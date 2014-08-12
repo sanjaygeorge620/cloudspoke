@@ -1,0 +1,80 @@
+<apex:page renderAs="pdf" standardController="Training_Attendee__c" recordSetVar="Training Attendees" extensions="TrainingPDFController" applyBodyTag="false" applyHtmlTag="false" showHeader="false">
+  <html>    
+    <head>
+        <style>
+            @page {
+                size:landscape;
+                 margin:0;
+            }
+            hr { margin-top: 1px;}
+
+}
+            
+                     
+            
+        </style>        
+    </head>                       
+    <body>          
+        
+    <apex:repeat value="{!attendees}" var="attendee" >
+         
+                      
+        <apex:outputPanel layout="block" Style="
+                font-family:Helvetica, Verdana, Arial, Sans-Serif; 
+                height:8.3in; width: 10.8in;
+                page-break-inside: avoid; 
+                background-image:url('{!$Resource.TrainingCertificate}'); 
+                background-position:center; background-repeat: no-repeat; 
+                margin:10px, 2px, 5px, 2px;">
+            
+            <apex:outputPanel layout="block" style="text-align:center; font-size:358%; padding-top:110px;">
+              <apex:outputText value="Certificate of Attendance"/> 
+            </apex:outputPanel>
+            
+            <apex:outputPanel layout="block" style="text-align:center; font-size:100%; margin-top:50px;">
+              <apex:outputText value="presented to"/> 
+            </apex:outputPanel>
+         
+            <apex:outputPanel layout="block" style="text-align:center; font-family: lucida handwriting, Monotype Corsiva, Brush Script MT, cursive; font-size:375%; margin-top:20px;">
+                <apex:outputText value="{!attendee.Contact__r.Name}"/>
+            </apex:outputPanel>
+            
+            <apex:outputPanel layout="block" style="text-align:center; font-size:100%; margin-top:50px;">
+              <apex:outputText value="upon successful completion of"/> 
+            </apex:outputPanel>
+            
+             <apex:outputPanel layout="block" style="text-align:center; font-size:175%; margin-top:20px;">
+                <apex:outputText value="{!attendee.Course_Name__c}"/>
+            </apex:outputPanel>
+            
+            <apex:outputPanel layout="block" style="text-align:center; font-size:150%; margin-top:20px;">
+                <apex:outputText value="{!attendee.Class__r.Class_Date_Str__c}"/>
+            </apex:outputPanel>           
+                <div style="width:3in; padding-left: 215px; margin-top:0px; float: left">
+                     <apex:outputPanel layout="block" style="text-align:center; font-size:150%; font-family: lucida handwriting, Monotype Corsiva, Brush Script MT, cursive; font-style:italic; margin-top:50px;">
+                        <apex:outputText value="{!attendee.class__r.Trainer__r.name}"/>
+                     </apex:outputPanel>
+                    <hr style="margin-top:3px;"/>                
+                    <p style="text-align:center; font-size:100%;">
+                        Trainer
+                    </p>
+                </div>  
+                <div style="width:3in; padding-left: 535px;">
+                    <apex:outputPanel layout="block" style="text-align:center; font-size:150%; font-family: lucida handwriting, Monotype Corsiva, Brush Script MT, cursive; margin-top:20px;">
+                          <apex:image url="{!$Resource.TrainingDirectorSig}" width="175px" height="60px" />
+                    </apex:outputPanel>
+                    <hr/>                
+                    <p style="text-align:center; font-size:100%;">
+                        Director of Product Training
+                    </p>
+                </div> 
+           
+                    
+       </apex:outputPanel>      
+
+    </apex:repeat>
+    </body>
+    </html>   
+   
+    
+</apex:page>

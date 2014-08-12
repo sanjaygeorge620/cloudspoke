@@ -1,0 +1,165 @@
+<apex:page controller="SitesHomeController" standardStylesheets="false" showHeader="false" cache="{!SITE_CACHED}" expires="{!SITE_CACHE_MAX_AGE}" >
+<html>
+    <head>
+        
+        <meta content="{!SITE_META_DESCRIPTION}" name="description" />
+        <meta content="{!SITE_META_KEYWORD}" name="keywords" />
+        
+        <!--css-->
+         <apex:stylesheet id="sfdc_css" value="{!URLFOR($Resource.Perceptive_Channel_CSS, 'css/perceptive.css')}" />
+       
+        <!--scripts-->
+         <apex:includeScript id="jquery_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/jquery.min.js')}" />
+         <apex:includeScript id="jqueryui_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/jquery-ui.min.js')}" />
+         <apex:includeScript id="jqueryplugins_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/jquery.plugins.js')}" />
+         <apex:includeScript id="shadowbox_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/shadowbox.js')}" />
+         <apex:includeScript id="psi_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/cp.js')}" />
+         <script type="text/javascript">
+             jQuery(document).ready(function(){
+                 //View alert
+                  jQuery('.message.alert').click(function() { // bind click event to class
+                          jQuery('.alert_msg').slideToggle('slow');
+                       return false;
+                    });
+             })
+         </script>
+    </head>
+    <body id="landing">     
+        <div id="frame">
+            <div id="header">
+                <div id="logo">
+                    <p id="logoimg">
+                    <a href="{!relatedsite}">Perceptive Software: Makers of ImageNow Document Management, Imaging and Workflow Software</a></p>
+                    <p id="loginnav">
+                        <apex:outputLink rendered="false" value="{!$Page.Login}">{!$Label.site.login}</apex:outputLink> 
+                        <apex:outputPanel rendered="{!isLoggedIn}">
+                            <!---SSO Look--->
+                            <apex:outputText styleclass="welcome-text" value="Welcome "/>
+                            <apex:outputLink value="{!$Page.MyProfilePage}" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">{!$User.FirstName+' '+$User.LastName}</apex:outputLink>
+                            |&nbsp;<apex:outputLink value="{!$Site.Prefix}/secur/logout.jsp">{!$Label.site.logout}</apex:outputLink>&nbsp;| 
+                        </apex:outputPanel> 
+                        
+                        <a href="{!relatedsite}contact">Contact Us</a> 
+                        | <a href="{!relatedsite}company/careers/">Careers</a>
+                        | <a href="http://community.perceptivesoftware.com">Community</a>
+                    </p>
+                </div>
+        
+                <div id="nav">
+                    <!-- Public Site Navigation -->
+                    <ul>
+                        <li id="company" ><a href="{!relatedsite}company/about/index.psi"> Company</a></li>
+                        <li id="platform" ><a href="{!relatedsite}platform/index.psi"> Platform</a></li>
+                        <li id="products" ><a href="{!relatedsite}products/index.psi"> Products</a></li>
+                        <li id="solutions" ><a href="{!relatedsite}solutions/index.psi"> Solutions</a></li>
+                        <li id="services" ><a href="{!relatedsite}services/index.psi"> Services</a></li>
+                        <li id="partners" ><a href="{!relatedsite}partners/index.psi"> Partners</a></li>
+                        <li id="success"><a href="{!relatedsite}success/index.psi"> Success</a></li>
+                        <li class="{!if(SITE_ACTIVATE_CUSTOMER_PORTAL_TAB==true,'active','')}" id="customerportal">
+                            <a href="https://perceptivesoftware.secure.force.com"> Customer Portal</a>
+                      <!--  <li id="Marketing"><a href="http://partner.perceptivesoftware.com/index.psi "> Marketing</a></li>    -->
+                        </li>
+                     </ul>
+                </div>
+            </div>
+            <div class="portalheader">
+                    <apex:outputPanel rendered="{!isLoggedin}" id="toolbar" >
+                    <!-- Customer Portal: Navigation --> 
+                                <ul class="cp">
+                                        <apex:outputtext rendered="{!SITE_TAB_HOME}"><li><apex:outputLink styleclass="toolbar-home" value="{!$Page.home}">Home</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_ACCOUNT}"><li><apex:outputLink styleclass="toolbar-account" value="{!$Page.account}">Account Profile</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_ACCOUNT_PARTNER}"><li><apex:outputLink styleclass="toolbar-accountpartner" value="{!$Page.partner}">Partner Profile</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_PARTNER_ACCOUNT}"><li><apex:outputLink styleclass="toolbar-partner-account" value="{!$Page.account_partner}">Accounts</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_OPPORTUNITIES}"><li><apex:outputLink styleclass="toolbar-opportunity" value="{!$Page.Opportunities}">Opportunities</apex:outputLink></li></apex:outputtext>                                                                                                                        
+                                        <apex:outputtext rendered="{!SITE_TAB_LEADS}"><li><apex:outputLink styleclass="toolbar-lead" value="{!$Page.ChannelLead}">Leads</apex:outputLink></li></apex:outputtext>                                        
+                                        <apex:outputtext rendered="{!SITE_TAB_ANSWERS}"><li><apex:outputLink styleclass="toolbar-answers" value="{!$Page.Answers}">Answers</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_CASES}"><li><apex:outputLink styleclass="toolbar-cases" value="{!$Page.Cases}">Cases</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_CASES_CHANNEL}"><li><apex:outputLink styleclass="toolbar-cases" value="{!$Page.CasesChannel}">Cases</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_DOWNLOADS}"><li><apex:outputLink styleclass="toolbar-downloads" value="{!$Page.Download}">Downloads</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_KNOWLEDGE}"><li><apex:outputLink styleclass="toolbar-knowledgebase" value="{!$Page.knowledge_Partner}">Knowledgebase</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_DOCUMENTATION}"><li><apex:outputLink styleclass="toolbar-documentation" value="{!$Page.Documentation_Partner}">Product Documentation</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_IDEAS}"><li><apex:outputLink styleclass="toolbar-ideas" value="{!$Page.Ideas}">Ideas</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_UPGRADE}"><li><apex:outputLink styleclass="toolbar-upgradecenter" value="{!$Page.Upgrade}">Upgrade Center</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_TRAINING}"><li><apex:outputLink styleclass="toolbar-training" value="{!$Page.Training_Partner}">Training</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_MARKETING}"><li><apex:outputLink value="http://partner.perceptivesoftware.com/index.psi">Marketing</apex:outputLink></li></apex:outputtext>
+                                </ul>
+        
+                                <!-- Customer Portal: Toolbar -->
+                                <ul class="toolbar">
+                                    <li><a title="My Profile" href="{!$page.MyProfilePage}"><span class="sprite_cpicons profile">&nbsp;</span></a></li>
+                                    <apex:outputPanel rendered="{!SITE_TOOLBAR}">
+                                        <li><apex:outputLink value="{!$Page.account}" title="ImageNow Servers"><apex:param name="tab" value="servers"/><span class="sprite_cpicons env">&nbsp;</span></apex:outputLink></li>
+                                        <li><apex:outputLink title="Contact Support" value="{!$Page.CaseWebSubmit}" rendered="{!SITE_TAB_CONTACT}"><span class="sprite_cpicons phone">&nbsp;</span></apex:outputLink></li>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!!SITE_ALERT_ACTIVE}">
+                                        <li>&nbsp;</li>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!SITE_ALERT_ACTIVE}">
+                                        <li id="opener" class="message alert"><a rel="xshadowbox" href="#inline-html"><span id="warning-icon" class="sprite_cpicons warning" >&nbsp;</span>{!If(len(SITE_ALERT_TITLE)>38,mid(SITE_ALERT_TITLE,1,35)+'...',SITE_ALERT_TITLE)}</a></li>
+                                    </apex:outputPanel>
+                                    <li class="ad"><a href="http://www.perceptivesoftware.com/customer-portal/user-groups.psi" title="ImageNow User Conference: Inspire 11"><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/user-groups-rug-banner-cp-toolbar.jpg')}" height="33" width="276" alt="ImageNow User Conference: Inspire 11" /></a></li>
+                                </ul>   
+                 </apex:outputPanel>
+            </div>
+                        
+            <div id="core">
+                   <div class="alert_msg" style="display:none;">
+                    <h3>{!SITE_ALERT_TITLE}</h3>
+                    <p><apex:outputText value="{!SITE_ALERT_FULL}" escape="false"></apex:outputText></p>
+                   </div>
+                   
+                   <apex:insert name="body"/>
+            </div>
+            
+            <div id="footer">
+                <ul class="social">
+                    <li>Stay connected with us.</li>
+                    <li><a title="Become our fan on Facebook." target="_blank" href="http://www.facebook.com/perceptivesw" class="fb"><span>Perceptive Software Facebook</span></a></li>
+                    <li><a title="Follow us on Twitter." target="_blank" href="http://www.twitter.com/perceptivesw" class="tw"><span>Perceptive Software Twitter</span></a></li>
+                    <li><a title="Connect with us on LinkedIN" target="_blank" href="http://www.linkedin.com/groups?gid=2912347" class="ln"><span>Perceptive Software LinkedIN</span></a></li>
+                </ul>
+                <p>&#169; 1993-{!YEAR(Today())} Perceptive Software |
+                    <a href="{!relatedsite}sitemap/index.psi">Site Map</a> |
+                    <a rel="nofollow" href="{!relatedsite}company/terms-of-use.psi">Terms of Use</a> |
+                    <a rel="nofollow" href="{!relatedsite}legal">Privacy Statement</a> |
+                    <a rel="nofollow" href="{!relatedsite}company/purchase-terms.psi">Purchase Terms</a>
+                    <apex:outputPanel rendered="false">
+                        <br />Account:{!SITE_ACCOUNT.Name}
+                        <br />Contact:{!SITE_CONTACT.Name}
+                        <br />Role:{!SITE_CONTACT.Contact_Role__c}
+                        <br />Profile:{!$Profile.Name}
+                   </apex:outputPanel>     
+                </p>
+            </div>
+            
+        </div>
+        <!---feedback widget--->
+        <apex:outputPanel layout="block" styleclass="feedback-widget" rendered="{!SITE_FEEDBACK && !(ISPICKVAL($User.UserType,'Guest'))}">
+            <apex:outputLink value="{!$Page.Feedback}"><apex:param name="retURL" value="{!$CurrentPage.URL}"/></apex:outputLink>
+        </apex:outputPanel>
+        
+        <script type="text/javascript"> 
+                 var _gaq = _gaq || []; 
+                _gaq.push(['t1._setAccount', 'UA-9714790-3']); 
+                _gaq.push(['t1._trackPageview']); 
+                
+                _gaq.push(['t2._setAccount', 'UA-18274388-1']); 
+                _gaq.push(['t2._setDomainName', 'none']); 
+                _gaq.push(['t2._setAllowLinker', true]); 
+                _gaq.push(['t2._setAllowHash', false]); 
+                _gaq.push(['t2._trackPageview']); 
+          
+          (function() { 
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; 
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); 
+          })(); 
+          
+        </script> 
+        
+    </body>    
+</html>    
+<site:previewAsAdmin />  
+</apex:page>

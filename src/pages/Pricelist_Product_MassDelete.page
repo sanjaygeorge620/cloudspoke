@@ -1,0 +1,238 @@
+<apex:page standardController="LX_Opportunity_Pricelist_Product__c" extensions="PriceListDelete">
+<html>
+<head>    
+
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>var j$ = jQuery.noConflict();</script>
+    <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>    
+    <script>
+        j$(document).ready(function() 
+        {       
+         var tab = initTable();     
+            
+        } );
+        
+        
+        //Reusable function to call whenever the table is rerendered
+        function initTable()
+        {
+           //Init Data Table
+       var image_table = j$('#jtable').dataTable({
+           "iDisplayLength": 25,           
+           "aoColumnDefs": [
+       { "bSortable": false, "aTargets": [ 1,9]}
+       ],
+           "fnDrawCallback": function(oSettings) 
+           {
+           if (arguments.length == 1) 
+           { 
+           var allChecked = true;
+            j$('.chkbox').each(function() { //loop through each checkbox
+                if(this.checked)
+                {                
+                //
+                }
+                else
+                {
+                allChecked = false;
+                }
+            });
+            
+            j$('#selecctall').prop('checked', allChecked);
+            
+             j$('.theHiddenInput').each(function() { 
+               this.checked = true;
+            });
+            
+            j$('#jtable tr *:nth-child(3)').hide();
+               
+            } 
+            
+           },
+                
+               "fnPreDrawCallback": function (oSettings) 
+            {   
+            preselect();  
+                                
+            }      
+            });    
+            
+              
+            j$("#selecctall").click(function(event){
+            if(this.checked) 
+            {
+             toggleCheckboxeson();
+            }
+            else
+            {
+             toggleCheckboxesoff();
+            }
+            });
+            
+       return image_table;
+            
+            }
+            
+        
+          function toggleCheckboxesoff()
+        {
+        j$('.chkbox').each(function() { //loop through each checkbox
+                this.checked = false;  //select all checkboxes with class "chkbox"  
+                j$(this).trigger('change');             
+            });    
+         
+        }
+        
+        
+        function toggleCheckboxeson()
+        {
+        j$('.chkbox').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "chkbox"  
+                j$(this).trigger('change');             
+            });    
+        }
+        
+         function toggleMasterCheckbox(cb,selectedItem)
+        {
+        
+        if(cb.checked==true)
+        {
+                aSelectItem(selectedItem);
+            }
+            else
+            {
+                aDeselectItem(selectedItem);
+            }
+        }
+    
+    </script>
+</head>
+<body>    
+    <apex:sectionHeader subtitle="Price List Product Mass Delete" title="{!$Organization.Name}"/>
+    <apex:pageMessages id="error" />
+    <apex:form >
+    
+       <!-- handle selected item -->
+        <apex:actionFunction name="aSelectItem" action="{!doSelectItemR}" rerender="refr21">
+            <apex:param name="selectedItem" value="" assignTo="{!selectedItem}"/>
+        </apex:actionFunction>
+ 
+        <!-- handle deselected item -->
+        <apex:actionFunction name="aDeselectItem" action="{!doDeselectItemR}" rerender="refr21">
+            <apex:param name="selectedItem" value="" assignTo="{!selectedItem}"/>
+        </apex:actionFunction>
+
+        <apex:actionFunction name="preselect" action="{!preSelect}" rerender="">
+        </apex:actionFunction>
+
+    
+    
+    
+           <apex:pageBlock title="Select Configuration ID" >           
+             <apex:outputPanel id="refr2"> 
+                   <apex:facet name="header1">Configuration ID</apex:facet>
+                       
+                       <apex:selectlist required="false"  size="1"  id="Configuration" value="{!Selected_Config}" multiselect="True" style=" "> 
+                         <apex:selectoptions value="{!Config_options}"/>                    
+                       </apex:selectlist> 
+                       <br></br> <br></br>
+                                       </apex:outputPanel>  
+                                        <apex:commandButton style="position:relative;" value="Refresh Data" action="{!Initialize}" reRender="error, refr1" oncomplete="initTable()" status="spinner">
+                       
+                       </apex:commandButton>    
+                       
+                                <apex:commandButton style="position:relative;" value="Delete Selected Configuration" action="{!DelSel}" reRender="error, refr1,refr2" oncomplete="initTable()" status="spinner">
+                      
+                       </apex:commandButton> 
+                       
+                       <apex:actionStatus id="spinner" >
+                         <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /></apex:facet>
+                       </apex:actionStatus>
+                                       
+            </apex:pageBlock>
+      
+     
+
+           
+       
+       
+       
+       
+       
+       <apex:pageBlock id="refr21" >                
+         <!--     <apex:pageBlockButtons location="bottom" > -->
+           <apex:outputPanel >
+
+         <apex:commandButton style="position:relative;" value="Delete Selected Part Numbers" action="{!del}" reRender="error, refr1,refr2" oncomplete="initTable()" status="spinner1">
+         </apex:commandButton>  
+         <apex:commandButton style="position:relative;" value="Return to Opportunity" action="{!backMethod}" status="spinner1">
+         </apex:commandButton>  
+         
+         <apex:actionStatus id="spinner1" >
+         <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /></apex:facet>
+         </apex:actionStatus>
+         </apex:outputPanel>  
+      <!--     </apex:pageBlockButtons>     -->
+             </apex:pageBlock>  
+          <apex:pageBlock id="refr1" >      
+         
+          <apex:outputPanel id="refr2">     
+                <table id="jtable" class="row-border jtable display" cellspacing="0" width="100%">
+                <thead>                
+                    <tr>
+                    <th>Row ID</th> 
+                     <th><input type="checkbox" id="selecctall"/></th>
+                <!--    <th><apex:inputCheckbox styleClass="checkall"/> </th>  -->
+                        <th class="col1"></th>  
+                        <th>Configuration ID</th>
+                 <!--   <th>LX_Opportunity</th> -->
+                        <th>Part Number</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Product Line</th>
+                        <th>Part Type</th>
+                        <th>Sales Price</th>
+                    </tr>
+                </thead>
+         
+         
+                <tbody>
+                   <apex:repeat value="{!records}" var="a">
+                        <tr>  
+                           <td>{!a.rownumber}</td>                         
+              <!--          <td><apex:inputCheckbox styleClass="chkbox" value="{!a.selected}" onchange="toggleMasterCheckbox(this,'{!a.lpp.Id}')"/></td>  -->
+                            <td><apex:inputCheckbox styleClass="chkbox" value="{!a.selected}"/></td>                             
+                            <td><apex:inputCheckbox styleClass="theHiddenInput" value="{!a.isCurrentPage}"/></td> 
+                            <td>{!a.LPP.Parent_ID__c}</td>
+                   <!--     <td>{!a.LPP.LX_Opportunity__c}</td> -->
+                            <td>{!a.LPP.LX_Part_Number__c}</td>
+                            <td><a href="/{!a.LPP.LX_Product__c}" target="_blank">{!a.LPP.LX_Product__r.name}</a></td>
+                            <td>{!a.LPP.Quantity__c}</td>
+                            <td>{!a.LPP.Product_Line__c}</td>
+                            <td>{!a.LPP.Part_Type__c}</td>                            
+                            <td><apex:outputField value="{!a.LPP.LX_Sales_Price__c}"/></td>
+                            
+                        </tr>
+                    </apex:repeat>
+                 </tbody>  
+             </table>
+             </apex:outputPanel>    
+        </apex:pageBlock>
+        
+   
+    </apex:form>
+    
+</body>    
+</html>  
+<!--
+          
+      var cells = [];
+         var nNodes = j$("#jtable").dataTable().fnGetNodes();
+        for(var i=0;i<nNodes.length;i++)
+        {        
+        alert('vvvvvvvv' +j$(nNodes[i]).find("td:eq(0)").html());
+        }          
+
+-->
+</apex:page>

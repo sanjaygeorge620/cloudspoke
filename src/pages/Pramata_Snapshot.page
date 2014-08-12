@@ -1,0 +1,6 @@
+<apex:page standardController="Account" >
+<iframe width="100%" style="height: 500px;border: 0px solid #f3f3ec;" src="https://perceptive.pramata.com/integration/show_analytics?sf_account_id={!Account.Id}
+&sf_account_name={!Account.Name}&sf_sessionid={!$Api.Session_ID}&sf_serverurl={!$Api.Partner_Server_URL_70}
+&email={!$User.Email}&request_from=salesforce&sf_external_value={!Account.Company_Number__c}">
+</iframe>
+</apex:page>

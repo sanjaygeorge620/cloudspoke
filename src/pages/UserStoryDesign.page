@@ -1,0 +1,22 @@
+<apex:page controller="Design_Controller">
+<apex:form >
+<br/><br/><strong>
+<apex:outputLabel style="padding-left:5px;" value="Sprint"/>
+ <apex:outputLabel style="padding-left:150px;" value="User Story Status"/> </strong><br/>
+ <apex:selectList id="saselect" size="1" value="{!currentSprint}" multiselect="false">
+                    <apex:selectOptions value="{!Sprint}" />
+             </apex:selectList>
+             
+ <apex:selectList id="saselect2" size="1" value="{!currentStatus}" multiselect="false">
+                    <apex:selectOptions value="{!Status}" />
+             </apex:selectList><br/><br/>
+     <apex:inputCheckbox value="{!isSelectedAcceptance}" />Do You want Acceptance Criteria in your Report? <br/>
+     <apex:inputCheckbox value="{!isSelectedDesignname}" />Do You want Design name and summary  in your Report? <br/>
+     <apex:inputCheckbox value="{!isSelectedDesignComponent}" />Do You want Design component  in your Report?   <br/>
+     <apex:inputCheckbox value="{!isSelectedDesignDetails}" />Do You want Design Details  in your Report?    <br/> 
+ <br/><br/>
+   <apex:commandButton action="{!redirectDesign}" value="Download as PDF" id="theButton"/>
+ <br/><br/>
+   <apex:commandButton action="{!converTWord}" value="Download as DOC" id="theButton2"/>
+</apex:form>
+</apex:page>

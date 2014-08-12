@@ -1,0 +1,19 @@
+<apex:component controller="SiteLoginController" id="loginComponent"  >
+    <div class="loginform">
+        <apex:form id="login" forceSSL="true">
+          <div>
+              <apex:outputLabel value="User Name" for="username"/>
+              <apex:inputText value="{!username}" styleClass="txtbox" id="username" onblur="if (this.value == '') { this.value='E-mail Address'; }" onfocus="if (this.value == 'E-mail Address') { this.value=''; }"  />
+             
+              <apex:outputLabel value="Password" for="password"/>
+              <apex:inputSecret value="{!password}" styleClass="txtbox" id="password" />
+              
+              <apex:commandButton action="{!login}" styleclass="submit-button login-button" value="Log in"/>
+          </div>
+          <div class="errormsg">
+              <apex:pageMessages />
+          </div>
+                  
+       </apex:form>
+     </div>  
+</apex:component>

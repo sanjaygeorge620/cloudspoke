@@ -1,0 +1,54 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | Feedback'}" controller="SitesFeedbackController">
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}">
+  <apex:define name="title"> 
+      <title>{!SITE_NICKNAME+' | Feedback'}</title>
+    </apex:define>
+    <apex:define name="javascriptcalls">
+        <script type="text/javascript">
+                jQuery(document).ready(function() {
+                  jQuery('.toolbar-home').addClass('active');
+                });
+            </script>
+    </apex:define>
+        <apex:define name="body">
+            
+            
+            <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">Home</a>
+                    <a class="current" href="#">Feedback</a>
+                 </nav>
+            </div>
+         </div>  
+            <div class="cp_core">
+                <div class="column full-width">
+                    <div class="callout secondary">
+                        <a class="title-bar" href="#">
+                        <span class="sprite_cpicons secondary qa">&nbsp;</span>Your feedback is important to us.</a>
+                        <div class="callout-content">
+                            <div class="content-inner">
+                            
+                                <apex:outputPanel id="form-feedback">
+                                     <apex:form >
+                                       <div class="form-feedback">
+                                       <apex:pageMessages escape="false" />
+                                            <label>Subject</label><apex:inputField value="{!Feedback.Reference_Title__c}" />
+                                            <label>Area</label><apex:selectList id="f_area" size="1" value="{!Feedback.Reference_Type__c}" styleclass="f_area">
+                                                                   <apex:selectoptions value="{!FeedbackOptions}" />
+                                                               </apex:selectList>
+                                        
+                                            <label>Comment</label><apex:inputTextarea value="{!Feedback.Comment__c}" />
+                                            <apex:commandButton value="Submit" styleClass="submit-button" reRender="form-feedback" action="{!submitFeedback}"/>
+                                      </div>  
+                                    </apex:form>
+                                 </apex:outputPanel>  
+                              </div>    
+                        </div>
+                    </div><!-- /secondary template -->
+                </div>
+            </div>
+        </apex:define>
+    </apex:composition>
+</apex:page>

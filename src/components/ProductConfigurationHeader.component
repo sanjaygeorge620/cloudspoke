@@ -1,0 +1,25 @@
+<apex:component >
+<apex:attribute name="type" description="Type of object to add to Product Configuration" type="String" /> 
+<apex:attribute name="prodAction" description="Action of the page" type="String" /> 
+<apex:attribute name="prod" type="Product_Configuration__c" description="The Product Configuration to display." />
+
+            <apex:pageBlockSection columns="2">
+                <apex:outputField value="{!prod.Internal_Product__c}" />
+                
+                <apex:outputField value="{!prod.ProductRelease__c}" />
+                                
+                <apex:outputField value="{!prod.Brand__c}" />
+                
+                <apex:outputField value="{!prod.Status__c}" />
+                
+                <apex:outputField value="{!prod.Release_Value__c}" />
+                
+                <apex:outputField value="{!prod.SKU__c}" />
+
+            </apex:pageBlockSection> 
+
+<br/><br/><b>
+    <apex:outputLabel >Please select the {!type} to {!prodAction}.</apex:outputLabel>
+    </b>
+<br/><br/>
+</apex:component>

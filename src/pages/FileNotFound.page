@@ -1,0 +1,42 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | '+$Label.site.file_not_found}" controller="SitesGenericController">
+  <title>{!SITE_NICKNAME+' | '+$Label.site.file_not_found}</title>
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}">
+        <apex:define name="javascript">
+              //change icons
+              //jQuery('.sprite_cpicons.secondary').removeClass('alert');
+              //jQuery('.sprite_cpicons.secondary').addClass('  ');
+        </apex:define>
+          
+         <script type="text/javascript">
+             var url = {!$Label.site.error2};
+            url.replace(/apex/TCScheduleGrid/, '/apex/pse__TCScheduleGrid');
+            alert("You pressed OK!");
+           </script>
+        
+        
+        <apex:define name="breadcrumb">
+             {!$Label.site.error2}
+        </apex:define>
+        
+        <apex:define name="titlebar">
+             {!$Label.site.error2+' 404 - '+$Label.site.file_not_found}
+        </apex:define>
+        
+        <apex:define name="breadcrumb2">
+             {!$Label.site.error2}
+        </apex:define>
+       
+        
+        <apex:define name="content">       
+           <p>The document or web page you requested could not be found. </p>
+            <ul>
+             <li>You may have typed the page address incorrectly.</li>
+             <li>A referring link may have been incorrect.</li>
+             <li>The page or document you are looking for has been moved or deleted.</li>
+            </ul>
+            <p>
+                 Click&nbsp;<apex:outputLink value="{!$Site.CurrentSiteUrl}">here</apex:outputLink> to return to our Home Page.
+            </p>   
+        </apex:define>
+  </apex:composition>
+</apex:page>

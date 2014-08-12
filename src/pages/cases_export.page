@@ -1,0 +1,30 @@
+<apex:page tabStyle="case" controller="SitesCaseController" contentType="application/vnd.ms-excel#Cases_{!substitute(substitute(substitute($CurrentPage.parameters.CaseType,',','_'),' ','_'),'-','_')}.xls">
+<!-- CSV File does not format correctly -->
+<h3>{!SITE_ACCOUNT.Name +' - '+$CurrentPage.parameters.CaseType} Cases</h3>
+<p> Confidential Information - Do Not Distribute <br />
+    Copyright (c) {!YEAR(Today())} Perceptive Software <br />
+    All rights reserved.
+</p>      
+  
+  <apex:pageMessages />
+  <apex:pageBlock >
+            <apex:pageBlocksection columns="1">
+              <apex:pageBlockTable id="table" value="{!CasesExport}" var="c"  >
+                        <apex:column headerValue="Number"  title="{!'Case Number: '+c.casenumber}"><a href="{!$Site.CurrentSiteUrl+'casedetails?id='+c.id}">{!c.casenumber}</a></apex:column>
+                        <apex:column headerValue="Subject" title="{!'Case Subject: '+c.subject}">{!c.subject}</apex:column>
+                        <apex:column headerValue="Description" title="{!'Case Description: '+c.Description}">{!c.Description}</apex:column>
+                        <apex:column headerValue="Contact" title="{!'Contact Name: '+c.Contact.name}" >{!c.Contact.name}</apex:column>
+                        <apex:column headerValue="Date Opened"  title="{!'Date Opened'}"                   >
+                            <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                <apex:param value="{!c.createddate}" />
+                            </apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Date Closed"  title="{!'Date Closed'}"                   >
+                            <apex:outputText value="{0,date,MM/dd/yyyy}">
+                                <apex:param value="{!c.closeddate}" />
+                            </apex:outputText>
+                        </apex:column>
+              </apex:pageBlockTable>
+            </apex:pageBlocksection>    
+      </apex:pageBlock>
+</apex:page>

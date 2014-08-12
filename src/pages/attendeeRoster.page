@@ -1,0 +1,121 @@
+<apex:page renderAs="PDF" standardController="Training_Attendee__c" recordSetVar="Training Attendees" extensions="TrainingPDFController" applyBodyTag="false" applyHtmlTag="false" showHeader="false">
+   <html>       
+         <head>
+            <style>
+                @page {
+                    size:landscape;
+                     margin:0;
+                }
+                
+                table, th, td, input, textarea {
+                    font-size: 100%;
+                }
+                
+                body, p, h1, h2, h3, h4, table, td, th, ul, ol, textarea, input {
+                    font-family: verdana,helvetica,arial,sans-serif;
+                }
+                table {
+                    font-family: "Trebuchet MS",Arial,Helvetica,sans-serif;
+                    border-collapse: collapse;
+                }
+                th {
+                    font-size: 12px;
+                    text-align: left;               
+                    background-color: #A7C942;
+                    color: black;
+                    
+                }            
+                td, th {                    
+                    border: 1px solid #98BF21;
+                    padding: 1px, 1px, 1px, 4px;
+                }         
+                
+                td {
+                    font-size: 11px;
+                }
+    
+            </style>
+        </head>     
+       
+        <body>
+             <apex:outputPanel layout="block" style="text-align:left;font-family:Sans-Serif; font-size:100%; padding:20px, 25px, 10px, 25px;">
+                        <apex:outputText style="font-size:100%; font-weight:bold;" value="Instructor Class Roster"/>   
+                 <br/>
+                        <apex:outputText value="Course: {!attendees[0].course_name__c}"/>   
+                 <br/>
+                        <apex:outputText value="Class: {!attendees[0].class__r.name}"/>
+                 <br/>
+                        <apex:outputText value="Date: {!attendees[0].Class__r.Class_Date_Str__c}"/>  
+                 <br/>
+                        <apex:outputText value="Trainer: {!attendees[0].class__r.Trainer__r.name}"/>
+             </apex:outputPanel>
+                
+                <div style="Padding:0px, 25px, 5px, 25px">    
+                
+                    <apex:repeat value="{!accounts}" var="acc">
+                     
+                         <table style="width: 100%; page-break-inside: avoid; padding: 0px, 0px, 5px, 0px;">
+                            <tr>
+                                <th>
+                                    Account: {!acc.Name +'  | City, State: '+ acc.Local_Lang_City__c +', '+ acc.Local_Language_Physical_State__c + '  | AEX: ' + acc.owner.Name +'  | ISR: '+ acc.ISR__r.Name +'  | CSA: '+ acc.CSA__c} 
+                                </th>
+                               
+                            </tr>
+                           
+                             <tr>
+                                 <td>               
+                                <TABLE style="padding: 2px, 4px, 25px, 7px; page-break-inside: avoid; display: inline-block; vertical-align: top">
+                                <tr>
+                                    <th style="width:200px">
+                                        Attendee Name
+                                    </th>                   
+                                </tr>
+                                    
+                                    <apex:repeat value="{!attendees}" var="a"> 
+                                        <tr style="Display:{!IF((a.Registration__r.Account__r.Name != acc.Name), 'None', '')}">                          
+                                             <td>
+                                                 {!a.Contact__r.Name}
+                                             </td>                            
+                                         </tr>                    
+                                    </apex:repeat>    
+                                    
+                                </TABLE>                               
+                                 <Table style="padding: 2px, 7px, 25px, 4px; display: inline-block; vertical-align: top;">
+                           
+                                     <tr>
+                                          <th style="width: 150px;">
+                                              Project Manager
+                                          </th>  
+                                          <th style="width: 250px;">
+                                              Project Name
+                                          </th>
+                                          <th style="width: 100px;">
+                                              Product Phase
+                                          </th>                
+                                     </tr>
+                           
+                                     <apex:repeat value="{!projects}" var="p">
+                                          <tr style="Display:{!IF((p.pse__Account__r.id != acc.Id), 'None', '')}">
+                                              <td>
+                                                  {!p.pse__Project_Manager__r.Name}
+                                              </td>
+                                              <td>
+                                                  {!p.Name}
+                                              </td>
+                                              <td>
+                                                  {!p.pse__Project_Phase__c}
+                                              </td>
+                                          </tr>
+                                    </apex:repeat> 
+                                     
+                                </Table>
+                             
+                            </td>
+                        </tr> 
+                    </table>   
+                     
+                </apex:repeat>    
+            </div>
+        </body> 
+    </html>
+</apex:page>

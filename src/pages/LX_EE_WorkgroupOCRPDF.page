@@ -1,0 +1,59 @@
+<!--
+Page Name : LX_EE_WorkgroupOCRPDF
+Description : This page is written for EASY ESTIMATE Workgroup OCR PDF Doc Generation.
+Created By : Madhurupa Ghose Roy (mghoseroy@deloitte.com)
+Created Date : 29-9-2013
+Modification Log:
+---------------------------------------------------------------------------
+Developer             Date            Modification ID        Description
+---------------------------------------------------------------------------
+Madhurupa Ghose Roy  29-9-2013        1000                   Initial Version
+***************************************************************************-->
+<apex:page standardController="STAR__c" renderAs="pdf" showHeader="false" standardStylesheets="false" applyBodyTag="false"> 
+  
+  <head>
+    <style>
+      .headerColumn{text-align: right;}
+    </style>
+  </head> 
+  
+  <apex:image id="theImage" value="{!$Resource.LexmarkWorkgroupOCR}" width="720" height="70"/>
+  <br/><center><b><font size="4">{!$Label.PrintPDFHeading} {!STAR__c.LX_Customer_Name__c}</font></b></center><br/>
+  <apex:outputText value="{!$Label.WPDFPara1}" escape="false"/>
+  
+  <apex:form >
+    <apex:pageBlock ><br/>
+      <apex:pageBlockTable value="{!STAR__c}" var="PSP" frame="box" align="center" columnsWidth="275px,275px" >
+        <apex:column >
+          <apex:outputText value="{!$Label.WPDFPara2}" escape="false"/>
+        </apex:column>
+        <apex:column >
+          <apex:outputText value="{0,number,###,###,##0}"><apex:param value="{!PSP.LX_Number_of_devices__c}"/></apex:outputText><br/>
+        </apex:column>
+      </apex:pageBlockTable><br/>
+      
+      <apex:pageBlockTable value="{!STAR__c}" var="item" frame="box" columnsWidth="275px,275px" border="2">
+        <apex:column headerValue="Description"> 
+          <apex:outputText value="{!$Label.WPDFDescription}" escape="false"/>
+        </apex:column>
+        <apex:column style="text-align:right;" headerClass="headerColumn"> 
+          <apex:facet name="header">Minimum Range</apex:facet>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Licensing_and_1st_year_support_min_value__c}"/></apex:outputText><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Profession_services_min_value__c}"/></apex:outputText><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Total_min_value__c}"/></apex:outputText></b><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Per_device_min_value__c}"/></apex:outputText></b><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Anuual_support_renewal_after_year1_min_v__c}"/></apex:outputText>
+        </apex:column>
+        <apex:column headerValue="Maximum Range" style="text-align:right;" headerClass="headerColumn"> 
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Licensing_and_1st_year_support_max_value__c}"/></apex:outputText><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Profession_services_max_value__c}"/></apex:outputText><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Total_max_value__c}"/></apex:outputText></b><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Per_device_max_value__c}"/></apex:outputText></b><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Anuual_support_renewal_after_year1_max_v__c}"/></apex:outputText>
+        </apex:column>
+      </apex:pageBlockTable> 
+      <apex:outputText value="{!$Label.WPDFPara3}" escape="false"/>
+      <apex:outputText value="{!$Label.WPDFPara4}" escape="false"/>         
+    </apex:pageBlock>
+  </apex:form>  
+</apex:page>

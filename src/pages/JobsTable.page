@@ -1,0 +1,89 @@
+<!--   Visualforce page for the tab page for the Scheduled_Job__c object   -->
+
+<apex:page controller="JobsTableController" tabStyle="Scheduled_Job__c" sidebar="true" >
+    
+    <!-- JavaScript for the select all checkboxes functionality -->
+    <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                 
+            for(var i=0; i<inputCheckBox.length; i++){         
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                    
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>    
+    
+    <apex:form id="form">
+        
+        <apex:pageBlock mode="maindetail" >    
+            <apex:pageBlockSection title="Scheduled Jobs" columns="1" collapsible="false">
+                
+                <apex:actionRegion >
+                    <apex:outputPanel >
+                        <apex:outputLabel value="View " for="view"/>
+                        <apex:selectList value="{!view}" size="1" label="View" id="view" style="" >
+                            <apex:selectOptions value="{!views}"/>
+                             <apex:actionSupport event="onchange" reRender="jobsTable"/>
+                        </apex:selectList>                          
+                    </apex:outputPanel>
+                </apex:actionRegion>
+                
+                <apex:outputPanel >
+                    <apex:commandButton action="{!ActivateJobs}" value="Activate" id="activate"  />
+                    <apex:commandButton action="{!DeactivateJobs}" value="Deactivate" id="deactivate"/>
+                    <apex:commandButton action="{!URLFOR($Action.Scheduled_Job__c.New, null,['retURL'='/apex/JobsTable'])}" value="New Job" id="newJob"/>                       
+                </apex:outputPanel>
+                
+                <apex:pageBlockTable value="{!JobsList}" var="jobWrap" id="jobsTable" styleClass="dataTable">
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')"/>
+                        </apex:facet>
+                        <apex:inputCheckbox value="{!jobWrap.selected}" id="inputId"/>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:outputLink value="{!URLFOR($Action.Scheduled_Job__c.Edit, jobWrap.job.Id, ['retURL'='/apex/JobsTable'])}">Manage</apex:outputLink>&nbsp;|&nbsp;
+                        <a href="javascript:if (window.confirm('Are you sure?')) DeleteJobAction('{!jobWrap.job.Id}');" style="font-weight:bold">Del</a>
+                    </apex:column> 
+                    
+                    <apex:column headerValue="Job Name">
+                        <apex:outputLink value="{!URLFOR($Action.Scheduled_Job__c.View, jobWrap.job.Id)}">{!jobWrap.Job.Name}</apex:outputLink>
+                    </apex:column>
+                    
+                    <apex:column value="{!jobWrap.job.Active__c}"/>       
+                    
+                    <apex:column value="{!jobWrap.job.Apex_Class__c}"/> 
+                    
+                    <apex:column headerValue="Status" >
+                        <apex:outputText value="{!IF(NOT(ISBLANK(jobWrap.job.CronTriggerId__c)), CronTriggerMap[jobWrap.job.Id].State , 'Not Scheduled')}"/>                  
+                    </apex:column>
+                    
+                    <apex:column headerValue="Next Fire Time" >
+                        <apex:outputText value="{!IF(NOT(ISBLANK(jobWrap.job.CronTriggerId__c)), CronTriggerMap[jobWrap.job.Id].NextFireTime , '')}"/>                        
+                    </apex:column>
+                    
+                   <!-- <apex:column headerValue="Previous Fire Time" >
+                        <apex:outputText value="{!IF(NOT(ISBLANK(jobWrap.job.CronTriggerId__c)), CronTriggerMap[jobWrap.job.Id].PreviousFireTime , '')}"/>                     
+                    </apex:column>  -->
+                    
+                    <apex:column headerValue="Created By" value="{!jobWrap.job.CreatedBy.Name}"/>
+                    
+                    <apex:column headerValue="Created Date" value="{!jobWrap.job.CreatedDate}"/>
+                    
+                </apex:pageBlockTable>               
+                
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>        
+        
+        <!-- Assign SelectedJobId to correct Job and delete the job -->
+        <apex:actionFunction action="{!DeleteJob}" name="DeleteJobAction" reRender="JobsTable" >
+           <apex:param name="jobid" value="" assignTo="{!SelectedJobId}"/>
+        </apex:actionFunction>
+        
+    </apex:form>       
+    
+</apex:page>

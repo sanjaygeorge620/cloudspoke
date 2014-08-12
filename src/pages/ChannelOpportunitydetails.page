@@ -1,0 +1,131 @@
+<apex:page showHeader="false" Controller="ChannelLeadController" standardStylesheets="false"> 
+<title>{!SITE_NICKNAME} | Details</title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-leads').addClass('active');
+          jQuery('.leadtable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.ChannelLead}">Leads</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Lead Details</a></li>
+                </ul>
+            </div> 
+            <apex:outputPanel rendered="{!!$ObjectType.Lead_Clone__c.accessible || !SITE_TAB_LEADS}">
+                  Insufficient Privileges
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!$ObjectType.Lead_Clone__c.accessible  && SITE_TAB_LEADS}">
+            
+             <div class="column full-width"> 
+                <div class="callout classroom"> 
+                    <span class="title-bar" href="#"><span class="sprite_cpicons class">&nbsp;</span>{!LeadDetail.Company__c}</span> 
+                    <div class="callout-content"> 
+                    
+                        <!-- Lead Detail --> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Opportunity Detail</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Opportunity Name</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Opportunity_Name__c}" /></p> 
+                                <p class="label course-type">Stage</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Stage__c}" /></p> 
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Close Date</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Close_Date__c}" /></p> 
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        <!--  Lead Detail --> 
+                        
+                        <!-- Lead Information--> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Opportunity Vitals</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Budget</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Budget__c}" /></p> 
+                                <p class="label course-type">Authority</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Authority__c}" /></p> 
+                                <p class="label course-type">Needs/Objectives</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Need_Objectives__c}" /></p> 
+                                <p class="label course-type">Timeline</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Timeline__c}" /></p>
+                                <p class="label course-type">Hot Buttons</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Hot_Buttons__c}" /></p>
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Next Step</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Next_Step__c}" /></p> 
+                                <p class="label course-type">Decision Criteria</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Decision_Criteria__c}" /></p> 
+                            </div> 
+                        </div>
+                        
+                        <div class="inner-content-title-bar"> 
+                            <span>Opportunity Description</span> 
+                        </div>
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-title">Description</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Description__c}" /></p>                                                              
+                            </div> 
+                            <div class="right-inner-col"> 
+                                
+                            </div> 
+                        </div>
+                        
+                        
+                        <div class="inner-content-title-bar"> 
+                            <span>Application Information</span> 
+                        </div>
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Sector</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Sector__c}" /></p>
+                                <p class="label course-title">Host Manufacturer</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Host_Manufacturer__c}" /></p> 
+                                <p class="label course-type">Host Application</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Host_Application__c}" /></p>
+                                <p class="label course-type">Department</p> 
+                                <p ><apex:outputfield value="{!LeadDetail.Department__c}" /></p>                               
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Secondary Host Manufacturer</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Secondary_Host_Manufacturer__c}" /></p> 
+                                <p class="label course-type">Secondary Host Application</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Secondary_Host_application__c}" /></p>  
+                                <p class="label course-type">Server Operating System</p> 
+                                <p><apex:outputfield value="{!LeadDetail.Server_Operating_System__c}" /></p>  
+                            </div> 
+
+                       </div>
+                         
+                       
+                    </div><!-- /Content --> 
+                </div><!-- /Course Content --> 
+            </div><!-- /Full Width Column --> 
+            
+
+            
+            </apex:outputPanel>
+        </div>
+            
+            
+               
+            
+            
+
+            
+          
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

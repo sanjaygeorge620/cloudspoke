@@ -1,0 +1,156 @@
+<!--
+Page Name : LX_EE_PrintRelease
+Description : This page is written for EASY ESTIMATE Print Release record creation.
+Created By : Madhurupa Ghose Roy (mghoseroy@deloitte.com)
+Created Date : 29-9-2013
+Modification Log:
+---------------------------------------------------------------------------
+Developer             Date            Modification ID        Description
+---------------------------------------------------------------------------
+Madhurupa Ghose Roy  29-9-2013        1000                   Initial Version
+***************************************************************************-->
+
+<apex:page standardController="STAR__c" extensions="LX_EE_PrintReleaseCtlr" action="{!Calculations}" id="page">
+  <script type="text/javascript">               
+    function nod(a,b,c){
+      a = a.value;
+      this.b = b ;
+      this.c = c.value ;
+      if(a<10||a>1000){
+        var r=confirm(b); 
+         if(r==true){
+          parent.window.location.replace("/"+c);
+        }
+      }    
+    }
+    function led(a,b,c){
+      a = a.value;
+      this.b = b ;    
+      this.c = c.value ;
+      if(a=='No'){
+        var r=confirm(b);   
+        if (r==true){
+          parent.window.location.replace("/"+c);
+        }
+      }    
+    }
+    function pcb(a,b,c){
+      a = a.value;
+      this.b = b ; 
+      this.c = c.value ;
+      if(a=='Cloud'){
+        var r=confirm(b);   
+        if (r==true){
+          parent.window.location.replace("/"+c);
+        }
+      }    
+    }
+    
+    function GeneratePDFonEnter(e){
+         if(window.event){ 
+                 key = window.event.keyCode; //IE 
+         } 
+         else{ 
+                 key = e.which; //firefox 
+         } 
+         if(key == 13) { 
+                 var ele=document.getElementById('{!$Component.form.pb.pbButtons.generateDocButtonId}'); 
+                 ele.click(); 
+                 return false; 
+         } else{ 
+                 return true; 
+        }
+    }
+          
+
+  </script>
+  
+  <style>
+    .headerColumn{text-align: right;}
+  </style>
+  
+  <apex:form id="form">
+    <apex:pageMessages id="pgmsg"/>
+    <apex:pageBlock title="Easy Estimate: Print Release" id="pb">
+      <apex:pageBlockButtons location="bottom" id="pbButtons">
+        <apex:commandButton value="Generate Customer Document" action="{!GenerateDoc}" id="generateDocButtonId"/>
+      </apex:pageBlockButtons>
+      {!$Label.Step1Print}
+      <br/><br/>
+      
+      <apex:pageBlockSection columns="1" id="Block">
+        <apex:inputField value="{!PSObj.LX_Customer_Name__c}"/>
+        <apex:inputField value="{!PSObj.LX_Customer_Type__c}" > 
+              <apex:actionSupport event="onchange" reRender="Block"/>
+        </apex:inputField>      
+        <apex:inputField value="{!PSObj.LX_Conversion_Rate__c}" rendered="{!PSObj.LX_Customer_Type__c=='Canada'}" />   
+      </apex:pageBlockSection>   
+       
+      <apex:pageBlockSection title="Hardware" columns="1">       
+        <apex:inputField id="inp" value="{!PSObj.LX_Number_of_devices__c}" onblur="nod(this,'{!$Label.Device_Range_JS}','{!opp}');" >&nbsp;&nbsp;&nbsp;&nbsp;<i>{!$Label.DeviceRangeNoteP}</i>       
+              <apex:actionSupport action="{!Calculations}" event="onkeyup" rerender="caltable" status="counterStatus" />
+        </apex:inputField>
+        <apex:inputField value="{!PSObj.LX_All_lexmatk_devices__c}" onblur="led(this,'{!$Label.Lexmark_Devices_JS}','{!opp}');">
+        </apex:inputField>
+        <apex:inputField value="{!PSObj.LX_Base_Type__c}" onblur="pcb(this,'{!$Label.Base_Type_JS}','{!opp}');" />
+        <apex:inputField value="{!PSObj.LX_Badges_used__c}" >
+          <apex:actionSupport action="{!Calculations}" event="onchange" rerender="caltable" status="counterStatus" />
+        </apex:inputField>
+      </apex:pageBlockSection>
+      
+      <apex:pageBlockSection title="Solution Features" columns="1">
+        <apex:inputField value="{!PSObj.LX_Document_accounting_required__c}" >
+          <apex:actionSupport action="{!Calculations}" event="onchange" rerender="caltable" status="counterStatus" />
+        </apex:inputField>
+        <apex:inputField value="{!PSObj.LX_Mobile_Print_Required__c}" >
+          <apex:actionSupport action="{!Calculations}" event="onchange" rerender="caltable" status="counterStatus" />
+        </apex:inputField>
+      </apex:pageBlockSection>
+      
+      <br/><br/>
+        <apex:actionStatus id="counterStatus" startText="Calculating..." stopText="Done"/>
+      <br/><br/>
+      
+      <apex:outputPanel id="caltable">
+        <apex:pageBlockTable value="{!PSObj}" var="item" title="Budgetary Estimate" align="center" frame="box" >
+        
+          <apex:column headerValue="Description"> 
+            Licensing and 1st Year Support<br/><br/>
+            <apex:outputPanel rendered="{!PSObj.LX_Badges_used__c=='Yes'}">
+              Card Reader Hardware<br/><br/>
+            </apex:outputPanel>
+            Professional Services<br/><br/>
+            <b>Total</b><br/><br/>
+            <b>Per Device Cost</b><br/><br/><br/><br/>
+            Annual Support Renewal After Year 1
+          </apex:column>
+          
+          <apex:column headerValue="Minimum Price" style="text-align:right;" headerClass="headerColumn"> 
+            <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Licensing_and_1st_year_support_min_value__c}"/></apex:outputText><br/><br/>
+            <apex:outputPanel rendered="{!PSObj.LX_Badges_used__c=='Yes'}">
+              <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Card_reader_hardware_min_value__c}"/></apex:outputText><br/><br/>
+            </apex:outputPanel>
+            <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Profession_services_min_value__c}"/></apex:outputText><br/><br/>
+            <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Total_min_value__c}"/></apex:outputText></b><br/><br/>
+            <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Per_device_min_value__c}"/></apex:outputText></b><br/><br/><br/><br/>
+            <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Anuual_support_renewal_after_year1_min_v__c}"/></apex:outputText>
+          </apex:column>
+          
+          <apex:column headerValue="Maximum Price" style="text-align:right;" headerClass="headerColumn"> 
+            <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Licensing_and_1st_year_support_max_value__c}"/></apex:outputText><br/><br/>
+            <apex:outputPanel rendered="{!PSObj.LX_Badges_used__c=='Yes'}">
+              <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Card_reader_hardware_max_value__c}"/></apex:outputText><br/><br/>
+            </apex:outputPanel>
+            <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Profession_services_max_value__c}"/></apex:outputText><br/><br/>
+            <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Total_max_value__c}"/></apex:outputText></b><br/><br/>
+            <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Per_device_max_value__c}"/></apex:outputText></b><br/><br/><br/><br/>
+            <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!PSObj.Anuual_support_renewal_after_year1_max_v__c}"/></apex:outputText>
+          </apex:column>
+          
+        </apex:pageBlockTable> 
+        <br/><br/>
+      </apex:outputPanel>
+      {!$Label.Step2Print}  
+    </apex:pageBlock>
+  </apex:form>
+</apex:page>

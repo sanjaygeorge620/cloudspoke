@@ -1,0 +1,310 @@
+<apex:page standardcontroller="Migration_Request__c" extensions="MigrationRequest_Extension">
+<apex:form >
+	<apex:outputpanel id="mainOP">
+		<apex:pageBlock title="User Stories">
+			<apex:pageMessages id="errors" /> 
+						
+			<apex:pageBlockButtons location="top" rendered="{!showCreateNewButton}">
+				 
+				<apex:commandButton id="cmb1" value="Select User Stories" action="{!newUserStoryToggle}" rendered="{!!showNewUserStory}" rerender="cmb1,cmb2,cmb3,mainOP,opRead,opCreate" status="status2" />
+				<apex:commandButton id="cmb3" value="Save" action="{!performUpdate}" rendered="{!showNewUserStory}" reRender="cmb1,cmb2,cmb3,mainOP,opRead,opCreate,errors" status="status2" />
+				<apex:commandButton id="cmb2" value="Cancel" immediate="true" action="{!newUserStoryToggle}" rendered="{!showNewUserStory}" reRender="cmb1,cmb2,cmb3,mainOP,opRead,opCreate" status="status2" />
+			
+			</apex:pageBlockButtons>
+
+			<apex:toolbar id="toolbar"
+							rendered="{!showNewUserStory}"
+		                    style="background: transparent url('/img/alohaSkin/metaBar_sprite.png') left -104px repeat-x; border: 1px solid #e1e0e0; 
+		                                border-top-color: #d1d1d1; -moz-border-radius: 5px; -webkit-border-radius: 5px; height: 33px; 
+		                                border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; border-bottom-right-radius: 5px 5px; 
+		                                border-bottom-left-radius: 5px 5px; border-bottom: 1px solid #C1C1C1;">
+		                    
+		            
+		            
+		            
+		            <apex:toolbarGroup id="toolbarMainTitle" location="left" style="padding-top:8px;">
+		                
+		                <apex:outputPanel id="qtyOP">
+		                	<apex:outputText value="Displaying <b>{!searchListSize}</b> Search Results" style="color:#606060; font-size:14px; font-weight:normal;" escape="false" />
+		                </apex:outputPanel>
+		                
+		            </apex:toolbarGroup> 
+		            
+		            <apex:toolbarGroup location="right" style="padding-top:6px;">
+		               
+		            	<script type="text/javascript">
+			                 function doFilter() { 
+			                     var t = setTimeout(function() {
+			                         searchServer(document.getElementById("IPRId").value);
+			                     }, 500);
+			                 }
+			             </script> 
+			              
+			             <apex:actionFunction name="searchServer" action="{!runFilter}" status="status2" rerender="opCreate,qtyOP,errors">
+			                 <apex:param name="searchProjectId" value="" />
+			             </apex:actionFunction>
+
+	               		<div style="padding:6px 150px 0px 0px;"> 
+		               		<label for="quickSearch" style="color:#666;">search </label>
+							<input name="quickSearch" id="IPRId" onkeyup="doFilter();" type="text" />
+							<input type="text" style="position: absolute; left: -9999px;" />
+							<!--
+		                	<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>-->
+						</div>
+
+
+		            </apex:toolbarGroup>
+		              
+		                
+		        </apex:toolbar>
+
+			
+			<div style="position:relative; overflow:auto;"> 
+        
+	        <apex:outputPanel >
+	            <apex:actionStatus id="status2">
+	                <apex:facet name="start">
+	                    <div style="width: 100%; height: 100%; background-color:#fbfbfb; opacity:0.65;" class="waitingSearchDiv" id="el_loading">
+	                        <div class="waitingHolder" style="top: 45px; ">
+	                            <img src="/img/loading.gif" class="waitingImage" title="Please Wait..." />
+	                            <span class="waitingDescription">Loading...</span>
+	                        </div>
+	                    </div>
+	                </apex:facet>
+	            </apex:actionStatus>
+	        </apex:outputPanel>
+			
+			<apex:outputPanel id="opRead" rendered="{!!showNewUserStory}">
+			
+				<apex:outputPanel id="pbtSearch3" rendered="{!listSize < 1}">
+			        <table class="list" border="0" cellspacing="0" cellpadding="0">
+			        	<tbody>
+			        		<tr class="headerRow">
+			        			<th scope="col" class="noRowsHeader">
+			        				No records to display
+		        				</th>
+	        				</tr>
+						</tbody>
+					</table>
+		        </apex:outputPanel>
+		        
+		        <div style="max-height:265px; overflow: auto;">
+		        
+	        	<apex:outputPanel id="pbtSearch4" rendered="{!listSize > 0}">
+		        	<table class="list" border="0" cellspacing="0" cellpadding="0">
+		            	<tbody>
+		            	
+			            	<tr class="headerRow"> 
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="#" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Name" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="State" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Iteration" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Release" />
+			                    	
+			                    </th>
+			                </tr>
+		            	
+			                <apex:repeat value="{!rallyUserStories}" var="us">
+			                <!-- ListRow -->
+			                <tr class="dataRow even first" onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}" onmouseout="if (window.hiOff){hiOff(this);}" onmouseover="if (window.hiOn){hiOn(this);}">
+			                     
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usId}" />
+			                    </td>
+			                    <td class="datacell">
+			                         <!-- <apex:outputLabel value="{!us.usName}" /> -->
+			                         <apex:outputLink value="https://rally1.rallydev.com/#/{!us.usProjectId}/detail/userstory/{!us.usObjectId}" target="_blank" styleClass="actionLink">{!us.usName}</apex:outputLink>
+			                    </td>
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usStatus}" />
+			                    </td>
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usIteration}" />
+			                    </td>
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usRelease}" />
+			                    </td>
+			                </tr>
+			                </apex:repeat> 
+			            </tbody>
+		        	</table>
+		        </apex:outputPanel>
+		        
+		        </div>
+	        
+	        </apex:outputPanel>
+	        <apex:outputPanel id="opCreate" rendered="{!showNewUserStory}">
+				<apex:outputPanel id="pbtSearch32" rendered="{!searchListSize < 1}">
+			        <table class="list" border="0" cellspacing="0" cellpadding="0">
+			        	<tbody>
+			        		<tr class="headerRow">
+			        			<th scope="col" class="noRowsHeader">
+			        				No records to display - Search by Project ID (ex: "IPR003468") or Rally User Story (ex: "US3707")
+		        				</th>
+	        				</tr>
+						</tbody>
+					</table>
+		        </apex:outputPanel>
+				<div style="max-height:265px; overflow: auto;">
+					<apex:outputPanel id="pbtSearch44" rendered="{!searchListSize > 0}">
+			        	<table class="list" border="0" cellspacing="0" cellpadding="0">
+			            	<tbody>
+			            	
+				            	<tr class="headerRow"> 
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="#" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="Name" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="State" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="Iteration" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="Release" />
+				                    	
+				                    </th>
+				                </tr>
+			            	
+				                <apex:repeat value="{!rallyUserStoriesByProjectId}" var="us">
+				                <!-- ListRow -->
+				                <tr class="dataRow even first" onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}" onmouseout="if (window.hiOff){hiOff(this);}" onmouseover="if (window.hiOn){hiOn(this);}">
+				                    
+				                    <td class="datacell">
+				                         <apex:inputCheckbox value="{!us.isSelected}" />
+				                    </td>
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usId}" />
+				                    </td>
+				                    <td class="datacell">
+				                         <!-- <apex:outputLabel value="{!us.usName}" /> -->
+				                         <apex:outputLink value="https://rally1.rallydev.com/#/18402917832d/detail/userstory/{!us.usObjectId}" target="_parent" styleClass="actionLink">{!us.usName}</apex:outputLink>
+				                    </td>
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usStatus}" />
+				                    </td>
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usIteration}" />
+				                    </td>
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usRelease}" />
+				                    </td>
+				                </tr>
+				                </apex:repeat> 
+				            </tbody>
+			        	</table>
+			        </apex:outputPanel>
+			        
+			        
+			        <apex:outputPanel id="pbtSearch04" rendered="{!listSize > 0}">
+			        	<br /><br />
+			        	<h2>Selected User Stories</h2>
+			        	<table class="list" border="0" cellspacing="0" cellpadding="0">
+			            	<tbody>
+			            	
+				            	<tr class="headerRow"> 
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="#" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="Name" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="State" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="Iteration" />
+				                    	
+				                    </th>
+				                    <th scope="row" class=" deemphasize">
+				                    	
+				                    	<apex:outputLabel value="Release" />
+				                    	
+				                    </th>
+				                </tr>
+			            	
+				                <apex:repeat value="{!rallyUserStories}" var="us">
+				                <!-- ListRow -->
+				                <tr class="dataRow even first" onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}" onmouseout="if (window.hiOff){hiOff(this);}" onmouseover="if (window.hiOn){hiOn(this);}">
+				                    
+				                    <td class="datacell">
+				                         <apex:inputCheckbox value="{!us.isSelected}" />
+				                    </td> 
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usId}" />
+				                    </td>
+				                    <td class="datacell">
+				                         <!-- <apex:outputLabel value="{!us.usName}" /> -->
+				                         <apex:outputLink value="https://rally1.rallydev.com/#/18402917832d/detail/userstory/{!us.usObjectId}" target="_parent" styleClass="actionLink">{!us.usName}</apex:outputLink>
+				                    </td>
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usStatus}" />
+				                    </td>
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usIteration}" />
+				                    </td>
+				                    <td class="datacell">
+				                         <apex:outputLabel value="{!us.usRelease}" />
+				                    </td>
+				                </tr>
+				                </apex:repeat> 
+				            </tbody>
+			        	</table>
+			        </apex:outputPanel>
+				
+				</div>
+			</apex:outputPanel>
+	        
+			
+			
+			</div>
+		</apex:pageBlock>
+	
+	
+	</apex:outputpanel>
+
+</apex:form>
+</apex:page>

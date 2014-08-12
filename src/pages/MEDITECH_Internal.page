@@ -1,0 +1,54 @@
+<!-- This Page has internal links for LearnMode Strategies Page under Learning Business Applications for MEDITECH  -->
+<!-- Created by Pemmanni on October 25th 2011 -->
+<apex:page controller="SitesControllerInternal">
+<title>MEDITECH</title>
+    <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+    jQuery('.toolbar-documentation').addClass('active');
+    scaletowindow('#itarget',900,300);});
+    jQuery(window).resize(function() {
+    scaletowindow('#itarget',900,300);});
+    </script>
+    <div class="breadcrumb">
+    <ul>
+    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+    <li><a class="current" href="{!$page.MEDITECH_iNTERNAL}">MEDITECH</a></li>
+    </ul>   
+    </div>    
+    <div class="cp_core">
+    <apex:pageMessages />
+    <div class="column full-width" >
+    <div class="callout spotlight">    
+    <div class="callout-content"><br/>
+    <div><H1 align="center">LearnMode with MEDITECH</h1></div><br /><hr /><br />
+    <div class="callout-content">
+    <p>MEDITECH, an EMR (electronic medical records) healthcare system integrates with ImageNow in business processes such as Patient Access, Medical Records, and Back Office among others. </p><br />
+    <p>This page describes the different approaches to learning a MEDITECH screen. Once a screen is successfully learned, it can be used to drive searching within ImageNow using a <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwr&popup=true">view action filter</a>.  </p><br/>
+    <p><b>Note:</b> To learn a MEDITECH screen, you will need the global privilege to Manage Application Plans within ImageNow. </p><br/><br/>
+    <p><h2><font color= "FF9933">Various approaches to learning MEDITECH screens:</font></h2></p><br />
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNyT&popup=true"><h3>Learning MEDITECH Client/Server</h3></a><br />
+    <p>MEDITECH Client/Server screens can be learned using HyperLearn LearnMode method. Refer to <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNoX&popup=true">HyperLearn Overview</a> in Knowledgebase for tips when using HyperLearn. </p><br/>
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Troubleshoot_Internal?id=kA170000000GuZD&popup=true"><h3>Learning MEDITECH Client/Server pre-5.x with “Large Size” font option</h3></a><br />
+    <p>A custom font template is required when learning MEDITECH Client/Server screens with large size font option. </p><br />
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNpQ&popup=true"><h3>Learning MEDITECH MAGIC Workstation Client version 3.x and 4.x</h3></a><br />
+    <p>MEDITECH MAGIC Workstation Client screens can be learned using Terminal Capture LearnMode method.  </p><br /><br />
+    <div class="column rightcolumn">  
+    <div class="callout fd">
+    <a class="title-bar" href="#"><span class="sprite_cpicons fd">&nbsp;</span><font color= "FF9933">Related Topics</font></a>
+    <div class="callout-content"><br />
+    <a href="{!$page.LearnMode_Strategies_FCL}"><h3>LearnMode Strategies</h3></a><br/>
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Troubleshoot_Internal?id=kA170000000GtBZ&popup=true"><h3>MEDITECH HyperLearn Fonts</H3></a><br/>
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNpB&popup=true"><h3>Using HyperLearn Debug</h3></a>
+    </div>                        
+    </div>                        
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </apex:define>
+  </apex:composition>
+</apex:page>

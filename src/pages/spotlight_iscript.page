@@ -1,0 +1,115 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <title>{!SITE_NICKNAME+' | Knowledgebase: ImageNow iScript Uses and Functionality'}</title>
+        <script type="text/javascript"> 
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-knowledgebase').addClass('active');
+              jQuery(function() {
+                   jQuery('.index').click( function() {
+                         jQuery.scrollTo( jQuery(this).attr('href'), 1000);
+                   });
+                });  
+            });  
+        </script> 
+        <div class="cp_core">
+            <apex:pageMessages />
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.Knowledgebase}">Knowledge</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">ImageNow iScript Uses and Functionality</a></li>
+                    
+                </ul>
+            </div> 
+            <div class="column full-width">
+                <div class="callout spotlight">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons knowledge">&nbsp;</span>ImageNow iScript Uses and Functionality</a>
+                    <div class="callout-content"> 
+                        <div class="spotlight-summary"> 
+                            <div class="spotlight-index"> 
+                                <a class="index" href="#section-1" title="Click to scroll to section">Introduction</a> 
+                                <a class="index" href="#section-2" title="Click to scroll to section">Usage Overview </a> 
+                                <a class="index" href="#section-3" title="Click to scroll to section">iScript Best Practices</a> 
+                                <a class="index" href="#section-4" title="Click to scroll to section">Functionality Samples </a> 
+                            </div>
+                        </div>  
+                        <div class="spotlight-title" id="section-1">Introduction</div> 
+                        <div class="spotlight-summary">
+                            <p>iScript is the ImageNow environment programming language. It is a fully compliant, ECMA-262 and JavaScript-based method of accessing data and    performing customized functions within ImageNow components. </p>
+                            <br />
+                            <p>iScript is a licensed product  component of the ImageNow Product Suite and is installed as part of the ImageNow Server installation. iScript     development can be done either by an ImageNow Administrator or by Perceptive Software as a fee based service.</p>
+                            <br />
+                            <p>It includes certain JavaScript objects, such as Date, String, RegExp (regular expressions), and Math however it does not support JavaScript  objects for creating/manipulating windows or input/output via alert, input boxes or forms. iScript contains</p>
+                            <br />
+                            <dl> 
+                                <dt>ScriptEase Library (SElib)</dt>
+                                <dd class="no-arrow">Most commonly used for grabbing files from a directory, splitting filenames, and a suspend     method.</dd>
+                                <br />
+                                
+                                <dt>ODBC Library (SEDBC)</dt>
+                                <dd class="no-arrow">Used for connecting to, querying, and updating databases via ODBC. To use this library, the script must have: #link “sedbc”.</dd>
+                                <br />
+
+                                <dt>COM Library (SECOMOBJ)</dt>
+                                <dd class="no-arrow">Used on Windows servers to integrate with the COM layer of Windows applications.  To use this library, the script must have: #link “secomobj”.</dd>
+                                <br />
+
+                                <dt>XML Library (INXML)</dt>
+                                <dd class="no-arrow">Used to create and parse XML objects to and from files or string variables. To use this library, the script must have: #link “inxml”.</dd>
+                            </dl>
+                            <br />
+                        </div>
+
+                        <div class="spotlight-title" id="section-2">Usage Overview </div> 
+                        <div class="spotlight-summary"> 
+                                <p>A benefit you can gain by using iScript is to automate ImageNow tasks, such as routing documents requiring additional work,  approvals and more based on data obtained from third-party business applications and databases.</p> 
+                                <br />
+                                <p>What if you are indexing documents to records in your business application environment but realize that not all data is available on the     application’s form? Using iScript, you can populate the remaining document index values based on the result of a database query to the business     application’s database. </p>
+                                <br />
+                                <p>This page connects you to key uses and iScript functionality that can get you started in developing your own customized scripts.</p>
+                                <br />
+                                <dl>    
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00001334?popup=true">Basics of iScript</a></dd>
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014479?popup=true">iScript Features by Version</a></dd>
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014497?popup=true">Using iScriptDebug and Logging</a></dd>
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00000277?popup=true">How to Run an iScript</a></dd>
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014499?popup=true">How to Test and Debug an iScript</a></dd>
+                                </dl>           
+                        </div>                            
+                        <div class="spotlight-title" id="section-3">iScript Best Practices</div> 
+                        <div class="spotlight-summary"> 
+                                Best practices developed by Perceptive Software based on experiences troubleshooting iScript issues in customer environments.
+                        </div> 
+                        <dl>                        
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014495?popup=true">Best Practices for integrating iScript into workflow</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014532?popup=true">Best Practices for running iScripts using INTool</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014533?popup=true">Best Practices for developing iScripts</a></dd>
+                        </dl>
+ 
+                        <div class="spotlight-title" id="section-4">Functionality Samples</div> 
+                        <div class="spotlight-summary"> 
+                                The following samples demonstrate how to use many of the functions available in iScript, the JavaScript language of ImageNow.
+                        </div>
+
+                        <dl>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00004304?popup=true">Retrieving the destination workflow queue name for an item from an outbound workflow iScript</a> </dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000001589?popup=true">iScript Sample – Assigning document type privileges with one function</a> </dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014500?popup=true">iScript Sample – Setting Custom Properties from a DB Lookup</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014501?popup=true">iScript Sample – Moving F4 To Document Type</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014502?popup=true">iScript Sample – Read Stamp and Route</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014503?popup=true">iScript Sample – Routing by Custom Property</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014504?popup=true">iScript Sample – Routing by Index Value</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014505?popup=true">iScript Sample – Add Rejected Stamp</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014506?popup=true">iScript Sample – Adding Files to Documents</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00001476?popup=true">Using getDocumentsByVSlQuery iScript function</a> </dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014507?popup=true">Setting custom properties using iScript</a></dd>
+                        </dl>
+                 
+                    </div>    
+                </div>
+            </div>
+        </div>
+   </apex:define>                 
+  </apex:composition> 
+</apex:page>

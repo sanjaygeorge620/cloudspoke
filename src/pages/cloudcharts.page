@@ -1,0 +1,28 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController"> 
+
+<apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+ <apex:define name="title"> 
+       <title>{!SITE_NICKNAME} | Metrics</title>
+    </apex:define>
+<apex:define name="javascriptcalls">
+       <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-metrics').addClass('active');              
+            });  
+        </script>
+     </apex:define>
+  <apex:define name="body">
+   <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                <a class="home" href="{!$Page.Home}">Home</a>
+                <a class="current" href="#">Metrics</a>
+              </nav>
+            </div>
+         </div>     
+  <c:googleChart >
+  </c:googleChart>
+  </apex:define>
+</apex:composition>
+</apex:page>

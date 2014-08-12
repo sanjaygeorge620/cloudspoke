@@ -1,0 +1,15 @@
+<apex:page showHeader="true" sidebar="false" applyHtmlTag="true" controller="BIReportsController">
+     <apex:form >
+      <apex:outputPanel rendered="{!!hasAccess}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        
+      <apex:outputPanel rendered="{!hasAccess}">        
+                <apex:pageBlock id="dashboardBlock">
+                    <apex:pageBlockSection collapsible="false" title="{!issSelectedDashboard}">
+                        <p align="right"><object data="{!issReportLink}" height="1700" width="1700"></object></p>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>                
+           </apex:outputPanel>     
+     </apex:form>    
+</apex:page>

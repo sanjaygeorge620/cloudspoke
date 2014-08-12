@@ -1,0 +1,51 @@
+<apex:page tabStyle="lead" standardController="lead" extensions="LeadRecordTypeSelection">
+
+<apex:form >
+    <apex:SectionHeader title="{!$ObjectType.Lead.label}" subtitle="Select {!$ObjectType.Lead.label} {!$ObjectType.Recordtype.label}"/>
+    <apex:pageMessages id="error" />
+    <apex:pageMessage rendered="{!!$ObjectType.Lead.Createable}" summary="Insufficient Privileges" severity="warning" strength="3" />
+    <apex:outputpanel rendered="{!$ObjectType.Lead.Createable}">
+        <apex:pageBlock title="Select {!$ObjectType.Lead.label} {!$ObjectType.Recordtype.label}" >
+           <apex:pageBlockButtons location="bottom" >
+               <apex:commandButton value="Continue" rendered="false" action="{!btnContinue}"/>
+               <apex:commandButton value="Continue" action="{!btnContinueCustom}"/>
+               <apex:commandButton value="Cancel" action="{!Cancel}"/>
+           </apex:pageBlockButtons>
+           <apex:pageBlockSection >
+               <apex:pageBlockSectionItem >
+                   <apex:outputLabel >{!$ObjectType.Recordtype.label}</apex:outputLabel>
+                   <apex:outputPanel >
+                     <div class="requiredInput">
+                         <div class="requiredBlock"></div>
+                         <apex:selectlist size="1" required="true" label="Lead Type" value="{!selectedType}">
+                              <apex:selectOptions value="{!leadTypes}" />
+                         </apex:selectList>
+                     </div>   
+                   </apex:outputPanel>
+                   
+               </apex:pageBlockSectionItem>
+           </apex:pageBlockSection>
+        </apex:pageBlock>
+        <br />
+        <br />
+        <div >
+            <h3>{!$ObjectType.Lead.label} {!$ObjectType.Recordtype.label}</h3>
+            <table class="recordTypeInfo infoTable" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr class="headerRow">
+                        <th scope="col">{!$ObjectType.Recordtype.label} {!$ObjectType.Recordtype.fields.Name.label}</th>
+                        <th scope="col">{!$ObjectType.Recordtype.fields.Description.label}</th>
+                    </tr>
+                    <apex:repeat value="{!LeadRecordtypes}" var="r">
+                        <tr>
+                            <th scope="row"><apex:outputtext value="{!r.name}"/></th>
+                            <td ><apex:outputtext value="{!r.Description}"/></td>
+                        </tr>
+                    </apex:repeat>
+                    
+                </tbody>
+            </table>
+        </div>    
+     </apex:outputpanel>   
+</apex:form>    
+</apex:page>

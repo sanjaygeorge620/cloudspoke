@@ -1,0 +1,39 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | Developer Showcase'}" controller="SitesContentController">
+  <title>{!SITE_NICKNAME+' | Developer Showcase'}</title>
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}">
+        <apex:define name="javascript">
+              //change icons
+              jQuery('.sprite_cpicons.secondary').removeClass('alert');
+              jQuery('.sprite_cpicons.secondary').addClass('partner-show');
+        </apex:define>
+        
+        <apex:define name="breadcrumb">
+             Developer Showcase
+        </apex:define>
+        
+        <apex:define name="titlebar">
+             Developer Showcase
+        </apex:define>
+        
+        <apex:define name="content">
+            <div class="rich-content full">
+                    <p>
+                        Here at the Perceptive Software Developer Network we are proud to work closely with our many member organizations dedicated to enhancing our customer’s experience through the use of innovative and collaborative technology solutions. 
+                    </p>
+                    <p>
+                        Please take a look at our member organizations:
+                    </p>
+                    <apex:repeat value="{!PARTNER_SHOWCASE}" var="s">
+                        <p>
+                            <a target="_blank" href="{!s.Image_Link__c}"><apex:image url="{!s.Image__c}"/></a>
+                            <h5>Development Area: {!s.Development_Area__c}</h5>
+                            <p>
+                                <apex:outputText escape="false" value="{!s.Description_Text__c}" />
+                            </p>
+                            
+                        </p>
+                    </apex:repeat>
+            </div>   
+        </apex:define>
+  </apex:composition>
+</apex:page>

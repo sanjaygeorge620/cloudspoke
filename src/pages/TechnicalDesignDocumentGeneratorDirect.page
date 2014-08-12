@@ -1,0 +1,7 @@
+<apex:page controller="TechnicalDocumentController" sidebar="false" action="{!TempPage}" >
+
+
+	<head>
+        <apex:stylesheet value="{!URLFOR($Resource.iConnectTemplate,'iconnectTechnicalForm.css')}"/>
+    </head>
+</apex:page>

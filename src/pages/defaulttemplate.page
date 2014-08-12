@@ -1,0 +1,311 @@
+<apex:page controller="SitesHomeController" standardStylesheets="false" showHeader="false">
+
+
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9]><html class="no-js ie9" lang="en"> <![endif]-->
+<!--if !IE]><!-->
+<html lang="en" class="no-js"><!--<![endif]-->
+<head>
+  <meta content="{!SITE_META_DESCRIPTION}" name="description" />
+  <meta content="{!SITE_META_KEYWORD}" name="keywords" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" /> 
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <apex:insert name="title" />
+  <script type="text/javascript" src="//az322532.vo.msecnd.net/script/modernizr.2.61.js">//empty</script>
+  <link rel="stylesheet" href="//www.perceptivesoftware.com/includes/css/ps3.css" />
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="//www.perceptivesoftware.com/includes/css/partners.css" />
+  <link rel="stylesheet" href="//www.perceptivesoftware.com/includes/css/country.css" />
+  <link rel="stylesheet" href="//www.perceptivesoftware.com/includes/css/ps3-print.css" media="print" />
+  <!--SALESFORCE.COM -->
+  
+
+<!--[if lt IE 9]> <script type="text/javascript" src="//www.perceptivesoftware.com/scripts/released/webengine/respond.min.js">//empty</script> 
+  <![endif]-->
+</head>
+<body>
+  <div class="frame">
+    <header>
+      <div class="row-brand">
+        <div class="brand hide-text"><a href="/">Perceptive Software</a></div>
+        <nav class="controlbar">
+          <a href="//www.perceptivesoftware.com/contact">Contact Us</a>
+          <a href="//www.perceptivesoftware.com/careers">Careers</a>
+          <a href="//www.perceptivesoftware.com/login">
+            Log In
+          </a>
+        </nav>
+        <div class="country-selector-link">
+          <a href="//www.perceptivesoftware.com/country-select" id="country-trigger"><span class="icon country us" aria-hidden="true">US</span></a>
+        </div>
+        <div id="country-selector" class="country-selector hide-completely">
+          <ul class="links-list links-icon">
+            <li><a href="http://www.perceptivesoftware.co.uk"><span class="icon country gb" aria-hidden="true">GB</span><span class="label">United Kingdom</span></a></li>
+            <li><a href="http://au.perceptivesoftware.com"><span class="icon country au" aria-hidden="true">AU</span><span class="label">Australia</span></a></li>
+            <li><a href="http://www.perceptivesoftware.nl"><span class="icon country nl" aria-hidden="true">NL</span><span class="label">Netherlands</span></a></li>
+            <li><a href="http://www.perceptivesoftware.es"><span class="icon country es" aria-hidden="true">ES</span><span class="label">Spain</span></a></li>
+            <li><a href="http://www.perceptivesoftware.fr"><span class="icon country fr" aria-hidden="true">FR</span><span class="label">France</span></a></li>
+            <li><a href="http://www.perceptivesoftware.de"><span class="icon country de" aria-hidden="true">DE</span><span class="label">Germany</span></a></li>
+            <li><a href="http://www.perceptivesoftware.it"><span class="icon country it" aria-hidden="true">IT</span><span class="label">Italy</span></a></li>
+            <li><a href="http://www.perceptivesoftware.com.br"><span class="icon country br" aria-hidden="true">BR</span><span class="label">Brazil</span></a></li>
+            <li><a href="http://www.perceptivesoftware.mx"><span class="icon country mx" aria-hidden="true">MX</span><span class="label">Mexico</span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="toggle-nav links-pictogram"><a class="button touch-ui pictogram-down">Show Menu</a></div>
+      <div class="row-nav">
+        <nav class="primary-nav">
+          <ul id="main-nav" class="primary-nav-level1">
+            <li class="dropdown-trigger"><a href="/products" class="test">Products</a>
+              <div class="dropdown products grid">
+                <div class="c9 m grid">
+                  <div class="c8 m">
+                    <p class="h2">
+                      <a href="//www.perceptivesoftware.com/products/perceptive-content">Content</a>
+                    </p>
+                    <ul class="primary-nav-level2">
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-content/document-management">Document Management</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-content/rich-media-management">Video and Rich Media Management</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-content/e-signatures">Electronic Signatures</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-content/rim">Records and Information Management</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-content/document-composition">Document Composition</a></li>
+                      <li><a href="//www.perceptivesoftware.com/solutions/healthcare/patient-care/vendor-neutral-archive">Vendor Neutral Archive</a></li>
+                    </ul>
+                  </div>
+                  <div class="c8">
+                    <p class="h2">
+                      <a href="//www.perceptivesoftware.com/products/perceptive-process">Process</a>
+                    </p>
+                    <ul class="primary-nav-level2">
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-process/process-mining">Process Mining</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-process/process-modeling">Process Modeling</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-process/process-documentation">Process Documentation</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-process/case-management">Case Management</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-process/workflow-management">Workflow</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-process/process-analytics">Process Analytics</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="c7 grid">
+                  <div class="c8 m">
+                    <p class="h2">
+                      <a href="//www.perceptivesoftware.com/products/perceptive-capture">Capture</a>
+                    </p>
+                    <ul class="primary-nav-level2">
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-capture/document-imaging">Document Imaging</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-capture/intelligent-capture">Intelligent Capture</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-capture/e-forms">E-Forms</a></li>
+                    </ul>
+                    <p class="h2">
+                      <a href="//www.perceptivesoftware.com/products/perceptive-search">Search</a>
+                    </p>
+                    <ul class="primary-nav-level2">
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-search/enterprise-search">Enterprise Search</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-search/workgroup-search">Workgroup Search</a></li>
+                    </ul>
+                  </div>
+                  <div class="c8">
+                    <p class="h2"><a href="//www.perceptivesoftware.com/products/perceptive-interact">Interact</a></p>
+                    <ul class="primary-nav-level2">
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-interact/platform-integration/learnmode-pretrieve">Platform Integration</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-interact/hardware-integration/capture-devices">Hardware Integration</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-interact/application-integration/jd-edwards">Application Integration</a></li>
+                    </ul>
+                    <p class="h2">Other Products</p>
+                    <ul class="primary-nav-level2">
+                      <li><a href="//www.perceptivesoftware.com/products/perceptive-platform">Perceptive Platform</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/software-deployment">Deployment Options</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/oem-technologies">OEM Technologies</a></li>
+                      <li><a href="//www.perceptivesoftware.com/products/rebranded">Rebranded Products</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="dropdown-trigger">
+              <a href="//www.perceptivesoftware.com/solutions">Solutions</a>
+              <div class="dropdown solutions grid">
+                <div class="c8 m">
+                  <p class="h2">Departments</p>
+                  <ul class="primary-nav-level2">
+                    <li><a href="//www.perceptivesoftware.com/solutions/accounting-financials">Accounting &amp; Finance</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/human-resources">Human Resources</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/contract-management">Contract Management</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/legal-document">Legal</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/payroll-management">Payroll</a></li>
+                  </ul>
+                  <p class="h2">Enterprise</p>
+                  <ul class="primary-nav-level2">
+                    <li><a href="//www.perceptivesoftware.com/solutions/enterprise/knowledge-driven-enterprise">Knowledge-driven Enterprise</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/enterprise/enterprise-content-management">Enterprise Content Management</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/enterprise/business-process-management">Business Process Management</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/enterprise/enterprise-video">Enterprise Video &amp; Rich Media</a></li>
+                  </ul>
+                </div>
+                <div class="c8">
+                  <p class="h2">Industries</p>
+                  <ul class="primary-nav-level2">
+                    <li><a href="//www.perceptivesoftware.com/solutions/financial-services/financial-services-industry">Financial Services</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/healthcare/healthcare-software">Healthcare</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/education/education-software">Higher Education</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/k-12/k12-schools">K-12 Education</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/insurance/insurance-industry">Insurance</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/manufacturing-distribution/manufacturing-distribution-industry">Manufacturing</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/retail/retail-industry">Retail</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/federal-government/">Federal Government</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/govt">State Government</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/energy-water-utilities/energy-water">Energy &amp; Water Utilities</a></li>
+                    <li><a href="//www.perceptivesoftware.com/solutions/digital-media-publishing-industry">Digital Media Publishing</a></li>
+                  </ul>
+                </div>
+              </div>
+            </li>
+            <li><a href="//www.perceptivesoftware.com/services"> Services</a></li>
+            <li class=""><a href="//www.perceptivesoftware.com/partners"> Partners</a></li>
+            <li><a href="//www.perceptivesoftware.com/case-studies"> Case Studies</a></li>
+            <li><a href="http://customer.perceptivesoftware.com">Customer Portal</a></li>
+          </ul>
+        </nav>
+        <form method="Post" action="//www.perceptivesoftware.com/ps-search" class="search">
+          <input class="field" name="IW_FIELD_WEB_STYLE" results="5" autosave="unique" value="" type="search" />
+          <input type="hidden" name="IW_DATABASE" class="inputSelector" value="Perceptivesoftware.com" />
+          <input type="submit" value="Search" class="search-button" />
+        </form>
+      </div>
+      
+      <hr class="row-border" />
+    </header>
+    <div class="main" role="main">
+      
+      <div class="content grid">
+
+        <apex:insert name="body"/>
+
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="frame">
+      <div class="homepage grid">
+        <div class="c8 m">
+          <h1>Process and Content Management Software</h1>
+          <p class="big-statement">Perceptive Software bridges the gap between your enterprise
+            applications and the processes and information they don't manage,
+            giving you the visibility and control you need to improve financial
+            performance, reduce risk and ensure future flexibility.</p>
+
+            <ul class="social">
+              <li>
+                <a href="//twitter.com/perceptivesw" class="icon tw">Follow Us on Twitter</a>
+              </li>
+              <li>
+                <a href="//www.facebook.com/perceptivesw" class="icon fb">Like Us on Facebook</a>
+              </li>
+              <li>
+                <a href="//www.linkedin.com/company/perceptive-software" class="icon li">Join Us on LinkedIn</a>
+              </li>
+              <li>
+                <a href="//www.youtube.com/user/perceptivesoftware" class="icon yt">Watch Us on YouTube</a>
+              </li>
+              <li>
+                <a href="http://www.incontextmag.com/" class="icon in">Read Us on InContext</a>
+              </li>
+            </ul>
+          </div>
+          <div class="c2 m">
+            <p class="h3">Products</p>
+            <ul class="linklist">
+              <li>
+                <a href="//www.perceptivesoftware.com/capture">Capture</a>
+              </li>
+              <li>
+                <a href="//www.perceptivesoftware.com/content">Content</a>
+              </li>
+
+              <li>
+                <a href="//www.perceptivesoftware.com/process">Process</a>
+              </li>
+              <li>
+                <a href="//www.perceptivesoftware.com/search">Search</a>
+              </li>
+              <li>
+                <a href="//www.perceptivesoftware.com/interact">Interact</a>
+              </li>
+            </ul>
+          </div>
+          <div class="c2 m solutions-list">
+            <p class="h3">Solutions</p>
+            <ul role="nav" class="linklist">
+              <li>
+                <a href="//www.perceptivesoftware.com/solutions/industry/financial-services/financial-services-industry">Financial Services</a>
+              </li>
+              <li>
+                <a href="//www.perceptivesoftware.com/solutions/industry/healthcare/healthcare-industry">Healthcare</a>
+              </li>
+              <li>
+                <a href="//www.perceptivesoftware.com/solutions/industry/higher-education/imagenow-higher-education">Higher Education</a></li><li><a href="/solutions/industry/k-12-education/imagenow-k12-schools">K-12 Education</a></li><li><a href="/solutions/industry/insurance/insurance-industry">Insurance</a></li><li><a href="/solutions/industry/manufacturing-distribution/manufacturing-distribution-industry">Manufacturing</a></li><li><a href="/solutions/industry/retail/retail-industry">Retail</a></li><li><a href="/solutions/industry/federal-government">Federal Government</a></li><li><a href="/solutions/industry/state-government">State Government</a></li><li><a href="/solutions/industry/energy-water-utilities/imagenow-energy-water">Energy &amp; Water</a></li></ul>
+
+              </div>
+              <div class="c2 m">
+                <p class="h3">Community</p>
+                <ul class="linklist">
+                  <li>
+                    <a href="http://community.perceptivesoftware.com/industry_user_groups/default.aspx">Industry User Groups</a>
+                  </li>
+                  <li>
+                    <a href="http://community.perceptivesoftware.com/user_groups/default.aspx?snl=Regional%20User%20Groups&amp;sid=3">Regional User Groups</a>
+                  </li>
+                  <li>
+                    <a href="http://www.incontextmag.com/">InContext</a>
+                  </li>
+                  <li>
+                    <a href="http://www.incontextmag.com/blog.html">InContext Blog</a>
+                  </li>
+                  <li>
+                    <a href="http://inspire.perceptivesoftware.com/">Inspire</a>
+                  </li>
+                  <li><a href="http://discover.perceptivesoftware.com/LP=962?refer=site">Subscription</a></li>
+                </ul>
+              </div>
+              <div class="c2">
+                <p class="h3">Company</p>
+                <ul class="linklist">
+                  <li>
+                    <a href="//www.perceptivesoftware.com/company/about/index">About Perceptive Software</a>
+                  </li>
+                  <li>
+                    <a href="//www.perceptivesoftware.com/company/careers/index">Careers</a>
+                  </li>
+                  <li>
+                    <a href="//www.perceptivesoftware.com/company/news/index">Newsroom</a>
+                  </li>
+                  <li>
+                    <a href="//www.perceptivesoftware.com/company/contact-us/index">Contact Us</a>
+                  </li>
+                  <li>
+                    <a href="//www.perceptivesoftware.com/company/webinars-events/index">Webinars and Events</a>
+                  </li>
+                  <li><a href="http://csr.lexmark.com/">Corporate Social Responsibility</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="copyright">
+              <p>© {!YEAR(Today())} Perceptive Software All rights reserved. <a href="//www.perceptivesoftware.com/sitemap/index">Site Map</a> | <a href="//www.perceptivesoftware.com/company/terms-of-use">Terms of Use</a> | <a href="//www.perceptivesoftware.com/company/legal">Privacy Statement</a> | <a href="//www.perceptivesoftware.com/company/purchase-terms">Purchase Terms</a></p>
+            </div>
+          </div>
+
+          <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">//empty</script>
+          <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js">//empty</script>
+          <script type="text/javascript" src="//az322532.vo.msecnd.net/script/jquery.youtube-2.2.8.js">//empty</script>
+          <script type="text/javascript" src="//az322532.vo.msecnd.net/script/jquery.nivo.slider.pack.js">//empty</script>
+          <script type="text/javascript" src="//az322532.vo.msecnd.net/validate-1-9-0/jquery.validate.js">//empty</script>
+          <script type="text/javascript" src="//www.perceptivesoftware.com/scripts/released/webengine/general.js">//empty</script>
+          <script type="text/javascript" src="//az322532.vo.msecnd.net/script/jquery.cookie.js">//empty</script>
+
+        </footer>
+      </body>
+      </html>
+      <site:previewAsAdmin />  
+    </apex:page>

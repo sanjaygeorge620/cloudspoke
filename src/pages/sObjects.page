@@ -1,0 +1,11 @@
+<apex:page controller="sobjectsCls" readOnly="true" contentType="application/vnd.ms-excel#sobjects.xls">
+    <apex:form >
+        <apex:pageblock >
+            <apex:pageblocktable value="{!lstobjects}" var="obj">
+                <apex:column value="{!obj.objectName}"/>
+                <apex:column value="{!obj.objectAPIName}"/>
+            </apex:pageblocktable>
+        </apex:pageblock>
+    </apex:form>
+    
+</apex:page>

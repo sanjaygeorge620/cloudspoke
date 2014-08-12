@@ -1,0 +1,85 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesGenericController"> 
+
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | Upgrade Center</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+       <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-upgradecenter').addClass('active');
+              jQuery("#accordion").accordion({ active: false, autoHeight: false, collapsible: true, icons: { 'header': 'ui-icon-plus', 'headerSelected': 'ui-icon-minus' } });
+              jQuery(".tabs").tabs({ fx:{opacity:'toggle'} });
+            });  
+        </script>
+        <script type="text/javascript">
+            Shadowbox.init({});
+            function openShadowbox(el,mov){ 
+                Shadowbox.open({
+                    content:    mov,
+                    player:     "qt",
+                    title:      el.title,
+                    height:     564,
+                    width:     900                
+                }); 
+            } 
+    </script>
+     </apex:define>
+    <apex:define name="body">  
+
+        <apex:stylesheet value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/smoothness/jquery-ui.css" />
+        <apex:stylesheet value="{!URLFOR($Resource.Perceptive_Sites, 'css/upgradecenter.css')}" />
+
+       
+       
+        <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">Home</a>
+                    <a href="/apex/Upgrade">Upgrade Center</a>
+                    <a class="current" href="#">Upgrade – NolijWeb</a>
+              </nav>
+            </div>
+         </div>  
+         <div class="grid">
+            <section class="c12 m visible-grid-left"> 
+                <h1 class="first-header">Upgrade – Nolij Web</h1>
+                <h2>Preparing for an upgrade</h2>
+                <p>Perceptive Software provides a range of services dedicated to the upgrade of the Perceptive Software environment and solution. During project preparation, technical and process reviews uncover the specifications, prerequisites, and tasks required to update your system to the new version. By leveraging the project management and technical skills within the <a href="http://www.perceptivesoftware.com/services/upgrade-services">Upgrade Services</a> and<a href="http://www.perceptivesoftware.com/services/professional-services"> Professional Services</a> teams, we can provide an intuitive approach to updating Perceptive Software products.  The expertise delivered by our service teams enables customers to focus their business needs while our experienced resources provide insight to the upgrade process and latest business process enhancements.  </p>
+                <h2>Getting Started</h2>
+                <p>To get started with your upgrade, please review the available product information as it relates to your solution and contact our Upgrade Services Team at <a href="mailto:upgrade@perceptivesoftware.com"><u>upgrade@perceptivesoftware.com</u></a>.    Our resources will review your inquiry and route the information to the appropriate resources, you should be provided an initial response with 2 business days.</p>
+                <h2>Learn More About Our Latest Release</h2>
+                <p>NolijWeb 6.8 </p>
+                <p>Product Documentation</p>
+                <ul class="plain-list">
+                    <li><a href="https://docs.perceptivesoftware.com/Perceptive_Nolij_Web/en_US/6.8/Print/Perceptive_Nolij_Web_Administrator_Guide_6.8.x.pdf" target="_blank">Admin Guide</a></li>
+                    <li><a href="https://docs.perceptivesoftware.com/Perceptive_Nolij_Web/en_US/6.8/Print/Perceptive_Nolij_Web_User_Guide_6.8.x.pdf" target="_blank">User Guide</a></li>
+                    <li><a href="https://docs.perceptivesoftware.com/Perceptive_Nolij_Web/en_US/6.8/Print/Perceptive_Nolij_Web_Technical_Specifications_6.8.x.pdf" target="_blank">Technical Specifications</a></li>
+                    <li><a href="https://docs.perceptivesoftware.com/Perceptive_Nolij_Web/en_US/6.8/Print/Perceptive_Nolij_Web_Installation_and_Upgrade_Guide_6.8.x.pdf" target="_blank">Installation and Upgrade Guide</a></li>
+                    
+                    
+                    
+                    
+                   
+                </ul>
+                <p>Recommended Training</p>
+                <ul class="plain-list">
+                    <li><a href="https://perceptivesoftware.secure.force.com/Training" target="_blank">Training Page</a></li>
+                    
+                    
+                </ul>
+            </section>
+            <aside class="c4">
+                <ul class="links-list">
+                    <li><a href="https://perceptivesoftware.secure.force.com/servlet/servlet.FileDownload?file=015i00000011qSz">Perceptive Software End of Life Policy</a></li>
+                    <li><a href="https://perceptivesoftware.secure.force.com/servlet/servlet.FileDownload?file=015i00000011qTn">Self-Service Process</a></li>
+                </ul>
+            </aside>
+         </div> 
+         <hr class="row-break"/>
+        
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

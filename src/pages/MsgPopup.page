@@ -1,0 +1,55 @@
+<apex:page controller="MsgPopup" showHeader="false" sidebar="false">
+    <apex:form >
+        <div class="payment-details">
+                            <p class="label class-payment-details-title">Payment Information</p>
+                            <div class="left-inner-col">
+                                <p class="label pay-method">Payment Method:</p>
+                                <p class="item pay-method">
+                                    <apex:inputField required="true" id="pay-methods" value="{!REGISTRATION.Payment_Method__c}" styleclass="form-field pay-methods"/>
+                                    
+                                </p>
+                                <p class="label pay-order-number">Purchase Order Number</p>
+                                <p title="If not applicable type N/A."  class="item pay-order-number">
+                                    <apex:inputField required="false" value="{!REGISTRATION.Purchase_Order_Number__c}" id="purchase-order-number" styleclass="form-field purchase-order-number"/>
+                                    
+                                </p>
+                                <p class="label pay-credit-type">Credit Card Type:</p>
+                                <p class="item pay-credit-type">
+                                    <apex:inputField id="pay-credit-types" value="{!REGISTRATION.Credit_Card_Type__c}" styleclass="form-field pay-credit-types"/>
+                                </p>
+                                <p class="label pay-name">Name on Credit Card:</p>
+                                <p class="item pay-name"><apex:inputField value="{!REGISTRATION.Name_on_Credit_Card__c}" id="credit-card-owner" styleclass="form-field credit-card-owner"/></p>
+                                <p class="label pay-credit-num">Credit Card Number:</p>
+                                <p class="item pay-credit-num"><apex:inputField value="{!REGISTRATION.Credit_Card_Number__c}" id="credit-card-number" styleclass="form-field credit-card-number" /></p>
+                                <p class="label pay-exp-date">Credit Card Expiration Date:</p>
+                                <p class="item pay-exp-date"><apex:inputField value="{!REGISTRATION.Credit_Card_Expiration_Date__c}" id="credit-exp-date" styleclass="form-field credit-exp-date"/>
+                                                              </p>
+                            </div>
+                            <div class="right-inner-col">
+                                <p class="label pay-address-1">Address 1:</p>
+                                <p class="item pay-address-1">
+                                    <apex:inputField required="true" value="{!REGISTRATION.Address_1__c}" id="user-address-1" styleclass="form-field pay-address-1" />
+                                    
+                                </p>
+                                <p class="label pay-address-2">Address 2:</p>
+                                <p class="item pay-address-2"><apex:inputField value="{!REGISTRATION.Address_2__c}" id="user-address-2" styleclass="form-field" /></p>
+                                <p class="label pay-bill-city">Billing City:</p>
+                                <p class="item pay-bill-city">
+                                    <apex:inputField required="true" id="billing-city" styleclass="form-field billing-city" value="{!REGISTRATION.Billing_City__c}"/>
+                                    
+                                </p>
+                                <p class="label pay-bill-state">Billing State/Province:</p>
+                                <p class="item pay-bill-state">
+                                    <apex:inputField required="true" id="bill-states" styleclass="form-field bill-states"  value="{!REGISTRATION.Billing_State__c}"/>
+                                    
+                                </p>
+                                <p class="label pay-bill-zip">Billing Postal Code:</p>
+                                <p class="item pay-bill-zip"><apex:inputField required="true" value="{!REGISTRATION.Billing_Zip__c}" id="billing-zipcode" styleclass="form-field billing-zipcode"/></p>
+                                <p class="label pay-bill-country">Country:</p>
+                                <p class="item pay-bill-country"><apex:inputField required="true" value="{!REGISTRATION.Country__c}" id="billing-country" styleclass="form-field billing-country"/></p>
+                            </div>
+                        </div>
+                       
+    </apex:form>
+    
+</apex:page>

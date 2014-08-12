@@ -1,0 +1,34 @@
+<apex:page standardController="case" extensions="KnowledgeWorkflowSubmit" action="{!initKnowledgeWorkflowSubmit}" >
+    <apex:sectionHeader subtitle="{!$ObjectType.Article_Submission__c.label}" title="{!$Organization.Name}"/>
+    <apex:form >
+             <apex:commandLink action="{!URLFOR($Action.Case.View, c.id)}" value="Back to Record"/>
+             <apex:pagemessages id="error" />
+             
+             <apex:pageBlock title="Edit Existing Article(s)"  >    
+                <apex:pageBlockTable value="{!ExistingRecords}" var="r"  title="Edit">
+                    <apex:column headerValue="Action">
+                        <apex:commandLink action="{!URLFOR($Action.Article_Submission__c.View, r.id)}" value="View"/>
+                        <apex:outputPanel rendered="{!r.Status__c=='Pending Submission'}" >
+                            &nbsp;|&nbsp; 
+                            <apex:commandLink action="{!URLFOR($Action.Article_Submission__c.Edit, r.id)}" value="Edit" />
+                        </apex:outputPanel>
+                    </apex:column>
+                    <apex:column headerValue="{!$ObjectType.Article_Submission__c.fields.Name.label}" value="{!r.Name}"/>
+                    <apex:column headerValue="{!$ObjectType.Article_Submission__c.fields.Title__c.label}" value="{!r.Title__c}"/>
+                    <apex:column rendered="false" headerValue="{!$ObjectType.Article_Submission__c.fields.Status__c.label}" value="{!r.Status__c}"/>
+                    <apex:column headerValue="{!$ObjectType.Article_Submission__c.fields.lastmodifiedbyid.label}" value="{!r.lastmodifiedbyid}"/>
+                    <apex:column headerValue="{!$ObjectType.Article_Submission__c.fields.lastmodifieddate.label}" value="{!r.lastmodifieddate}"/>
+                    <apex:facet name="footer">
+                        <apex:outputpanel rendered="{!ExistingRecords.size==0}">
+                           No_records_to_display
+                        </apex:outputpanel>
+                    </apex:facet>
+                </apex:pageBlockTable>
+                
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton action="{!createKBArticle}" value="Create New"/>
+                </apex:pageBlockButtons>
+             </apex:pageBlock>
+             
+    </apex:form>
+</apex:page>

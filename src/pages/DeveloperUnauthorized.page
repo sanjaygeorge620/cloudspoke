@@ -1,0 +1,165 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesContentController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="title"> 
+       <title>{!SITE_NICKNAME} | Developer Network</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+       <script type="text/javascript"> 
+            jQuery(document).ready(function() {
+                    var els = jQuery('.ad_header_images a').get();
+                    var img_on=Math.floor(Math.random()*els.length)
+                    jQuery('.ad_header_images a').hide();
+                    jQuery('.ad_header_images a:eq(' + img_on + ')').show("fade",2000);
+                                        jQuery(document).Loginify({
+                    oid: '{!$Organization.id}',   
+                    pid: '060i0000000LnqV'   
+                    });
+
+            });
+        </script> 
+       </apex:define>
+    <apex:define name="body">
+      <div class="grid full-width">
+        <div id="ad_header" class="ad_header_images" >
+            <!-- Should rotate 3-5 images on refresh-->
+                <a style="display:none;" title="Perceptive Mobile" href="http://www.perceptivesoftware.com/products/perceptive-capture/mobile-capture" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Perceptive Mobile']);" ><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/2014_MobileCapture_FINAL.jpg')}" height="230" width="978" alt="Perceptive Mobile" /></a>
+                <a style="display:none;" title="Perceptive Photo Capture." href="http://www.perceptivesoftware.com/images/perceptive-mobile-capture_product-summary.pdf" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Perceptive Photo Capture.']);" ><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/2014-PhotoCapture-purple-final.jpg')}" height="230" width="978" alt="Perceptive Photo Capture." /></a>
+                <a style="display:none;" title="Product Family" href="https://www.perceptivesoftware.com/products" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Product Family']);"><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-ProductFamily.jpg')}" height="230" width="978" alt="Product Family" /></a>
+                <!--<a style="display:none;" title="Inspire Registration" href="http://inspire.perceptivesoftware.com/" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Inspire Registration']);" ><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-Inspire.jpg')}" height="230" width="978" alt="Inspire Registration" /></a>-->
+                <!--<a style="display:none;" title="Take the biannual customer survey and share your feedback with us!" href="http://www.perceptivesoftware.com/customer-portal/news/customer-input-shapes-the-future-at-perceptive-software" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Customer Feedback Survey']);" ><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-CustomerFeedbackSurvey.jpg')}" height="230" width="978" alt="Take the biannual customer survey and share your feedback with us!" /></a>-->
+                <a style="display:none;" title="Join a User Group in your area" href="http://community.perceptivesoftware.com/user_groups/default.aspx?snl=Regional%20User%20Groups&sid=3" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Join User Group']);"><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-RUG.jpg')}" height="230" width="978" alt="Join a User Group in your area" /></a>
+                <a style="display:none;" title="Join the Perceptive Software Community" href="http://community.perceptivesoftware.com/" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Perceptive Community']);"><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-Community.jpg')}" height="230" width="978" alt="Join the Perceptive Software Community" /></a>
+                <a style="display:none;" title="Share knowledge. Promote your success. Be a thought leader." href="http://champions.perceptivesoftware.com/" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Perceptive Champion']);"><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-CustomerReference.jpg')}" height="230" width="978" alt="Share knowledge. Promote your success. Be a thought leader." /></a>
+                <a style="display:none;" title="Product Training" href="http://customer.perceptivesoftware.com/apex/training" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Product Training']);" ><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-Training-01.jpg')}" height="230" width="978" alt="Product Training" /></a>                
+                <a style="display:none;" title="Product Training" href="http://customer.perceptivesoftware.com/apex/training" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Product Training']);" ><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-Training-02.jpg')}" height="230" width="978" alt="Product Training" /></a>                
+                <a style="display:none;" title="Product Training" href="http://customer.perceptivesoftware.com/apex/training" onClick="_gaq.push(['_trackEvent','Banners', 'Click', 'Product Training']);" ><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-Training-03.jpg')}" height="230" width="978" alt="Product Training" /></a>                
+       </div>
+    </div>
+    <div class="content grid">
+        <article class="c10 m">
+            <h1>
+                Developer Partner Program Highlights</h1>
+            <span>
+                <h3>
+                    <span>Perceptive Software Developer Partner Network Overview</span></h3>
+                <p>
+                    <span>The unstructured content that drives today’s successful businesses — such as documents,
+                        e-mail, data streams and electronic forms — continues to multiply. That’s why flexible
+                        enterprise content management (ECM) technology that helps organize and manage those
+                        mountains of data is a fast-growing market. The Perceptive Software Developer Network
+                        offers you a unique opportunity to leverage our proven platform technology and claim
+                        your share of the ECM market.</span></p>
+                <p>
+                    <span>For independent software vendors and system integrations, membership in the Perceptive
+                        Software Developer Network, can mean increased short-term revenue and long-term
+                        growth potential. For customers and existing partners, it offers tremendous tools
+                        to help you deliver tailored business solutions and reach your business goals sooner.
+                    </span>
+                </p>
+                <h3>
+                    <span>Why Work with Perceptive Software?</span></h3>
+                <p>
+                    <span>Becoming part of the Developer Network means collaboration and knowledge sharing
+                        with an ECM industry leader. According to a recent Gartner report, Perceptive Software
+                        is the fastest-growing ECM vendor worldwide, and one of the top 10 in terms of revenue.
+                    </span>
+                </p>
+                <p>
+                    <span>More than 2,000 customers in 45 countries use our ImageNow® document management,
+                        imaging and workflow software products across a variety of business processes to
+                        create direct and effortless connections between business content and the people
+                        who need it. As a member of the Developer Network, you, too, can create applications
+                        and solutions that complement and extend Perceptive Software’s ECM platform. To
+                        see who is currently partnering with us visit our &nbsp;<apex:outputlink value="https://www.perceptivesoftware.com/partners/developer-network/developer-showcase">Developer Showcase</apex:outputlink>.
+                    </span>
+                </p>
+                <h3>
+                    <span>Key Advantages for Development Partners: </span>
+                </h3>
+                <p>
+                    <ul>
+                        <li>Proven ECM platform that runs natively on both Windows and Unix operating systems
+                        </li>
+                        <li>Web services capabilities for both inbound and outbound messaging, using the open
+                            industry standard SOAP-XML </li>
+                        <li>Complete scripting environment that provides web services compatibility, URL integration
+                            and the use of proven standards, such as HL7, EDI, COM and .NET </li>
+                        <li>Access to open standards e-form technology (XML, HTML, CSS), including e-form design
+                            tools </li>
+                        <li>Compatibility with third-party integration engines and Enterprise Service Bus (ESB)
+                            platforms, such as TIBCO, Oracle BPEL Process Manager, WebSphere ESB and PeopleSoft’s
+                            Integration Broker </li>
+                        <li>Pre-built Microsoft SharePoint integration and code samples for rapid deployment
+                            in a Microsoft SharePoint environment </li>
+                        <li>Helpful developer-specific documentation for technology</li>
+                    </ul>
+                </p>
+                <h3>
+                    <span>Building on a Strong Platform</span></h3>
+                <p>
+                    <span>ImageNow is built on an innovative technology platform, solidified by five fundamental
+                        strengths: </span>
+                </p>
+                   <p>
+           
+        
+                        <script type="text/javascript">
+                            var FlashJavascriptID = "PlatformAnimation";
+                            swfobject.registerObject("PlatformAnimation", "9.0.0", "https://www.perceptivesoftware.com/interactive/expressInstall.swf");
+                        </script>
+                        <div id="topflash">
+                            <object style="visibility: visible;" id="PlatformAnimation" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+                                width="598" height="254">
+                                <param name="movie" value="{!URLFOR($Resource.Perceptive_Sites, 'flash/ImageNow_Platform.swf')}">
+                                </param>
+                                <param name="wmode" value="transparent"></param>
+                                <!--[if !IE]>-->
+                                <object type="application/x-shockwave-flash" data="{!URLFOR($Resource.Perceptive_Sites, 'flash/ImageNow_Platform.swf')}"
+                                    width="598" height="254">
+                                    <param name="wmode" value="transparent"></param>
+                                    <!--<![endif]-->
+                                    <div id="altflash">
+                                        <a href="http://get.adobe.com/flashplayer/">
+                                            <img src="https://www.perceptivesoftware.com/interactive/PlatformAnimation.png" alt="Please download Adobe Flash Player"></img>
+                                        </a>
+                                        <p>
+                                            <a href="http://get.adobe.com/flashplayer/">
+                                                <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif"
+                                                    alt="Get Adobe Flash player"/>
+                                            </a>
+                                        </p>
+                                    </div>
+                                    
+                                </object>
+                            </object>
+                        </div>
+                </p>
+                <h3>
+                    <span>Benefits Overview</span></h3>
+                <p>
+                    <span>As a Perceptive Software Development Partner in full compliance with all requirements,
+                        your company can gain access to the program benefits shown in the <a target="_blank"
+                            title="Developer Network Guide" href="https://www.perceptivesoftware.com/images/Brochure_DeveloperPartner.pdf">
+                            Developer Network Guide</a>. To respond to changing market conditions or to
+                        incorporate best practices, we reserve the right to modify these benefits at any
+                        time at our sole discretion.</span></p>
+                <h3>
+                    <span>Next Steps</span></h3>
+                <p>
+                    <span><a href="http://www.perceptivesoftware.com/partners/developer-network/application.psi">
+                        Apply now</a> to the Perceptive Software Developer Network and take the first step
+                        toward success through collaborative and innovative development. For all other questions
+                        please contact us at <a href="mailto:devnetwork@perceptivesoftware.com">devnetwork@perceptivesoftware.com</a>.</span></p>
+            </span>
+        </article>
+        <aside class="c6">
+            <h1>
+                &nbsp;</h1>
+            <h3>
+                Developer Network</h3>
+            <c:SiteLogin id="siteLogin" />
+        </aside>
+    </div>      
+    </apex:define>
+  </apex:composition>
+</apex:page>

@@ -1,0 +1,14 @@
+<apex:page standardController="Video__kav" showHeader="false" sidebar="false">
+<title>Knowledgebase | {!Video__kav.Title}</title>
+    <!---Analytics --->
+    <apex:include pageName="CustomerPortalAnalytics"/>
+    <!---Frames --->
+    <apex:sectionHeader title="{!Video__kav.Title}" />
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="1">
+            <apex:outputText escape="false" value="{!Video__kav.Description__c}"/>
+            <br />
+            <apex:outputText escape="false" value="{!Video__kav.Video__c}"/>                     
+        </apex:pageBlockSection> 
+    </apex:pageBlock>
+</apex:page>

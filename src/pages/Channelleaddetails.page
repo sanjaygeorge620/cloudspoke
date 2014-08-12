@@ -1,0 +1,159 @@
+<apex:page showHeader="false" Controller="ChannelLeadController" standardStylesheets="false"> 
+<title>{!SITE_NICKNAME} | Details</title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-leads').addClass('active');
+          jQuery('.leadtable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.ChannelLead}">Leads</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Lead Details</a></li>
+                </ul>
+            </div> 
+            <apex:outputPanel rendered="{!!$ObjectType.Lead_Clone__c.accessible || !SITE_TAB_LEADS}">
+                  Insufficient Privileges
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!$ObjectType.Lead_Clone__c.accessible  && SITE_TAB_LEADS}">
+            
+             <div class="column full-width"> 
+                <div class="callout classroom"> 
+                    <span class="title-bar" href="#"><span class="sprite_cpicons class">&nbsp;</span>{!LeadDetails.Company__c}</span> 
+                    <div class="callout-content"> 
+                    
+                        <!-- Lead Detail --> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Lead Detail</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Company</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Company__c}" /></p> 
+                                <p class="label course-type">Name</p> 
+                                <p ><apex:outputfield value="{!LeadDetails.Name__c}" /></p> 
+                                <p class="label course-type">Title</p> 
+                                <p ><apex:outputfield value="{!LeadDetails.Title__c}" /></p> 
+                                <p class="label course-type">Department</p> 
+                                <p ><apex:outputfield value="{!LeadDetails.Department__c}" /></p> 
+                                <p class="label course-type">Industry</p> 
+                                <p ><apex:outputfield value="{!LeadDetails.Industry__c}" /></p> 
+                               
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Phone</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Phone__c}" /></p>  
+                                <p class="label course-type">Email</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Email__c}" /></p>  
+                                <p class="label course-type">Website</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Website__c}" /></p> 
+                                <p class="label course-type">Sector</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Sector__c}" /></p>   
+                                <p class="label course-type">Lead Type</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Lead_Type__c}" /></p>
+                                <p class="label course-type">Campaign Name</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Campaign_Clone_name__r.name}" /></p>                              
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        <!--  Lead Detail --> 
+                        
+                        <!-- Lead Information--> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Lead Information</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-title">Host Manufacturer</p> 
+                                <p ><apex:outputfield value="{!LeadDetails.Host_Manufacturer__c}" /></p> 
+                                <p class="label course-type">Budget</p> 
+                                <p ><apex:outputfield value="{!LeadDetails.Budget__c}" /></p>                               
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Host Application</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Host_application__c}" /></p>  
+                                <p class="label course-type">Current Solution</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Current_Solution__c}" /></p>  
+                            </div> 
+
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Needs/Objectives</p> 
+                                <p ><apex:outputfield value="{!LeadDetails.Need_Objectives__c}" /></p> 
+                            </div> 
+                            <div class="right-inner-col"> 
+                               <p class="label course-type">Timeline</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Timeline__c}" /></p>  
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        <!--  Lead Information--> 
+                        
+                        <!-- Additional Information--> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Additional Information</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-title">Preferred Language</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Preferred_Language__c}" /></p> 
+                                <p class="label course-type">Opportunity Lead Notes</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Opportunity_Lead_Notes__c}" /></p>                                
+                            </div> 
+                            <div class="right-inner-col"> 
+                                
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        <!--  Additional Information --> 
+                        
+                        <!-- Address Information--> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Address Information</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-title">Region</p> 
+                                <p class= "lead-input"><apex:outputfield value="{!LeadDetails.Region__c}" /></p> 
+                                <p class="label course-type">Physical Country</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Physical_Country__c}" /></p>  
+                                <p class="label course-title">Physical Street Address</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Physical_Street_Address__c}" /></p> 
+                                <p class="label course-title">Physical Street Address 2</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Physical_Street_Address_2__c}" /></p> 
+                                <p class="label course-type">Physical City</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Physical_City__c}" /></p> 
+                                <p class="label course-title">Physical State</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Physical_State__c}" /></p> 
+                                <p class="label course-type">Physical Postal Code</p> 
+                                <p><apex:outputfield value="{!LeadDetails.Physical_Postal_Code__c}" /></p> 
+                                <p class="label course-type">International State/Province</p> 
+                                <p><apex:outputfield value="{!LeadDetails.international_state_province__c}" /></p>                               
+                            </div> 
+                            <div class="right-inner-col"> 
+                                
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        <!--  Address Information --> 
+                         
+                       
+                    </div><!-- /Content --> 
+                </div><!-- /Course Content --> 
+            </div><!-- /Full Width Column --> 
+            
+
+            
+            </apex:outputPanel>
+        </div>
+            
+            
+               
+            
+            
+
+            
+          
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

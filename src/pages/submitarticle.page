@@ -1,0 +1,18 @@
+<apex:page controller="SubmitKBArticle" tabStyle="Knowledgebase__tab" sidebar="true">
+    <apex:sectionHeader title="Knowledgebase" subtitle="Submit an Article"/>
+    <apex:pageMessages id="error" />
+    <apex:form id="kb-block">
+      <apex:pageBlock title="{!$ObjectType.Support_Articles__kav.label}">
+          <apex:pageBlockSection columns="1"  collapsible="false">
+                          <apex:inputfield style="width:99%;" value="{!kav.Title}" />
+                          <apex:inputfield value="{!kav.Article__c}" />
+                          <apex:inputfield value="{!kav.Resolution__c}" />
+                          <apex:inputfield value="{!kav.Internal_Note__c}" />
+           </apex:pageBlockSection>
+           
+           <apex:pageBlockButtons id="saveButtons" location="bottom">
+                <apex:commandButton action="{!saveArticle}" value="Submit Article" />
+           </apex:pageBlockButtons>
+      </apex:pageBlock>
+    </apex:form>    
+</apex:page>

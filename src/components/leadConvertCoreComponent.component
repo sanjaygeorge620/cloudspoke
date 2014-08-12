@@ -1,0 +1,385 @@
+<!-- This component allows for the core lead converting functionality -->
+
+<apex:component controller="leadConvertCoreComponentController">
+    <!-- This allows for the lookup to Account but hides the text of the selected account name leaving the magnifying glass only -->
+    <style type="text/css">
+        input.hiddenInput {
+            width:0;
+            height:0;
+            border:0;
+            padding:0;
+            margin:0;
+        }
+    </style>
+
+    <!-- This is the attribute that holds the lead to convert -->
+    <apex:attribute name="LeadToConvert" 
+        description="The lead to convert"
+        type="Lead" 
+        assignTo="{!leadConvert}"
+        required="true"/>
+        
+         <!-- This is the attribute that holds the Account Record Type Name -->
+    <apex:attribute name="AccRecordType" 
+        description="The Account Record type Name"
+        type="string" 
+        assignTo="{!AccRtTypeName}"
+        required="false"/>
+
+    <!-- This attribute is used for the leadConvertController to interact with this component's controller -->
+    <apex:attribute name="thepageController"
+      type="PageControllerBase"
+      assignTo="{!pageController}"
+      required="true"
+      description="The controller for the page." />
+    <!--Choose Account Section -->
+    <!--<apex:sectionHeader title="Salesforce.com" subtitle="Matching {!$ObjectType.Account.labelPlural}" />-->
+   <apex:actionFunction name="callaction" reRender="pbOpportunitySectionPanel" status="waitingStatusLoad"/>  
+    <apex:pageBlockSection id="pblockChooseAccount" title="Matching {!$ObjectType.Account.labelPlural} (Total Returned: {!if(AccWrapperList.size==PARAM_QUERY_SIZE, TEXT(PARAM_QUERY_SIZE) + '+', AccWrapperList.size)})" collapsible="no" columns="1"  rendered="{!IF(AccWrapperList.size>0,true,false)}">
+        <apex:pageBlockTable value="{!AccWrapperList}" var="Acc">
+            <apex:column headerValue="Select">
+                <apex:inputCheckbox value="{!Acc.SelectAccount }">
+                    <apex:actionSupport event="onchange" 
+                        action="{!accountChanged}" 
+                        rerender="pblockChooseAccount,pbOpportunitySectionPanel,pblockCreateAccount" status="waitingStatusLoad" > 
+                         <apex:param name="AccName" assignTo="{!selectedAccount}" value="{!Acc.selectedAccountName}"/>
+                    </apex:actionSupport>     
+                 </apex:inputCheckbox>
+             </apex:column>
+            <apex:column value="{!Acc.AccountName}" headerValue="Account Name"/>
+            <apex:column headerValue="Address">
+                 <apex:outputText value="{!Acc.BillingStreet}" /><br />
+                <apex:outputText value="{!Acc.BillingCity}" />&nbsp;
+                <apex:outputText value="{!Acc.BillingState}" /><br />
+                <apex:outputText value="{!Acc.BillingCountry}" />            </apex:column>
+            <apex:column value="{!Acc.TRStatus}" headerValue="Record Type"/>
+            <apex:column value="{!Acc.LocationDuns}" headerValue="Location DUNS"/>
+            <apex:column value="{!Acc.GlobalDUNS }" headerValue="Global DUNS"/>
+            <apex:column value="{!Acc.PartyRole}" headerValue="Party Role"/>
+            <apex:column value="{!Acc.PartyType}" headerValue="Party Type"/>
+            <apex:column value="{!Acc.OwnerName}" headerValue="Owner Name"/>
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+     <apex:pageBlockSection id="pblockCreateAccount" title="Create {!$ObjectType.Account.labelPlural} " collapsible="no" columns="1" rendered="{!IF(AccCreateWrapperList.size>0,true,false)}">
+        <apex:pageBlockTable value="{!AccCreateWrapperList}" var="Acc">
+            <apex:column headerValue="Select">
+                <apex:inputCheckbox value="{!Acc.SelectAccount }">
+                    <apex:actionSupport event="onchange" 
+                        action="{!accountChanged}" 
+                        rerender="pblockChooseAccount,pbOpportunitySectionPanel,pblockCreateAccount" status="waitingStatusLoad" > 
+                         <apex:param name="AccName" assignTo="{!selectedAccount}" value="{!Acc.selectedAccountName}"/>
+                    </apex:actionSupport>     
+                 </apex:inputCheckbox>
+             </apex:column>
+            <apex:column value="{!Acc.AccountName}" headerValue="Account Name"/>
+            <apex:column headerValue="Address">
+                 <apex:outputText value="{!Acc.BillingStreet}" /><br />
+                <apex:outputText value="{!Acc.BillingCity}" />&nbsp;
+                <apex:outputText value="{!Acc.BillingState}" /><br />
+                <apex:outputText value="{!Acc.BillingCountry}" />            </apex:column>
+            <apex:column value="{!Acc.TRStatus}" headerValue="Record Type"/>
+            <apex:column value="{!Acc.LocationDuns}" headerValue="Location DUNS"/>
+            <apex:column value="{!Acc.GlobalDUNS }" headerValue="Global DUNS"/>
+            <apex:column value="{!Acc.PartyRole}" headerValue="Party Role"/>
+            <apex:column value="{!Acc.PartyType}" headerValue="Party Type"/>
+            <apex:column value="{!Acc.OwnerName}" headerValue="Owner Name"/>
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+    <!--Choose Account Section Ends-->
+   
+    <!-- Lead Convert section -->    
+    <apex:pageBlockSection id="pblockconvertLead" title="Convert Lead" collapsible="no" columns="1">
+    
+        <!-- Leads Record Owner -->
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Record Owner" for="recordOwner" />
+            <apex:inputField value="{!leadConvert.LX_Account_Owner__c}" id="recordOwner" />
+        </apex:pageBlockSectionItem>
+        
+        <!-- Checkbox indicating whether to send an email to the owner -->    
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Send Email to the Owner" for="sendOwnerEmail" />
+            <c:OutputCheckbox id="sendOwnerEmail" value="{!sendOwnerEmail}" />
+            <!--<apex:inputCheckbox value="{!sendOwnerEmail}" id="sendOwnerEmail" />-->
+        </apex:pageBlockSectionItem>
+        
+             
+     <!--   <apex:pageBlockSectionItem id="convertLeadAccountBlockSectionItem" >
+            
+            <apex:outputLabel value="Account Name" for="accountList" />
+            <apex:outputPanel styleClass="requiredInput" layout="block" id="block">
+                <div class="requiredBlock"></div>
+                <apex:selectList value="{!selectedAccount}" size="1" 
+                    multiselect="false" id="accountList">
+                    
+                    <apex:actionSupport event="onchange" 
+                        action="{!accountChanged}" 
+                        rerender="opportunityName, ViewLink" status="waitingStatusLoad"
+                         />     
+                    <apex:selectOptions value="{!accounts}"/>
+                    
+                </apex:selectList>
+                
+                <apex:inputField styleClass="hiddenInput" 
+                value="{!contactId.AccountId}" id="accountId" >
+                    
+                    <apex:actionSupport event="onchange" 
+                        action="{!accountLookedUp}" 
+                        rerender="accountList, opportunityName, ViewLink" status="waitingStatusLoad"
+                         />
+                        
+                </apex:inputField>
+                
+                <apex:commandLink id="ViewLink"  value="View"
+                    onclick="javascript:if ('{!selectedAccount}' != 'NEW' && '{!selectedAccount}' != 'NONE' ) {var newWindow = window.open('/{!selectedAccount}/p', 'accountview', 'top=40, left=40,scrollbars=yes, height=450, width=800');newwindow.focus();} else {alert('You can only view existing accounts.');}"
+                />
+                
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem> -->
+          <apex:pageblockSectionItem rendered="{!IfCustomer}">
+                <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Do_you_need_to_create_an_opportunity__c.label}"> </apex:outputLabel>
+                <apex:inputField value="{!leadConvert.LX_Do_you_need_to_create_an_opportunity__c}">
+                    <apex:actionSupport event="onchange" reRender="pbOpportunitySectionPanel" status="waitingStatusLoad"/>
+                </apex:inputField>
+       </apex:pageblockSectionItem>
+      
+        
+      
+        
+        <!-- Converted Status -->
+        <!--<apex:pageBlockSectionItem >
+            <apex:outputLabel value="Converted Status" for="leadStatus" />
+            <apex:outputPanel styleClass="requiredInput" layout="block">
+                <div class="requiredBlock"></div>
+                <apex:selectList id="LeadStatusList" size="1" 
+                    value="{!LeadToConvert.Status}" multiselect="false" required="true">
+                    <apex:selectOptions value="{!LeadStatusOption}"/>
+                </apex:selectList> 
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>-->
+    </apex:pageBlockSection>
+    <apex:outputPanel id="pbOpportunitySectionPanel">
+    <apex:pageBlockSection id="pbOpportunitySection" rendered="{!AND(CreateOppty,IfCustomer)}" title="Opportunity Information" collapsible="no" columns="2">
+      <!-- Opportunity section -->
+     
+      
+            <apex:pageBlockSectionItem id="oppSection" >
+                
+                <apex:outputPanel id="oppPanel" >
+                    <apex:outputLabel value="Opportunity Name" for="opportunityName" />
+                </apex:outputPanel>
+                
+                
+                <apex:outputPanel id="opportunityPanel" layout="block">
+                   
+                    <apex:outputPanel rendered="{!CreateOppty}" styleClass="requiredInput" layout="block" id="block">
+                    <div class="requiredBlock"></div>
+                    
+                    
+                    
+                    
+                    <apex:outputPanel >
+                    <!-- Opportunity Name -->
+                    <apex:inputField required="false" 
+                        value="{!opportunityID.Name}" id="opportunityName"/>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    
+                    <!--  This is only shown if the Do Not Create Opportunity is true -->    
+                    <apex:inputText disabled="true" rendered="{!NOT(CreateOppty)}"  value="{!opportunityID.Name}" id="opportunityNameDisabled"/>
+                   <!-- <apex:outputPanel layout="block" styleClass="requiredInput">
+                    <apex:outputPanel layout="block" />
+                    
+                    <!-- Checkbox indicating whether to create an Opportunity 
+                     <c:OutputCheckbox id="OutputCreateOppty" value="{!CreateOppty}" />
+                 
+                    Create a new opportunity upon conversion.
+                </apex:outputPanel> -->
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageblockSectionItem >
+            
+                <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_expected_to_close_within_5_days__c.label}"> </apex:outputLabel>
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                <apex:inputField value="{!leadConvert.LX_expected_to_close_within_5_days__c}">
+                
+                    <apex:actionSupport event="onchange" reRender="pbOpportunitySectionPanel" status="waitingStatusLoad"/>
+                </apex:inputField>
+                </apex:outputPanel>
+       </apex:pageblockSectionItem>
+           <apex:pageblockSectionItem id="ProductType">
+           
+           <apex:outputLabel value="Product Type" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    <apex:actionRegion >
+                    <apex:panelGrid columns="2"> 
+                     <apex:inputCheckbox value="{!LeadtoConvert.Technology__c}" label="Technology" immediate="false"  >
+                       <apex:actionSupport event="onchange" action="{!ResetSalesType}"   reRender="pbOpportunitySectionPanel" status="waitingStatusLoad"  >
+                           
+                          </apex:actionSupport>
+                     </apex:inputCheckbox><apex:outputLabel value="Technology" />
+                      <apex:inputCheckbox value="{!LeadtoConvert.Software_Solutions__c}" label="Software Solution" immediate="false"  >
+                       <apex:actionSupport event="onchange"  action="{!ResetSalesType}"   reRender="pbOpportunitySectionPanel" status="waitingStatusLoad" >
+                            
+                          </apex:actionSupport>
+                     </apex:inputCheckbox> <apex:outputLabel value="Software Solution" />
+                      <apex:inputCheckbox value="{!LeadtoConvert.MPS__c}" label="MPS" immediate="false" >
+                       <apex:actionSupport event="onchange" action="{!ResetSalesType}"     reRender="pbOpportunitySectionPanel" status="waitingStatusLoad" >
+                             
+                          </apex:actionSupport>
+                     </apex:inputCheckbox> <apex:outputLabel value="MPS" />
+                     </apex:panelGrid>
+                      </apex:actionRegion>
+                <!--<apex:selectList value="{!ProductTypeSelected}" multiselect="true" size="3">
+                
+                <apex:actionSupport event="onchange" reRender="SalesTypeBlock" />
+                    <apex:selectOptions value="{!ProductTypeOptions}" > </apex:selectOptions>
+                </apex:selectList>-->
+           </apex:outputPanel>
+          
+            </apex:pageblockSectionItem>
+           
+            <apex:pageBlockSectionItem id="SalesCurrency">
+            <apex:outputLabel value="Sales Currency" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+            
+            
+            <apex:selectList label="Sales Currency" value="{!SalesCurrency}"  rendered="{!CreateOppty}" multiselect="false"  size="1"><apex:selectOptions value="{!SalesOrgSelectOptions}"> </apex:selectOptions></apex:selectList>
+            </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageblockSectionItem id="SalesType">
+            <apex:outputLabel value="Sales Type" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    
+                     
+                 <apex:outputPanel id="SalesTypeBlock" >    
+                <apex:selectList value="{!SalesTypeSelected}" multiselect="false" size="1">
+                    <apex:selectOptions value="{!SalesTypeOptions}" > </apex:selectOptions>
+                </apex:selectList>
+           </apex:outputPanel>
+           </apex:outputPanel>
+            </apex:pageblockSectionItem>
+            
+             <apex:pageBlockSectionItem id="SalesOrg">
+            <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Sales_Organization__c.Label}" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+            
+            
+            <apex:inputField value="{!LeadtoConvert.LX_Sales_Organization__c}"/>
+            </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            
+            
+         
+         
+         <apex:pageblockSectionItem id="AdditionalInformationToMDM">
+            <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Additional_Comments__c.Label}" />
+                
+                     
+                 <apex:outputPanel id="AdditionalInformationToMDMBlock" >    
+                <apex:inputField value="{!LeadtoConvert.LX_Additional_Comments__c}"/>
+           
+           </apex:outputPanel>
+            </apex:pageblockSectionItem>
+            
+            <Apex:pageblockSectionItem id="PaymentTerms" rendered="{!IF(leadConvert.LX_expected_to_close_within_5_days__c=='Yes',true,false)}">
+             <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Payment_Terms__c.Label}"></apex:outputLabel>
+               <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    
+                     
+                 <apex:outputPanel id="PaymentTermBlock" >  
+             <apex:inputField value="{!LeadtoConvert.LX_Payment_Terms__c}" >
+                 <apex:actionSupport event="onchange" reRender="pbOpportunitySection" status="waitingStatusLoad"/>
+             </apex:inputField>
+             </apex:outputPanel>
+             </apex:outputPanel>
+         </Apex:pageblockSectionItem>
+            
+            
+            <apex:pageblockSectionItem id="NextStep">
+            <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Next_Steps__c.Label}" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    
+                     
+                 <apex:outputPanel id="NextStepBlock" >    
+                <apex:inputField value="{!LeadtoConvert.LX_Next_Steps__c}"/>
+           </apex:outputPanel>
+           </apex:outputPanel>
+            </apex:pageblockSectionItem>
+       
+       <apex:pageblockSectionItem id="RequestedCredit" rendered="{!IF(OR(leadToConvert.LX_Payment_Terms__c=='Net 30 Days',leadToConvert.LX_Payment_Terms__c=='Net 45 Days'),true,false)}" >
+             
+            <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Requested_Credit_Limit__c.Label}" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    
+                     
+                 <apex:outputPanel id="RequestedCreditBlock" >    
+                <apex:inputField value="{!LeadtoConvert.LX_Requested_Credit_Limit__c}"/>
+           </apex:outputPanel>
+           </apex:outputPanel>
+           </apex:pageblockSectionItem>
+       
+    </apex:pageBlockSection>
+     </apex:outputPanel>
+     <apex:outputPanel id="PartnerLeadinformation" rendered="false">
+         <apex:pageblockSection id="PartnerInformationSection" title="Partner Information" collapsible="no" columns="2"> 
+         <apex:pageblockSectionItem id="PartnerDirect">
+            <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Partner_buy_directly_from_Lexmark__c.Label}" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    
+                     
+                 <apex:outputPanel id="PartnerDirectBlock" >    
+                <apex:inputField value="{!LeadtoConvert.LX_Partner_buy_directly_from_Lexmark__c}">
+                     <apex:actionSupport event="onchange"  reRender="PartnerInformationSection" status="waitingStatusLoad" />
+                </apex:inputField>
+           </apex:outputPanel>
+           </apex:outputPanel>
+            </apex:pageblockSectionItem>
+           
+           <Apex:pageblockSectionItem id="PaymentTermsPartner" rendered="{!IF(leadConvert.LX_Partner_buy_directly_from_Lexmark__c=='Yes',true,false)}">
+             <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Payment_Terms__c.Label}"></apex:outputLabel>
+               <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    
+                     
+                 <apex:outputPanel id="PaymentTermBlock" layout="block">  
+             <apex:inputField value="{!LeadtoConvert.LX_Payment_Terms__c}" >
+                 <apex:actionSupport event="onchange" reRender="PartnerInformationSection" status="waitingStatusLoad"/>
+             </apex:inputField>
+             </apex:outputPanel>
+             </apex:outputPanel>
+         </Apex:pageblockSectionItem>  
+      
+        
+                <apex:pageblockSectionItem id="RequestedCreditPartner" rendered="{!IF(OR(leadToConvert.LX_Payment_Terms__c=='Net 30 Days',leadToConvert.LX_Payment_Terms__c=='Net 45 Days',leadToConvert.LX_Payment_Terms__c=='Cash With Order'),true,false)}" >
+             
+            <apex:outputLabel value="{!$ObjectType.Lead.Fields.LX_Requested_Credit_Limit__c.Label}" />
+                <apex:outputPanel styleClass="requiredInput" layout="block">
+                    <div class="requiredBlock"></div>
+                    
+                     
+                 <apex:outputPanel id="RequestedCreditBlock" >    
+                <apex:inputField value="{!LeadtoConvert.LX_Requested_Credit_Limit__c}"/>
+           </apex:outputPanel>
+           </apex:outputPanel>
+           </apex:pageblockSectionItem>
+         
+         </apex:pageblockSection>
+     </apex:outputPanel>
+    <!-- <apex:outputPanel id="CreditAppinformation" rendered="{!NOT(IfCustomer)}">
+         <apex:pageblockSection id="CreditAppinformationSection" title="Credit App Information" collapsible="no" columns="2"> 
+         <apex:pageblockSectionItem >
+         </apex:pageblockSectionItem>
+         </apex:pageblockSection>
+     </apex:outputPanel>-->
+</apex:component>

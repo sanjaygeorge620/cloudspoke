@@ -1,0 +1,35 @@
+<apex:page id="StdExceptionTemplate" showHeader="false" standardStylesheets="false" controller="SitesGenericController">
+    <apex:composition template="{!SITE_TEMPLATE_PRIMARY}">
+     <apex:define name="javascriptcalls">
+          <script type="text/javascript">
+                jQuery(document).ready(function() {
+                  jQuery('.toolbar-home').addClass('active');
+                  <apex:insert name="javascript"/>
+                });
+            </script>
+     </apex:define>
+        <apex:define name="body">
+
+            
+            
+            <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Site.CurrentSiteURL}">Home</a>
+                    <a class="current" href="#"><apex:insert name="breadcrumb"/></a>                                    
+                </nav>
+            </div>
+         </div>            
+          <div class="content grid">
+               <aside class="c5 m">
+        
+             </aside>
+             <div class="c11">
+          <h1><apex:insert name="titlebar"/></h1>
+               <apex:insert name="content"/>          
+          </div>
+          </div>
+        </apex:define>
+    </apex:composition>         
+</apex:page>

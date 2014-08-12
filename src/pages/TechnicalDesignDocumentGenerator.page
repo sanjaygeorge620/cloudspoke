@@ -1,0 +1,233 @@
+<apex:page controller="TechnicalDocumentController" sidebar="false" id="page">
+<script>
+
+  
+</script>
+    <apex:form id="form">
+        <apex:pageMessages id="errors" escape="false"/>
+        <apex:pageBlock title="Document Generator" mode="edit">
+            <apex:pageBlockSection title="User Story Filters" columns="4">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Status" for="functionalArea"/>
+                    <apex:inputField value="{!initUS.Development_Stage__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Functional Area" for="functionalArea" />
+                    <apex:inputField value="{!initUS.Functional_Area__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Sub-Process" for="subProcess" />
+                    <apex:inputField value="{!initUS.Sub_Process__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Allocated Sprint" for="allocatedSprint" />
+                    <apex:selectList id="allocatedSprint" value="{!lstSprint}" multiselect="true" size="5">
+                        <apex:selectOptions value="{!optionsAllocatedSprint}" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>              
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons > 
+                    <apex:commandButton action="{!createQuerySOQL}" value="Query" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <apex:pageBlock title="Query Result" mode="edit" id="PageBlockQueryResult">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Add Selected User Stories" action="{!processSelected}" rerender="results,selectTable"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!UserStories}" var="userStory" id="results">
+                <apex:column >
+                   <apex:facet name="header">
+                     <apex:inputCheckbox value="{!SelectAll}">
+                     <apex:actionSupport event="onclick" rerender="results"/>
+                     </apex:inputCheckbox>
+                  </apex:facet>
+                    <apex:inputCheckbox value="{!userStory.selected}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink value="Name" action="{!toggleSort}" rerender="results">
+                            <apex:param name="sortField" value="Name" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!userStory.reqUS.Name}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="As a..." action="{!toggleSort}" rerender="results">
+                            <apex:param name="sortField" value="User_Type__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!userStory.reqUS.User_Type__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="I Want To..." action="{!toggleSort}" rerender="results">
+                            <apex:param name="sortField" value="User_Story__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!userStory.reqUS.User_Story__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="So That..." action="{!toggleSort}" rerender="results">
+                            <apex:param name="sortField" value="So_that__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!userStory.reqUS.So_that__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="Status" action="{!toggleSort}" rerender="results">
+                            <apex:param name="sortField" value="Development_Stage__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!userStory.reqUS.Development_Stage__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="Allocated Sprint" action="{!toggleSort}" rerender="results">
+                            <apex:param name="sortField" value="Allocated_Sprint__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!userStory.reqUS.Allocated_Sprint__c}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <apex:pageBlock title="Selected US" mode="edit" id="PageBlockSelectedUS">
+            <apex:pageBlockTable value="{!selectedUS}" var="item" id="selectTable">
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:commandLink value="Name" action="{!toggleSort}" rerender="selectTable">
+                            <apex:param name="sortField" value="Name" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!item.name}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="As a..." action="{!toggleSort}" rerender="selectTable">
+                            <apex:param name="sortField" value="User_Type__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!item.User_Type__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="I Want To..." action="{!toggleSort}" rerender="selectTable">
+                            <apex:param name="sortField" value="User_Story__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!item.User_Story__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="So That..." action="{!toggleSort}" rerender="selectTable">
+                            <apex:param name="sortField" value="So_that__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!item.So_that__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="Status" action="{!toggleSort}" rerender="selectTable">
+                            <apex:param name="sortField" value="Development_Stage__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!item.Development_Stage__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >
+                        <apex:commandLink value="Allocated Sprint" action="{!toggleSort}" rerender="selectTable">
+                            <apex:param name="sortField" value="Allocated_Sprint__c" assignTo="{!sortField}" />
+                        </apex:commandLink>
+                    </apex:facet>
+                    <apex:outputField value="{!item.Allocated_Sprint__c}" />
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <apex:pageblock title="Other Information">
+            <apex:pageBlockButtons >
+                 <apex:commandlink styleclass="btn" style="text-decoration:none;padding:4px;"
+                 value="Create Functional Document" action="{!CreateFunctionalDocument}" target="_blank"/>
+                <apex:commandlink styleclass="btn" style="text-decoration:none;padding:4px;" value="Create Technical Design Document" action="{!createDocument}" target="_blank" />
+                <apex:commandlink styleclass="btn" style="text-decoration:none;padding:4px;" value="Generate QA Cards" action="{!generateQAcards}" target="_blank" />
+              </apex:pageBlockButtons>
+              <apex:pageBlockSection columns="2">
+                 <apex:pageBlockSectionitem >
+                       <apex:outputLabel value="Organization"></apex:outputLabel>
+                       <apex:inputText value="{!Organization}"/>
+                 </apex:pageBlockSectionitem>
+                 <apex:pageBlockSectionitem >
+                       <apex:outputLabel value="Project Name"></apex:outputLabel>
+                       <apex:selectList value="{!Project_Name}" multiselect="false" size="1"> 
+                            <apex:selectOptions value="{!ProjNameList}"/>
+                       </apex:selectList>                      
+                 </apex:pageBlockSectionitem>
+                 <apex:pageBlockSectionitem >
+                       <apex:outputLabel value="Version"></apex:outputLabel>
+                       <apex:inputText value="{!Version}"/>
+                 </apex:pageBlockSectionitem>   
+                 <apex:pageBlockSectionitem >
+                       <apex:outputLabel value="Deliverable Id"></apex:outputLabel>
+                       <apex:inputText value="{!Deliverable_Id}"/>
+                 </apex:pageBlockSectionitem>
+                <apex:pageBlockSectionitem >
+                       <apex:outputLabel value="Change Description"></apex:outputLabel>
+                       <apex:inputTextarea value="{!Change_Desp}"/>
+                 </apex:pageBlockSectionitem>                 
+              </apex:pageBlockSection>
+              <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Author Role"></apex:outputLabel>
+                    <apex:inputText value="{!AuthorRole}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Author Name & Title"></apex:outputLabel>
+                    <apex:inputText value="{!Author}" />
+                </apex:pageBlockSectionItem>
+              </apex:pageBlockSection>
+              <apex:pageBlockSection columns="2" title="Review and Approval">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Name #1"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthor1}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Role #1"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthorRole1}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Name #2"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthor2}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Role #2"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthorRole2}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Name #3"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthor3}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Role #3"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthorRole3}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Name #4"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthor4}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Role #4"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthorRole4}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Name #5"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthor5}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Review Role #5"></apex:outputLabel>
+                    <apex:inputText value="{!ReviewAuthorRole5}" />
+                </apex:pageBlockSectionItem>
+              </apex:pageBlockSection>
+        </apex:pageblock>
+    </apex:form>
+</apex:page>

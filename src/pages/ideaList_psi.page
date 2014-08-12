@@ -1,0 +1,57 @@
+<apex:page extensions="IdeaListController" standardController="Idea" recordSetVar="setIdeas" showHeader="false" action="{!redirectWithCommunityId}">
+   
+    <apex:composition template="ideaLayoutWrapper">
+       <apex:define name="title"> 
+        <title>Ideas |&nbsp; <apex:outputText value="{!IF(sortParam == 'popular','Most Popular Ideas',
+                                                  IF(sortParam == 'top','Top Ideas All-time',
+                                                  IF(sortParam == 'recent','Most Recent Ideas',
+                                                  IF(sortParam == 'comments','Idea Comments',
+                                                  'Ideas'))))}"/></title>
+    </apex:define>
+       
+        <apex:define name="content">
+            <div class="callout ideas">
+                <c:ideatabs Home_Tab="false" 
+                    ViewAll_Tab="true"
+                    Search_Tab="false"
+                    MyIdeas_Tab="false"
+                    Submit_Tab="false"
+                    />
+             </div>     
+            <div class="callout ideas-secondary">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons mp">&nbsp;</span>
+                        <apex:outputText value="{!IF(sortParam == 'popular','Most Popular Ideas',
+                                                  IF(sortParam == 'top','Top Ideas All-time',
+                                                  IF(sortParam == 'recent','Most Recent Ideas',
+                                                  IF(sortParam == 'comments','Idea Comments',
+                                                  'Ideas'))))}"/>
+                                                  </a>
+                    <ideas:listOutputLink styleclass="view-all" communityId="{!communityId}" page="{!ideaListPage}" category="" sort="{!sortForFilters}">All Categories</ideas:listOutputLink>
+                    <div class="callout-content ideasearch">
+                       <h2><apex:outputText value="{!IF(categoryParam == '','All Categories',categoryParam)}" /></h2>
+                        <apex:form rendered="{!sortParam != 'comments'}">
+                            <apex:dataList value="{!ideasWithVotes}" var="ideaWithVote" styleClass="ibtIdeaList ibtIdeaListPadding">
+                                <c:ideaDetails idea="{!ideaWithVote.idea}" howUserVoted="{!ideaWithVote.howUserVoted}" returnUrl="{!currentPageUrl}" />
+                            </apex:dataList>
+                        </apex:form>
+
+
+                        <apex:outputPanel rendered="{!sortParam == 'comments'}" layout="block" styleclass="ibtCommentList">
+                            <apex:dataList value="{!ideas}" var="i">
+                                <c:ideaCommentDetails idea="{!i}" comment="{!i.lastComment}" showCategories="true" showCommunityNickName="true" returnUrl="{!currentPageUrl}" />
+                            </apex:dataList>
+                        </apex:outputPanel>
+
+
+                        <apex:outputPanel styleClass="ibtIdeaListPaginationLinks" layout="block">
+                            <ideas:listOutputLink communityId="{!communityId}" rendered="{!hasPreviousPage}" styleClass="ibtPagePrevious" page="{!pageName}" pageOffset="-1">Previous Page</ideas:listOutputLink>
+                            <ideas:listOutputLink communityId="{!communityId}" rendered="{!hasNextPage}" styleClass="ibtPageNext" page="{!pageName}" pageOffset="1">Next Page</ideas:listOutputLink>
+                        </apex:outputPanel>
+                    </div>
+            </div> 
+            <c:ideaFeed feedName="{!feedName}" />
+
+        </apex:define>
+    </apex:composition>
+
+</apex:page>

@@ -1,0 +1,41 @@
+<apex:page controller="LX_GetWBSController" showHeader="false" >
+<script>
+function closePopUp(){
+
+    window.close();
+    
+}
+
+
+function checkError(err){ 
+    
+    if(err == 'false'){
+        window.opener.location.href = 'https://{!baseUrl}/{!$CurrentPage.parameters.id}';
+        self.close();
+    }
+}
+</script>
+<body onblur="window.close();">
+  <apex:form id="frm" >
+  <apex:pageMessages id="msg"></apex:pageMessages>
+  
+  <apex:actionFunction name="check" action="{!save}" oncomplete="checkError('{!error}')" rerender="pb,msg"/>
+      <apex:pageBlock id="pb">
+      <apex:pageblockSection >
+          <apex:selectList size="1" label="WBS Element Description" value="{!Values}" required="true"> 
+              <apex:selectOptions value="{!selectOptionElements}"/>
+          </apex:selectList>
+      </apex:pageblockSection>    
+          
+          <apex:outputLabel style="color:red" rendered="{!AND(error,NOT(exceptionMsg))}">Please select WBS Element</apex:outputLabel>
+          <br/>
+          
+          <apex:commandButton onclick="check(); return false;" value="Save" id="theSaveButton"/>
+         <!-- 
+          <apex:commandButton action="{!cancel}" value="Cancel" id="theCancelButton"/> -->
+          <apex:commandButton value="Cancel" onclick="closePopUp();"/>
+          
+      </apex:pageBlock>
+  </apex:form>
+  </body>
+</apex:page>

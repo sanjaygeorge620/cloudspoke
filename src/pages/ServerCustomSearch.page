@@ -1,0 +1,134 @@
+<apex:page controller="ControllerSearch" tabstyle="Server__c" id="pg" >
+<apex:form id="frm">
+<apex:actionFunction name="getReleases" rerender="ReleaseList" oncomplete="getProductNames()"/>
+<apex:actionFunction name="getProductNames" rerender="ProductNameList"/>
+
+<apex:actionFunction name="refreshPanels"  rerender="pnl,pnlSearch,pcSection,pfSection,pDBSection" oncomplete="showResultSections();"/>
+<apex:actionFunction name="doSearch" action="{!doSearch}" oncomplete="refreshPanels();"/>
+<script>
+function searchresults() {
+ 
+  var brand  = document.getElementById('pg:frm:pb:pbs:pbsiBrands:brandSel').selectedIndex;
+  var release =   document.getElementById('pg:frm:pb:pbs:pbsiRelease:ReleaseList').selectedIndex;
+  var productName = document.getElementById('pg:frm:pb:pbs:pbsiProdName:ProductNameList').selectedIndex ;
+ 
+  if( brand == 0 || release == 0||  productName == 0 )
+      alert('Please select all the fields');
+  else { 
+    //showResultSections();
+    doSearch();
+  }
+}
+
+function hideResultSections() {
+  if(document.getElementById('pg:frm:pb:PCSearchResults') != null)
+    document.getElementById('pg:frm:pb:PCSearchResults').style.display = 'none';
+    
+  if(document.getElementById('pg:frm:pb:PFSearchResults') != null)
+    document.getElementById('pg:frm:pb:PFSearchResults').style.display = 'none';
+    
+  if(document.getElementById('pg:frm:pb:PDSearchResults') != null)
+    document.getElementById('pg:frm:pb:PDSearchResults').style.display = 'none';
+}
+
+function showResultSections() {
+  if(document.getElementById('pg:frm:pb:PCSearchResults') != null)
+    document.getElementById('pg:frm:pb:PCSearchResults').style.display = 'block';
+    
+  if(document.getElementById('pg:frm:pb:PFSearchResults') != null)
+    document.getElementById('pg:frm:pb:PFSearchResults').style.display = 'block';
+    
+  if(document.getElementById('pg:frm:pb:PDSearchResults') != null)
+    document.getElementById('pg:frm:pb:PDSearchResults').style.display = 'block';
+}
+</script>
+<apex:pageblock id="pb" >
+<apex:pageBlockButtons id="btnSection" location="bottom">
+    <apex:outputpanel id="pnl">
+        <apex:commandButton id="btnBack" rendered="{!showResult}" action="{!BackToPage}" value="Save" />
+    </apex:outputpanel>
+</apex:pageBlockButtons>
+
+<apex:outputpanel id="pnlSearch">
+<apex:pageBlockSection columns="1" id="pbs">
+
+  <apex:PageblockSectionItem id="pbsiBrands">
+    <apex:outputLabel >Search Brand</apex:outputLabel>
+    <apex:outputPanel id="opBrands">
+      <div class="requiredInput" >
+        <div class="requiredBlock"></div>
+        <apex:selectList size="1" value="{!server.Search_Brand__c}" onchange="getReleases();hideResultSections();" id="brandSel">
+          <apex:selectOptions value="{!BrandsList}"></apex:selectOptions>
+        </apex:selectList>
+      </div>
+    </apex:outputPanel>
+  </apex:PageblockSectionItem>
+
+  
+  <apex:PageblockSectionItem id="pbsiRelease">
+    <apex:outputLabel >Search Release</apex:outputLabel>
+    <apex:outputPanel id="opRelease">
+      <div class="requiredInput" >
+        <div class="requiredBlock"></div>
+        <apex:selectList id="ReleaseList" size="1" value="{!server.Search_Release__c}" onchange="getProductNames();hideResultSections();">
+          <apex:selectOptions value="{!ReleaseList}"></apex:selectOptions>
+        </apex:selectList>
+      </div>
+    </apex:outputPanel>      
+  </apex:PageblockSectionItem>
+  
+  <apex:PageblockSectionItem id="pbsiProdName">
+    <apex:outputLabel >Search Product Name</apex:outputLabel>
+    <apex:outputPanel id="opProdName">
+      <div class="requiredInput" >
+        <div class="requiredBlock"></div>
+        <apex:selectList id="ProductNameList" size="1" value="{!server.Search_Product_Name__c}" onchange="hideResultSections();">
+          <apex:selectOptions value="{!ProductNameList}"></apex:selectOptions>
+        </apex:selectList>
+      </div>
+    </apex:outputPanel>      
+  </apex:PageblockSectionItem>
+  
+</apex:pageBlockSection>
+</apex:outputpanel>
+<br/>
+
+<apex:outputPanel style="margin-left:100px">
+    <input type="button" class="btn" value="Search"  onclick="javascript:searchresults();"/>    
+    <apex:commandButton value="Back" action="{!Cancel}" immediate="true"/>
+</apex:outputPanel>
+<br/>
+<br/>
+
+<apex:outputpanel id="pcSection">
+<apex:pageBlockSection rendered="{!showResult}" title="Product Configuration Results" columns="1" id="PCSearchResults" >
+    <apex:outputLabel rendered="{!Not(prdConfigExists) && showResult}"><b>No Result Found. </b></apex:outputLabel>
+    <apex:selectRadio value="{!selectedPrdConfig}" dir="LTR" id="radio_Q07" layout="pagedirection" >
+          <apex:selectOptions value="{!prdConfigToShow}"/>
+    </apex:selectRadio>
+</apex:pageBlockSection>
+ </apex:outputpanel>
+  <br/>
+  
+<apex:outputpanel id="pfSection">
+<apex:pageBlockSection rendered="{!showResult}"  title="PlatForm Search Results" columns="1" id="PFSearchResults"  >
+    <apex:outputLabel rendered="{!Not(prdPlatFormExists) && showResult}"><b>No Result Found. </b></apex:outputLabel>
+    <apex:selectRadio value="{!selectedPrdPlatForm}" dir="LTR" id="radio_Q07" layout="pagedirection" >
+          <apex:selectOptions value="{!prdplatformToShow}"/>
+    </apex:selectRadio>
+</apex:pageBlockSection>
+</apex:outputpanel>
+ 
+ <br/>
+
+<apex:outputpanel id="pDBSection">  
+<apex:pageBlockSection rendered="{!showResult}"  title="DataBase Search Results" columns="1" id="PDSearchResults"  >
+    <apex:outputLabel rendered="{!Not(PrdDataBaseExists) && showResult}"><b>No Result Found. </b></apex:outputLabel>
+    <apex:selectRadio value="{!selectedPrdDataBase}" dir="LTR" id="radio_Q07" layout="pagedirection" >
+          <apex:selectOptions value="{!prdDataBaseToShow}"/>
+    </apex:selectRadio>
+</apex:pageBlockSection>
+</apex:outputpanel>
+</apex:pageblock>
+</apex:form>
+</apex:page>

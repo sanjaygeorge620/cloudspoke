@@ -1,0 +1,202 @@
+<apex:page standardController="LX_Program_Enrollment__c" extensions="LX_Program_EnrollmentExtension" id="pageid" 
+action="{!doredirect}">
+  
+<apex:sectionHeader title="Program Enrollment Edit"  rendered="{!Not(ISNULL(ObjEnrollment.name))}" subtitle="{!LX_Program_Enrollment__c.name}"/> 
+<apex:sectionHeader title="Program Enrollment Edit"  rendered="{!(ISNULL(ObjEnrollment.name))}" subtitle="New Program Enrollment"/> 
+
+
+<apex:form id="myForm">
+
+
+<apex:pageBlock title="Program Enrollment Edit" mode="edit" id="pageblock1"> 
+ <apex:pageBlockButtons location="top"> 
+ <apex:commandButton value="Save" action="{!SaveNew}"/> 
+<apex:commandButton value="Cancel" action="{!cancel}"/> </apex:pageBlockButtons> 
+<apex:pageBlockButtons location="bottom"> <apex:commandButton value="Save" action="{!SaveNew}"/> 
+
+<apex:commandButton value="Cancel" action="{!cancel}"/> </apex:pageBlockButtons> 
+ <apex:pageBlockSection title="Information"  columns="2" id="pageblocksection1">
+
+
+
+ <apex:inputField id="LX_LocalProgram" value="{!LX_Program_Enrollment__c.Master_Program__c}" required="true"/> 
+ <apex:inputField value="{!ObjEnrollment.LX_Enrollment_Status__c}" required="false"/> 
+ 
+ <apex:inputField id="LX_Account" value="{!LX_Program_Enrollment__c.LX_Account__c}" required="true"/>  
+ <apex:inputField value="{!ObjEnrollment.LX_Enrollment_Proposed_Date__c}" required="false"/> 
+
+  <apex:inputField value="{!ObjEnrollment.LX_Certified_Date__c}" required="false"/> 
+ <apex:inputField value="{!ObjEnrollment.LX_Enrollment_Signed_Date__c}" required="false"/> 
+
+  <apex:inputField value="{!ObjEnrollment.Additional_Comments__c}" required="false"/> 
+ <apex:inputField value="{!ObjEnrollment.LX_Enrollment_Effective_Date__c}" required="false"/> 
+
+  <apex:inputField value="{!ObjEnrollment.Approval_Status__c}" required="false"/> 
+ <apex:inputField value="{!ObjEnrollment.LX_Enrollment_End_Date__c}" required="false"/>
+<apex:inputField value="{!ObjEnrollment.RecordTypeID}" id="recId" /> 
+<apex:inputField value="{!ObjEnrollment.LX_Apply_to_All_Reseller_Locations__c}" />
+<apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+
+
+
+  <script type="text/javascript"> 
+      window.onload=function(){
+        document.getElementById('pageid:myForm:pageblock1:pageblocksection1:recId').disabled=true;}
+
+  function openLookup(baseURL, width, modified, searchParam)
+  {
+    
+   
+      
+      //    document.getElementById('{!$Component.LX_LocalProgram}').value = 'arun';
+   
+    var originalbaseURL = baseURL;
+    var originalwidth = width;
+    var originalmodified = modified;
+    var originalsearchParam = searchParam;
+     //alert('baseURL 11 = '+baseURL);
+    var lookupType = baseURL.substr(baseURL.length-3, 3);
+    if (modified == '1') baseURL = baseURL + searchParam;
+    //alert('lookupType == '+lookupType);
+    var isCustomLookup = false;
+    var isFromPartnerRecord = false;
+    var partnerRecordID = "{!ProgramId}";
+    //alert('partnerRecordID == '+partnerRecordID)
+    if(partnerRecordID != null && partnerRecordID != '')
+        isFromPartnerRecord = true;
+    var paramAccountName = 'retURL';
+    var paramProgramId = 'programId';
+    var queryAccountId = '';
+    var queryProgramId = '';
+     var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        //alert(pair[0]);
+        //alert('paramAccountName == '+paramAccountName);
+        if (pair[0] == paramAccountName) {
+            queryAccountId = pair[1];
+            queryAccountId = queryAccountId.replace('%2F','');
+        }
+        
+         if (pair[0] == paramProgramId) {
+            queryProgramId = pair[1];
+        }
+    }
+    //alert('queryAccountId  == '+queryAccountId);
+    //alert('queryProgramId == '+queryProgramId);
+    
+    // Following "001" is the lookup type for Account object so change this as per your standard or custom object
+    if(lookupType == "001")
+    {
+     
+     var ProgramId;
+    if(document.getElementById('{!$Component.LX_LocalProgram}_lkid')!=null)
+    ProgramId =document.getElementById('{!$Component.LX_LocalProgram}_lkid').value;
+    else
+    ProgramId='{!LX_Program_Enrollment__c.Master_Program__c}';
+    
+    
+    if(ProgramId == '' || ProgramId=='000000000000000')
+    {
+        ProgramId = queryProgramId;
+    }
+    //alert('ProgramId == '+ProgramId);
+    if(ProgramId=='')
+    {
+     
+    alert('Please select Local Program Name.');
+    return false;
+    }
+    
+  
+      var urlArr = baseURL.split("&");
+      var txtId = '';
+      if(urlArr.length > 2) {
+        urlArr = urlArr[1].split('=');
+        txtId = urlArr[1];
+      }
+      
+      // Following is the url of Custom Lookup page. You need to change that accordingly
+      baseURL = "/apex/LX_Enrollment_programs?txt=" + txtId+'&programId='+ProgramId+'&fromPartner='+isFromPartnerRecord;
+          
+      
+      // Following is the id of apex:form control "myForm". You need to change that accordingly
+      baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.myForm}");
+      if (modified == '1') {
+        baseURL = baseURL + "&lksearch=" + searchParam;
+      }
+      
+     // Following is the ID of inputField that is the lookup to be customized as custom lookup
+      if(txtId.indexOf('Account') > -1 ){
+        isCustomLookup = true;
+      }
+    }
+    else
+    {
+        var accountID;
+        if(document.getElementById('{!$Component.LX_Account}_lkid')!=null)
+            accountID = document.getElementById('{!$Component.LX_Account}_lkid').value;
+       //alert('ProgramId == '+ProgramId);
+        
+        var accId = '{!LX_Program_Enrollment__c.LX_Account__c}';
+        
+        if(accountID == '' || accountID =='000000000000000' || accountID == 'undefined')
+        {
+            //accountID = queryAccountId;
+            accountID = accId;
+            
+        }
+        if(accountID == null)
+        {
+            accountID = accId;
+         
+        }
+        
+         //alert('accountID == '+accountID);
+        if(accountID=='') 
+        {
+         
+        alert('Please select Account Name.');
+        return false;
+        }
+        var urlArr = baseURL.split("&");
+        var txtId = '';
+        if(urlArr.length > 2) {
+            urlArr = urlArr[1].split('=');
+            txtId = urlArr[1];
+        } 
+      
+        // Following is the url of Custom Lookup page. You need to change that accordingly
+        baseURL = "/apex/CustomPartnerPrograms?txt=" + txtId+'&accountId='+accountID;
+          
+      
+        // Following is the id of apex:form control "myForm". You need to change that accordingly
+        baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.myForm}");
+        if (modified == '1') {
+            baseURL = baseURL + "&lksearch=" + searchParam;
+       }
+      
+        isCustomLookup  = true;
+    
+    
+    }
+    
+    //alert('baseURL == '+baseURL);
+    if(isCustomLookup == true){
+      openPopup(baseURL, "lookup", 350, 480, "width="+width+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+    }
+    else {
+      if (modified == '1') originalbaseURL = originalbaseURL + originalsearchParam;
+      openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+    } 
+  }
+</script>
+
+</apex:pageBlockSection> 
+</apex:pageBlock> 
+
+
+</apex:form> 
+
+</apex:page>

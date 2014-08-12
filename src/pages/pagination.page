@@ -1,0 +1,97 @@
+<apex:page controller="CTLPagination" >
+<html>
+<head>
+    
+
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>    
+    <script>
+        var j$ = jQuery.noConflict();
+        var oTable;
+        j$(document).ready(function() {
+          initTable();
+        });
+        
+        function initTable() {
+          oTable = j$(".jtable").dataTable({"fnDrawCallback":function(settings) {
+            var allChecked = true;
+            j$(".jtable .chkbox").each(function() {
+              if (!j$(this).is(":checked")) {
+                allChecked = false;
+              }
+            });
+            j$(".selectAll").prop("checked", allChecked);
+          }});
+        }
+        j$("body").on("click", ".selectAll", function() {
+          //j$('.chkbox', oTable.fnGetNodes()).attr('checked',this.checked).trigger("change");
+          j$('.chkbox').prop('checked',this.checked).trigger("change");
+          
+        });
+        
+    </script>
+</head>
+<body>    
+    <apex:outputPanel id="tableBlock" layout="block">
+       <apex:repeat value="{!wAccounts}" var="x">
+           <div style="float:left;color:{!if(x.Selected,"red","black")};">{!x.Selected} + {!x.RecordID} </div> 
+       </apex:repeat> 
+       <br clar="both" />
+    </apex:outputPanel>
+    
+    <apex:sectionHeader subtitle="Pagination Example" title="{!$Organization.Name}"/>
+    <apex:pageMessages id="error" />
+    <apex:form >
+        <apex:pageBlock >
+               
+                
+                <br />
+                <input type="checkbox" class="selectAll"/>
+                <apex:actionStatus id="spinner" >
+                   <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /></apex:facet>
+                </apex:actionStatus>
+                <table id="jtable" class="row-border jtable display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        
+                    </tr>
+                </thead>
+         
+                <tfoot>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        
+                    </tr>
+                </tfoot>
+         
+                <tbody>
+                   <apex:repeat value="{!wAccounts}" var="a">
+                        <tr>
+                            
+                            <td>
+                                <apex:inputCheckbox styleClass="chkbox" value="{!a.Selected}" >
+                                    <apex:actionSupport status="spinner" event="onchange" reRender="error, tableBlock"/>
+                                </apex:inputCheckbox>
+                            </td>
+                            <td>{!a.RecordID}</td>
+                            <td>{!a.NAme}</td>
+                        </tr>
+                    </apex:repeat>
+                 </tbody>  
+             </table>
+            
+           
+        </apex:pageBlock>
+        
+   
+    </apex:form>
+    
+</body>    
+</html>  
+</apex:page>

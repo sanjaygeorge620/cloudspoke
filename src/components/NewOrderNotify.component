@@ -1,0 +1,288 @@
+<apex:component controller="NewOrderNotify" access="global"> 
+  <apex:attribute name="componentValue" description="Opportunity attribute on the component." type="String" required="required" assignTo="{!opportunityId}"/>
+<div>
+<span style="font-size: 16px; font-weight: bold;">
+  <apex:outputText value="NEW ORDER SUBMITTED on {0,date,M/d/yyyy}">
+     <apex:param value="{!Opportunity.CloseDate}" />
+   </apex:outputText>
+</span>
+<br />
+<table>
+<tr>
+  <td width="20"></td>
+  <td>
+  <span style="font-style: italic;font-size: 12px;">
+Order documentation for the following opportunity has been completed.  You have received this notice because you are listed as an interested party for PSI Orders and your attention is required.
+</span>
+  </td>
+</tr>
+</table>
+</div>
+<div>&nbsp;</div>
+<div>
+<span style="font-size: 16px; font-weight: bold;">
+{!opportunity.Account.Name}
+</span>
+<table>
+<tr>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Opportunity Name: {!opportunity.Name}
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Primary Contact: {!orderNotifyData.primaryContact }
+  </span>
+  </td>
+</tr>
+</table>
+</div>
+<div>&nbsp;</div>
+<div>
+  <span style="font-size: 16px; font-weight: bold;">
+Total Amount:  {!opportunity.currencyIsoCode}&nbsp;
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!opportunity.amount}" />
+                </apex:outputText>
+  </span>
+<table>
+
+<tr>
+  <td width="20"></td>
+  <td colspan="2">
+  <span style="font-size: 12px;">
+    Concession Amt: 
+    {!opportunity.currencyIsoCode}&nbsp; 
+      <apex:outputText value="{0,number,#,##0.00}">
+        <apex:param value="{!NULLVALUE(orderNotifyData.concessionForm.Total_Amount_Difference__c,0.00)}" />
+      </apex:outputText>
+      <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Total_Amount_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td colspan="2">
+  <span style="font-size: 12px;">
+    Revenue (One-Time)
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    License: 
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BPQ_License__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.License_Amount_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Prof Srvcs:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BPQ_Professional_Services__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Prof_Srvcs_Percent__c,0)}% Discount)"/>
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Database Services:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.Book_Database_Services__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Database_Srvc__c,0)}% Discount)"/>
+  </span>
+  </td>
+</tr>
+
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Managed Services:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BPQ_Managed_Services__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Mngd_Srvc_Percent__c,0)}% Discount)"/>
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Platform Services: 
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BPQ_Platform_Services__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Platform_Srvc_Percent__c,0)}% Discount)"/>
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    3rd Party:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BM_Third_Party__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.X3rd_Party_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Training:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BM_Training__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Training_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td colspan="2">
+  <span style="font-size: 12px;">
+    Revenue (Recurring)
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Subscription:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BM_Subscription__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Subscription_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Platform:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BM_Platform__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Platform_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    Remote Admin:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BM_Remote_Admin__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.Remote_Admin_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    SMSA:
+    {!opportunity.currencyIsoCode}&nbsp; 
+                <apex:outputText value="{0,number,#,##0.00}">
+                    <apex:param value="{!NULLVALUE(Opportunity.BM_SMSA__c,0.00)}" />
+                </apex:outputText>
+                <apex:outputLabel value="({!NULLVALUE(orderNotifyData.concessionForm.SMSA_Percent__c,0)}% Discount)" />
+  </span>
+  </td>
+</tr>
+<tr>
+  <td width="20"></td>
+  <td colspan="2">
+  <span style="font-size: 12px;">
+    <apex:outputLabel value="{!opportunity.Sector__c}"/> 
+      <apex:outputPanel id="dashPanel"> &mdash;</apex:outputPanel> 
+      <apex:outputLabel value="{!opportunity.Type}" />
+  </span>
+  </td>
+</tr>
+</table> 
+</div> 
+<div>&nbsp;</div>
+<div>
+  <span style="font-size: 16px; font-weight: bold;">
+    Sales Team
+      <span style="font-weight: normal; font-size: 10px; ">
+        (AEX &bull; ISR &bull; Manager):
+    </span>
+  
+  </span>
+<table>
+<tr>
+  <td width="20"></td>
+  <td>
+  <span style="font-size: 12px;">
+    {!orderNotifyData.AEXName} &bull; {!orderNotifyData.ISRName}  &bull; {!orderNotifyData.ManagerName}
+  </span>
+  </td>
+</tr>
+</table>
+</div>
+<div>&nbsp;</div>
+<div>
+<span style="font-size: 12px;"><span style="font-size: 16px; font-weight: bold;">Opportunity: </span> <apex:outputLink value="{!opportunityViewURL}" >View Details</apex:outputLink></span>
+<br />
+<span style="font-size: 12px;"><span style="font-size: 16px; font-weight: bold;">Order Docs: </span> <apex:outputLink value="{!orderViewURL}" >View Details</apex:outputLink></span>
+</div>
+<div>&nbsp;</div>
+<div>
+<span style="font-size: 16px; font-weight: bold;">Line Item Detail:</span><br />
+<apex:datatable value="{!orderNotifyData.lineItems}" var="lineitms" border="1" cellpadding="2" style="font-size: 12px;">
+
+    <apex:column headerValue="Item Title" ><apex:outputLabel value="{!lineitms.productName}"  escape="false"/> </apex:column>
+    <apex:column headerValue="Qty">
+            <apex:outputLabel value="{!ROUND(lineitms.lineItem.Quantity, 0)}" />
+    </apex:column>
+</apex:datatable>
+</div>
+</apex:component>

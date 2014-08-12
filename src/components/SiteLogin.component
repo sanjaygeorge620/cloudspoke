@@ -1,0 +1,25 @@
+<apex:component controller="SiteLoginController" id="loginComponent"  >
+<section>
+        <apex:form id="login" forceSSL="true" styleClass="form color-blue">
+          <p class="text">
+              <apex:outputLabel value="User Name" for="username"/>
+              <apex:inputText value="{!username}" styleClass="txtbox" id="username" onblur="if (this.value == '') { this.value='E-mail Address'; }" onfocus="if (this.value == 'E-mail Address') { this.value=''; }"  />
+         </p>   
+         <p class="text"> 
+              <apex:outputLabel value="Password" for="password"/>
+              <apex:inputSecret value="{!password}" styleClass="txtbox" id="password" />
+         </p>
+              <p>
+              <apex:commandButton action="{!login}" styleclass="button major" value="Log in"/>
+              </p>
+
+          <p>
+            <a title="Recover Password" href="{!$Page.ForgotPassword}">Recover Password</a>  |  
+            <a title="Register as a new User" href="{!$Page.SiteRegisterEmail}">Register as a New User</a>
+          </p>
+          <div class="errormsg">
+              <apex:pageMessages />
+          </div>
+       </apex:form>
+     </section>
+</apex:component>

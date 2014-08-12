@@ -1,0 +1,15 @@
+<apex:page standardController="Contact" tabStyle="Contact" sidebar="true" >
+  <apex:sectionHeader title="Contact"  subtitle="{!Contact.Name}"/>
+  <apex:form >
+  <apex:pageBlock title="Contact Detail" tabStyle="Contact">
+      <apex:pageBlockSection >
+          <apex:outputField value="{!Contact.Name}"/>
+          
+          <apex:outputField value="{!Contact.Owner.Name}" label="Contact Owner"/>
+      </apex:pageBlockSection>
+      <apex:pageBlockButtons location="Bottom">
+      <apex:commandButton action="{!Cancel}" value="Cancel"/>
+      </apex:pageBlockButtons>
+  </apex:pageBlock>
+  </apex:form>
+</apex:page>

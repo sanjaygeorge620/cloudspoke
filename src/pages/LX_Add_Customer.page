@@ -1,0 +1,232 @@
+<apex:page standardcontroller="LX_Opportunity_Parties__c" extensions="LX_AddCustomerExtension" docType="html-5.0">
+<c:ActionStatusLoading />
+    <apex:form >
+        <apex:outputPanel id="searchOutputPanel">
+            <apex:pageBlock mode="edit" id="mainPageBlock" tabStyle="lead" rendered="{!pgBlockRenderMain}">
+                <apex:pageBlockButtons location="both" >
+                    <apex:actionStatus id="counterStatus" style="align:center;" >
+                        <apex:facet name="start" >
+                            <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                        </apex:facet>
+                    </apex:actionStatus>
+                    <apex:commandButton timeout="50000" status="counterStatus" value="Search" action="{!searchLogic}" reRender="dataDotComPanel, ErrorOnNoRecordsFromSearchPanel"/>
+                    <apex:commandButton action="{!cancelLogic}" immediate="true" value="Cancel" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection title="Enter Customer Details" collapsible="false" columns="1">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Company Name"/>
+                        <apex:inputText value="{!companyNameForm}"/>
+                    </apex:pageBlockSectionItem> 
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Physical City"/>
+                        <apex:inputText value="{!physicalCityForm}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Physical State/Province"/>
+                        <apex:inputText value="{!physicalState}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                   <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Physical ZIP/Postal Code"/>
+                        <apex:inputText value="{!physicalZip}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageblockSectionItem >
+                        <apex:outputlabel value="Physical Country"/>
+                         <apex:inputField required="false" value="{!lInstance.Physical_Country__c}"/>
+                    </apex:pageblockSectionItem>
+                    
+              <!--      <apex:pageBlockSectionItem >
+                        <apex:OutputLabel value="Physical Country"/>
+                            <apex:selectList size="1" value="{!lInstance.physicalCountry}" id="countries_List">
+                                <apex:selectOptions value="{!countriesList}"/>
+                            </apex:selectList>
+                    </apex:pageBlockSectionItem> -->
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Phone Number"/>
+                        <apex:inputText value="{!phoneNumberFromForm}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Website"/>
+                        <apex:inputText value="{!websiteFromForm}"/>
+                    </apex:pageBlockSectionItem>                                                           
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+     </apex:outputPanel>
+            
+     <!--       <apex:outputPanel id="outPutPanelHiddenFields">
+            <apex:pageblock rendered="{!pgBlockRenderMain}" id="pageBlockHiddenFields">
+                <apex:pageblockSection title="Physical Country Information" columns="4">
+                    <apex:pageBlockSectionItem >
+                         <apex:outputLabel value="PSW Sales Region"/>
+                            <apex:inputField required="true" value="{!lInstance.LX_PSW_Sales_Region__c}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Country Code"/>
+                            <apex:inputField required="true" value="{!lInstance.LX_Country_Code__c}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Region"/>
+                            <apex:inputField required="true" value="{!lInstance.LXK_Region__c}"/>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Geo"/>
+                            <apex:inputField required="true"  value="{!lInstance.Region__c}"/>
+                    </apex:pageBlockSectionItem> 
+                </apex:pageblockSection>
+            </apex:pageblock>
+            </apex:outputPanel> -->
+            
+            <!-- TO show a customer when it submitted for quick bid  -->
+       <apex:outputPanel id="ViewCustomeronSbmttoApprvl">
+        <apex:pageBlock title="Selected Customer" id="SbmttoApprvlselectedCustomerPageBlock" rendered="{!outputPanelSbmttoApprvl}">
+                <apex:pagemessages id="SelectedCustomerErrorPanel"/>
+                    <apex:pageblockTable var="SbmttoApprvlsavedDataCloudWrapper" value="{!savedDataCloudWrapperList}" id="SbmttoApprvlselectedCustomerResultTable" columns="9">
+                        
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.name}" headerValue="Company Name"/>
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.street}" headerValue="Street"/>
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.city}" headerValue="City"/> 
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.state}" headerValue="State"/>
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.zip}" headerValue="ZIP Code"/> 
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.country}" headerValue="Country"/> 
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.Phone}" headerValue="Phone"/> 
+                        <apex:column value="{!SbmttoApprvlsavedDataCloudWrapper.Website}" headerValue="Website"/>
+                        
+                    </apex:pageblockTable>                      
+         <apex:pageBlockButtons location="both" >
+         <apex:commandButton action="{!cancelLogic}" immediate="true" value="Cancel" />
+         </apex:pageBlockButtons>
+        </apex:pageBlock> 
+       </apex:outputPanel>
+            
+            <apex:outputPanel id="selectedCustomerOutputPanel">
+            <apex:pageBlock title="Customer Already Selected" id="selectedCustomerPageBlock" rendered="{!outputPanelSelectedCustomer}">
+                <apex:pagemessages id="SelectedCustomerErrorPanel"/>
+                    <apex:pageblockTable var="savedDataCloudWrapper" value="{!savedDataCloudWrapperList}" id="selectedCustomerResultTable" columns="9">
+                        
+                        <apex:column value="{!savedDataCloudWrapper.name}" headerValue="Company Name"/>
+                        <apex:column value="{!savedDataCloudWrapper.street}" headerValue="Street"/>
+                        <apex:column value="{!savedDataCloudWrapper.city}" headerValue="City"/> 
+                        <apex:column value="{!savedDataCloudWrapper.state}" headerValue="State"/>
+                        <apex:column value="{!savedDataCloudWrapper.zip}" headerValue="ZIP Code"/> 
+                        <apex:column value="{!savedDataCloudWrapper.country}" headerValue="Country"/> 
+      
+                        <apex:column value="{!savedDataCloudWrapper.Phone}" headerValue="Phone"/> 
+                        <apex:column value="{!savedDataCloudWrapper.Website}" headerValue="Website"/>   
+                        <apex:column headerValue="Delete">
+                            <apex:commandLink id="DeleteCustomer" action="{!inlineDeleteLogic}" rerender="selectedCustomerOutputPanel,outPutPanelHiddenFields,searchOutputPanel" value="Delete" title="Delete" status="waitingStatusLoad"/>
+                        </apex:column>        
+                    </apex:pageblockTable>
+                    
+                     <apex:pageBlockButtons location="both" >                  
+                        <apex:commandButton action="{!cancelLogic}" immediate="true" value="Cancel" />
+                     </apex:pageBlockButtons>
+            </apex:pageBlock>
+            </apex:outputPanel>
+
+            <apex:outputPanel id="dataDotComPanel">
+            <apex:pageBlock id="DataDotComResultsPageBlock" title="Customer List" rendered="{!pgBlockDataDotComRender}">
+                 <apex:pageMessages id="errorDataDotComResults" />              
+                    <apex:pageblockTable var="dataCloudWrapper" value="{!dataCloudWrapperList}" columnsWidth="5%,*" id="DataDotComResultTable" columns="11" >
+                        <apex:column headerValue="Account Exists?">
+                            <apex:image rendered="{!dataCloudWrapper.doesAccountExist}" url="{!$Resource.Account_Exists_Image}" height="15" width="15"/>
+                       <!--     <apex:image rendered="{!dataCloudWrapper.doesAccountExist==false}" url="{!$Resource.Account_Does_Not_Exist}" height="15" width="15"/> -->
+                        </apex:column>
+                        <apex:column headerValue="Select Company">
+                            <apex:inputCheckbox value="{!dataCloudWrapper.isSelected}" id="checkCompany">
+                                <apex:actionSupport event="onchange" 
+                                action="{!unselectOthers}" 
+                                rerender="dataDotComPanel" status="waitingStatusLoad">
+                                <apex:param name="DataDotComVar" assignTo="{!DataDotComSelectedRecord}" value="{!dataCloudWrapper.name}+{!dataCloudWrapper.city}+{!dataCloudWrapper.state}+{!dataCloudWrapper.zip}+{!dataCloudWrapper.country}+{!dataCloudWrapper.DunsNumber}"/>
+                                </apex:actionSupport>
+                            </apex:inputCheckbox>
+                        </apex:column>
+                        <apex:column value="{!dataCloudWrapper.name}" headerValue="Company Name"/>
+                        <apex:column value="{!dataCloudWrapper.street}" headerValue="Street"/>
+                        <apex:column value="{!dataCloudWrapper.city}" headerValue="City"/> 
+                        <apex:column value="{!dataCloudWrapper.state}" headerValue="State"/>
+                        <apex:column value="{!dataCloudWrapper.zip}" headerValue="ZIP Code"/> 
+                        <apex:column value="{!dataCloudWrapper.country}" headerValue="Country"/> 
+                        <apex:column value="{!dataCloudWrapper.DunsNumber}" headerValue="D-U-N-S Number"/>         
+                        <apex:column value="{!dataCloudWrapper.Phone}" headerValue="Phone"/> 
+                        <apex:column value="{!dataCloudWrapper.Website}" headerValue="Website"/> 
+                 <!--       <apex:column value="{!dataCloudWrapper.Sic}" headerValue="Sic"/>
+                        <apex:column value="{!dataCloudWrapper.SicDesc}" headerValue="SicDesc"/>   -->
+                    </apex:pageblockTable>
+                    
+                    <apex:pageBlockButtons > 
+
+             <apex:outputPanel id="myButtons_SearchResults" rendered="{!dataCloudWrapperList!= null && dataCloudWrapperList.size>0}">
+                <apex:actionStatus id="counterStatus_SearchResults" style="align:center;" >
+                        <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                    </apex:facet>
+                 </apex:actionStatus> 
+                                                
+                <apex:commandButton value="First Page" id="firstPage_SearchResults" rerender="dataDotComPanel,myButtons_SearchResults" disabled="{!prev}" action="{!FirstPage}" status="counterStatus_SearchResults">
+      <!--               <apex:actionSupport event="onclick" rerender="SearchResultsForm,myButtons_SearchResults"
+                                action="{!FirstPage_SearchResults}" status="waitingStatusLoad" />    -->
+                </apex:commandButton>               
+            
+            <apex:commandButton value="Previous Page" id="previousPage_SearchResults" disabled="{!prev}" rerender="dataDotComPanel,myButtons_SearchResults"  action="{!previous}" status="counterStatus_SearchResults">
+             <!--        <apex:actionSupport event="onclick" rerender="SearchResultsForm,myButtons_SearchResults"
+                                action="{!previous_SearchResults}" status="waitingStatusLoad" />   --> 
+                </apex:commandButton>
+            
+            <apex:commandButton status="counterStatus_SearchResults" value="Save" action="{!saveLogic}"/>
+            
+            <apex:commandButton value="Next Page" id="nextPage_SearchResults" rerender="dataDotComPanel,myButtons_SearchResults" disabled="{!nxt}" action="{!next}" status="counterStatus_SearchResults">
+         <!--            <apex:actionSupport event="onclick" rerender="SearchResultsForm,myButtons_SearchResults"
+                                action="{!next_SearchResults}" status="waitingStatusLoad" /> -->
+            </apex:commandButton>
+            
+       <!--     <apex:commandButton value="Last Page" id="lastPage_SearchResults" rerender="dataDotComPanel,myButtons_SearchResults" disabled="{!nxt}"  action="{!LastPage}" status="counterStatus_SearchResults" >
+         <!--             <apex:actionSupport event="onclick" rerender="SearchResultsForm,myButtons_SearchResults"
+                                action="{!last_SearchResults}" status="waitingStatusLoad" />  
+            </apex:commandButton> -->
+        </apex:outputPanel>
+            </apex:pageBlockButtons>
+                    
+             <!--       <apex:pageBlockButtons location="both">
+                        <apex:actionStatus id="counterStatus" style="align:center;" >
+                            <apex:facet name="start" >
+                                <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                            </apex:facet>
+                        </apex:actionStatus>
+                        <apex:commandButton status="counterStatus" value="Save" action="{!saveLogic}"/>
+                        <apex:commandButton action="{!cancelLogic}" immediate="true" value="Cancel" />
+                    </apex:pageBlockButtons>-->
+                     
+                </apex:pageBlock>
+            </apex:outputPanel>
+            <!-- Button to show the 'Back' button when Opportunity Party already exists for the Opportunity  
+            <apex:pageBlock rendered="{!oppPartyListExists}">
+            <apex:pageMessages id="ErrorOnUniqueOppParty"/>
+                <div align="center">    
+                    <apex:commandButton value="Back" rendered="{!oppPartyListExists}" action="{!cancelLogic}">
+                    </apex:commandButton>
+                </div>
+            </apex:pageBlock>  -->
+            <apex:outputPanel id="ErrorOnNoRecordsFromSearchPanel">
+                <apex:pageBlock rendered="{!noRecordsFromSearchExists}">
+                    <apex:pageMessages id="ErrorOnNoRecordsFromSearch"/>
+                    <apex:pageblockButtons location="both">
+                        <apex:actionStatus id="counterStatus1" style="align:center;" >
+                            <apex:facet name="start" >
+                                <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                            </apex:facet>
+                        </apex:actionStatus>
+                        <apex:commandButton timeout="50000" status="waitingStatusLoad" value="Add" action="{!saveLogicOverRide}" reRender="ErrorOnNoRecordsFromSearchPanel"/>
+                        <apex:commandButton action="{!cancelLogic}" immediate="true" value="Cancel" />
+                    </apex:pageBlockButtons>
+                 </apex:pageBlock>
+            </apex:outputPanel>
+    </apex:form>
+</apex:page>

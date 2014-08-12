@@ -1,0 +1,148 @@
+<apex:page Controller="RMAController" extensions="LX_CustomSoldtoLookupRMA" tabstyle="LX_RMA__c">
+<base target="_parent"/>
+  <apex:pagemessages id="errorMessage" />
+    <apex:sectionHeader title="{!$ObjectType.LX_RMA__c.label} Edit" subtitle="{!recordRMA.name}"/>
+    <apex:form >
+    
+    <apex:pageBlock title="{!$ObjectType.LX_RMA__c.label} Edit" mode="edit">
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!save}" value="Save"/>
+            <apex:commandButton action="{!cancel2}" value="Cancel" immediate="true"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection showHeader="true" title="General Information" columns="2">
+            <apex:outputField value="{!recordRMA.Name}"/>
+            <apex:inputField value="{!recordRMA.LX_Case__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Contact__c}" required="true" />
+            <apex:inputField value="{!recordRMA.LX_Legacy_RMA__c}"/>
+            <apex:pageBlockSectionItem >
+            <apex:outputtext value="Account"/>
+            <apex:actionregion >
+            <apex:inputField required="true" value="{!recordRMA.LX_Account__c}"  >
+                <apex:actionsupport event="onchange" rerender="orderInformation,RelatedTable" action="{!clearShipBill}" immediate="false"/>
+            </apex:inputField></apex:actionregion>
+            </apex:pageBlockSectionItem>
+            
+            <apex:inputField value="{!recordRMA.LX_Demo__c}"/>
+            <apex:inputField value="{!recordRMA.LX_SAP_Sales_Order__c}"/>        
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="Order Information" columns="2" id="orderInformation">
+            <apex:pageBlockSectionItem >
+            <apex:outputtext value="Sold To Link"/>
+            <apex:commandLink action="{!soldTo}" value="Click here to Edit" id="theCommandLink" target="_parent" immediate="true"/>
+            </apex:pageBlockSectionItem>            
+            <apex:pageBlockSectionItem />
+            <apex:inputField value="{!recordRMA.LX_Sold_To_ID__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:inputField value="{!recordRMA.LX_Sold_To_New__c}">
+            <apex:actionsupport event="onchange" reRender="theLink,theLink1" />
+            </apex:inputField>
+            <apex:pageBlockSectionItem />
+            <apex:pageBlockSectionItem >
+            <apex:outputtext value="Bill To Link"/>
+            <apex:commandLink action="{!billTo}" value="Click here to Edit" id="theCommandLink2" target="_parent" immediate="true"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            <apex:outputtext value="Ship To Link"/>
+            <apex:commandLink action="{!shipTo}" value="Click here to Edit" id="theCommandLink3" target="_parent" immediate="true"/>
+            </apex:pageBlockSectionItem>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_ID__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_To_ID__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_Company__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_to_Company__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_Name__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_To_Name__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_Address__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_To_Address__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_City__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_To_City__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_State_Province__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_To_State_Province__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_Postal_Code__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_To_Postal_Code__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_Country__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Ship_To_Country__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Bill_To_Email_Address__c}"/>
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="Return Information" columns="2">
+            <apex:inputField value="{!recordRMA.LX_Vendor_RMA_Number__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Sales_Return__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Reason_for_Return__c}" required="true"/>
+            <apex:inputField value="{!recordRMA.LX_Obsolete__c}"/>
+            <apex:inputField value="{!recordRMA.LX_Return_Type__c}" required="true" />
+            <apex:inputField value="{!recordRMA.LX_Scrapped_by_Pacsgear__c}" />
+            <apex:pageBlockSectionItem />
+            <apex:inputField value="{!recordRMA.LX_Scrapped_by_Customer__c}" />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="System Information" columns="2">
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    
+
+    <apex:pageBlock title="Returning Items Section" mode="edit" id="RelatedTable"  tabStyle="Serial_Number__c" helpTitle="Serial Number Sales Orders Help" helpUrl="javascript:OpenPopupFocusEscapePounds(%27https://help.salesforce.com/apex/htdoor?loc=help&target=co_relatedlist.htm&section=CustomObjects&language=en_US&release=184.20.12&instance=CS16%27, %27Help%27, 1024, 768, %27width=1024,height=768,resizable=yes,toolbar=yes,status=yes,scrollbars=yes,menubar=yes,directories=no,location=yes,dependant=no%27, false, false);" >
+    
+    
+    <apex:outputpanel id="RMAform" rendered="{!renderFilter}">
+   <apex:pageBlockSection title="Filter" columns="2"   >
+                    
+         <apex:panelGrid columns="6" id="filterpanel" style="width:100%">
+             <apex:outputText value="Serial Number" id="search1"/>
+             <apex:inputText value="{!input11}"/>  
+             <apex:outputText value="Part Name" id="search2"/>
+             <apex:inputText value="{!input12}"/><apex:pageblocksectionitem /> <apex:pageblocksectionitem /> 
+            <apex:outputText value="Part Number" id="search3"/>
+             <apex:inputText value="{!input13}"/>
+            <apex:pageblocksectionitem /> 
+            <apex:commandLink action="{!clearFilters}" value="Clear Filters" id="theClearFilter" rerender="RelatedTable" /> 
+             <apex:pageblocksectionitem />  <apex:commandbutton action="{!search}" value="Search" rerender="RelatedTable"/></apex:panelGrid>   
+             
+            </apex:pageBlockSection> 
+        
+
+            <apex:pageBlocksection title="Serial Number Line Items" columns="1">
+             </apex:pageblocksection> 
+             <apex:outputpanel id="RMAformNoitems"  rendered="{!NOT(IF(listSerialNumberLineItemWrap.size>0,true,false))}">
+    
+            <br></br>
+        <p>No Serial Number line items to display.</p>
+        </apex:outputpanel>
+             <apex:outputPanel id="lineItemResults" rendered="{!IF(listSerialNumberLineItemWrap.size>0,true,false)}">
+            
+            <apex:commandLink action="{!selectAll}" value="Check All" id="selectAll" rerender="lineItemResults" />&nbsp;&nbsp;&nbsp;&nbsp;
+            <apex:commandLink action="{!unSelectAll}" value="Unselect All" id="unSelectAll" rerender="lineItemResults" />  
+             <apex:pageblockTable value="{!listSerialNumberLineItemWrap}" var="lineitem"  >
+
+             <apex:column width="5%"> 
+            <apex:facet name="header">Serial Number</apex:facet>
+            <apex:inputCheckbox value="{!lineitem.selected}" id="checkedstatus" />
+              </apex:column>
+          
+            <apex:column width="20%"> 
+            <apex:facet name="header">Serial Number</apex:facet>
+            <apex:outputLink value="/{!lineitem.serialnumberlineItem.id}" target="_blank">{!lineitem.serialnumberlineItem.Serial_Number__c}</apex:outputLink>        
+              </apex:column> 
+           
+            <apex:column width="20%"> 
+            <apex:facet name="header">Part Number</apex:facet>
+                <apex:outputfield value="{!lineitem.serialnumberlineItem.Part_Number__c}"/> 
+            </apex:column>
+            
+            <apex:column width="30%"> 
+            <apex:facet name="header">Part Name</apex:facet>
+                <apex:outputfield value="{!lineitem.serialnumberlineItem.Part_Name__c}"/> 
+            </apex:column>
+            
+            <apex:column width="10%"> 
+            <apex:facet name="header">Status</apex:facet>
+                <apex:outputfield value="{!lineitem.serialnumberlineItem.Item_Status__c}"/> 
+            </apex:column>
+
+            </apex:pageblockTable>
+                </apex:outputPanel>
+                </apex:outputpanel>
+            
+                        </apex:pageBlock>
+    
+    </apex:form>
+</apex:page>

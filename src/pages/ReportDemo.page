@@ -1,0 +1,57 @@
+<!--<apex:page controller="ReportDemo">
+<apex:form >
+    <apex:pageBlock >
+        <apex:pageBlockButtons location="Bottom">
+               <apex:commandButton action="{!getReportData}" title="Display Report" value="Display Report"/>
+          </apex:pageBlockButtons> 
+    
+        <apex:pageBlock title="North America (Direct)" rendered="{!displayReport}">
+         
+         
+            <apex:pageBlockSection columns="2" >
+                <apex:pageBlockTable value="{!reportDataList}" var="s">
+                    <apex:column title="Areas of Interest" headerValue="By Business Unit" value="{!s.areaofInterest}"/>
+                    <apex:column title="Goal" headerValue="Q2 13 QTD" value="{!s.goal}"/>
+                    <apex:column title="Count" headerValue="Q2 13 QTD A" value="{!s.count}"/>
+                    <apex:column title="Var" headerValue="Var" value="{!s.difference}"/>
+                    <apex:column title="Var%" headerValue="Var%" value="{!s.percentageDifference}"/>
+                </apex:pageBlockTable> 
+            
+                <apex:chart height="400" width="500" animate="true" data="{!ChartData}">
+                    <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Areas of Interest" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Area of Interest">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock title="North America Content/Process By Sector (Direct)" rendered="{!displayReport}">
+            <apex:pageBlockSection collapsible="false" >
+                <apex:pageBlockTable value="{!sectorReportList}" var="s">
+                    <apex:column title="Areas of Interest" headerValue="By Business Unit" value="{!s.areaofInterest}"/>
+                    <apex:column title="Goal" headerValue="Q2 13 QTD" value="{!s.goal}"/>
+                    <apex:column title="Count" headerValue="Q2 13 QTD A" value="{!s.count}"/>
+                    <apex:column title="Var" headerValue="Var" value="{!s.difference}"/>
+                    <apex:column title="Var%" headerValue="Var%" value="{!s.percentageDifference}"/>
+                </apex:pageBlockTable>
+                
+                <apex:chart height="400" width="600" animate="true" data="{!SectorChartData}">
+                    <apex:axis fields="count" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Sector" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="count" title="Sector">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:pageBlock>
+</apex:form>  
+
+</apex:page> -->
+
+<apex:page > Code for this page is commented :) </apex:page>

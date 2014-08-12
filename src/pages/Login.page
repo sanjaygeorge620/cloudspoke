@@ -1,0 +1,4 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController" action="{!redirectLogin}"> 
+  <title>{!SITE_TITLE}</title> 
+      <apex:include pageName="{!SITE_LOGIN}" />
+</apex:page>

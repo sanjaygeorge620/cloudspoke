@@ -1,0 +1,43 @@
+<apex:page controller="rallyIntegrationCalloutController">
+
+<apex:form >
+
+    
+
+    <apex:outputPanel id="mainOP">
+    
+    
+    <br /><br />
+    <!--
+    <apex:commandButton value="Schedule Rally Batch Uploads" action="{!setupBatchUploadsSchdl}" reRender="mainOP" />
+    <apex:commandButton value="Schedule Rally Batch Pull Udates" action="{!setupBatchPullUpdatesSchdl}" reRender="mainOP" />
+     
+    <br /><br />
+    
+    <apex:commandButton value="Sync to Rally" action="{!performSync}" reRender="mainOP" />
+    -->
+    <apex:commandButton value="Sync from Rally" action="{!performSyncFromRally}" reRender="mainOP" />
+     
+    Internal Project Request ID: 
+    <apex:inputText value="{!searchParam}" />
+    <br /><br />
+    <apex:commandButton value="Pull User Stories from Rally" action="{!performCallout}" reRender="mainOP" />
+    
+    <br /><br /><br />
+    {!JSONMsg}
+    <br /><br /><br /><br /><br />
+    
+
+    
+
+    
+
+    
+
+    </apex:outputPanel>
+
+
+
+</apex:form>
+
+</apex:page>

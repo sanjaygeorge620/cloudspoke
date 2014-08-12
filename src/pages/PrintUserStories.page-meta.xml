@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>25.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>Creates cut out user story cards for a sprint, complete with Story, Effort Estimates, Priority and a QR code</description>
+    <label>PrintUserStories</label>
+</ApexPage>

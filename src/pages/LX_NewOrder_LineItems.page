@@ -1,0 +1,80 @@
+<apex:page standardController="LX_New_Order_Request__c" extensions="LX_NewOrder_LineItems" id="page">
+<apex:pagemessages />
+
+<script>
+    function validate(){
+        if('{!newOrder.LX_Bill_To_ID__c}' !='' && '{!newOrder.LX_Ship_To_ID__c}' !=''){
+            var res = confirm('Ensure that you have entered values properly and click OK');
+            if(res == true)
+                call();
+            else{
+            check();
+            return false;
+            }    
+        }
+        else{
+            alert('Bill To or Ship To details are needed to save line items');
+            return false;
+        }
+    }
+    function check(){
+        //alert('{!newOrder.Id}');
+        window.top.location.href='/{!newOrder.Id}';
+    }
+</script>
+    <apex:form >
+        <apex:actionFunction name="call" action="{!saveQuant}" oncomplete="check()"/>
+        <apex:pageBlock title="SAP Line Items" id="block"> 
+            <apex:pageBlockButtons location="top" >
+                <apex:commandButton value="Submit Order Request" onclick="return validate();"   rendered="{!if(neworder.recordtype.name='Read Only', false,true)}" reRender="pbt"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="1" id="sct">
+            
+                <apex:pageBlockTable value="{!LineItems}" var="i" id="pbt">
+               
+                     <apex:column headerValue="Line Item Number">
+                           <apex:outputField value="{!i.LX_SAP_Contract_Item__r.Line_Number__c}"/>
+                     </apex:column>
+                     
+                     <apex:column headerValue="Quantity">
+                        <apex:outputPanel rendered="{!OR(show,NOT(ISBLANK(i.LX_SAP_Contract_Item__r.LX_Grouping_Code__c)))}">
+                            <apex:outputField value="{!i.LX_Quantity__c}"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!AND(NOT(show),(i.LX_SAP_Contract_Item__r.LX_Grouping_Code__c == ''))}" >
+                            <apex:inputField value="{!i.LX_Quantity__c}"/>
+                        </apex:outputPanel>
+                     </apex:column>
+                     
+                     <apex:column headerValue="Part Name">
+                       <apex:outputField value="{!i.LX_SAP_Contract_Item__r.Part_Name__c}"/>
+                     </apex:column>
+                     
+                     <apex:column headerValue="Part Number">
+                       <apex:outputField value="{!i.LX_SAP_Contract_Item__r.Part_Number__c}"/>
+                     </apex:column>
+                     
+                     <apex:column headerValue="Unit of Measure">
+                       <apex:outputField value="{!i.LX_SAP_Contract_Item__r.LX_Unit_of_Measure__c}"/>
+                     </apex:column>
+                     
+                     <apex:column headerValue="Start Date">
+                       <apex:outputField value="{!i.LX_SAP_Contract_Item__r.Start_Date__c}"/>
+                     </apex:column>
+                     
+                     <apex:column headerValue="Sold Price">
+                       <apex:outputField value="{!i.LX_SAP_Contract_Item__r.Sold_Price__c}"/>
+                     </apex:column>
+                     
+                     <apex:column headerValue="End Date">
+                       <apex:outputField value="{!i.LX_SAP_Contract_Item__r.End_Date__c}"/>
+                     </apex:column>
+                     
+                     <apex:column headerValue="Grouping Code">
+                       <apex:outputField value="{!i.LX_SAP_Contract_Item__r.LX_Grouping_Code__c}"/>
+                     </apex:column>
+
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>  
+    </apex:form>
+</apex:page>

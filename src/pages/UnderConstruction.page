@@ -1,0 +1,33 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | '+$Label.site.site_under_construction}" controller="SitesGenericController">
+  <title>{!SITE_NICKNAME+' | '+$Label.site.site_under_construction}</title>
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}">
+        <apex:define name="javascript">
+              //change icons
+              //jQuery('.sprite_cpicons.secondary').removeClass('alert');
+              //jQuery('.sprite_cpicons.secondary').addClass('  ');
+        </apex:define>
+        
+        <apex:define name="breadcrumb">
+             {!$Label.site.site_under_construction}
+        </apex:define>
+        
+        <apex:define name="titlebar">
+             {!$Label.site.site_under_construction}
+        </apex:define>
+        
+        <apex:define name="content">
+            <p>
+                <apex:outputText escape="false" styleClass="title" value="{!$Label.site.under_construction}">
+                    <apex:param value="{!$Site.CurrentSiteUrl}"/>
+                </apex:outputText>
+                <br/>
+                <br/>
+                <apex:outputText escape="false" value=" {!$Label.site.get_in_touch}">
+                  <apex:param value="mailto:{!$Site.AdminEmailAddress}"/>
+                  <apex:param value="{!$Label.site.email_us}"/>
+                </apex:outputText>
+
+            </p>    
+        </apex:define>
+  </apex:composition>
+</apex:page>

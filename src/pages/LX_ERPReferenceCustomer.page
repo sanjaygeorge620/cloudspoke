@@ -1,0 +1,177 @@
+<apex:page controller="LX_ERPReferenceCustomerContlr" sidebar="false" showHeader="false" showChat="false" action="{!onLoad}" tabStyle="Account" id="p">
+         <script>
+              
+                function uncheckOthers(a){
+                        if(a.checked == true){
+                        var elements = document.getElementsByTagName("input");
+                                for(i=0;i<elements.length;i++)
+                                        {
+                                            e = elements[i];
+                                            if(e.id.indexOf("checkSold") != -1){
+                                                        if(a.id != e.id){
+                                                                e.checked = false;
+                                                        }
+                                            }
+                                    }
+                                }
+                        }
+                        
+                function CloseAndRefresh(){
+                      top.window.opener.location.href="/{!$CurrentPage.parameters.oppId}";
+                      window.top.close();
+                    }  
+               
+                                            
+        </script>
+   <apex:pagemessages />
+  <apex:form >
+  
+  <apex:pageBlock title="{!$Label.LX_Sold_To}" rendered="{!NOT(flag)}">
+  <apex:pageBlockSection title="{!$Label.LX_Search_Para}" >
+   </apex:pageBlockSection>
+   
+     <apex:outputPanel rendered="{!NOT(flag)}"> 
+     <!--  apex:pageBlockSection title="Search Parameters" columns="7">  
+     -->     <br/><br/>
+             <apex:outputpanel title="{!$Label.LX_Search_Para}">
+             <apex:outputText value="{!$Label.LX_SAP_Name}" id="search1"/>
+             <apex:inputText value="{!input1}"/>
+             <apex:outputText value="{!$Label.LX_SoldTo_Id}" id="search2"/>
+             <apex:inputText value="{!input2}"/>
+             <apex:outputText value="{!$Label.LX_Payment_Terms}" id="search3"/>
+             <apex:inputText value="{!input3}"/>
+             <apex:outputText value="{!$Label.LX_Currency}" id="search4"/>
+             <apex:inputText value="{!input4}"/>
+             <apex:outputText value="{!$Label.LX_Sales_Organization}" id="search5"/>
+             <apex:inputText value="{!input5}"/> 
+             <apex:commandbutton action="{!GoSoldTo}" value="{!$Label.LX_Go}" />
+             </apex:outputpanel><br/><br/><br/>
+       <!--   </apex:pageBlockSection>-->
+        </apex:outputPanel>
+        <apex:pageBlockSection title="{!$Label.LX_Search_Results}" columns="1" rendered="{!NOT(flag)}">
+            <apex:pageBlockTable value="{!resultList}" columns="6" var="soldto">
+                <apex:column headerValue="{!$Label.LX_Select}">
+                    <apex:inputCheckbox value="{!soldto.selected}" onclick="uncheckOthers(this)" id="checkSold"/>
+               </apex:column>
+
+               <apex:column value="{!soldto.soldToObject.LX_Sold_To__r.LX_Name__c}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewSoldToData}" value="Sold To Name{!IF(sortExpression=='LX_Sold_To__r.LX_Name__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort1">
+                     <apex:param value="LX_Sold_To__r.LX_Name__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+               
+               <apex:column value="{!soldto.soldToObject.LX_Sold_To__r.LX_Sold_To_ID__c}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewSoldToData}" value="Sold To ID{!IF(sortExpression=='LX_Sold_To__r.LX_Sold_To_ID__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort2">
+                     <apex:param value="LX_Sold_To__r.LX_Sold_To_ID__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+
+               <apex:column value="{!soldto.soldToObject.LX_Default_Payment_Terms__c}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewSoldToData}" value="Payment Terms{!IF(sortExpression=='LX_Default_Payment_Terms__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort3">
+                     <apex:param value="LX_Default_Payment_Terms__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+
+               <apex:column value="{!soldto.soldToObject.LX_Currency__c}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewSoldToData}" value="Currency{!IF(sortExpression=='LX_Currency__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort4">
+                     <apex:param value="LX_Currency__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+
+               <apex:column value="{!soldto.soldToObject.LX_Sales_Org1__c}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewSoldToData}" value="Sales Organization{!IF(sortExpression=='LX_Sales_Org1__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort5">
+                     <apex:param value="LX_Sales_Org1__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>  
+                <apex:pageBlockButtons location="bottom" >
+               <!-- <apex:commandButton action="{!updateOpp}" value="{!$Label.LX_Save}" oncomplete="javascript:CloseAndRefresh()" />-->
+               <apex:commandButton action="{!updateERPCustomer}" value="{!$Label.LX_Save}" oncomplete="javascript:CloseAndRefresh()" />
+                <apex:commandButton action="{!Cancel}" value="{!$Label.LX_Cancel}" oncomplete="javascript:CloseAndRefresh()" />
+          <!--   <apex:commandButton action="/500/e?{!$Label.LX_Case_Subject}=Sold To request for Opportunity [{!opp.Name}]&retURL=%2F{!opp.Id}&CF{!$Label.LX_Case_Internal_Account}={!opp.Account.Name}&CF{!$Label.LX_Case_Internal_Account}_lkid={!opp.Account.Id}&{!$Label.LX_Case_Contact_Name}={!objContact.Name}&{!$Label.LX_Case_Contact_Name}_lkid={!objContact.Id}&RecordType={!$Label.LX_Case_SoldTo_RecordTypeId}&ent=Case&{!$Label.LX_Case_Request_Change}=<h3>Create Sold To:</h3><table width=600 border=1><tr><th width=200>Opportunity</th><td><a href='/{!opp.Id}' >{!URLENCODE(opp.Name)}</a></td></tr><tr><th>MDM ID</th><td>{!opp.Account.MDM_ID__c}</td></tr><tr><th>MDM Account Number</th><td>{!opp.Account.MDM_Account_Number__c}</td></tr><tr><th>Currency</th><td>{!opp.CurrencyIsoCode}</td></tr><tr><th>Sales Organization</th><td>{!opp.Sales_Organization_value__c}</td></tr><tr><th>Payment Terms</th><td></td></tr><tr><th>Requestor</th><td><a href='/{!$User.Id}' >{!$User.FirstName}%20{!$User.LastName}</a></td></tr><tr><th>Salesperson Notes</th><td></td></tr></table>" value="Request New Sold to"/>-->
+    </apex:pageBlockButtons>  
+     </apex:pageBlock> 
+     <apex:pageBlock title="{!$Label.LX_ZIDC}" rendered="{!flag}"> 
+        
+     <apex:pageBlockSection title="{!$Label.LX_Search_Para}" >
+     </apex:pageBlockSection>
+     <apex:outputPanel rendered="{!flag}"> 
+       <br/><br/>
+             <apex:outputpanel title="{!$Label.LX_Search_Para}"> 
+             <apex:outputText value="{!$Label.LX_SAP_Name}" id="searchsap1"/>
+             <apex:inputText value="{!input1}"/>
+             <apex:outputText value="{!$Label.LX_ZIDCID}" id="searchsap2"/>
+             <apex:inputText value="{!input2}"/>
+                     <apex:commandbutton action="{!Go}" value="{!$Label.LX_Go}" />
+             </apex:outputpanel><br/><br/><br/>
+       <!--   </apex:pageBlockSection>-->
+        </apex:outputPanel>
+        
+          <apex:pageBlockSection title="{!$Label.LX_ZIDC_Search_Results}" columns="1" rendered="{!flag}" >
+        <apex:pageBlockTable value="{!resultZIDCList}" columns="5" var="Z">
+          <apex:column headerValue="{!$Label.LX_Select}">
+                    <apex:inputCheckbox value="{!Z.selected}" onclick="uncheckOthers(this)" id="checkSold"/>
+               </apex:column>
+               <apex:column value="{!Z.ZIDCObject.LX_Name__c}" headerValue="Name">
+               <apex:facet name="header">   
+                   <apex:commandLink action="{!viewZIDCData}" value="ZIDC Name{!IF(sortExpression=='LX_Name__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort1">
+                     <apex:param value="Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+               </apex:column>
+               
+               <apex:column value="{!Z.ZIDCObject.LX_ZIDC_ID__c}" headerValue="ZIDC ID">
+               <apex:facet name="header">   
+                   <apex:commandLink action="{!viewZIDCData}" value="ZIDC ID{!IF(sortExpression=='LX_ZIDC_ID__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort2">
+                     <apex:param value="Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+               </apex:column>
+
+       <!--        <apex:column value="{!Z.ZIDCObject.CurrencyIsoCode}" headerValue="Currency">
+               <apex:facet name="header">   
+                   <apex:commandLink action="{!viewZIDCData}" value="Currency{!IF(sortExpression=='CurrencyIsoCode',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort3">
+                     <apex:param value="Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+               </apex:column>
+        -->
+               <apex:column value="{!Z.ZIDCObject.LX_Status__c}" headerValue="Status">
+                <apex:facet name="header">   
+                   <apex:commandLink action="{!viewZIDCData}" value="Status{!IF(sortExpression=='LX_Status__c',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort4">
+                     <apex:param value="Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+               </apex:column>
+              
+            </apex:pageBlockTable>
+        </apex:pageBlockSection> 
+              <apex:pageBlockButtons location="bottom" >
+               <!-- <apex:commandButton action="{!updateOpp}" value="{!$Label.LX_Save}" oncomplete="javascript:CloseAndRefresh()" />-->
+               <apex:commandButton action="{!updateERPCustomer}" value="{!$Label.LX_Save}" oncomplete="javascript:CloseAndRefresh()" />
+                <apex:commandButton action="{!Cancel}" value="{!$Label.LX_Cancel}" oncomplete="javascript:CloseAndRefresh()" />
+          <!--   <apex:commandButton action="/500/e?{!$Label.LX_Case_Subject}=Sold To request for Opportunity [{!opp.Name}]&retURL=%2F{!opp.Id}&CF{!$Label.LX_Case_Internal_Account}={!opp.Account.Name}&CF{!$Label.LX_Case_Internal_Account}_lkid={!opp.Account.Id}&{!$Label.LX_Case_Contact_Name}={!objContact.Name}&{!$Label.LX_Case_Contact_Name}_lkid={!objContact.Id}&RecordType={!$Label.LX_Case_SoldTo_RecordTypeId}&ent=Case&{!$Label.LX_Case_Request_Change}=<h3>Create Sold To:</h3><table width=600 border=1><tr><th width=200>Opportunity</th><td><a href='/{!opp.Id}' >{!URLENCODE(opp.Name)}</a></td></tr><tr><th>MDM ID</th><td>{!opp.Account.MDM_ID__c}</td></tr><tr><th>MDM Account Number</th><td>{!opp.Account.MDM_Account_Number__c}</td></tr><tr><th>Currency</th><td>{!opp.CurrencyIsoCode}</td></tr><tr><th>Sales Organization</th><td>{!opp.Sales_Organization_value__c}</td></tr><tr><th>Payment Terms</th><td></td></tr><tr><th>Requestor</th><td><a href='/{!$User.Id}' >{!$User.FirstName}%20{!$User.LastName}</a></td></tr><tr><th>Salesperson Notes</th><td></td></tr></table>" value="Request New Sold to"/>-->
+    </apex:pageBlockButtons>  
+           
+     </apex:pageBlock> 
+    <!--    <apex:pageBlock rendered="{!NOT(isError)}">
+  commented by sumedha 1/15  <apex:pageBlockButtons location="bottom" >
+               <apex:commandButton action="{!updateERPCustomer}" value="{!$Label.LX_Save}" oncomplete="javascript:CloseAndRefresh()" />
+                <apex:commandButton action="{!Cancel}" value="{!$Label.LX_Cancel}" oncomplete="javascript:CloseAndRefresh()" />
+    </apex:pageBlockButtons>  
+   
+     </apex:pageBlock>  --> 
+  </apex:form>
+  
+</apex:page>

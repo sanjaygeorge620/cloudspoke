@@ -1,0 +1,238 @@
+<apex:page standardController="Goal__c" extensions="UpdateGoalData" action="{!displayReportData}" showHeader="false" sidebar="false" renderAs="pdf">
+  <apex:form >
+
+    <TABLE WIDTH="100%" CELLPADDING="0" CELLSPACING="0" >
+    <tr>
+        <td width="26%">
+            <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                <tr>
+                    <th>By Business Unit</th>
+                    <th>{!col1Header}</th>
+                    <th>{!col2Header}</th>
+                    <th>{!col3Header}</th>
+                    <th>Var</th>
+                    <th>Var %</th>
+                </tr>
+                               
+                      <apex:repeat value="{!reportDataListMql}" var="s">
+                      <tr> 
+                          <td>{!s.areaOfInterest}</td>
+                          <td>{!s.goal}</td>
+                          <td>{!s.goalTd}</td>
+                          <td>{!s.actual}</td>
+                          <td>{!s.var}</td>
+                          <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+                 
+                
+            </table>
+        </td>
+            
+        <td width="26%">
+                <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                    <tr>
+                        <th>By Business Unit</th>
+                        <th>{!col1Header}</th>
+                        <th>{!col2Header}</th>
+                        <th>{!col3Header}</th>  
+                        <th>Var</th>
+                        <th>Var %</th>
+                    </tr>
+                    
+                      <apex:repeat value="{!reportDataListSqo}" var="s">
+                        <tr>
+                          <td>{!s.areaOfInterest}</td>
+                          <td>{!s.goal}</td>
+                          <td>{!s.goalTd}</td>
+                          <td>{!s.actual}</td>
+                          <td>{!s.var}</td>
+                          <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+                    
+                </table>
+        </td>
+                
+        <td width="26%">
+                <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                    <tr>
+                        <th>By Business Unit</th>
+                        <th>{!col1Header}</th>
+                        <th>{!col2Header}</th>
+                        <th>{!col3Header}</th>
+                        <th>Var</th>
+                        <th>Var %</th>
+                    </tr>
+                    
+                      <apex:repeat value="{!reportDataListNAAds}" var="s">
+                        <tr>
+                              <td>{!s.areaOfInterest}</td>
+                              <td>{!s.goal}</td>
+                              <td>{!s.goalTd}</td>
+                              <td>{!s.actual}</td>
+                              <td>{!s.var}</td>
+                              <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+                    
+                </table>  
+        </td>
+          
+    </tr>
+
+    <tr>
+         <td width="26%">
+            <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                <tr>
+                    <th>By Business Unit</th>
+                    <th>{!col1Header}</th>
+                    <th>{!col2Header}</th>
+                    <th>{!col3Header}</th>
+                    <th>Var</th>
+                    <th>Var %</th>
+                </tr>
+                               
+                      <apex:repeat value="{!reportDataListSectorMql}" var="s">
+                      <tr> 
+                          <td>{!s.areaOfInterest}</td>
+                          <td>{!s.goal}</td>
+                          <td>{!s.goalTd}</td>
+                          <td>{!s.actual}</td>
+                          <td>{!s.var}</td>
+                          <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+            </table>
+        </td>
+            
+        <td width="26%">
+                <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                    <tr>
+                        <th>By Business Unit</th>
+                        <th>{!col1Header}</th>
+                        <th>{!col2Header}</th>
+                        <th>{!col3Header}</th>
+                        <th>Var</th>
+                        <th>Var %</th>
+                    </tr>
+                    
+                      <apex:repeat value="{!reportDataListSectorSqo}" var="s">
+                        <tr>
+                          <td>{!s.areaOfInterest}</td>
+                          <td>{!s.goal}</td>
+                          <td>{!s.goalTd}</td>
+                          <td>{!s.actual}</td>
+                          <td>{!s.var}</td>
+                          <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+                    
+                </table>
+        </td>
+                
+        <td width="26%">
+                <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                    <tr>
+                        <th>By Business Unit</th>
+                        <th>{!col1Header}</th>
+                        <th>{!col2Header}</th>
+                        <th>{!col3Header}</th>
+                        <th>Var</th>
+                        <th>Var %</th>
+                    </tr>
+                    
+                      <apex:repeat value="{!reportDataListSectorAds}" var="s">
+                        <tr>
+                              <td>{!s.areaOfInterest}</td>
+                              <td>{!s.goal}</td>
+                              <td>{!s.goalTd}</td>
+                              <td>{!s.actual}</td>
+                              <td>{!s.var}</td>
+                              <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+                    
+                </table>  
+        </td>
+    </tr>
+    <tr>
+       <td width="26%">
+            <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                <tr>
+                    <th>By Business Unit</th>
+                    <th>{!col1Header}</th>
+                    <th>{!col2Header}</th>
+                    <th>{!col3Header}</th>
+                    <th>Var</th>
+                    <th>Var %</th>
+                </tr>
+                               
+                      <apex:repeat value="{!reportDataListLAMql}" var="s">
+                      <tr> 
+                          <td>{!s.areaOfInterest}</td>
+                          <td>{!s.goal}</td>
+                          <td>{!s.goalTd}</td>
+                          <td>{!s.actual}</td>
+                          <td>{!s.var}</td>
+                          <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+            </table>
+        </td>
+            
+        <td width="26%">
+                <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                    <tr>
+                        <th>By Business Unit</th>
+                        <th>{!col1Header}</th>
+                        <th>{!col2Header}</th>
+                        <th>{!col3Header}</th>
+                        <th>Var</th>
+                        <th>Var %</th>
+                    </tr>
+                    
+                      <apex:repeat value="{!reportDataListLASqo}" var="s">
+                        <tr>
+                          <td>{!s.areaOfInterest}</td>
+                          <td>{!s.goal}</td>
+                          <td>{!s.goalTd}</td>
+                          <td>{!s.actual}</td>
+                          <td>{!s.var}</td>
+                          <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+                    
+                </table>
+        </td>
+                
+        <td width="26%">
+                <TABLE style="font-family:Georgia, Garamond, Serif; font-size:0.6em" border="1px solid black">
+                    <tr>
+                        <th>By Business Unit</th>
+                        <th>{!col1Header}</th>
+                        <th>{!col2Header}</th>
+                        <th>{!col3Header}</th>
+                        <th>Var</th>
+                        <th>Var %</th>
+                    </tr>
+                    
+                      <apex:repeat value="{!reportDataListLAAds}" var="s">
+                        <tr>
+                              <td>{!s.areaOfInterest}</td>
+                              <td>{!s.goal}</td>
+                              <td>{!s.goalTd}</td>
+                              <td>{!s.actual}</td>
+                              <td>{!s.var}</td>
+                              <td>{!s.varPer}</td>
+                        </tr>
+                      </apex:repeat>
+                    
+                </table>  
+        </td> 
+    </tr>
+    
+    </table>
+
+  </apex:form>
+</apex:page>

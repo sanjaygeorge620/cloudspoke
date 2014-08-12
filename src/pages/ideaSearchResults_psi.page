@@ -1,0 +1,39 @@
+<apex:page controller="IdeaSearchController" tabStyle="Idea" showHeader="false">
+    <apex:composition template="ideaLayoutWrapper">
+        <apex:define name="content">
+            <div class="callout ideas">
+                <c:ideatabs Home_Tab="false" 
+                    ViewAll_Tab="false"
+                    Search_Tab="true"
+                    MyIdeas_Tab="false"
+                    Submit_Tab="false"
+                    />
+             </div>   
+            <div class="callout ideas-secondary">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons mp">&nbsp;</span>Search Results</a>
+                    <div class="callout-content ideasearch">
+                        <apex:form >
+                            <apex:outputPanel id="rerenderButtons" styleClass="baseSearchResults">
+                                <h2><apex:outputText value="Search Results" /></h2>
+    
+                                <apex:outputPanel styleClass="ibtNoItemMessage" rendered="{!AND((ideasWithVotes.size == 0),!hasMessages)}">
+                                    <apex:outputText value="No Results for '{!searchTermParam}'" />
+                                </apex:outputPanel>
+    
+                                <apex:dataList value="{!ideasWithVotes}" var="ideaWithVote" styleClass="ibtIdeaList ibtIdeaListPadding">
+                                    <c:ideaDetails idea="{!ideaWithVote.idea}" howUserVoted="{!ideaWithVote.howUserVoted}" />
+                                </apex:dataList>
+                            </apex:outputPanel>
+                        </apex:form>
+                        <apex:outputPanel styleClass="ibtIdeaListPaginationLinks" layout="block">
+                            <ideas:listOutputLink rendered="{!!isFirstPage}" styleClass="ibtPagePrevious" page="{!previousPageUrl}" pageOffset="-1">Previous Page</ideas:listOutputLink>
+                            <ideas:listOutputLink rendered="{!hasNextPage}" styleClass="ibtPageNext" page="{!nextPageUrl}" pageOffset="1">Next Page</ideas:listOutputLink>
+                        </apex:outputPanel>
+                    </div>
+            </div>        
+            
+            
+
+        </apex:define>
+    </apex:composition>
+</apex:page>

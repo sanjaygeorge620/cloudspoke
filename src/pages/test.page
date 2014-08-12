@@ -1,0 +1,30 @@
+<!-- Page: sampleToolbar-->
+
+<apex:page id="thePage">
+<style>
+    .toolbar {background: #d0d0d0 left -104px repeat-x; border: 1px solid #e1e0e0; 
+                                        border-top-color: #d1d1d1; -moz-border-radius: 5px; -webkit-border-radius: 5px; height: 33px; 
+                                        border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; border-bottom-right-radius: 5px 5px; 
+                                        border-bottom-left-radius: 5px 5px; border-bottom: 1px solid #C1C1C1;"
+</style>
+
+<apex:toolbar id="toolbar"  styleClass="toolbar">
+                            
+                    
+                    
+                    
+                    <apex:toolbarGroup id="toolbarMainTitle" location="left" style="padding-top:8px;">
+                        
+                        Displaying 
+                        
+                        
+                    </apex:toolbarGroup> 
+                    
+                    <apex:toolbarGroup location="right" style="padding-top:6px;">
+                       toolbarGroup
+
+                    </apex:toolbarGroup>
+                      
+                        
+                </apex:toolbar>
+</apex:page>

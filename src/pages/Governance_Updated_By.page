@@ -1,0 +1,13 @@
+<apex:page standardController="SFDC_Projects__c">
+<style type="text/css">
+body
+{
+background-color:rgb(243,243,236);
+}
+</style>
+<body>
+{!SFDC_Projects__c.Governance_Updated_User__c},&nbsp;<apex:outputField value="{!SFDC_Projects__c.Governance_Time_Field__c}"/> 
+
+</body>
+
+</apex:page>

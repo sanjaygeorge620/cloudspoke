@@ -1,0 +1,124 @@
+<apex:page controller="ControllerTrainingItem" tabstyle="Training__tab" id="pg" title="{!SiteNickname+' | Training'}">
+<title>{!SiteNickname+' | Training'}</title>
+
+<apex:form id="frm">
+  <style>
+  body, td, select, input, textarea, fieldset legend, .warn .textCounter, .miniTab .currentTab, .requiredLegend, .bPageBlock .noRecords, .list td, .list th, .bPageBlock td.actionColumn .actionLink, .bWizardBlock .pbDescription, .bWizardBlock .pbTopButtons {
+   color:#333333;
+  }
+  
+  .pbTitle {
+    height: 20px;
+  }
+  </style>
+
+    <apex:pageblock id="pb" title="Sign Up For Training">
+        <br/>
+        <apex:dataTable value="{!infoItems1}" var="info" id="regTable"
+            rowClasses="dataRow" width="100%" rendered="{!showItems1}">
+            <apex:column >
+              <apex:facet name="header" >{!info.Name}</apex:facet>
+              <apex:outputLink value="/{!info.Parent_Title_URL__c}" 
+                        onclick="window.parent.location.href='/{!info.Parent_Title_URL__c}';"
+                        rendered="{!info.Parent_Title_URL__c != ''}"
+                        ><b>{!info.name}</b>
+              </apex:outputLink>
+              
+              <apex:outputLink value="/apex/TrainingInfoSingle?id={!info.Id}" 
+                        onclick="window.parent.location.href='/apex/TrainingInfoSingle?id={!info.id}';"
+                        rendered="{!info.Parent_Title_URL__c == ''}"
+                        ><b>{!info.name} </b>
+                        
+              </apex:outputLink>
+              <br/><br/>
+              <apex:outputField value="{!info.Description__c}" />
+              <br/><br/>
+            </apex:column>
+          </apex:dataTable> 
+    </apex:pageblock>
+
+    <apex:pageblock id="pb2" title="Prepare for Training">
+        <br/>
+        <apex:dataTable value="{!infoItems2}" var="info" id="regTable2"
+            rowClasses="dataRow" width="100%" rendered="{!showItems2}">
+            <apex:column >
+              <apex:facet name="header" >{!info.Name}</apex:facet>
+              <apex:outputLink value="/{!info.Parent_Title_URL__c}" 
+                        onclick="window.parent.location.href='/{!info.Parent_Title_URL__c}';"
+                        rendered="{!info.Parent_Title_URL__c != ''}"
+                        ><b>{!info.name}</b>
+              </apex:outputLink>
+              
+              <apex:outputLink value="/apex/TrainingInfoSingle?id={!info.Id}" 
+                        onclick="window.parent.location.href='/apex/TrainingInfoSingle?id={!info.id}';"
+                        rendered="{!info.Parent_Title_URL__c == ''}"
+                        ><b>{!info.name} </b>
+                        
+              </apex:outputLink>
+              <br/><br/>
+              <apex:outputField value="{!info.Description__c}" />
+              <br/><br/>
+            </apex:column>
+          </apex:dataTable> 
+    </apex:pageblock>
+    <apex:pageblock id="pb3" title="Services">
+        <br/>
+        <apex:dataTable value="{!infoItems3}" var="info" id="regTable3"
+            rowClasses="dataRow" width="100%" rendered="{!showItems3}">
+            <apex:column >
+              <apex:facet name="header" >{!info.Name}</apex:facet>
+              <apex:outputLink value="/{!info.Parent_Title_URL__c}" 
+                        onclick="window.parent.location.href='/{!info.Parent_Title_URL__c}';"
+                        rendered="{!info.Parent_Title_URL__c != ''}"
+                        ><b>{!info.name}</b>
+              </apex:outputLink>
+              
+              <apex:outputLink value="/apex/TrainingInfoSingle?id={!info.Id}" 
+                        onclick="window.parent.location.href='/apex/TrainingInfoSingle?id={!info.id}';"
+                        rendered="{!info.Parent_Title_URL__c == ''}"
+                        ><b>{!info.name} </b>
+                        
+              </apex:outputLink>
+              <br/><br/>
+              <apex:outputField value="{!info.Description__c}" />
+              <br/><br/>
+            </apex:column>
+          </apex:dataTable> 
+    </apex:pageblock>      
+
+    <apex:pageblock id="pb4" title="Additional Information">
+        <br/>
+        <apex:dataTable value="{!infoItems4}" var="info" id="regTable4"
+            rowClasses="dataRow" width="100%" rendered="{!showItems4}">
+            <apex:column >
+              <apex:facet name="header" >{!info.Name}</apex:facet>
+              <apex:outputLink value="/{!info.Parent_Title_URL__c}" 
+                        onclick="window.parent.location.href='/{!info.Parent_Title_URL__c}';"
+                        rendered="{!info.Parent_Title_URL__c != ''}"
+                        ><b>{!info.name}</b>
+              </apex:outputLink>
+              
+              <apex:outputLink value="/apex/TrainingInfoSingle?id={!info.Id}" 
+                        onclick="window.parent.location.href='/apex/TrainingInfoSingle?id={!info.id}';"
+                        rendered="{!info.Parent_Title_URL__c == ''}"
+                        ><b>{!info.name} </b>
+                        
+              </apex:outputLink>
+              <br/><br/>
+              <apex:outputField value="{!info.Description__c}" />
+              <br/><br/>
+            </apex:column>
+          </apex:dataTable> 
+          <c:TrainingInfoFooter />
+    </apex:pageblock>
+
+</apex:form>
+
+   <div><iframe id="resizeHack" width="0" height="0" frameborder="no"/></div>
+<script>
+  document.getElementById("resizeHack").src = "{!URLFOR($Scontrol.Resize_VF_Iframe)}" +
+                                              "&ifName=" + window.name +
+                                              "&ifHeight=" + document.body.offsetHeight;
+</script>
+
+</apex:page>

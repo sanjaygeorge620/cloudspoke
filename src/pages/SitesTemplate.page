@@ -1,0 +1,271 @@
+<apex:page controller="SitesHomeController" standardStylesheets="false" showHeader="false" cache="{!SITE_CACHED}" expires="{!SITE_CACHE_MAX_AGE}" language="{!SITE_LANGUAGE}">
+<!--[if lt IE 7]> <html class="salesforce-sites no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="salesforce-sites  no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="salesforce-sites  no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="salesforce-sites  no-js ie9" lang="en"> <![endif]-->
+<!--[if !IE]><!--><html lang="en" class="salesforce-sites  no-js"><!--<![endif]-->
+    <head>
+        <apex:insert name="title" />
+        <meta content="{!SITE_META_DESCRIPTION}" name="description" />
+        <meta content="{!SITE_META_KEYWORD}" name="keywords" />
+        <script src="//az322532.vo.msecnd.net/script/modernizr.2.61.js" type="text/javascript">//empty</script>
+        <!--css-->
+
+            <apex:outputText rendered="{!SITE_LANGUAGE!='de'}">
+                <apex:stylesheet id="sfdc_css" value="{!URLFOR($Resource.Perceptive_Sites_CSS, 'css/perceptive.css')}" />
+            </apex:outputText>
+            <apex:outputText rendered="{!SITE_LANGUAGE=='de'}">
+                <apex:stylesheet id="de_sfdc_css" value="{!URLFOR($Resource.Perceptive_Sites_CSS_DE, 'css/perceptive.css')}" />
+            </apex:outputText>
+            <link href="//webenginedevstoragecdn.blob.core.windows.net/salesforce-css/customer-portal/jquery-ui-1.10.1.custom.css" rel="stylesheet"/>
+            <link href="//www.perceptivesoftware.com/includes/css/ps3-salesforce.css" rel="stylesheet" />
+            <style>
+                dl{margin-left: 0em;}
+            </style>
+        <!--scripts-->
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript">//empty</script>
+            <script src="/soap/ajax/27.0/connection.js" type="text/javascript">//empty</script>
+            <script>
+            if(!jQuery("html").hasClass("salesforce-sites")){
+                   jQuery("html").addClass("salesforce-sites");
+               }
+            </script>
+    </head>
+
+    <body id="landing">  
+        <div id="frame" class="frame">
+        <header>
+          <div class="row-brand">
+
+            <div class="brand hide-text"><a href="/">Perceptive Software</a></div>
+              <div class="user-info">
+               <apex:outputPanel rendered="{!isLoggedIn}">
+                            <!---SSO Look--->
+                            <apex:outputText styleclass="welcome-text" value="Welcome, "/>
+                            <apex:outputLink value="{!$Page.MyProfilePage}" rendered="{!NOT(ISPICKVAL($User.UserType,'Guest'))}">{!$User.FirstName+' '+$User.LastName}</apex:outputLink>
+               </apex:outputPanel> 
+               </div>
+            <nav class="controlbar">             
+               <a href="{!RelatedSite}contact">{!$Label.Contact_Us}</a>
+               <a href="{!RelatedSite}careers">{!$Label.Careers}</a>
+               <apex:outputLink rendered="{!!isLoggedIn}" value="{!RelatedSite}login">{!$Label.Log_In}</apex:outputLink> 
+               <apex:outputLink rendered="{!isLoggedIn}" value="{!$Site.Prefix}/secur/logout.jsp">{!$Label.Log_Out}</apex:outputLink> 
+               <a id="country-trigger" href="http://www.perceptivesoftware.com"><span class="icon country us">US</span></a>
+            </nav>
+            <div class="country-selector hide-completely" id="country-selector">
+                <ul class="links-list links-icon">
+                    <li><a href="http://www.perceptivesoftware.co.uk"><span class="icon country gb">GB</span><span class="label">United Kingdom</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.nl"><span class="icon country nl">NL</span><span class="label">Netherlands</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.es"><span class="icon country es">ES</span><span class="label">Spain</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.fr"><span class="icon country fr">FR</span><span class="label">France</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.de"><span class="icon country de">DE</span><span class="label">Germany</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.it"><span class="icon country it">IT</span><span class="label">Italy</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.br.com"><span class="icon country br">BR</span><span class="label">Brazil</span></a></li>
+                </ul>
+            </div>
+          </div>
+          <div class="toggle-nav links-pictogram"><a class="button touch-ui pictogram-down">Show Menu</a></div>
+          <div class="row-nav">
+            <nav class="primary-nav">
+              <ul class="primary-nav-level1" id="main-nav">
+              <li><a href="{!RelatedSite}products"> {!$Label.Products}</a></li>
+              <li class="dropdown-trigger">
+              <a class="test dropdown-menu" href="{!RelatedSite}solutions">{!$Label.Solutions}</a>
+              <apex:outputpanel rendered="{!SITE_LANGUAGE=='en_US'}">
+                  <div class="dropdown solutions grid"><div class="c8 m">
+                  <h2>Departments</h2><ul class="links-list primary-nav-level2">
+                  <li><a href="{!RelatedSite}solutions/back-office/accounting-financials">Accounting &amp; Finance</a></li>
+                  <li><a href="{!RelatedSite}solutions/back-office/human-resources">Human Resources</a></li>
+                  <li><a href="{!RelatedSite}solutions/back-office/contract-management">Contract Management</a></li>
+                  <li><a href="{!RelatedSite}solutions/back-office/legal-document">Legal</a></li>
+                  <li><a href="{!RelatedSite}solutions/back-office/payroll-management">Payroll</a></li>
+                  </ul><ul class="links-list primary-nav-level2"><li><a href="{!RelatedSite}solutions/compliance">Regulatory Compliance</a>
+                  </li></ul></div><div class="c8"><h2>Industries</h2><ul class="links-list primary-nav-level2">
+                  <li><a href="{!RelatedSite}solutions/industry/financial-services/financial-services-industry">Financial Services</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/healthcare/healthcare-industry">Healthcare</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/higher-education/imagenow-higher-education">Higher Education</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/k-12-education/imagenow-k12-schools">K-12 Education</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/insurance/insurance-industry">Insurance</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/manufacturing-distribution/manufacturing-distribution-industry">Manufacturing</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/retail/retail-industry">Retail</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/federal-government/">Federal Government</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/state-government">State Government</a></li>
+                  <li><a href="{!RelatedSite}solutions/industry/energy-water-utilities/imagenow-energy-water">Energy &amp; Water Utilities</a></li>
+                  </ul></div></div>
+              </apex:outputpanel>
+              </li>
+              <li><a href="{!RelatedSite}services"> {!$Label.Services}</a></li>
+              <li><a href="{!RelatedSite}partners"> {!$Label.Partners}</a></li>
+              <li><a href="{!RelatedSite}case-studies"> {!$Label.Case_Studies}</a></li>
+              <li class="active-section"><a href="/">{!$Label.Customer_Portal}</a></li></ul>
+            </nav>
+            <form class="search" action="{!RelatedSite}search" method="Post">
+              <input type="search" value="" autosave="unique" results="5" name="IW_FIELD_WEB_STYLE" class="field" /> 
+              <input type="hidden" value="Perceptivesoftware.com (QA)" class="inputSelector" name="IW_DATABASE" />
+              <input type="submit" class="search-button" value="Search" />
+            </form>
+          </div>
+          <div class="row-border">
+        </div></header>
+           
+                        
+            <div id="core" class="main" role="main">
+             <div class="portalheader grid full-width">
+                    <apex:outputPanel rendered="{!isLoggedin}" id="toolbar" >
+                    <!-- Customer Portal: Navigation --> 
+                                <ul class="cp">
+                                        <apex:outputtext rendered="{!SITE_TAB_HOME}"><li><apex:outputLink styleclass="toolbar-home" value="{!$Page.home}">Home</apex:outputLink></li></apex:outputtext>
+                                    <apex:outputtext rendered="{!SITE_TAB_ACCOUNT}"><li><apex:outputLink styleclass="toolbar-account" value="{!$Page.account}">{!$Label.Account_Profile}</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_ACCOUNT_PARTNER}"><li><apex:outputLink styleclass="toolbar-accountpartner" value="{!$Page.partner}">Partner Profile</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_PARTNER_ACCOUNT}"><li><apex:outputLink styleclass="toolbar-partner-account" value="{!$Page.account_partner}">Accounts</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_OPPORTUNITIES}"><li><apex:outputLink styleclass="toolbar-opportunity" value="{!$Page.Opportunities}">Opportunities</apex:outputLink></li></apex:outputtext>                                                                                                                        
+                                        <apex:outputtext rendered="{!SITE_TAB_LEADS}"><li><apex:outputLink styleclass="toolbar-lead" value="{!$Page.Leads}">Leads</apex:outputLink></li></apex:outputtext>                                        
+                                        <apex:outputtext rendered="{!SITE_TAB_KNOWLEDGE}"><li><apex:outputLink styleclass="toolbar-knowledgebase" value="{!$Page.knowledge}">{!$Label.Knowledgebase}</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_ANSWERS}"><li><apex:outputLink styleclass="toolbar-answers" value="{!$Page.Answers}">{!$Label.Answers}</apex:outputLink></li></apex:outputtext>
+                                  <!--  <apex:outputtext rendered="{!SITE_TAB_DOWNLOADS}"><li><apex:outputLink styleclass="toolbar-downloads" value="{!$Page.Download}">Downloads</apex:outputLink></li></apex:outputtext>  -->
+                                        
+                                        <apex:outputtext rendered="{!SITE_TAB_DOWNLOADS}"><li><apex:outputLink styleclass="toolbar-downloads" value="{!$Page.redirectflexera}">{!$Label.Downloads}</apex:outputLink></li></apex:outputtext>                                     
+                                        <apex:outputtext rendered="{!SITE_TAB_CASES}"><li><apex:outputLink styleclass="toolbar-cases" value="{!$Page.Cases}">{!$Label.Cases}</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_CASES_CHANNEL}"><li><apex:outputLink styleclass="toolbar-cases" value="{!$Page.CasesChannel}">{!$Label.Cases}</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_IDEAS}"><li><apex:outputLink styleclass="toolbar-ideas" value="{!$Page.Ideas}">{!$Label.Ideas}</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_UPGRADE}"><li><apex:outputLink styleclass="toolbar-upgradecenter" value="{!$Page.Upgrade}">Upgrade Center</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!SITE_TAB_DOCUMENTATION}"><li><apex:outputLink styleclass="toolbar-documentation" value="{!$Page.Documentation}">{!$Label.Product_Documentation}</apex:outputLink></li></apex:outputtext>
+                                        <!-- Training Tab -->
+                                        <!-- <apex:outputtext rendered="{!SITE_TAB_TRAINING}"><li><apex:outputLink styleclass="toolbar-training" value="{!$Page.Training}">Training</apex:outputLink></li></apex:outputtext>-->
+                                        <apex:outputtext rendered="{!SITE_TAB_TRAINING}">
+                                            <li>
+                                                <apex:form >
+                                                    <apex:outputLink rendered="false" styleclass="toolbar-training" value="{!$Page.Training}">{!$Label.Training}</apex:outputLink>
+                                                    <apex:commandLink styleclass="toolbar-training" value="Training"    action="{!logintoSkillport}"/>
+                                                </apex:form>
+                                            </li>
+                                        </apex:outputtext>
+                                        <!-- /Training Tab -->                             
+                                        <apex:outputtext rendered="false"><li><apex:outputLink styleclass="toolbar-contactsupport" value="{!$Page.CaseWebSubmit}">{!$Label.Contact_Support}</apex:outputLink></li></apex:outputtext>
+                                        <!-- <apex:outputtext rendered="{!SITE_TAB_TIMECARDS}"><li><apex:outputLink styleclass="toolbar-training" value="{!URLFOR($Page.pse__TCEntryForward,null,[id=UID])}">Timecards</apex:outputLink></li></apex:outputtext>  -->
+                                        <apex:outputtext rendered="{!SITE_TAB_TIMECARDS}"><li><apex:outputLink styleclass="toolbar-training" value="{!$Page.Timecards}">Timecards</apex:outputLink></li></apex:outputtext>
+                                        <apex:outputtext rendered="{!enable_Metrics}"><li><apex:outputLink styleclass="toolbar-metrics" value="{!$Page.cloudcharts}">Metrics</apex:outputLink></li></apex:outputtext>
+                                        
+                                  </ul> 
+        
+                                <!-- Customer Portal: Toolbar -->
+                                 <ul class="toolbar">
+                                    <li><a title="" href="{!$page.MyProfilePage}">&nbsp;{!$Label.My_Profile}<span class="sprite_cpicons profile"></span></a></li>
+                                    <apex:outputPanel rendered="{!SITE_TOOLBAR}">
+                                        <li><apex:outputLink value="{!$Page.account}" title="">&nbsp;Servers<apex:param name="tab" value="servers"/><span class="sprite_cpicons env">&nbsp;</span></apex:outputLink></li>
+                                        <li><apex:outputLink title="" value="{!$Page.contactSupport}" rendered="{!SITE_TAB_CONTACT}">&nbsp;{!$Label.Contact_Support}<span class="sprite_cpicons phone">&nbsp;Contact Support</span></apex:outputLink></li>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!!SITE_ALERT_ACTIVE}">
+                                        <li>&nbsp;</li>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!SITE_ALERT_ACTIVE}">
+                                        <li id="opener" class="message alert"><a rel="xshadowbox" href="#inline-html"><span id="warning-icon" class="sprite_cpicons warning" >&nbsp;</span>{!If(len(SITE_ALERT_TITLE)>38,mid(SITE_ALERT_TITLE,1,35)+'...',SITE_ALERT_TITLE)}</a></li>
+                                    </apex:outputPanel>
+                                    
+                                    <!-- NavToolbarRight -->
+                                    <apex:outputPanel rendered="{!WidgetNavToolbarRight.size!=0}">  
+                                        <apex:repeat value="{!WidgetNavToolbarRight}" var="w">
+                                            <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                                        </apex:repeat>
+                                    </apex:outputPanel>
+                                </ul>  
+                 </apex:outputPanel>
+            </div>
+                   <apex:outputPanel styleClass="alert_msg" style="display:none;" rendered="{!isLoggedin}" >
+                       <h3>{!SITE_ALERT_TITLE}</h3>
+                        <p><apex:outputText value="{!SITE_ALERT_FULL}" escape="false"></apex:outputText></p>
+                   </apex:outputPanel>
+                   <apex:insert name="body"/>
+                   
+                   <apex:insert name="FlexErr"/>
+                   
+                   
+            </div>
+            
+           
+            
+        </div>
+<footer>
+    <div class="frame">
+         <div class="copyright">
+          <p>&copy; 2012 Perceptive Software {!$Label.All_rights_reserved}. <a href="{!RelatedSite}sitemap/index">{!$Label.Site_Map}</a> | <a href="{!RelatedSite}company/terms-of-use">{!$Label.Terms_of_Use}</a> | <a href="{!RelatedSite}company/legal">{!$Label.Privacy_Statement}</a> | <a href="{!RelatedSite}company/purchase-terms">{!$Label.Purchase_Terms}</a></p>
+          <br /> {!SITE_LANGUAGE} 
+         </div>
+         
+      </div>
+          
+    </footer>
+        <!---feedback widget--->
+        <apex:outputPanel layout="block" styleclass="feedback-widget" rendered="{!SITE_FEEDBACK && !(ISPICKVAL($User.UserType,'Guest'))}">
+            <apex:outputLink value="{!$Page.Feedback}"><apex:param name="retURL" value="{!$CurrentPage.URL}"/></apex:outputLink>
+        </apex:outputPanel>
+          <!--scripts-->
+         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/validate-1-9-0/jquery.validate.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/script/jquery.youtube-2.1.5.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/salesforce-scripts/jquery.plugins.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/salesforce-scripts/shadowbox.js" type="text/javascript">//empty</script>
+         <script src="//www.perceptivesoftware.com/scripts/general.js" type="text/javascript">//empty</script>
+         <script type="text/javascript">
+         
+             jQuery(document).ready(function(){
+                 //View alert
+                  jQuery('.message.alert').click(function() { // bind click event to class
+                          jQuery('.alert_msg').slideToggle('slow');
+                       return false;
+                    });
+             })
+         </script>
+        <apex:insert name="javascriptcalls" /> 
+        
+        <script type="text/javascript">     
+        var targetWidth = 430; 
+        jQuery('#view-full').bind('click', function(){ 
+            $('meta[name="viewport"]').attr('content', 'width=' + targetWidth);
+        });        
+       
+      </script>
+     
+      
+        <script src="//az322532.vo.msecnd.net/salesforce-scripts/cp.js" type="text/javascript">//empty</script>
+        <script src="//webenginedevstoragecdn.blob.core.windows.net/salesforce-scripts/jquery.locked.js" type="text/javascript">//empty</script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            /* GSS ------------------------------*/
+                _gaq.push(['t1._setAccount', 'UA-9714790-3']);
+                _gaq.push(['t1._setCustomVar',
+                3,              // This custom var is set to slot #4.  Required parameter.
+                'Contact ID',   // The name of the custom variable.   Required parameter.
+                '{!SITE_CONTACT.ID}',      // Sets the value of "User Type" to "Member" or "Visitor" depending on status.  Required parameter.
+                3              // Sets the scope to Page-level.  Optional parameter.
+                ]);  
+                _gaq.push(['t1._trackPageview']); 
+            
+            /* MKT ------------------------------*/
+                _gaq.push(['_setAccount', 'UA-18274388-1']);
+                _gaq.push(['_setCustomVar',
+                3,             // This custom var is set to slot #2.  Required parameter.
+                'Contact ID',   // The name of the custom variable.  Required parameter.
+                '{!SITE_CONTACT.ID}',      // Sets the value of "User Type" to "Member" or "Visitor" depending on status.  Required parameter.
+                3             // Sets the scope to Page-level.  Optional parameter.
+                ]);
+                _gaq.push(['_trackPageview']);
+             
+             _gaq.push(['_setDomainName', 'Perceptive Software Customer Portal']); 
+            
+            (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+            
+        </script>
+        
+     
+    </body>    
+
+</html>
+<site:previewAsAdmin />  
+</apex:page>

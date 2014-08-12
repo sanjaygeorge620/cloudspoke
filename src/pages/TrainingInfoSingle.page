@@ -1,0 +1,46 @@
+<apex:page standardController="Training_Info_Item__c" extensions="ControllerTrainingItem" tabstyle="Training_Info_Item__c" id="pg" >
+
+<apex:form id="frm">
+  <style>
+  body, td, select, input, textarea, fieldset legend, .warn .textCounter, .miniTab .currentTab, .requiredLegend, .bPageBlock .noRecords, .list td, .list th, .bPageBlock td.actionColumn .actionLink, .bWizardBlock .pbDescription, .bWizardBlock .pbTopButtons {
+   color:#333333;
+  }
+  .pbTitle {
+    height: 20px;
+  }
+  
+  </style>
+
+    <apex:pageblock id="pb" title="{!Training_Info_Item__c.Name}">
+    <br/>
+    
+        {!Training_Info_Item__c.Long_Description__c}
+    
+    <BR/>
+    
+        <apex:dataTable value="{!childInfoItems}" var="info" id="regTable"
+            styleClass="list" headerClass="headerRow" rowClasses="dataRow" width="100%">
+            <apex:column >
+            <br/>
+              <b>
+              <apex:outputField value="{!info.Name}" rendered="{!info.TitleHasURL__c == 'False'}"/>
+              <apex:outputLink value="{!info.Title_URL__c}" onclick="window.parent.location.href='{!info.Title_URL__c}';" rendered="{!info.TitleHasURL__c == 'True'}">{!info.name}</apex:outputLink>
+              </b>
+              <br/><br/>
+              <apex:outputField value="{!info.Description__c}" />
+              <br/><br/>
+            </apex:column>
+          </apex:dataTable>  
+    </apex:pageblock>
+
+       
+</apex:form>
+
+   <div><iframe id="resizeHack" width="0" height="0" frameborder="no"/></div>
+<script>
+  document.getElementById("resizeHack").src = "{!URLFOR($Scontrol.Resize_VF_Iframe)}" +
+                                              "&ifName=" + window.name +
+                                              "&ifHeight=" + document.body.offsetHeight;
+</script>
+
+</apex:page>

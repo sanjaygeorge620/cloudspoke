@@ -1,0 +1,68 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesContentController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <!-- Customer Portal content -->
+        <apex:includeScript id="swfobject_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/swfobject.js')}" />
+        <!-- Customer Portal: Image Heading Ad Rotator -->
+        <script type="text/javascript"> 
+            jQuery(document).ready(function() {
+                    var els = jQuery('.cp_header_images a').get();
+                    var img_on=Math.floor(Math.random()*els.length)
+                    jQuery('.cp_header_images a').hide();
+                    jQuery('.cp_header_images a:eq(' + img_on + ')').show();
+            });
+        </script> 
+        <div id="cp_header" class="cp_header_images" >
+            <!-- Should rotate 3-5 images on refresh-->
+            <a title="Join the Perceptive Software Community" href="http://community.perceptivesoftware.com/" style="display:none;"><img src="{!URLFOR($Resource.Perceptive_Sites, 'images/Banner-Community.jpg')}" height="230" width="958" alt="Join the Perceptive Software Community" /></a>
+        </div>
+        <!-- /Customer Portal: Image Heading Ad Rotator -->
+        
+        <!-- Customer Portal: UnAuth Content -->
+        <div class="cp_core">
+            <div class="two-thirds left-32"> 
+                        <div class="column-23"> 
+                              <div class="callout developer"> 
+                                    <a class="title-bar" href="#"><span class="sprite_cpicons dev-network">&nbsp;</span>Channel Portal</a> 
+                                    <div class="callout-content"> 
+                                        <div class="rich-content twothirds">
+                                            Our Channel Portal is designed to support our strategic partners with lead management, solution installations and more.  If your company has assigned you as an authorized user for the Channel Portal, please login below. 
+                                             <br/>
+                                             <br/>
+                                            If you are having problems accessing the portal, please contact your Partner Account Manager.
+                                        </div>        
+                                    </div><!-- /callout content --> 
+                             </div>       
+                        </div><!-- /Two-Thirds Column Left-32--> 
+                    <div class="column leftcol"> 
+                    </div><!-- /Left Column --> 
+                    
+                    <div class="column middlecol"> 
+                    </div><!-- /Middle Column --> 
+                </div> 
+                <div class="column rightcol"> 
+                    <apex:outputPanel rendered="{!SITE_OUTAGE}"><!---outage --->
+                        <apex:outputText escape="false" value="{!SITE_OUTAGE_HTML}" />
+                    </apex:outputPanel><!---/outage --->
+                    
+                    <div class="callout support"><!---psdn --->
+                        <span class="title-bar" href="#"><span class="sprite_cpicons login">&nbsp;</span>Channel Portal</span>
+                        <div class="callout-content">
+                            <p>
+                              <c:SiteLogin_Channel id="siteLogin"/>
+                            </p>                    
+                        </div>
+                    </div><!-- /psdn-->
+                   
+                   
+                </div><!-- /Right Column --> 
+                          
+            
+        </div>
+        <!-- Customer Portal: UnAuth Content -->
+        
+    <!-- / Customer Portal content -->
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

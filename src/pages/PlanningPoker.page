@@ -1,0 +1,627 @@
+<apex:page sidebar="false" action="{!enterSession}" controller="Controller_PlanningPoker">
+
+<style type="text/css">
+	#estimate a { 	
+		display:block; 
+		float:left;
+		margin:5px;
+		
+	}
+	
+	#header {
+		
+		padding:5px 5px 5px 15px;
+		background-color: #C4E7F2;
+    	border-radius: 5px 5px 5px 5px;
+   		font-weight: bold;
+    	outline: medium none;
+    	height:30px;
+	}
+	
+	#estimate {
+		float:left;
+		padding:20px;
+		background-color:#F1F1F1;
+		width:500px;
+		display:none;
+		height:25px;
+		height: 120px;
+		}
+		
+	#controls{
+		padding-left:50px;
+	}
+	
+	.storyLink {
+		width:100px;
+		float:left;
+		margin:0;
+		font-size:1.5em;
+	}	
+	
+	.storyTitle {
+		margin:0;
+		float:left;
+		width:900px;
+		font-weight:bold;
+		font-size:1.5em;
+	}
+	
+	#preText {
+		color:#CCCCCC;
+		font-size:1.5em;
+		text-align:center;
+		margin-top:50px;
+	}
+	
+	.hidden {
+		display:none;
+		float:right;
+		}
+		
+	.left {
+		float:left;
+	}
+		
+	.right { 
+		float:right;
+		}
+	
+	#leftbar {
+		float:left;
+		padding:50px;
+		width:95%
+	}
+		
+	
+		
+	#buttons {
+		float:right;
+	}
+	
+	#result {
+		float:right;
+		width:50px;
+	}
+	
+	.vote {
+		float:left;
+		padding-left:2px;
+	}
+	
+	
+	
+	#cards .vote {
+		cursor: pointer; 
+		cursor: hand;
+	}
+	
+	.cardHidden {
+			background-image: url("{!URLFOR($Resource.PlanningPoker, 'images/card2-back.png')}");
+	}
+	
+	.cardVisible {
+			background-image: url("{!URLFOR($Resource.PlanningPoker, 'images/card2-front.png')}");
+	}
+	.hidden {
+		display:none;
+	}
+		
+	.voteScore {
+		height:120px;
+		width:80px;
+		vertical-align:middle;
+		display:table-cell;
+		text-align:center;
+		font-size:4em;
+	}
+	
+	.voteUser {
+		padding:5px;
+	}
+	
+	.deck {
+		overflow: auto; 
+		background-color:#F6F6F8;
+		height:150px;
+		margin:5px;
+		padding: 20px 0 0 40px;
+	}
+	
+	#cards {
+		
+		display:none;
+	}
+	
+	#sidebar {
+		float:right;
+		width:350px;
+	
+		right:0;
+		padding:15px;
+		background-color:#ebebff;
+	}
+		
+	
+	
+	#users {
+		padding-right:50px;
+	
+	}
+	
+	#cards_outer {
+		padding-top:30px;
+	}
+	
+	#title {
+		padding:20px;
+		font-size:20px;
+		font-weight:bold;
+		background-color:#F1F1F1;
+	}
+
+	
+	#cards a {
+		font-size:15px;
+	}
+
+	
+</style>
+
+
+ 
+<apex:includeScript value="{!$Resource.jqueryPP}"/>
+ 
+
+<script type="text/javascript">
+	var boolScoreVisible = false;
+	var chatterMessage = '';
+	
+	
+	function setMessage(){
+		var msg=prompt("Add Chatter Message",chatterMessage);
+		
+		alert(msg);
+	}
+	
+	/*  @function		ready
+	 *	@description	Startup function when the page has finished loading, calls getData
+	 */
+	 
+	$(document).ready(function() { 
+		getData();
+	});
+
+	/*  @function		reestimate
+	 *	@description	This function invokes the reEstimate function on the server
+	 */
+	 
+	function reestimate(){
+		var r=confirm("Are you sure?");
+		if (!r)
+			return false;
+		
+		$('#buttons').hide();
+		$('#saveScoreIcon').show();
+		
+		Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Controller_PlanningPoker.reEstimate}',
+            '{!session.Id}',
+            function(result, event){
+                if (event.status) {
+                 	$('#buttons').show();
+					$('#saveScoreIcon').hide();
+					
+					
+					getData();
+                } else if (event.type === 'exception') {
+                    
+                } else {
+                    document.getElementById("responseErrors").innerHTML = event.message;
+                }
+            }, 
+            {escape: true}
+        );
+	}
+	
+	/*  @function		parseData
+	 *	@description	This function parses the result coming from the server and handles all data accordingly.
+	 *	@param			data	The data coming from the client.	
+	 */
+	
+	function parseData(data){
+		
+		//if the story field is set
+		if(data.Story){
+		
+			//if the story changed OR the story is being re-estimated (via last modified date)
+			if($('#storyTitle').text() != data.Story || $('#lastmodified').text() != data.LastModifiedDate){
+				$('#votes .vote').remove();
+				$('#cards .vote').removeClass('selected');
+				$('#cards').show();
+				$("#cards .vote").show();
+				boolScoreVisible = false;
+			}
+			
+			$('#storyLink').text('');
+			$('#storyLink').append('<a target="_blank" href="/' + data.StoryID + '">' + data.StoryName + '</a>');
+			$('#storyTitle').text(data.Story);
+			$('#lastmodified').text(data.LastModifiedDate);
+			
+		}
+		
+		
+		$('#users').text('');
+		
+		for(i=0;i<data.Users.length;i++){
+			
+			var name = data.Users[i];
+			
+			$('#users').append(name)
+			
+			if('{!leaderName}'==name){
+				
+				$('#users').append(' (leader)');
+			}else{
+			
+				//if I am the leader, add a delete option
+				if('{!user}'=='{!leader}')
+					$('#users').append('<a href=\'#\' onclick=\'kickUser("' + name + '");return false;\'><img src=\'/img/func_icons/remove12_on.gif\'></img></a>');
+			}
+			
+			$('#users').append('<br/>');
+		}
+		
+		//if there are votes
+		if(data.Votes.length > 0){
+		
+			//hide the pre-text
+			$('#preText').hide();
+			
+			//append only the latest votes
+			for(i=$('#votes .vote').length;i<data.Votes.length;i++){
+				var vote = data.Votes[i];
+				$('#votes').append('<div class=\'vote\'><div class=\'voteScore cardHidden\'><span>' + vote.UserVote + '</span></div><div class=\'voteUser\'>' + vote.UserName.substring(0,25) + '</div></div>');
+				$('#votes .voteScore span').hide();
+			}
+		}
+		
+		if($('#votes .vote').length == data.Users.length && !boolScoreVisible){
+				boolScoreVisible = true;
+				
+				$('#votes .voteScore span').show();
+				$('#votes .voteScore').removeClass('cardHidden');
+				$('#votes .voteScore').addClass('cardVisible');
+				$('#estimate').show();	
+				
+				var tempVote = 0;
+				
+				for(i=0;i<$('#votes .vote').length;i++){
+					tempVote+=parseInt($('#votes span')[i].innerHTML);
+				}
+				
+				var avg = tempVote / $('#votes .vote').length;
+				
+				if(avg > 0)
+					$('#score').val(1);
+				
+				if(avg > 1)
+					$('#score').val(2);
+				
+				if(avg > 2)
+					$('#score').val(3);
+				
+				if(avg > 3)
+					$('#score').val(5);
+				
+				if(avg > 5)
+					$('#score').val(8);
+				
+				if(avg > 8)
+					$('#score').val(13);
+				
+				if(avg > 13)
+					$('#score').val(21);
+				
+				if(avg > 21 )
+					$('#score').val(40);
+		}
+	
+	}
+
+	/*  @function		getData
+	 *	@description	This function calls the getData function on the server given a server ID.
+	 */
+	 
+	function getData(){
+		Visualforce.remoting.Manager.invokeAction( 
+			'{!$RemoteAction.Controller_PlanningPoker.getData}',
+			'{!session.Id}',
+			function(result, event){
+                if (event.status) {
+                	parseData(result);
+                } else if (event.type === 'exception') {
+                    
+                } else {
+                    document.getElementById("responseErrors").innerHTML = event.message;
+                }
+            }, 
+            {escape: true}
+        );
+        
+        //Long-polling 
+        setTimeout('getData();', 2500);
+	}
+	
+	/*  @function		kickUser
+	 *	@description	Removes a user from this session.
+	 *	@param			username	The username of the user to be kicked.
+	 */
+	 
+	function kickUser(username){
+		Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Controller_PlanningPoker.kickUser}',
+            username,
+            '{!session.Id}',
+            function(result, event){
+                if (event.status) {
+                 
+                } else if (event.type === 'exception') {
+                    
+                } else {
+                    document.getElementById("responseErrors").innerHTML = event.message;
+                }
+            }, 
+            {escape: true}
+        );
+	}
+	
+	/*  @function		vote
+	 *	@description	This function calls the vote function on the server. Invokes voting.
+	 *	@param			score	The score that is sent to the server.
+	 */
+	
+	function vote(score){
+		
+		//Hide all hrefs except selected
+		$("#cards .vote").not('div.selected').hide();
+		//$("#cards .selected").fadeOut();
+		
+		Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Controller_PlanningPoker.vote}',
+            score,
+            '{!session.Id}',
+            function(result, event){
+                if (event.status) {
+                 
+                } else if (event.type === 'exception') {
+                    
+                } else {
+                    document.getElementById("responseErrors").innerHTML = event.message;
+                }
+            }, 
+            {escape: true}
+        );
+
+	}
+	
+	/*  @function		setScore
+	 *	@description	This function sets the score for the current user story
+	 */	 
+	 
+	function setScore(){
+		$('#buttons').hide();
+		$('#saveScoreIcon').show();
+		
+		var tech = $('#technology').val();
+		var score = $('#score').val()
+		var chatterNote = $('#chatterNote').val();
+		
+		Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Controller_PlanningPoker.setScore}',
+            '{!session.Id}',
+            score,
+            tech,
+            chatterNote,
+            function(result, event){
+                if (event.status) {
+                  $('#saveScoreIcon').hide();
+                  $('#savedSuccess').fadeIn().delay(1500).fadeOut();
+                  $('#buttons').show();
+                  $('#chatterNote').val('');
+                 // $('#votes').text('');
+                  
+                } else if (event.type === 'exception') {
+                    
+                } else {
+                    document.getElementById("responseErrors").innerHTML = event.message;
+                }
+            }, 
+            {escape: true}
+        );
+	
+	}
+	
+	/*  @function		setScore
+	 *	@description	This function sets the current story to the story with given ID
+	 *	@param			idStory		The id of the newly selected story
+	 */	 
+	 
+	function setStory(idStory){
+		Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Controller_PlanningPoker.setStory}',
+            idStory,
+            function(result, event){
+                if (event.status) {
+                  
+                } else if (event.type === 'exception') {
+                    
+                } else {
+                    document.getElementById("responseErrors").innerHTML = event.message;
+                }
+            }, 
+            {escape: true}
+        );
+	}
+	
+
+</script>
+
+
+<body>
+<div id="session">
+
+	
+	<div id="title">
+		{!session.Title__c}
+	</div>
+	<div class="hidden" id="lastmodified"></div>
+	
+	<div id="content">
+		<div id="leftbar">
+			<div id="header">
+				<div id="storyLink" class="storyLink">	</div>
+				<div id="storyTitle" class="storyTitle">	</div>
+			</div>
+			<div id="cards_outer">
+				<div class="deck" id="votes">
+					<div id="preText">
+						Please wait until the leader has selected a user story
+					</div>
+				</div>
+				
+				<div class="deck" id="cards">
+					<div class="vote" onclick="$(this).addClass('selected');vote('0');return false;">
+						<div class="voteScore cardVisible">
+							<span>0</span>
+						</div>
+					</div>
+					
+					<div class="vote" onclick="$(this).addClass('selected');vote('1');return false;">
+						<div class="voteScore cardVisible">
+							<span>1</span>
+						</div>
+					</div>
+					
+					<div class="vote" onclick="$(this).addClass('selected');vote('2');return false;">
+						<div class="voteScore cardVisible">
+							<span>2</span>
+						</div>
+					</div>
+					
+					<div onclick="$(this).addClass('selected');vote('3');return false;" class="vote">
+						<div class="voteScore cardVisible">
+							<span>3</span>
+						</div>
+					</div>
+					
+					<div onclick="$(this).addClass('selected');vote('5');return false;" class="vote">
+						<div class="voteScore cardVisible">
+							<span>5</span>
+						</div>
+					</div>
+					
+					<div onclick="$(this).addClass('selected');vote('8');return false;" class="vote">
+						<div class="voteScore cardVisible">
+							<span>8</span>
+						</div>
+					</div>
+					
+					<div onclick="$(this).addClass('selected');vote('13');return false;" class="vote">
+						<div class="voteScore cardVisible">
+							<span>13</span>
+						</div>
+					</div>
+					
+					<div onclick="$(this).addClass('selected');vote('21');return false;" class="vote">
+						<div class="voteScore cardVisible">
+							<span>21</span>
+						</div>
+					</div>
+					
+					<div onclick="$(this).addClass('selected');vote('40');return false;" class="vote">
+						<div class="voteScore cardVisible">
+							<span>40</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	<div style="clear:both;"></div>
+		<div id="controls">
+			<apex:outputPanel rendered="{!user == leader}">
+				<div id="estimate">
+					<select style="width:100px" id="score">
+					  <option value="0">0</option>
+					  <option value="1">1</option>
+					  <option value="2">2</option>
+					  <option value="3">3</option>
+					  <option value="5">5</option>
+					  <option value="8">8</option>
+					  <option value="13">13</option>
+					  <option value="21">21</option>
+					  <option value="40">40</option>
+					</select>
+					
+					<select style="width:100px" id="technology">
+					  <option value="SFDC">SFDC</option>
+					  <option value="SAP">SAP</option>
+					  <option value="OTHER">Other</option>
+					</select>
+					<div id="result">
+						<img id="saveScoreIcon" class="hidden" title="Saving..." src="/img/staleValue.gif"></img>
+						<img id="savedSuccess" class="hidden" title="Success" src="/img/func_icons/util/checkmark16.gif" />						
+					</div>
+					<br/>
+					<img style="padding: 5px 0 5px 0;" title="Add chatter message" alt="Add chatter message" src='/img/feeds/feed16.png' />
+					<textarea cols="92" id="chatterNote" rows="2"></textarea>
+				
+					<div id="buttons">
+						<input id="saveScoreButton" type="button" onclick="setScore();return false;" value="Submit"/>
+						<input id="reestimateButton" type="button" onclick="reestimate();return false;" value="Re-estimate"/>
+					</div>
+					
+				</div>
+				<div style="clear:both;"></div>
+			</apex:outputPanel>
+			<div id="storyList" class="left">
+				<b>Stories:</b><br/>
+				<table>   
+							
+					<apex:repeat value="{!content}" var="story">
+						<tr>
+							<apex:outputPanel rendered="{!user == leader}">
+								<td>
+									<a href="#" onclick="setStory('{!story.Id}');return false;">
+										Estimate
+									</a>
+								</td>
+							</apex:outputPanel>
+							<td>
+								{!story.User_Story__r.User_Story__c}
+							</td>
+							<td>
+								(<a target="_blank" href="/{!story.User_Story__c}">{!story.User_Story__r.Name}</a>)
+							</td>
+						</tr>	
+					</apex:repeat>
+						
+				</table>
+			</div>
+			<div id="sidebar">
+				<b>Current users:<br/></b>
+				<div id="users">
+			
+				</div>
+				<br/>
+				Copy the link of this page and send it to other Tracker users to invite people to estimate.
+			</div>
+			
+		</div>
+	
+</div>
+</body>
+</apex:page>

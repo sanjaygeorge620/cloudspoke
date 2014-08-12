@@ -1,0 +1,333 @@
+<apex:page standardcontroller="LX_Offer_Enrollment__c" extensions="LX_Offer_EnrollmentDetailsExtension">
+    <script src="/soap/ajax/25.0/connection.js"/> 
+    <script src="/soap/ajax/25.0/apex.js"/> 
+    <script type="text/javascript">
+    var offerId = '{!offId}'; 
+        if(offerId == '' || offerId == null) {
+            alert('You can create an OfferEnrollment by clicking Create Offer Enrollment from an Offer record.');
+            sforce.connection.sessionId = "{!$Api.Session_ID}";
+            var result = sforce.connection.describeSObjects(["LX_Offer_Enrollment__c"]);
+            var clientPrefix = result[0].keyPrefix;
+            window.location = '/'+clientPrefix+'/o';
+
+        }
+    
+        function checkAll(cb,filter)
+        {
+            var inputElem = document.getElementsByTagName("input");          
+            for(var i=0; i<inputElem.length; i++)
+            {   
+                if(inputElem[i].id.indexOf(filter)!=-1)                         
+                inputElem[i].checked = cb.checked;
+            }
+        }
+          
+        
+        function validateEnrollment(varSPB){
+            if(varSPB){ 
+                if(document.getElementById("{!$Component.frm.pb.TopSection.PurMthd.Purchasing_Method}").value == ''){
+                   alert("Purchasing Method is mandatory");
+                   return false;
+                }
+             
+                if(document.getElementById("{!$Component.frm.pb.TopSection.TmOfDis.Timing_of_Discount}").value == ''){
+                    alert("Timing of Discount is mandatory");
+                    return false;
+                }               
+            }
+            callOfferEnrol();  
+              
+        } 
+        
+        function validateSearchfilter(){
+            
+            if((document.getElementById("{!$Component.frm.pb.TopSection.mlptsalesOrg.slsOrg}").value == 'Yes')&&(
+            (document.getElementById("{!$Component.frm.pb.TopSection.PrtyRole.PartyRole}").value == '') ||
+            (document.getElementById("{!$Component.frm.pb.TopSection.phyCntry.physicalCountry}").value == ''))){
+                alert("Party Role and Physical Country is required if 'Add Parties from Multiple Sales Orgs?' is Yes");
+                return false;
+            } 
+            
+            callSearchLogic();
+            
+        }
+          
+    </script>
+        
+    
+    <apex:form id="frm" rendered="{!formRender}">    
+    <apex:pageMessages id="msg"></apex:pageMessages>    
+    <apex:pageBlock id="pb" rendered="{!pgBlockRender}">
+            <apex:actionFunction name="callOfferEnrol" action="{!createOfferEnrollment}"  />
+            <apex:actionFunction name="callSearchLogic" action="{!SearchLogic}"/>
+            <apex:pageBlockSection Title="Enrollment Selections" id="TopSection" columns="2">
+            
+          <apex:pageBlockSectionItem >
+               <apex:OutputLabel value="Party Group" for="partyGroup"/> <!-- US4026: to make the field required in the VF page -->
+               <apex:outputPanel >                   
+                 <apex:outputPanel styleClass="requiredInput" layout="block" rendered="{!mandateFlagByQcat}" > 
+                 <apex:outputPanel styleClass="requiredBlock" layout="block"  />
+                     <apex:inputField value="{!tempOfEnrl.Lx_PartyGroup__c}"  />
+                 </apex:outputPanel> 
+               <apex:inputField value="{!tempOfEnrl.Lx_PartyGroup__c}"  rendered="{!NOT(mandateFlagByQcat)}"  />
+               </apex:outputPanel>    
+            </apex:pageBlockSectionItem>          
+           
+           <apex:pageBlockSectionItem >
+            <apex:OutputLabel />
+           </apex:pageBlockSectionItem>
+           
+           <apex:pageBlockSectionItem id="PrtyRole" > <!-- US4026: to make the field required in the VF page -->
+                <apex:OutputLabel value="Party Role" for="PartyRole"/>
+                <apex:outputPanel >
+                    <apex:outputPanel styleClass="requiredInput" layout="block" rendered="{!mandateFlagByQcat}" >
+                        <apex:outputPanel styleClass="requiredBlock" layout="block"  />
+                        <apex:selectList size="1" value="{!tempofEnrl.Lx_PartyRole__c}" id="PartyRole" >
+                         <apex:selectOptions value="{!optPartyRole}"/>
+                         <apex:actionSupport event="onchange" action="{!showShipDebit}" reRender="pb,msg" />
+                      </apex:selectList>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(mandateFlagByQcat)}">
+                        <apex:selectList size="1" value="{!tempofEnrl.Lx_PartyRole__c}" id="PartyRole1">
+                         <apex:selectOptions value="{!optPartyRole}"/>
+                         <apex:actionSupport event="onchange" action="{!showShipDebit}" reRender="pb,msg" />
+                      </apex:selectList>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+              </apex:pageBlockSectionItem>
+            
+           <apex:pageBlockSectionItem id="PrtyType" >
+                <apex:OutputLabel value="Party Type" for="PartyType"/>
+               <apex:selectList size="1" value="{!tempOfEnrl.Lx_PartyType__c}" id="partyTypeValue">
+                    <apex:selectOptions value="{!optPartyType}"/>
+                </apex:selectList> 
+              <!--  <apex:inputField value="{!tempOfEnrl.Lx_PartyType__c}" id="PartyType" /> -->
+            </apex:pageBlockSectionItem> 
+            
+            <apex:pageBlockSectionItem id="PurMthd" rendered="{!AND(varSoftPB || varPromotion )}" >
+            <apex:OutputLabel value="Purchasing Method"   for="Purchasing_Method"/>
+                <apex:selectList size="1" value="{!purchasingMethod}" required="false" id="Purchasing_Method">
+                    <apex:selectOptions value="{!purchasingMethodList}"/>
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem id="ClaPty" rendered="{!varSoftPB}">
+            <apex:OutputLabel value="Claiming Party" for="Claiming_Party" />
+                <apex:outputPanel >
+                <apex:selectList size="1" value="{!claimingParty}" id="Claiming_Party" required="false" disabled="{!Not(m_ShowClaimingParty)}">
+                    <apex:selectOptions value="{!claimingPartyList}"/>
+                </apex:selectList>
+                </apex:outputPanel> 
+            </apex:pageBlockSectionItem>
+            
+             <apex:pageBlockSectionItem id="TmOfDis" rendered="{!varSoftPB}">
+            <apex:OutputLabel value="Timing of Discount" for="Timing_of_Discount"/>
+                <apex:selectList size="1" value="{!timingOfDiscount}" required="false" id="Timing_of_Discount"> <!--  onchange="DisableClaimingparty();" -->
+                    <apex:selectOptions value="{!timingOfDiscountList}"/>
+                    <apex:actionSupport event="onchange" action="{!showShipDebit}" reRender="pb,msg" />
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem Id="ShpDbt" rendered="{!varSoftPB}">
+            <apex:OutputLabel value="Ship/Debit" for="ShipDebit"/>
+            <apex:outputPanel >
+                <apex:selectList size="1" value="{!ShipDebit}" id="ShipDebit" required="false"  disabled="{!Not(m_ShowShipDebit)}">
+                    <apex:selectOptions value="{!ShipDebitList}"/>
+                </apex:selectList> 
+            </apex:outputPanel>                  
+            </apex:pageBlockSectionItem> 
+            
+            <apex:pageBlockSection id="prdLnItm" rendered="{!varSoftPB}">
+                <apex:inputField value="{!tempOfEnrl.LX_Product_Line_Items__c }" id="prdLineItems" required="false"/>
+            </apex:pageBlockSection>
+                       
+            <apex:pageBlockSectionItem rendered="{!varSoftPB}">
+                <apex:OutputLabel />
+            </apex:pageBlockSectionItem>
+                
+            <apex:pageBlockSectionItem id="mlptsalesOrg">      
+                <apex:OutputLabel value="Add Parties from Multiple Sales Orgs?" for="slsOrg"/>
+                    <apex:selectList size="1" value="{!m_AddParties}" id="slsOrg">
+                        <apex:selectOptions value="{!addParties}"/>
+                    </apex:selectList> 
+            </apex:pageBlockSectionItem> 
+                         
+            <apex:pageBlockSectionItem >
+                <apex:OutputLabel value="Offer Sales Org" for="addparties"/>
+                <apex:outputField value="{!offer.Sales_Organization__c}" />
+            </apex:pageBlockSectionItem> 
+            
+     
+            <!-- <apex:pageBlockSectionItem rendered="{!Not((strProgram == 'No Program' || strProgram == null))}" >
+             <apex:OutputLabel value="Sold To" />
+             <apex:InputText value="{!soldTo}" id="soldto"/>
+            </apex:pageBlockSectionItem> -->
+            
+            <apex:pageBlockSectionItem id="phyCntry">
+                <apex:OutputLabel value="Physical Country" for="physicalCountry"/>
+                <apex:selectList size="1" value="{!m_PhysicalCountry}" id="physicalCountry">
+                    <apex:selectOptions value="{!optPhysicalCountry}"/>
+                </apex:selectList> 
+            </apex:pageBlockSectionItem> 
+         
+            
+            <apex:pageBlockSectionItem >
+              <apex:OutputLabel value="Partner ISS Capability Segment" for="ISSCapabilty"/>
+               <apex:selectList size="1" value="{!m_ISSCapability}" id="issCapabilityValue">
+                    <apex:selectOptions value="{!optISSCapability}"/>
+                </apex:selectList> 
+            </apex:pageBlockSectionItem>   
+            
+            <apex:pageBlockSectionItem >
+                <apex:OutputLabel value="Primary ISS Internal Segment" for="ISSSegment  "/>
+                <apex:selectList size="1" value="{!m_ISSSegment}" id="issSegmentValue">
+                    <apex:selectOptions value="{!optISSSegment}"/>
+                </apex:selectList> 
+            </apex:pageBlockSectionItem> 
+            
+            <apex:pageBlockSectionItem id="TotalCapScore">
+               <apex:OutputLabel value="Total Capability Score"/>
+                <apex:InputText value="{!totCapabilityScore}" id="totCapabilityScore"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:OutputLabel value="ISS Coverage Model/ISS Coverage Method" for="ISSCoverageModel"/>
+                <apex:selectList size="1" value="{!m_ISSCoverageModel}" id="issCoverageModelValue">
+                    <apex:selectOptions value="{!optISSCoverageModel}"/>
+                </apex:selectList> 
+            </apex:pageBlockSectionItem> 
+            
+            
+            <apex:pageBlockSectionItem id="MPSCapScore">
+               <apex:OutputLabel value="MPS Capability Score"/>
+                <apex:InputText value="{!mpsCapabilityScore}" id="mpsCapabilityScore"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+                <apex:OutputLabel value="ISS Coverage Status" for="ISSCoverageStatus"/>
+                <apex:selectList size="1" value="{!m_ISSCoverageStatus}" id="issCoverageStatusValue">
+                    <apex:selectOptions value="{!optISSCoverageStatus}"/>
+                </apex:selectList> 
+            </apex:pageBlockSectionItem>  
+            
+            <apex:pageBlockSectionItem id="PartnerISSCapScore">
+               <apex:OutputLabel value="Partner ISS Solutions Capability Score"/>
+                <apex:InputText value="{!partnerISSCapScore}" id="partnerISSCapScore"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem > <!-- rendered="{!(strProgram == 'No Program' || strProgram == null)}" -->
+            <apex:OutputLabel value="Account Name"/>
+            <apex:InputText value="{!accountName}" id="accountName"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem rendered="{!varPromotion},{!notNonQ}"> <!--notNonQ added for US4396 --><!-- rendered="{!(strProgram == 'No Program' || strProgram == null)}" -->
+             <apex:OutputLabel value="Sold To"  />
+             <apex:InputText value="{!soldTo}" id="soldto"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem > <!-- rendered="{!(strProgram == 'No Program' || strProgram == null)}" -->
+            <apex:OutputLabel value="Company Number"/>
+            <apex:InputText value="{!companyNumber}" id="companyNumber"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+             <apex:OutputLabel />
+            </apex:pageBlockSectionItem>
+                        
+            </apex:pageBlockSection>
+             <div align="center">
+             <apex:commandButton onClick="validateSearchfilter();" value="Search" id="searchButton" rerender="pb" /> <!-- action="{!SearchLogic}" value="Search" id="searchButton" /> rendered="{!(strProgram == 'No Program' || strProgram == null)}" -->
+              </div>
+            <div>
+            <apex:actionStatus id="stat">
+                    <apex:facet name="start">
+                        <apex:image value="{!$Resource.LX_Loading}" style="width:50px; height:50px"/>
+                    </apex:facet>
+            </apex:actionStatus>
+            </div>
+             <apex:variable var="rowIndex" value="{!1}"/>
+             <apex:pageBlockSection Title="Enrollment List" id="pageblocksection1" columns="1">
+                 <apex:pageblockTable var="prgEnrol" value="{!offEnrollist}" id="table" columnsWidth="1%,1%,8%,20%,5%,10%,10%,10%,10%,10%,10%,10%" > 
+                 <apex:column headerValue="#"> {!rowIndex}
+                        <apex:variable value="{!rowIndex + 1}" var="rowIndex"/>
+                        <apex:outputText value=""/>
+                 </apex:column>    
+                 <apex:column headerValue="" headerClass="header1"> <!-- rendered="{!chkbx}" -->
+                        <apex:facet name="header">
+                            <input type="checkbox" onclick="checkAll(this,'checkedone')"  />                                  
+                        </apex:facet>
+                        <apex:inputCheckbox value="{!prgEnrol.selected}" id="checkedone">
+                        </apex:inputCheckbox>
+                </apex:column> 
+                <!-- apex:column value="{!prgEnrol.offerName}"  headerValue="Offer"/ --> 
+                <apex:column width="100 px" value="{!prgEnrol.companynumber1}"  headerValue="Company Number"/>     
+                <apex:column width="10 px " value="{!prgEnrol.AccountName}"  headerValue="Account Name"/>
+                <apex:column width="10%" value="{!prgEnrol.PhysicalCntry}"  headerValue="Physical Country"/>
+                <apex:column width="10%"  rendered="{!varPromotion}, {!notNonQ}" value="{!prgEnrol.soldTo}"  headerValue="Sold To Number"/><!--notNonQ added for US4396 -->
+              <!-- <apex:column value="{!prgEnrol.ZIDC}"  headerValue="ZIDC"/> -->
+              <!--  <apex:column value="{!prgEnrol.salesOrg }"  headerValue="Sales Org "/>  -->
+              <!--  <apex:column value="{!prgEnrol.ProgName}"  headerValue="Program Name"/>-->
+               <apex:column width="10%"   value="{!prgEnrol.PartyRole}"  headerValue="Party Role"/>   
+                <apex:column width="10%"  value="{!prgEnrol.PartyType}"  headerValue="Sold To - Party Type" rendered="{!notNonQ}"/><!--notNonQ added for US4396 --> -->
+                <apex:column width="10%" rendered="{!varPromotion}" value="{!prgEnrol.Salesorgname}"  headerValue="Salesorgname"/> -->
+              <!--  <apex:column value="{!prgEnrol.Region}"  headerValue="Region"/>
+              <!--  <apex:column value="{!prgEnrol.MPSCapabilityScore}" headerValue="MPS Capability Score"/>
+              <!--  <apex:column value="{!prgEnrol.PartnerCapabilityScore}" headerValue="Partner Capability Score"/>
+              <!--  <apex:column value="{!prgEnrol.ISSCoverageMethod}"  headerValue="ISS Coverage Method"/> -->
+              <!--  <apex:column value="{!prgEnrol.ISSIntseg}"  headerValue="ISS Internal segment "/>  -->
+                 <apex:column width="10%" value="{!prgEnrol.AccountownerName }"  headerValue="Account Owner"/>
+                 <apex:column width="10%" value="{!prgEnrol.ISSCoverageStatus}"  headerValue="ISS Coverage Status "/>                 
+                 <apex:column width="10%" value="{!prgEnrol.ISSCapSeg}"  headerValue="ISS Capability Segment "/>  
+
+                <apex:column value="{!prgEnrol.recordTypeName}"  headerValue="Record Type" rendered="false"/>
+<apex:facet name="footer" ><apex:outputLabel rendered="{!(strProgram == 'No Program' || strProgram == null) && (totalPages > 0) }" value="Showing Page # {!pageNumber} of {!totalPages}" /></apex:facet>
+                
+            </apex:pageblockTable>                           
+            </apex:pageBlockSection> 
+             <apex:outputPanel id="myButtons" rendered="{!(strProgram == 'No Program' || strProgram == null)}">
+                 <apex:actionStatus id="counterStatus" style="align:center;" >
+                        <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                    </apex:facet>
+                    </apex:actionStatus>
+                <apex:commandButton value="First Page" rerender="table,myButtons"  disabled="{!prev}">
+                <apex:actionSupport event="onclick" rerender="table,myButtons"
+                                action="{!FirstPage}" status="counterStatus" 
+                                />
+                </apex:commandButton>               
+            <apex:commandButton value="Previous" rerender="table,myButtons" disabled="{!prev}">
+            <apex:actionSupport event="onclick" rerender="table,myButtons"
+                                action="{!previous}" status="counterStatus" 
+                                />
+                </apex:commandButton>
+            <apex:commandButton value="Next" rerender="table,myButtons"  disabled="{!nxt}">
+            <apex:actionSupport event="onclick" rerender="table,myButtons"
+                                action="{!next}" status="counterStatus" 
+                                />
+            </apex:commandButton>
+            
+            <apex:commandButton value="Last Page" rerender="table,myButtons"  disabled="{!nxt}"> 
+                <apex:actionSupport event="onclick" rerender="table,myButtons"
+                                action="{!LastPage}" status="counterStatus" 
+                                />
+                </apex:commandButton>           
+          
+           </apex:outputPanel>
+                <apex:pageBlockButtons > 
+                     <apex:commandButton onClick="validateEnrollment({!varSoftPB});"  value="Enroll" id="theButton1" disabled="{!enblEnrolBtn}" rerender="pb"/>       
+                    <apex:commandButton action="{!cancelLogic}" value="Cancel" id="theButton2"/>
+                </apex:pageBlockButtons> 
+                     
+        </apex:pageBlock>
+        </apex:form>
+    <apex:form id="form1" rendered="{!formRender1}">
+        <apex:pageBlock rendered="{!pgBlockRender1}">
+            <apex:actionFunction name="calluserNotAllowedToAdd" action="{!userNotAllowedToAdd}"  /> 
+                <apex:pageMessages />
+                 <div align="center">   
+                    <apex:commandButton action="{!cancelLogic}" value="Back" id="BackButton"/>   
+                 </div>
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>

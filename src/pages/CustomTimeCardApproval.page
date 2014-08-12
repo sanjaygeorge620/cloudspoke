@@ -1,0 +1,408 @@
+<apex:page controller="CustomTimeCardApprovalController" id="pg">
+<apex:includeScript value="{!$Resource.Jquery}" />
+<apex:form id="frm">
+<apex:actionFunction status="sttus" name="refreshPMList" action="{!refreshPMList}" reRender="selectListPM" >
+</apex:actionFunction>
+
+
+<apex:actionFunction status="sttus1" name="RunAction" action="{!Run}" reRender="projectbaseList" />
+
+
+<script type="text/javascript">
+
+
+  function selectAll(obj){
+     if(obj.checked == true){
+        
+         document.getElementById('chkUnSelectAll').checked = false;
+         
+         var arr = document.getElementsByTagName('input');
+         for(i = 0; i < arr.length; i++){
+            var id = arr[i].id;
+            if(id == 'chkSelectAll' || id == 'chkUnSelectAll' || id == chkSaved
+              || id == chkSubmitted || id == chkApproved || id == chkRejected || id.indexOf('sidebar') != -1
+            ){
+               continue;
+            }
+            if(arr[i].type == 'checkbox')            
+            arr[i].checked = true;
+         }     
+     }     
+  }
+  
+  function unSelectAll(obj){
+     if(obj.checked == true){
+         document.getElementById('chkSelectAll').checked = false;
+         var arr = document.getElementsByTagName('input');
+         for(i = 0; i < arr.length; i++){
+            var id = arr[i].id;
+            if(id == 'chkSelectAll' || id == 'chkUnSelectAll' || id == chkSaved
+              || id == chkSubmitted || id == chkApproved || id == chkRejected || id.indexOf('sidebar') != -1
+            ){
+               continue;
+            }
+            if(arr[i].type == 'checkbox')    
+            arr[i].checked = false;
+         }
+     }
+  }
+
+	// PR-06881 Adding document ready event to hide calendar
+	
+   	var j$ = jQuery.noConflict();
+   	j$(document).ready(function() {   	 
+   	  
+   	  // making calendar visibilty hidden when page is ready. This will not cause the
+   	  // calendar to display even when focus is there on date field.
+   	  var x = j$('#datePicker');
+      x.css('visibility','hidden');
+      
+      // resetting the visibility on click of the dtField
+      var dt =document.getElementById(dtField); 
+	  j$(dt).click(function(){
+	    x.css('visibility','visible');
+	  });
+	  
+	});
+	
+
+</script>
+<style>
+ body{
+   /* font-size:90%; */
+ }
+ .hRow{
+    border:1px solid #BFCFD4;
+    border-collapse:collapse;
+    color:#333333;
+    min-width:85px;
+    padding:2px 0 3px 4px;
+    vertical-align:baseline;
+    width:10%;
+ }
+ 
+ .rowClass{
+    background:#FFFFFF url(/img/alohaSkin/grid_headerbg.gif) repeat-x scroll 0 bottom;
+    border-color:#BFCFD4;
+    border-style:solid;
+    border-width:1px 0;
+    color:#000000;
+    font-size:0.9em;
+    font-weight:bold;
+    padding:0;
+ }
+ 
+ .dataRowClass{    
+    border-left:1px solid #BFCFD4;
+    border-right:1px solid #BFCFD4;
+    border-bottom:1px solid #BFCFD4;
+    border-top:0px solid #BFCFD4;
+ }
+ 
+ .dRow{
+   min-Width:85px;
+   width: 10%;
+   padding:2px;
+   /**
+   text-align:center;
+   background-color:#ccc;
+   **/  
+   cursor:default;
+   -moz-user-select:text;
+   line-height:normal;
+   padding:3px 3px 3px 5px;
+   border-left:1px solid #BFCFD4;
+   border-right:1px solid #BFCFD4;
+   border-bottom:1px solid #BFCFD4;
+   border-top:0px solid #BFCFD4;
+    
+ }
+ .errorMsg{
+   color:red;
+ }
+ .errorMsgHead{
+   color:red;
+   font-size:90%;   
+ }
+ span .dateFormat{
+   display:none;
+ }
+ 
+ body .pageTitleIcon {
+background-image:url(/img/icon/alarmClock32.png) !important;
+background-position: 0 0;
+
+}
+ .homeTab .pageTitleIcon, .individualPalette .homeBlock .pageTitleIcon {
+   background-position: 0 0;
+ }
+</style>
+
+<div class="bPageTitle">
+<div class="ptBody secondaryPalette"><div class="content"><img alt="Timecard" title="Timecard" class="pageTitleIcon" src="/s.gif"/>
+<h1 class="pageType noSecondHeader">
+<input type="text" value="TIMECARD APPROVAL" class="pageType noSecondHeader" style="font-family:arial;border-style:none;font-weight:bold;color:#333;background:transparent;font-size:18px;" readonly="readonly" />
+</h1><div class="blank"/></div>
+<div class="links">&nbsp;</div></div></div>
+
+
+ 
+<apex:outputpanel id="noaccessPanel" rendered="{!!isPageAccessible}">
+  Your profile has no rights to access this page
+</apex:outputpanel>
+
+
+<apex:outputPanel id="accessiblePanel" rendered="{!isPageAccessible}"> 
+
+
+
+
+
+   <table style="width:100%">
+     <tr style="background-color:"><td colspan="2" ><strong></strong></td></tr>
+     <tr style="background-color:"><td style="height:30px;color:red">
+     <apex:actionStatus id="sttus" startText="Refreshing Approver List..."></apex:actionStatus>
+     </td><td style="height:30px;color:red">
+     
+     <apex:actionStatus id="sttus1" startText="Filtering Timecards..."></apex:actionStatus>
+     </td></tr>
+     <tr>
+      <td style="white-space:nowrap">
+           <table style="height:80px;width:100%;border: 1px solid #BFCFD4;">
+           <tr>
+           <td style="height:20px;color: black"><strong>Week Ending</strong></td>
+           <td style="color: black"><strong>Approver</strong></td>
+           <td></td>
+           </tr>
+           <tr>
+           <td>
+           
+           <input type="text" value="" style="display:none"/> 
+           <apex:inputField onchange="refreshPMList();" value="{!dummyObj.pse__End_Date__c}" id="dtField"/>
+           </td><td>
+           
+           <apex:outputPanel id="selectListPM">
+           
+           <apex:selectList size="1"  value="{!selectedPM}">
+              <apex:selectOptions value="{!pmList}"></apex:selectOptions>
+           </apex:selectList>
+           </apex:outputPanel> 
+           </td>
+           <td>
+             
+             <apex:commandButton value="Run" action="{!Run}" id="runBtn"/>
+           </td>
+           <td style="width:50%">
+             &nbsp;
+           </td>
+           </tr>
+           </table>
+           <script>            
+           	var runBtn = '{!$Component.runBtn}';
+           	var dtField = '{!$Component.dtField}';
+           </script>
+      </td>     
+      <td>
+           <table  style="height:80px;width:100%;border: 1px solid #BFCFD4;">
+           <tr><td  style="height:20px;color: black" colspan="4"><strong>Filter Timecards</strong></td></tr>
+           <tr><td width="20%">            
+           <strong>Saved:</strong>
+           </td>
+           <td>
+           <apex:inputcheckbox selected="True" onclick="RunAction();" id="chkSaved" value="{!isSaved}"/>
+           </td>
+           <td width="20%">
+           <strong>Submitted:</strong>
+           </td>
+           <td><apex:inputcheckbox selected="True" onclick="RunAction();" id="chkSubmitted" value="{!isSubmitted}"/>
+           </td>
+           </tr>
+           <tr><td>
+           <strong>Approved:</strong>
+           </td>
+           <td><apex:inputcheckbox selected="True" onclick="RunAction();" id="chkApproved" value="{!isApproved}"/>
+           </td>
+           <td>
+           <strong>Rejected:</strong>
+           </td>
+           <td><apex:inputcheckbox selected="True" onclick="RunAction();" id="chkRejected" value="{!isRejected}"/>
+           </td>
+           </tr>
+           </table>
+       <script>
+        var chkSaved = '{!$Component.chkSaved}';
+        var chkSubmitted = '{!$Component.chkSubmitted}';
+        var chkApproved = '{!$Component.chkApproved}';
+        var chkRejected = '{!$Component.chkRejected}';
+        
+       
+       </script>   
+      </td>
+     </tr>
+   </table>
+
+   <table style="width:100%">
+   <tr><td>
+   <input id="chkSelectAll" onclick="selectAll(this);" type="checkbox" /> Select All
+   <input id="chkUnSelectAll" onclick="unSelectAll(this);" type="checkbox" /> Deselect All
+   </td>
+   <td>
+      <apex:commandbutton value="Approve" action="{!Approve}"/>
+      <apex:commandButton value="Reject" action="{!Reject}"/>
+      <br/>
+      <span class="errorMsgHead">{!message}</span>
+   </td>
+   <td style="width:25%">&nbsp;
+   </td>
+   </tr>
+   </table>
+   
+   <hr style="background-color: #bfcfd4;" color="#bfcfd4" size="1" />
+   <apex:outputPanel rendered="{!!isRecordsFound}">
+     <span class="errorMsg">No Records Found!</span>
+   </apex:outputPanel>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+ <apex:outputPanel id="projectbaseList">
+   
+   <apex:outputPanel rendered="{!isRecordsFound}">
+   <apex:repeat value="{!projectBaseList}" var="project">
+   
+   <table style="width:100%">
+   <tr>
+   	<td width="10%"><strong>Account </strong>
+   	</td>
+   	<td>
+   	<a href="/{!project.projectAccountId}"> {!project.projectAccountName} </a>  
+   	</td>
+   </tr>
+   <tr>
+   <td>   
+    <strong>Project </strong>
+    </td>
+   <td>
+     <a href="/{!project.projectId}"> {!project.projectName} </a>     
+   </td>
+   </tr>
+   <tr>
+   <td>   
+    <strong>Billing Type </strong>
+    </td>
+   <td>
+     {!project.projectBillingType}     
+   </td>
+   </tr>
+   <tr><td>
+    <strong>Approver </strong>
+   </td>
+   <td>
+   	{!project.projectManager}
+   </td>
+   </tr><tr>
+   <td>
+     <strong>Week </strong>
+     </td>
+   	<td>
+     <apex:outputText value="{0,date,MM/dd/yyyy}">
+                             <apex:param value="{!project.weekStartDate}"  />
+       </apex:outputText>
+       -
+     <apex:outputText value="{0,date,MM/dd/yyyy}">
+                             <apex:param value="{!project.weekEndDate}"  />
+     </apex:outputText>  
+      
+   </td>
+   </tr>
+   </table>
+   <table cellspacing="0" cellpadding="0" >
+   <tr class="rowClass">
+      <td class="hRow">Select</td>
+      <td class="hRow">Status</td>
+      <td class="hRow">Timecard</td>
+      <td class="hRow">Resource</td>
+      <td class="hRow">Methodology</td>
+      <!--  <td class="hRow">Week Ending</td>-->
+      <td class="hRow">Bill Rate</td>
+      <!-- 
+      <td class="hRow">Project Name</td>
+       -->
+      <td class="hRow">Hours</td>
+      <td class="hRow">Total Amount</td>
+      <td class="hRow">Rejection Notes</td>
+   </tr>
+   <apex:repeat value="{!project.timeCardList}"  var="tc">
+      <tr class="dataRowClass">
+ <td class="dRow"><apex:inputCheckbox value="{!tc.isSelected}" rendered="{!tc.checkboxIsVisible}"/></td>
+      <td class="dRow">{!tc.status}</td>
+      <td class="dRow"><a href='/{!tc.timeCardId}'>{!tc.timeCardName}</a></td>
+      <td class="dRow"><a href='/{!tc.resourceId}'>{!tc.resourceName}</a></td>
+      <td class="dRow">{!tc.billingType}</td>
+      <!--  <td class="dRow">      
+       <apex:outputText value="{0,date,yyyy-MM-dd}">
+                             <apex:param value="{!tc.enddate}"  />
+       </apex:outputText>
+      </td>-->
+      <td class="dRow">{!tc.CurrencyIsoCode} {!tc.billRate} </td>
+      <!-- 
+      <td class="dRow">{!tc.projectName}</td>
+       -->
+      <td class="dRow">{!tc.hours}</td>
+      <td class="dRow">{!tc.CurrencyIsoCode} 
+      
+      
+      
+      <apex:outputText value="{0, number, ###,###,###,##0.00}">
+        <apex:param value="{!tc.totalAmount}"/>
+      </apex:outputText>
+      
+      </td>
+      <td class="dRow">
+      <apex:inputText rendered="{!tc.checkboxIsVisible}" value="{!tc.notes}" />
+      <apex:outputText rendered="{!!tc.checkboxIsVisible}" value="{!tc.notes}">      
+      </apex:outputText>
+      <br/>
+      <span class="errorMsg">{!tc.errorMsg}</span>
+      </td>
+      </tr>   
+   </apex:repeat>
+   
+      <tr>
+      <td class="dRow"><strong>TOTALS</strong></td>
+      <td class="dRow"></td>
+      <td class="dRow"></td>
+      <td class="dRow"></td>
+      <td class="dRow"></td>
+      <!-- <td class="dRow"></td>  -->
+      <!-- 
+      <td class="dRow"></td>
+       -->
+      <td class="dRow"></td>
+      <td class="dRow"><strong>{!project.totalhours}</strong></td>
+      <td class="dRow"><strong>{!project.currencyISOCode} &nbsp;
+       <apex:outputText value="{0, number, ###,###,###,##0.00}">
+        <apex:param value="{!project.totalAmount}"/>
+      </apex:outputText>
+      </strong></td>
+      <td class="dRow">      
+      </td>
+      </tr>
+    
+   </table>
+
+
+</apex:repeat>
+</apex:outputPanel>
+
+</apex:outputPanel> 
+</apex:outputPanel>
+</apex:form>
+</apex:page>

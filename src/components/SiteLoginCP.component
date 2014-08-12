@@ -1,0 +1,35 @@
+<apex:component controller="SiteLoginController" id="loginComponent"  >
+        <apex:form id="login" forceSSL="true" styleClass="form color-blue loginify">
+            <p class="text">
+                  <apex:outputLabel value="User Name" for="username"/>
+                  <apex:inputText value="{!username}" id="username" />
+             </p>
+             
+              <p class="text">
+                  <apex:outputLabel value="Password" for="password"/>
+                  <apex:inputSecret value="{!password}"  id="password"/>
+              </p>
+              
+              <p>
+                  <apex:commandButton action="{!login}" styleclass="button major" value="Log in"/>
+              </p>
+              
+
+                  <apex:pageMessages />
+
+          
+           <p>
+                <a title="Recover Password" href="{!$Page.ForgotPassword}">Recover Password</a>  |  
+                <a title="Register as a new User" href="{!$Page.SiteRegisterEmail}">Register as a New User</a>
+           </p>
+           <br/>
+                <h4>Search</h4>
+                <p>Search the Knowledgebase, Product Documentation or Upgrade Center for access to key support information.</p>
+                <h4>Collaborate</h4>
+                <p>Collaborate by viewing and posting ideas or technical questions in the Ideas and Answers areas.</p>
+                <h4>Contact</h4>
+                <p>Contact our Product Support team by submitting a case.</p>
+                <h4>Learn</h4>
+                <p>Learn about our extensive educational offerings and enroll online in the training area.</p>          
+       </apex:form>
+</apex:component>

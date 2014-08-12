@@ -1,0 +1,31 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesTrainingController"> 
+<html>
+<head>
+    <title>{!SITE_NICKNAME} | eLearning Chapter: {!ViewChapter.Chapter_Number__c} for {!ViewChapter.Class__r.Course__r.name}</title>
+    <apex:includeScript id="jquery_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/jquery.min.js')}" />
+    <apex:includeScript id="quicktime_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/ac_quicktime.js')}" />
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function() {
+          var chptval = '{!ViewChapter.Chapter_URL__c}'; 
+          if( chptval.length > 4 ){ 
+              var fieldtype = chptval.substr( chptval.length - 4 ); 
+                switch (fieldtype ) { 
+                    case ".mov" :QT_WriteOBJECT(chptval, '100%', '95%', '', 'AUTOPLAY', 'True', 'SCALE', 'Aspect') ; 
+                    break; 
+                    
+                    case ".mp4" :QT_WriteOBJECT(chptval, '100%', '95%', '', 'AUTOPLAY', 'True', 'SCALE', 'Aspect') ; 
+                    break; 
+                    
+                    default : document.write("<iframe frameborder=no width='100%' height='100%' src ="+ chptval +"></iframe>"); 
+                    break; 
+                } 
+            }
+          
+          
+        });
+    </script>    
+</head>    
+<body />
+</html>    
+</apex:page>

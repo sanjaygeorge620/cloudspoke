@@ -1,0 +1,623 @@
+<apex:page tabStyle="rfp_projects__c" controller="RFPSurvey"> 
+<apex:form > 
+
+	<script>
+		function setFocusOnLoad() {}
+	</script>
+
+	<apex:outputPanel id="mainOP">
+	
+	<div style="position:relative; overflow:auto;"> 
+    <apex:outputPanel >
+        <apex:actionStatus id="status2">
+            <apex:facet name="start">
+                <div style="width: 100%; height: 100%; background-color:#fbfbfb; opacity:0.65;" class="waitingSearchDiv" id="el_loading">
+                    <div class="waitingHolder" style="top: 45px; ">
+                        <img src="/img/loading.gif" class="waitingImage" title="Please Wait..." />
+                        <span class="waitingDescription">Loading...</span>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+    </apex:outputPanel>
+    <apex:outputPanel id="showRFPSection1" rendered="{!showRFPSection1}">
+    <apex:pageBlock title="RFP Survey">
+		<apex:pageblockSection >
+			<apex:pageblockSectionItem >
+				<apex:outputLabel value="Create New RFP" />
+				<apex:commandButton action="{!launchNewSurvey}" value="Launch New Survey" status="status2" reRender="mainOP,errors" />
+			</apex:pageblockSectionItem>
+		</apex:pageblockSection>
+		<br /><br /><br />
+		<apex:pageBlock title="Add to Existing RFP Survey">
+		<apex:toolbar id="toolbar"
+							style="background: transparent url('/img/alohaSkin/metaBar_sprite.png') left -104px repeat-x; border: 1px solid #e1e0e0; 
+		                                border-top-color: #d1d1d1; -moz-border-radius: 5px; -webkit-border-radius: 5px; height: 33px; 
+		                                border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; border-bottom-right-radius: 5px 5px; 
+		                                border-bottom-left-radius: 5px 5px; border-bottom: 1px solid #C1C1C1;">
+		                    
+   
+            <apex:toolbarGroup id="toolbarMainTitle" location="left" style="padding-top:8px;">
+                
+                <apex:outputPanel id="qtyOP">
+                	<apex:outputText value="Displaying <b>{!searchListSize}</b> Search Results" style="color:#606060; font-size:14px; font-weight:normal;" escape="false" />
+                </apex:outputPanel>
+                
+            </apex:toolbarGroup> 
+            
+            <apex:toolbarGroup location="right" style="padding-top:6px;">
+               
+            	<script type="text/javascript">
+	                 function doFilter() { 
+	                     var t = setTimeout(function() {
+	                         searchServer(document.getElementById("RFPSearchBox").value);
+	                     }, 500);
+	                 }
+	             </script> 
+	              
+	             <apex:actionFunction name="searchServer" action="{!runFilter}" status="status3" rerender="searchOP,qtyOP,errors">
+	                 <apex:param name="searchRFPValue" value="" />
+	             </apex:actionFunction>
+
+           		<div style="padding:6px 150px 0px 0px;"> 
+               		<label for="quickSearch" style="color:#666;">search </label>
+					<input name="quickSearch" id="RFPSearchBox" onkeyup="doFilter();" type="text" />
+					<input type="text" style="position: absolute; left: -9999px;" />
+					<!--
+                	<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>-->
+				</div>
+
+
+            </apex:toolbarGroup>
+              
+                
+        </apex:toolbar>
+
+        <div style="position:relative; overflow:auto;"> 
+        
+	        <apex:outputPanel >
+	            <apex:actionStatus id="status3">
+	                <apex:facet name="start">
+	                    <div style="width: 100%; height: 100%; background-color:#fbfbfb; opacity:0.65;" class="waitingSearchDiv" id="el_loading">
+	                        <div class="waitingHolder" style="top: 45px; ">
+	                            <img src="/img/loading.gif" class="waitingImage" title="Please Wait..." />
+	                            <span class="waitingDescription">Loading...</span>
+	                        </div>
+	                    </div>
+	                </apex:facet>
+	            </apex:actionStatus>
+	        </apex:outputPanel>
+			
+			
+				<apex:outputPanel id="searchOP">
+				<apex:outputPanel id="pbtSearch3" rendered="{!searchListSize < 1}">
+			        <table class="list" border="0" cellspacing="0" cellpadding="0">
+			        	<tbody>
+			        		<tr class="headerRow">
+			        			<th scope="col" class="noRowsHeader">
+			        				No records to display
+		        				</th>
+	        				</tr>
+						</tbody>
+					</table>
+		        </apex:outputPanel>
+		        
+		        <div style="max-height:265px; overflow: auto;">
+		        
+	        	<apex:outputPanel id="pbtSearch4" rendered="{!searchListSize > 0}">
+		        	<table class="list" border="0" cellspacing="0" cellpadding="0">
+		            	<tbody>
+		            	
+			            	<tr class="headerRow"> 
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Action" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Name" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="RFP Due Date" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Contact" />
+			                    	
+			                    </th>
+			                </tr>
+		            	
+			                <apex:repeat value="{!searchExistingRFPs}" var="rfp">
+			                <!-- ListRow -->
+			                <tr class="dataRow even first" onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}" onmouseout="if (window.hiOff){hiOff(this);}" onmouseover="if (window.hiOn){hiOn(this);}">
+			                     
+			                    <td class="datacell">
+			                         <apex:commandLink action="{!launchExistingSurvey}"  status="status2" reRender="mainOP,errors" styleClass="actionLink">
+									    <apex:param name="selectedExistingRFPId" value="{!rfp.Id}" assignTo="{!selectedExistingRFPId}" />
+									    Launch Existing Survey
+									</apex:commandLink>
+			                    </td>
+			                    <td class="datacell">
+		                         	<apex:outputLabel value="{!rfp.Name}" />
+			                    </td>
+			                    <td class="datacell">
+	                    			<apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+	                         			<apex:param value="{!rfp.RFP_Due_Date__c}" />
+	                         		</apex:outputText>
+			                    </td>
+			                    <td class="datacell">
+		                         	<apex:outputField value="{!rfp.Contact__c}" />
+			                    </td>
+			                </tr>
+			                </apex:repeat> 
+			            </tbody>
+		        	</table> 
+		        </apex:outputPanel>
+		        </div>
+	        	</apex:outputPanel>
+	        </div>
+        </apex:pageBlock>
+    </apex:pageBlock>
+    </apex:outputPanel>
+    <apex:outputPanel id="showRFPSection2" rendered="{!showRFPSection2}">
+	<apex:pageBlock title="RFP Survey" mode="maindetail">
+		<apex:pageMessages id="errors" />         
+
+		<apex:outputPanel id="bothSection" rendered="{!showBothSection}">
+		<!-- Begin Both Questions Section -->
+		<apex:pageBlockSection columns="1" title="Project Overview">
+			<apex:inputField value="{!newRFP.Type_of_Request__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Date_Request_Was_Received}" />
+				<apex:inputField value="{!newRFP.Date_Request_Was_Received__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Date_Intent_to_Bid_doc_due}" />
+				<apex:inputField value="{!newRFP.Date_Intent_to_Bid_doc_due__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Questions_Due_to_Customer}" />
+				<apex:inputField value="{!newRFP.Questions_Due_to_Customer__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.RFP_Due_Date}" />
+				<apex:inputField value="{!newRFP.RFP_Due_Date__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Date_Decision_is_Expected}" />
+				<apex:inputField value="{!newRFP.Date_Decision_is_Expected__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Proposal_Reference_Number}" />
+				<apex:inputField value="{!newRFP.Proposal_Reference_Number__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Contact}" />
+				<apex:outputPanel >
+				<apex:inputField value="{!newRFP.Contact__c}">
+					<apex:actionSupport event="onchange" action="{!runPrimaryCustomerContactFieldPull}" status="status9" rerender="mainOP,errors" immediate="false" />
+				</apex:inputField>
+				<apex:actionStatus startText="(pulling related contact information...)" id="status9" />
+				</apex:outputPanel>
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!primaryCustomerContact.MailingStreet}" />
+			<apex:inputField value="{!primaryCustomerContact.MailingCity}" />
+			<apex:inputField value="{!primaryCustomerContact.MailingState}" />
+			<apex:inputField value="{!primaryCustomerContact.MailingPostalCode}" />
+			<apex:inputField value="{!primaryCustomerContact.MailingCountry}" />
+			<apex:inputField value="{!primaryCustomerContact.Phone}" />
+			<apex:inputField value="{!primaryCustomerContact.Email}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Primary_Lexmark_Contact}" />
+				<apex:outputPanel >
+				<apex:inputField value="{!newRFP.Primary_Lexmark_Contact__c}">
+					<apex:actionSupport event="onchange" action="{!runPrimaryLexmarkContactFieldPull}" status="status10" rerender="mainOP,errors" immediate="false" />
+				</apex:inputField>
+				<apex:actionStatus startText="(pulling related contact information...)" id="status10" />
+				</apex:outputPanel>
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!primaryLexmarkContact.MailingStreet}" />
+			<apex:inputField value="{!primaryLexmarkContact.MailingCity}" />
+			<apex:inputField value="{!primaryLexmarkContact.MailingState}" />
+			<apex:inputField value="{!primaryLexmarkContact.MailingPostalCode}" />
+			<apex:inputField value="{!primaryLexmarkContact.MailingCountry}" />
+			<apex:inputField value="{!primaryLexmarkContact.Phone}" />
+			<apex:inputField value="{!primaryLexmarkContact.Email}" />
+			<apex:inputField value="{!newRFP.Lexmark_company_name_long__c}" />
+			<apex:inputField value="{!newRFP.Lexmark_company_name_short__c}" />
+			<apex:inputField value="{!newRFP.Geo_s_covered_by_this_project__c}" />
+			<apex:inputField value="{!newRFP.Estimated_revenue_for_this_project__c}" />
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Requirements">	
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Business_Unit}" />
+				<apex:inputField value="{!newRFP.Business_Unit__c}"> 
+					<apex:actionSupport action="{!nullPR}" event="onchange" rerender="NextBTN,NextBTN2" />
+				</apex:inputField>  
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Is_Hardcopy_Required__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Customer_Requires_ISO_Certification}" />
+				<apex:inputField value="{!newRFP.Customer_requires_ISO_Certification__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Pricing_to_be_Provided__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Performance_or_Bid_Bond_Required}" />
+				<apex:inputField value="{!newRFP.Performance_or_Bid_Bond_Required__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Deployment_target_date}" />
+				<apex:inputField value="{!newRFP.Deployment_Target_Date__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Deployment_Complexity__c}" />
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Online Projects">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Website_for_Proposal}" />
+				<apex:inputField value="{!newRFP.Website_for_Proposal__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Username__c}" />
+			<apex:inputField value="{!newRFP.Password__c}" />
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Relationship & Strategy">
+			<apex:inputField value="{!newRFP.Are_we_partnering__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Are_we_priming_or_is_the_partner}" />
+				<apex:inputField value="{!newRFP.Are_we_priming_or_is_the_partner__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.List_of_Partners}" />
+				<apex:inputField value="{!newRFP.List_of_Partners__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Prior_Contact_With_Prospect_Details}" />
+				<apex:inputField value="{!newRFP.Prior_Contact_With_Prospect_Details__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Additional_Prior_Contact_Details}" />
+				<apex:inputField value="{!newRFP.Additional_Prior_Contact_Details__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Is_Lexmark_the_incumbent}" />
+				<apex:inputField value="{!newRFP.Is_Lexmark_the_incumbent__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Sample_RFP_Functional_Checklist}" />
+				<apex:inputField value="{!newRFP.Sample_RFP_Functional_Checklist__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Red_Flags_Challenges}" />
+				<apex:inputField value="{!newRFP.Red_Flags_Challenges__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Strengths}" />
+				<apex:inputField value="{!newRFP.Strengths__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<!-- End of Both Questions Section -->
+		</apex:outputPanel>
+		<apex:outputPanel id="pswSection" rendered="{!showPSWSection}">
+		<!-- Begin PSW Questions Section -->
+		<apex:pageBlockSection columns="1" title="PSW">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Pursuing_Opportunity}" />
+				<apex:inputField value="{!newRFP.Pursuing_Opportunity__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.RFP_Pricing_Terms__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Pricing_Details}" />
+				<apex:inputField value="{!newRFP.Pricing_Details__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Does this initial Opportunity involve:">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Strategic_Opportunity}" />
+				<apex:inputField value="{!newRFP.Strategic_Opportunity__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Deploying_Across_5_Departments}" />
+				<apex:inputField value="{!newRFP.Deploying_Across_5_Departments__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Deploying_In_More_Than_10_Locations}" />
+				<apex:inputField value="{!newRFP.Deploying_In_More_Than_10_Locations__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Large_Professional_Services_Commitment}" />
+				<apex:inputField value="{!newRFP.Large_Professional_Services_Commitment__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Multi_Phase_Deployment}" />
+				<apex:inputField value="{!newRFP.Multi_phase_Deployment__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Engaging_a_System_Integrator__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Initial_PO_Value_3M_US}" />
+				<apex:inputField value="{!newRFP.Initial_PO_Value_3M_US__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.License_Deployment_300_users}" />
+				<apex:inputField value="{!newRFP.License_Deployment_300_users__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Multiple_Partners__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Footprint_in_New_or_Strategic_Area}" />
+				<apex:inputField value="{!newRFP.Footprint_in_New_or_Strategic_Area__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Additional_Opportunity_Details}" />
+				<apex:inputField value="{!newRFP.Additional_Opportunity_Details__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Anticipated Scope and Complexity">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Number_of_Processes_Proposed}" />
+				<apex:inputField value="{!newRFP.Number_of_Processes_Proposed__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Number_of_Sites}" />
+				<apex:inputField value="{!newRFP.Number_of_Sites__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Processes_Proposed}" />
+				<apex:inputField value="{!newRFP.Processes_Proposed__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Engagement Scenario">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.New_PSW_Install}" />
+				<apex:inputField value="{!newRFP.New_PSW_Install__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Consolidating_an_Existing_System}" />
+				<apex:inputField value="{!newRFP.Consolidating_an_Existing_System__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Replacing_a_Single_Existing_System}" />
+				<apex:inputField value="{!newRFP.Replacing_a_Single_Existing_System__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Consolidating_Replacing_Details}" />
+				<apex:inputField value="{!newRFP.Consolidating_Replacing_Details__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Solution and Environment">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Solution_Proposed}" />
+				<apex:inputField value="{!newRFP.Solution_Proposed__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Custom_Solution}" />
+				<apex:inputField value="{!newRFP.Custom_Solution__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Scanners_Required__c}" />
+			<apex:inputField value="{!newRFP.Hardware_Provisioning__c}" />
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="The following items provide Professional Services with a more complete understanding of the solution they will ultimately implement. Check all items that are discussed or provided in the RFP. Then, add explanatory notes below.">
+			<apex:inputField value="{!newRFP.Backfile_Conversion_Needed__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Backfile_Conversion_Details}" />
+				<apex:inputField value="{!newRFP.Backfile_Conversion_Details__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Proposing_Object_Conversion}" />
+				<apex:inputField value="{!newRFP.Proposing_Object_Conversion__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Technical_Validation_Exercise_TVE__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Project_Plan_Required}" />
+				<apex:inputField value="{!newRFP.Project_Plan_Required__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Simple_or_Sample_Project_Plan}" />
+				<apex:inputField value="{!newRFP.Simple_or_Sample_Project_Plan__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Simple_Sample_Project_Plan_Details}" />
+				<apex:inputField value="{!newRFP.Simple_Sample_Project_Plan_Details__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Software Solution. From a technical/service delivery perspective, how close is our solution to a perfect fit (a '10')?">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Does_Solution_Meet_Requirements}" />
+				<apex:inputField value="{!newRFP.Does_Solution_Meet_Requirements__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Deploy_on_Time_and_Budget}" />
+				<apex:inputField value="{!newRFP.Deploy_on_Time_and_Budget__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Solution_Requirements_Deployment_Details}" />
+				<apex:inputField value="{!newRFP.Solution_Requirements_Deployment_Details__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Indicate the deployment option(s) the prospect requests.">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Traditional_Perpetual_Deployment}" />
+				<apex:inputField value="{!newRFP.Traditional_Perpetual_Deployment__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Subscription_on_Premises_Deployment}" />
+				<apex:inputField value="{!newRFP.Subscription_on_Premises_Deployment__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Hosted}" />
+				<apex:inputField value="{!newRFP.Hosted__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Software_as_a_Service}" />
+				<apex:inputField value="{!newRFP.Software_as_a_Service__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Solutions_Anticipated}" />
+				<apex:inputField value="{!newRFP.Solutions_Anticipated__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Future_Functionality_Required__c}" />
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Anticipated training courses, delivery method and location">
+			<apex:inputField value="{!newRFP.Training_Location__c}" />
+			<apex:inputField value="{!newRFP.Delivery_Method__c}" />
+			<apex:inputField value="{!newRFP.Course_1__c}" />
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Partnering">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Partnering_Agreement_in_Place}" />
+				<apex:inputField value="{!newRFP.Partnering_Agreement_in_Place__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Teaming_Agreements_in_Place}" />
+				<apex:inputField value="{!newRFP.Teaming_Agreements_in_Place__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<!-- End of PSW Questions Section -->
+		</apex:outputPanel>
+		<apex:outputPanel id="issSection" rendered="{!showISSSection}">
+		<!-- Begin ISS Questions Section -->
+		<apex:pageBlockSection columns="1" title="Project Overview">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.ISS_Local_Priority}" />
+				<apex:inputField value="{!newRFP.ISS_Local_Priority__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Please_Select}" />
+				<apex:inputField value="{!newRFP.Please_Select__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Term_of_Contract__c}" />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Total_Quantity_of_Units}" />
+				<apex:inputField value="{!newRFP.Total_Quantity_of_Units__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Estimated_Page_Volumes_Per_Month}" />
+				<apex:inputField value="{!newRFP.Estimated_Page_Volumes_Per_Month__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.eCommerce_Capability}" />
+				<apex:inputField value="{!newRFP.eCommerce_Capability__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Current_Print_Vendor}" />
+				<apex:inputField value="{!newRFP.Current_Print_Vendor__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Customer Focused Team">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.SE_on_Project}" />
+				<apex:inputField value="{!newRFP.SE_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Industry_Consultant_on_Project}" />
+				<apex:inputField value="{!newRFP.Industry_Consultant_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.RSC_on_Project}" />
+				<apex:inputField value="{!newRFP.RSC_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.ROC_on_Project}" />
+				<apex:inputField value="{!newRFP.ROC_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.PSC_on_Project}" />
+				<apex:inputField value="{!newRFP.PSC_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Ext_CFT_Member_1_on_Project}" />
+				<apex:inputField value="{!newRFP.Ext_CFT_Member_1_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Ext_CFT_Member_2_on_Project}" />
+				<apex:inputField value="{!newRFP.Ext_CFT_Member_2_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Ext_CFT_Member_3_on_Project}" />
+				<apex:inputField value="{!newRFP.Ext_CFT_Member_3_on_Project__c}" />
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection columns="1" title="Cover Letter Info">
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Most_Important_output_need}" />
+				<apex:inputField value="{!newRFP.Most_Important_output_need__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Second_most_Important_output_need}" />
+				<apex:inputField value="{!newRFP.Second_Most_Important_output_need__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Most_important_outcome}" />
+				<apex:inputField value="{!newRFP.Most_important_outcome__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Second_most_important_outcome}" />
+				<apex:inputField value="{!newRFP.Second_most_important_outcome__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="{!$Label.Follow_up_date}" />
+				<apex:inputField value="{!newRFP.Follow_up_date__c}" />
+			</apex:pageBlockSectionItem>
+			<apex:inputField value="{!newRFP.Main_Title_of_Proposal__c}" />
+			<apex:inputField value="{!newRFP.Subtitle_of_Proposal__c}" />
+			<!-- End ISS Questions Section -->
+			
+			
+
+		</apex:pageBlockSection>
+		</apex:outputPanel>  
+
+		<!-- Begin Attachments Section -->
+		<!-- placeholder for attaching Proposal Documentation -->
+		<!--
+		- Both (Attach Proposal Documentation)
+		- Both (Acct: Customer Logo)
+		- ISS (Picture for the Title page)
+		
+		-->
+		<!-- End Attachments Section --> 
+
+		<apex:pageBlockButtons location="top">
+
+			<apex:commandButton value="Back" action="{!Back}" reRender="mainOP,errors" status="status2" rendered="{!!showBothSection}" />
+			<apex:commandButton id="NextBTN2" disabled="{!newRFP.Business_Unit__c==null}" value="Next" action="{!Next}" reRender="mainOP,errors" status="status2" />
+		</apex:pageBlockButtons>
+		<apex:pageBlockButtons location="bottom">
+
+			<apex:commandButton value="Back" action="{!Back}" reRender="mainOP,errors" status="status2" rendered="{!!showBothSection}" />
+			<apex:commandButton id="NextBTN" disabled="{!newRFP.Business_Unit__c==null}" value="Next" action="{!Next}" reRender="mainOP,errors" status="status2" />
+		</apex:pageBlockButtons>
+
+		
+	</apex:pageBlock>
+	</apex:outputPanel>
+    <apex:outputPanel id="showRFPSection3" rendered="{!showRFPSection3}">
+    	<apex:pageBlock title="RFP Survey">
+    		<!---->
+			<apex:pageBlockSection columns="1">
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Attach Proposal Documentation" />
+					<apex:inputFile fileName="{!fileName}" contentType="{!contentType}" value="{!proposalDocumentation}" size="50" fileSize="1000" />
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="" />
+					<apex:commandButton value="Attach File" action="{!attachFile}" />
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockTable value="{!rfpAttachments}" var="att" rendered="{!rfpAttachments.size>0}">
+				<apex:column value="{!att.Name}" />
+			</apex:pageBlockTable>
+
+			<apex:pageBlockButtons location="bottom">
+    			<apex:commandButton value="Save RFP Survey" action="{!performFinalSave}" />
+    		</apex:pageBlockButtons>
+    	</apex:pageBlock>
+    </apex:outputPanel>
+	</div>
+
+	</apex:outputPanel>
+
+</apex:form>
+</apex:page>

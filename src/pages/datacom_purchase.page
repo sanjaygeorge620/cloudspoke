@@ -1,0 +1,19 @@
+<apex:page controller="datacom_purchase" action="{!init}">
+  <style>
+      input[type="text"] {width:80%;}
+  </style>
+  <apex:sectionHeader title="Data.com" subtitle="{!if(datatype=='1',$ObjectType.DatacloudCompany.label,$ObjectType.DatacloudCompany.label)} Search"/>
+  <apex:form >
+    <apex:pageBlock >
+        <apex:pageMessages id="error" />
+        <apex:pageBlockSection columns="2" >
+            <apex:repeat rendered="true" value="{!recordMap}" var="r">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!r}" />
+                    <apex:outputText value="{!recordMap[r]}" />
+                </apex:pageBlockSectionItem>
+           </apex:repeat>     
+        </apex:pageBlockSection>
+     </apex:pageBlock>  
+  </apex:form>
+</apex:page>

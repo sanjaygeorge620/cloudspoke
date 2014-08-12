@@ -1,0 +1,142 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesTrainingController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+           
+           jQuery('.toolbar-training').addClass('active');
+            });  
+        </script>
+         <style>th{text-align: left; font-weight:normal;}/*ie8*/
+.auto-style1 {background-color: #fff7d5;height: 25px;border : 1px solid #fed309;text-align: center;}
+</style>
+         <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Site.CurrentSiteURL}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.training}">Training</a><span>&#187;</span></li>
+                    <li><a href="{!$page.training}">Enrollment History</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">{!RegistrationDetails.Course_Name__c}</a></li>
+                </ul>
+         </div>            
+         <div class="cp_core">
+        
+              <apex:form >
+                <div class="column full-width">
+                        <div class="callout classroom course-registration">
+                            <span class="title-bar" href="#"><span class="sprite_cpicons calendar">&nbsp;</span>Registration: {!RegistrationDetails.Name}</span>
+                      
+    
+                            <div class="callout-content">
+                                        <apex:pageMessage escape="false" severity="info" strength="10" rendered="{!$CurrentPage.parameters.enrollment=='success'}">Successfully Submitted Your Enrollment Request<br /><br /></apex:pageMessage>
+                                        <apex:pageMessages id="error" />
+                                      
+                                        <div class="class-details">
+                                            <p class="label class-details-title">Class Details</p>
+                                            <div class="left-inner-col">
+                                            
+                                                <p class="label class-name">Class Name:</p>
+                                                <p class="item class-name"><apex:outputField value="{!RegistrationDetails.Course_Name__c}"/></p>
+                                                <apex:outputPanel rendered="{!RegistrationDetails.Class__r.class_type__c!='E-Learning'}">
+                                                    <p class="label class-date">Class Date:</p>
+                                                    <p class="item class-date"><apex:outputField value="{!RegistrationDetails.Class__r.Class_Date_Str__c}"/></p>
+                                                    <p class="label class-time">Class Hours:</p>
+                                                    <p class="item class-time"><apex:outputField value="{!RegistrationDetails.Class__r.Hours_Text__c}"/></p>
+                                                </apex:outputPanel>    
+                                            </div>
+                                            <div class="right-inner-col">
+                                             <apex:outputPanel rendered="{!RegistrationDetails.Class__r.class_type__c =='E-Learning'}">
+                                             <p class="label class-number">Class Language:</p>
+                                                <p class="item class-number"><apex:outputField value="{!RegistrationDetails.Class__r.Language__c}"/></p>
+                                             </apex:outputPanel>     
+                                                <p class="label class-number">Class Number:</p>
+                                                <p class="item class-number"><apex:outputField value="{!RegistrationDetails.Class__r.name}"/></p>
+                                                <p class="label class-type">Class Type:</p>
+                                                <p class="item class-type"><apex:outputField value="{!RegistrationDetails.Course_Type__c}"/></p>
+                                                <apex:outputPanel rendered="{!RegistrationDetails.Class__r.class_type__c!='E-Learning'}">
+                                                <p class="label class-number">Class Country:</p>
+                                                <p class="item class-number"><apex:outputField value="{!RegistrationDetails.Class__r.Country__c}"/></p>
+                                                <p class="label class-number">Class Language:</p>
+                                                <p class="item class-number"><apex:outputField value="{!RegistrationDetails.Class__r.Language__c}"/></p>
+                                                    <p class="label class-location">Training Location:</p>
+                                                    <p class="item class-location">
+                                                        <apex:outputLink value="{!$page.training_location}">
+                                                            <apex:outputtext value="{!RegistrationDetails.Class__r.Training_Location__r.name}"/>
+                                                            <apex:param name="id" value="{!RegistrationDetails.Class__r.Training_Location__c}"/>
+                                                        </apex:outputLink>
+                                                    </p>
+                                                    <p class="label class-trainer">Trainer:</p> 
+                                                      <p class="item class-trainer"><apex:outputtext value="{!RegistrationDetails.Class__r.Trainers__c}"/></p>  
+                                                </apex:outputPanel>       
+                                            </div>
+                                        </div>
+                                        <div class="payment-details">
+                                            <p class="label class-payment-details-title">Payment Information</p>
+                                            <div class="left-inner-col">
+                                                <p class="label pay-method">Payment Method:</p>
+                                                <p class="item pay-method">
+                                                    <apex:outputField id="pay-methods" value="{!RegistrationDetails.Payment_Method__c}"/>
+                                                </p>
+                                                <p class="label pay-order-number">Purchase Order Number</p>
+                                                <p class="item pay-order-number"><apex:outputField id="purchase-order-number" styleclass="form-field" value="{!RegistrationDetails.Purchase_Order_Number__c}"/></p>
+                                                <p class="label pay-credit-type">Credit Card Type:</p>
+                                                <p class="item pay-credit-type"><apex:outputField id="pay-credit-types" value="{!RegistrationDetails.Credit_Card_Type__c}"/></p>
+                                                <p class="label pay-name">Name on Credit Card:</p>
+                                                <p class="item pay-name"><apex:outputField value="{!RegistrationDetails.Name_on_Credit_Card__c}" id="credit-card-owner" styleclass="form-field"/></p>
+                                                <p class="label pay-credit-num">Credit Card Number:</p>
+                                                <p class="item pay-credit-num"><apex:outputField value="{!RegistrationDetails.Credit_Card_Number__c}" id="credit-card-number" styleclass="form-field" /></p>
+                                                <p class="label pay-exp-date">Credit Card Expiration Date:</p>
+                                                <p class="item pay-exp-date"><apex:outputField value="{!RegistrationDetails.Credit_Card_Expiration_Date__c}" id="credit-exp-date" styleclass="form-field"/></p>
+                                            </div>
+                                            <div class="right-inner-col">
+                                                <p class="label pay-address-1">Address 1:</p>
+                                                <p class="item pay-address-1"><apex:outputField value="{!RegistrationDetails.Address_1__c}" id="user-address-1" styleclass="form-field" /></p>
+                                                <p class="label pay-address-2">Address 2:</p>
+                                                <p class="item pay-address-2"><apex:outputField value="{!RegistrationDetails.Address_2__c}" id="user-address-2" styleclass="form-field" /></p>
+                                                <p class="label pay-bill-city">Billing City:</p>
+                                                <p class="item pay-bill-city"><apex:outputField id="billing-city" styleclass="form-field" value="{!RegistrationDetails.Billing_City__c}"/></p>
+                                                <p class="label pay-bill-state">Billing State/Province:</p>
+                                                <p class="item pay-bill-state"><apex:outputField id="bill-states" value="{!RegistrationDetails.Billing_State__c}"/></p>
+                                                <p class="label pay-bill-zip">Billing Postal Code:</p>
+                                                <p class="item pay-bill-zip"><apex:outputField value="{!RegistrationDetails.Billing_Zip__c}" id="billing-zipcode" styleclass="form-field"/></p>
+                                                <p class="label pay-bill-country">Country:</p>
+                                                <p class="item pay-bill-country"><apex:outputField value="{!RegistrationDetails.Country__c}" id="billing-country" styleclass="form-field"/></p>
+                                            </div>
+                                        </div>
+                                        <div class="attendance-details">
+                                            <p class="label attend-title">Attendees:</p>
+                                            <p class="label-note">All Payment and Attendee fields required must be populated prior to adding additional attendees.</p>
+                                                 <div class="trainee_table">
+                                                    <apex:pageBlockTable value="{!ATTENDEES}" var="a" id="trainee_table">
+                                                        <apex:column headerValue="Name" styleClass="form-field">
+                                                            <apex:outputField styleclass="form-field attendee-name" value="{!a.Name}"/>
+                                                        </apex:column>
+                                                        <apex:column headerValue="Phone" styleClass="form-field">
+                                                            <apex:outputField styleclass="form-field attendee-name" value="{!a.Contact_Phone__c}"/>
+                                                        </apex:column> 
+                                                        <apex:column headerValue="Email" styleClass="form-field">
+                                                            <apex:outputField styleclass="form-field attendee-name" value="{!a.Attendee_Email__c}"/>
+                                                        </apex:column> 
+                                                        <apex:column styleClass="form-field">                  
+                                                                <apex:facet name="header">
+                                                                    ImageNow Role
+                                                                    <span id="Category_help" class="helpButtonOn" style="margin:2px;">
+                                                                    <img class="helpOrb" title="{!$ObjectType.Training_Attendee__c.Fields.Attendee_ImageNow_Role__c.inlineHelpText}" alt="" src="/s.gif"/></span>
+                                                                </apex:facet>  
+                                                                <apex:outputField value="{!a.Attendee_ImageNow_Role__c}" />
+                                                        </apex:column>    
+                                    </apex:pageBlockTable>
+                                </div>   
+                            </div>
+                            </div>
+                                <div class="auto-style1"  >
+                                    <apex:outputPanel >
+                                        <span style="font-weight:bold;font-size:12px">Do you want to add another Class?&nbsp;&nbsp;&nbsp;&nbsp;<span><apex:outputLink value="{!$Page.Training}" >{!$Label.Yes}</apex:outputLink></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><apex:outputLink value="{!$Page.Home}" >{!$Label.No}</apex:outputLink></span></span>
+                                    </apex:outputPanel>
+                                </div> 
+                        </div><!-- /registration -->
+                                </div>
+            </apex:form> 
+            </div>
+     </apex:define>    
+   </apex:composition>      
+</apex:page>

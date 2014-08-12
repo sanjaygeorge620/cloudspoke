@@ -1,0 +1,75 @@
+<apex:page controller="IdeaHomeController" showHeader="false" sideBar="false" title="Home">
+    <apex:composition template="ideaLayoutWrapper">
+        <apex:define name="content">
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                  jQuery('.toolbar-ideas').addClass('active');
+                });  
+            </script>
+            <div class="callout ideas">
+                <c:ideatabs Home_Tab="true" 
+                    ViewAll_Tab="false"
+                    Search_Tab="false"
+                    MyIdeas_Tab="false"
+                    Submit_Tab="false"
+                    />
+             </div>        
+                <apex:outputPanel styleClass="" rendered="false">
+                         <c:ideaFeed feedName="RecentIdeas" />
+                </apex:outputPanel>                            
+                <div class="callout ideas-secondary">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons mr">&nbsp;</span>Most Recent Ideas</a>
+                    <ideas:listOutputLink styleClass="view-all" communityId="{!communityId}" page="{!ideaListPage}" sort="recent">Recent Ideas</ideas:listOutputLink>
+                    <div class="callout-content most-recent">
+                        <ul>
+                            <apex:dataList value="{!recentIdeas}" var="idea">
+                                <li>
+                                    <span class="time"><c:ideaDateFormat idea="{!idea}" /></span>
+                                <ideas:detailOutputLink page="{!ideaViewPage}" ideaId="{!idea.Id}">{!idea.title}</ideas:detailOutputLink>
+                                <span class="comments"></span>
+                                </li>
+                            </apex:dataList>
+                        </ul>
+                    </div>
+                </div><!-- /Most Recent Ideas -->
+                
+                <div class="callout ideas-secondary" style="display:none;">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons mp">&nbsp;</span>Most Popular Ideas</a>
+                    <ideas:listOutputLink styleclass="view-all" communityId="{!communityId}" page="{!ideaListPage}" sort="popular">Popular Ideas</ideas:listOutputLink>
+                    <div class="callout-content most-popular">
+                        <ul>
+                            <li>
+                                <div class="inner-title-bar">
+                                    <span class="points">923 pts</span> | 
+                                    <a class="" href="#">Perceptive Product &amp; Solutions test</a> 
+                                    <span class="comments">(25 comments)</span>
+                                </div>
+                                <div class="vote">
+                                    <span class="vote-title">Vote</span>
+                                    <a class="sprite_cpicons vote-icon approve" href="#" title="Approve!">Vote Approved!</a>
+                                    <a class="sprite_cpicons vote-icon disapprove" href="#" title="Disapprove!">Vote Disapproved!</a>
+                                    <span class="points">705 pts</span>
+                                </div>
+                                <div class="idea-contents">
+                                    <span class="post-meta">posted 12/12/2011 at 8:47 PM by <a class="author" href="#">designbyjm</a></span>
+                                    <p>Ut aliquam facilisis suscipit. Mauris venenatis pellentesque tortor, ac rhoncus ligula suscipit ac. Sed imperdiet tempor sem, posuere rhoncus eros egestas ut. Sed nisl ipsum, posuere eget dignissim nec, porta in nunc. Vivamus convallis mattis massa adipiscing viverra.</p>
+                                </div>
+                                <div class="idea-status">
+                                    <span class="status-title">Under Review</span>
+                                    <a class="sprite_cpicons idea-status-icon under-review" href="#" title="Under Review">Under Review</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- /Most Popular Ideas -->
+            
+            
+            
+            
+            
+            
+            
+            
+        </apex:define>
+    </apex:composition>
+</apex:page>

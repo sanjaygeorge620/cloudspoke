@@ -1,0 +1,192 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesController">
+<title>LearnMode Strategies</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript">
+        jQuery(document).ready(function() {
+        jQuery('.toolbar-documentation').addClass('active');
+        scaletowindow('#itarget',900,300);});
+        jQuery(window).resize(function() {
+        scaletowindow('#itarget',900,300);});
+        </script>
+        <div class="breadcrumb">
+        <ul>
+            <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+            <li><a class="current" href="{!$page.LearnModeStrategies}">LearnMode Strategies</a></li>
+        </ul>
+        </div>   
+        <div class="cp_core">
+            <apex:pageMessages />
+            <div class="column full-width" >
+            <div class="callout spotlight">    
+            <div class="callout-content">
+            <br/>
+            <div><H1 align="center">LearnMode Strategies</h1></div>
+            <br />
+            <hr />
+            <br />
+            </div>
+            <div class="callout-content">
+           
+            <ul>
+                <a href="#sec0"><H3>Introduction</H3></a>
+                <br />
+                <a href="#sec1"><H3>LearnMode Overview</H3></a>
+                <br />
+                <a href="#sec2"><H3>Browser-delivered Applications</H3></a>
+                <br />
+                <a href="#sec3"><H3>Java Applications</H3></a>
+                <br />
+                <a href="#sec4"><H3>Terminal Emulator Applications</H3></a>
+                <br />
+                <a href="#sec5"><H3>HyperLearn Tips</H3></a>
+                <br />
+                <a href="#sec6"><H3>VBScript</H3></a>
+                <br />
+                <a href="#sec7"><H3>Macros</H3></a>
+                <br />
+                <a href="#sec8"><H3>Learning Business Applications</H3></a>
+                <br/>
+                <br/>
+                <br/>
+                </ul>
+                
+                   <!--LINKS-->  
+                         
+                         <h2 id="sec0">Introduction</h2>
+                         <br />
+                         There are several different LearnMode methods for capturing ImageNow linking values (document keys and custom properties) from a business application. The following articles provide an overview of the LearnMode methods and tips on using the different methods. 
+                         <br />
+                         <br />
+                         <h2 id="sec1">LearnMode Overview</h2>
+                         <br/>
+                         <ul>
+                         <Li><a href="/articles/ProductHelp/Help-40002333?popup=true">What is LearnMode?</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Article-000015672?retURL=%2Fapex%2Fhome&popup=false">About the LearnMode type methods</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001134?popup=true">Create a LearnMode application plan</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001082?popup=true">About matching text in window titles</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001084?popup=true">Use wildcards in application plan settings</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015696?popup=true">Searching using LearnMode</a></Li>
+                         </ul>
+                         <br />
+                         <h2 id="sec2">Browser-delivered Applications</h2>
+                         <br />
+                         <p>Browser-delivered applications can sometimes be learned using the <a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001105?popup=true">Internet Explorer LearnMode method</a>.</p>
+                         <br />
+                         <p>There are instances where IE LearnMode method will not work due to shifting of HTML tags at the application layer. In those situations, the following strategies are available, in order of effectiveness. </p>
+                        
+                         <br/>
+                         <ul>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015576?popup=true">Using hidden HTML tags to capture shifting values in LearnMode</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-00004367?popup=true">Using IE LearnMode VBScript functions for capturing shifting values in a browser application</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015686?popup=true">Using AppGetData for linking with shifting values in a business application</a></Li>
+                         <br/>
+                         </ul>
+                         <br />
+                         The <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015659?popup=true">Viewpoint method</a> can be a fast way for learning a browser application, if the following conditions are true:
+                         <br />
+                         <br />
+                         <ol>
+                         <li>The Windows display settings are standardized, since Viewpoint performs xy coordinate mapping to find the data fields.</li>
+                         <br />
+                         <li>For browser applications, the locations of the toolbars are standardized.</li>
+                         <br />
+                         <li>The data is visible on the screen. </li> 
+                         <br />
+                         <br />
+                         </ol>
+                         If none of the previous approaches work, then use  <a href="#sec5"> HyperLearn</a>.
+                         <br />
+                         <br />
+                         <br />
+                         <h2 id="sec3">Java Applications</h2>
+                         <br />
+                         <br />
+                         Java applications can typically be learned using the <a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001108?popup=true">Window Walker method</a>. However, there may be certain applications that require using the <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015436?popup=true">WinGetData function</a>.
+                         <br />
+                         <br />
+                         <h2 id="sec4">Terminal Emulator Applications</h2>
+                         <br />
+                         <ul>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40002343?popup=true">Determine connect strings for a terminal emulation program</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015761?popup=true">Terminal capture connect strings for common terminal emulators</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015687?retURL=%2Fapex%2Fhome&popup=false">Using GetScreenText function to capture shifting values in a terminal emulator</a></Li>
+                         <br/>
+                         </ul>
+                         <h2 id="sec5">HyperLearn Tips</h2>
+                         <br/>
+                         <ul>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015524?popup=true">HyperLearn Overview</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015526?popup=true">Common font types and sizes for learning business applications with HyperLearn</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Troubleshooting/Article-00001821?popup=true">Using HyperLearn offset to resolve "Couldn't recognize text" error on one computer</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015664?popup=true">Disabling font smoothing for HyperLearn</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40002334?popup=true">Imagenow.ini settings for HyperLearn</a></Li>
+                         </ul>
+                         <br />
+                         <h2 id="sec6">VBScript</h2>
+                         <br />
+                         VBScript functions in ImageNow Client can be used to obtain and parse data used as linking values for document keys and custom properties. Below are articles that explain how to use VBScript functions with ImageNow LearnMode. 
+                         <br />
+                         <br />
+                         <ul>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015688?retURL=%2Fapex%2Fhome&popup=false">VBScript introduction</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001126?popup=true">VBScript functions</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001127?popup=true">VBScript variables</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015701?popup=true">Conditional statements in VBScripts</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015707?popup=true">Loops in VBScripts</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015307?popup=true">Evaluating text with LearnMode VBScripts</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015306?popup=true">Troubleshooting LearnMode VBScripts</a></Li>
+                         </ul>
+                         <br />
+                         <h2 id="sec7">Macros</h2>
+                         <br />
+                         Macros simplify common data formatting tasks with LearnMode, such as date conversion, removing spaces, or removing certain types of characters. 
+                         <ul>
+                         <br />
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001118?popup=true">Macro definitions</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/Support_Troubleshooting/Article-00006082?popup=true">Formatting a date in LearnMode using a macro</a></Li>
+                         <br/>
+                         <Li><a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Article-000015685?popup=true">Patterns for formatting macros</a></Li>
+                         </ul>
+                         <br />
+                         <br />
+                         <h2 id="sec8">Learning Business Applications</h2>
+                         <br />
+                         <ul>
+                         <br />
+                         <li><a href="{!$page.Datatel}"><h4>Ellucian – Datatel</h4> </a></li>
+                         <br />
+                         <li><a href="{!$page.Lawson}"> <h4>Lawson </h4></a></li>
+                         <br />
+                         <li><a href="{!$page.Meditech}"> <h4>MEDITECH </h4></a></li>
+                         <br />
+                         <li><a href="{!$page.PeopleSoft}"> <h4>PeopleSoft </h4></a></li>
+                         </ul>
+                         </div>
+                        
+                         </div>
+                         </div>
+                         </div>
+            </apex:define>
+  </apex:composition>
+</apex:page>

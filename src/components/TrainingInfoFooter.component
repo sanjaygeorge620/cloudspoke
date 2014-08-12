@@ -1,0 +1,5 @@
+<apex:component >
+<br/>
+    <apex:outputLabel >For more information, contact the Product Training Team at <a href="mailto:training@perceptivesoftware.com"> training@perceptivesoftware.com</a>.</apex:outputLabel>
+
+</apex:component>

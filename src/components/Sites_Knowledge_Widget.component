@@ -1,0 +1,54 @@
+<apex:component controller="SitesKnowledgeWidget" allowDML="false" >
+    <apex:attribute name="KB_CATEGORIES" type="string" required="true" description="Category Filter"/>
+    <apex:attribute name="KB_SORTBY" type="string" required="true" description="Article Sort"/>
+    <apex:attribute name="KB_PAGE_SIZE" type="string" required="true" description="Page Size"/>
+    <apex:attribute name="KB_CURRENT_PAGE_NUMBER" type="string" required="true" description="Page Number"/>
+    <apex:attribute name="KB_KEYWORD" assignTo="{!KB_KEYWORDSEARCH}" type="string" required="true" description="Keyword"/>
+    <apex:attribute name="KB_ARTICLETYPES" type="string" required="true" description="Article Types"/>
+    <apex:attribute name="KB_WINDOW" type="string" required="true" description="open in what Window? _self, _blank"/>
+
+        
+<div class="error">
+    <apex:pageMessages id="error" />
+</div>
+<div class="title-bar kbresults"> 
+    <span class="sprite_cpicons results">&nbsp;</span>{!$Label.Search_Results}
+    <span class="returned-results"></span> 
+</div> 
+<div class="callout-content results-content"> 
+    <div class="search-results">
+         <apex:outputPanel id="articletable" >
+          <table cellpadding="0" cellspacing="0" border="0" class="display" id="datatable">
+                    <thead>
+                        <tr>
+                            <th>{!$Label.Document_Title}</th>
+                            <th>{!$Label.Type}</th>
+                            <th>{!$Label.Published}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat rendered="true" value="{!Articles}" var="a">
+                            <tr>
+                                <td>
+                                <!--value="{!URLFOR($Action.KnowledgeArticle.View, a.Id)}"-->
+                                    <apex:outputLink styleclass="results-doc-title" target="{!KB_WINDOW}" value="/articles/{!a.ArticleType}/{!a.UrlName}"   >
+                                        <apex:outputField value="{!a.title}"/> 
+                                        <apex:param name="retURL" value="{!$CurrentPage.URL}"/>
+                                    </apex:outputLink>
+                                </td>
+                                <td class="results-doc-type">
+                                    {!a.ArticleType}
+                                </td>
+                                <td class="results-doc-date">
+                                    <apex:outputText value="{0,date, MM/dd/yyyy}">
+                                         <apex:param value="{!a.LastPublishedDate}" />
+                                     </apex:outputText>
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+          </table>
+         </apex:outputPanel> 
+        </div>       
+</div>
+</apex:component>

@@ -1,0 +1,28 @@
+<apex:page >
+    <apex:composition template="ideaLayoutWrapper">
+        <apex:define name="content">
+            <div class="callout ideas">
+                  <c:ideatabs Home_Tab="false" 
+                    ViewAll_Tab="true"
+                    Search_Tab="false"
+                    MyIdeas_Tab="false"
+                    Submit_Tab="false"
+                    />
+             </div>       
+            <div class="callout ideas-secondary">
+                <span class="title-bar"><span class="sprite_cpicons mr">&nbsp;</span>Profile</span>
+                <div class="callout-content ideasearch">
+                        <apex:outputPanel layout="block" styleclass="ibtProfileSidebar">
+                            <c:ideaUserProfile />
+                        </apex:outputPanel>
+    
+                        <apex:outputPanel layout="block" styleClass="ibtProfileIdeaList">
+                            <apex:insert name="profileContent" />
+                        </apex:outputPanel>
+    
+                </div>
+            </div>    
+            <apex:insert name="profileContentFeed" />
+        </apex:define>
+    </apex:composition>
+</apex:page>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>16.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>This page is called from the Update Utilization button on the Region detail page and forwards to the general purpose Update Utilization page using the forwardToUpdateUtilization() method in the UpdateUtilization controller extension.</description>
+    <label>Update Utilization Forward From Region</label>
+</ApexPage>

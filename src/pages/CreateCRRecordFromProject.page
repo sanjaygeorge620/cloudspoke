@@ -1,0 +1,57 @@
+<apex:page standardController="pse__Proj__c" tabStyle="pse__Proj__c" extensions="CreateCRRecordFromProject">
+<apex:sectionHeader title="Create Change Request" />
+<apex:form >
+<apex:pageMessages />
+<apex:pageBlock title="Change Request Details" mode="edit" rendered="{!NOT(ISNULL(opportunity))}" >
+    <apex:pageBlockButtons >
+        <apex:commandButton action="{!Cancel}" value="cancel"/> 
+        <apex:commandButton action="{!Create}" value="create"/>
+    </apex:pageBlockButtons> 
+    <apex:pageBlockSection title="Opportunity Details" >
+        <apex:inputField value="{!opportunity.Name}" />
+        <apex:outputField value="{!opportunity.pse__Primary_Project__c}" />
+        <apex:outputField value="{!opportunity.pse__Parent_Opportunity__c}"/>
+        <apex:inputField value="{!opportunity.Amount}" required="true"/> 
+        <apex:outputField value="{!opportunity.AccountId}" />
+        <apex:inputField value="{!opportunity.CloseDate}" required="true"/>
+         <apex:inputField value="{!opportunity.pse__PreBilledAmount__c}" />
+          <apex:inputField value="{!opportunity.pse__Region__c}" required="true" /> 
+         <apex:outputField value="{!opportunity.pse__Is_Services_Opportunity__c}" />
+         <apex:inputField value="{!opportunity.pse__Practice__c}" required="true" />
+        <apex:outputField value="{!opportunity.pse__Is_Change_Request__c}" />
+        <apex:inputField value="{!opportunity.pse__Group__c}" required="true" />
+        <apex:inputField value="{!opportunity.CurrencyIsoCode}" />
+        <Apex:PageblockSectionItem ></Apex:PageblockSectionItem>
+        <apex:inputField value="{!opportunity.NextStep}" />
+        <apex:pageblockSectionItem ></apex:pageblockSectionItem>
+        <apex:pageBlockSectionItem labelStyle="left">
+             <apex:outputLabel value="Description"  />
+             <apex:inputTextarea value="{!opportunity.Description}"  cols="25" rows="3"/>
+        </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Budget Details"  >                                  
+         <apex:inputField value="{!budget.Name}" required="true"/>
+         <apex:outputField value="{!budget.pse__Account__c}" />
+         <apex:outputField value="{!opportunity.Name}"/>
+         <apex:outputField value="{!budget.pse__Project__c}" />
+         <apex:inputField value="{!budget.pse__Amount__c}" required="true" />
+         <apex:inputField value="{!budget.pse__Status__c}" required="true"/>
+         <apex:inputField value="{!budget.pse__Expense_Amount__c}" />
+         <apex:pageBlockSectionItem labelStyle="left" >
+            <apex:outputLabel value="Budget Type" for="budgetType" />
+            <apex:selectList value="{!budget.pse__Type__c}" size="1" id="budgetType" >
+               <apex:selectOptions value="{!budgetTypes}"/>
+            </apex:selectList>
+                
+         </apex:pageBlockSectionItem>
+         <apex:inputField value="{!budget.pse__PreBilledAmount__c}" />
+         <apex:inputField value="{!budget.pse__Effective_Date__c}" required="true"/>
+         <apex:outputText value="{!opportunity.Name}"/>                            
+         <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Description"  />
+            <apex:inputTextarea value="{!budget.pse__Description__c}"  cols="60" rows="3" />
+         </apex:pageBlockSectionItem> 
+          </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

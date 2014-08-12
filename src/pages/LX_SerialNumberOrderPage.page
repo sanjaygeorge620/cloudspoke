@@ -1,0 +1,44 @@
+<apex:page standardController="LX_Serial_Number_Sales_Order__c" extensions="LX_SerialNumberOrder" >
+<script type="text/javascript">  
+      function setHidden(counter) {
+        var index = document.getElementById('theHiddenInput');
+        index.value = counter;
+      }
+</script>
+<apex:Form >
+    <apex:pageBlock >
+        <apex:pageblockTable value="{!serialNumberList}" var="s">
+           <apex:column >
+                <apex:outputLabel >Serial Number</apex:outputLabel>
+            </apex:column>
+            <apex:column > 
+                <apex:inputfield value="{!s.serialnumberlineItem.Serial_Number__c}"/> 
+            </apex:column>
+            <apex:column >
+                <apex:outputLabel >Part Number</apex:outputLabel>
+            </apex:column>
+            <apex:column > 
+                <apex:inputfield value="{!s.serialnumberlineItem.Part_Number__c}"/> 
+            </apex:column>
+            <apex:column >
+                <apex:outputLabel >Part Name</apex:outputLabel>
+            </apex:column>
+            <apex:column > 
+                <apex:inputfield value="{!s.serialnumberlineItem.Part_Name__c}"/> 
+            </apex:column>
+                       <apex:column > 
+                <apex:commandButton id="addAnother" title="Add Another" value="+" action="{!addSerialNumberOrder}"  style="width:50;"/>
+            </apex:column>
+            <apex:column > 
+                <apex:commandButton id="remove" title="Remove" value="-" action="{!removeSerialNumberOrder}" onclick="setHidden('{!s.counterWrap}');" reRender=""> 
+               <apex:param name="index" value="{!s.counterWrap}"/>
+              
+                </apex:commandButton>
+               
+            </apex:column>
+         </apex:pageblockTable>
+      <apex:inputHidden value="{!index}" id="theHiddenInput"/>
+    </apex:pageBlock>
+    
+</apex:form>
+</apex:page>

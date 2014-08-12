@@ -1,0 +1,405 @@
+<apex:page standardController="Goal__c" extensions="UpdateGoalData" action="{!displayReportData}" showHeader="false" sidebar="false">
+  <apex:form >
+      <apex:pageBlock >
+          <apex:pageBlockSection columns="4" title="North America (Direct)" collapsible="false">
+
+              <apex:pageBlock title="MQL's Required">
+           <!--   <apex:pageBlockSectionItem dataTitle="MQL's Required" labelTitle="MQL's Required">-->
+                  <apex:pageBlockTable value="{!reportDataListMql}" var="s" title="MQL's Required" style="width:200px;font-size:10px">
+                      
+                      <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                      </apex:column>
+                      <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                      <apex:column >
+                          <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                          </div>
+                      </apex:column>
+                      <apex:column >
+                      <div style="margin-left:20px">
+                          <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                          {!s.actual}
+                       </div>
+                      </apex:column>
+                      <div style="margin-left:20px">
+                        <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                      </div>
+                      <div style="margin-left:20px">
+                        <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                      </div>
+                  </apex:pageBlockTable>
+         <!--     </apex:pageBlockSectionItem>-->
+              </apex:pageBlock> 
+              
+              <apex:pageBlock title="SQO's Required"> 
+          <!--    <apex:pageBlockSectionItem >-->
+                  <apex:pageBlockTable value="{!reportDataListSqo}" var="s" style="width:200px;font-size:10px">
+                      <apex:column style="font-weight:bold;width:30px">
+                          
+                              <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                              {!s.areaOfInterest}
+                          
+                      </apex:column>
+                      <div style="margin-left:20px">
+                        <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                      </div>    
+                      <apex:column >
+                        <div style="margin-left:20px">
+                          <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                          {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                            <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                            {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+                  </apex:pageBlockTable>
+             <!--  </apex:pageBlockSectionItem>--> 
+             </apex:pageBlock>
+              
+              <apex:pageBlock title="ADS's Required">
+           <!--   <apex:pageBlockSectionItem >-->
+              
+                  <apex:pageBlockTable value="{!reportDataListNAAds}" var="s" style="width:200px;font-size:10px">
+                      <apex:column style="font-weight:bold;width:30px">
+                        
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                        
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                       <div style="margin-left:20px">
+                          <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                          {!s.actual}
+                       </div>
+                      </apex:column>
+                      <div style="margin-left:20px">
+                      <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                      </div>
+                      <div style="margin-left:20px">
+                          <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                      </div>
+                  </apex:pageBlockTable>
+            <!--   </apex:pageBlockSectionItem> -->
+              </apex:pageBlock>
+              <apex:pageBlock title="EXP's Required"> 
+             <!-- <apex:pageBlockSectionItem >-->
+                  <apex:pageBlockTable value="{!reportDataListNAExp}" var="s" title="MQL's Required" style="width:200px;font-size:10px">
+                      <apex:column style="font-weight:bold;width:30px">
+                        
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                        
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>  
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                              {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+                  </apex:pageBlockTable>
+          <!--   </apex:pageBlockSectionItem>-->
+              </apex:pageBlock> 
+
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="North America Content/Process By Sector (Direct)" columns="4" collapsible="false">
+             <apex:pageBlock title="MQL's Required" > 
+            <!--   <apex:pageBlockSectionItem >-->
+                  <apex:pageBlockTable value="{!reportDataListSectorMql}" var="s" title="MQL's Required" style="width:200px;font-size:10px">
+                      <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                              {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+                  </apex:pageBlockTable>
+           <!--   </apex:pageBlockSectionItem>-->
+              </apex:pageBlock> 
+              
+              <apex:pageBlock title="SQO's Required" >
+            <!--  <apex:pageBlockSectionItem > -->
+              <apex:pageBlockTable value="{!reportDataListSectorSqo}" var="s" style="width:200px;font-size:10px">
+                  <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>
+                        
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                              {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+              </apex:pageBlockTable>
+            <!--  </apex:pageBlockSectionItem>-->
+              </apex:pageBlock> 
+              
+              <apex:pageBlock title="ADS's Required">
+           <!--   <apex:pageBlockSectionItem >-->
+                  <apex:pageBlockTable value="{!reportDataListSectorAds}" var="s" style="width:200px;font-size:10px">
+                      <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                              {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+                  </apex:pageBlockTable>
+            <!--  </apex:pageBlockSectionItem>-->
+              </apex:pageBlock> 
+              
+              <apex:pageBlock title="EXP's Required" > 
+              <apex:pageBlockTable value="{!reportDataListSectorExp}" var="s" style="width:200px;font-size:10px">
+                  <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                  </apex:column>
+                    <div style="margin-left:20px">
+                        <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                    </div>
+                  <apex:column >
+                    <div style="margin-left:20px">
+                          <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                          {!s.goalTd}
+                    </div>
+                  </apex:column>
+                  <apex:column >
+                    <div style="margin-left:20px">
+                          <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                          {!s.actual}
+                    </div>
+                  </apex:column>
+                    <div style="margin-left:20px">
+                        <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                    </div>
+                    <div style="margin-left:20px">
+                        <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                    </div>
+              </apex:pageBlockTable>
+              </apex:pageBlock>
+              
+              
+          </apex:pageBlockSection>
+          
+          <apex:pageBlockSection title="Latin America Content/Process (Direct)" columns="4" collapsible="false">
+              <apex:pageBlock title="MQL's Required"> 
+             <!-- <apex:pageBlockSectionItem >-->
+                  <apex:pageBlockTable value="{!reportDataListLAMql}" var="s" title="MQL's Required" style="width:200px;font-size:10px">
+                      <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                          <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                          {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                              {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+                  </apex:pageBlockTable>
+          <!--   </apex:pageBlockSectionItem>-->
+              </apex:pageBlock> 
+              
+              <!--<apex:pageBlockSectionItem >-->
+             <apex:pageBlock title="SQO's Required" > 
+              <apex:pageBlockTable value="{!reportDataListLASqo}" var="s" style="width:200px;font-size:10px">
+                  <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                  </apex:column>
+                    <div style="margin-left:20px">
+                        <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                    </div>
+                  <apex:column >
+                    <div style="margin-left:20px">
+                        <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                        {!s.goalTd}
+                    </div>
+                  </apex:column>
+                  <apex:column >
+                    <div style="margin-left:20px">
+                          <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                          {!s.actual}
+                    </div>
+                  </apex:column>
+                    <div style="margin-left:20px">
+                        <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                    </div>
+                    <div style="margin-left:20px">
+                        <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                    </div>
+              </apex:pageBlockTable>
+              </apex:pageBlock>
+              <!--</apex:pageBlockSectionItem>-->
+              
+            <apex:pageBlock title="ADS's Required"> 
+              <!--<apex:pageBlockSectionItem >-->
+                  <apex:pageBlockTable value="{!reportDataListLAAds}" var="s" style="width:200px;font-size:10px" title="ADS's Required">
+                      <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                          <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                          {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+                  </apex:pageBlockTable>
+              <!--</apex:pageBlockSectionItem> -->
+             </apex:pageBlock>
+             
+             <apex:pageBlock title="EXP's Required"> 
+              <!--<apex:pageBlockSectionItem >-->
+                  <apex:pageBlockTable value="{!reportDataListLAExp}" var="s" style="width:200px;font-size:10px" title="ADS's Required">
+                      <apex:column style="font-weight:bold;width:30px">
+                          <apex:facet name="header">By Business <br/> Unit</apex:facet>
+                          {!s.areaOfInterest}
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="{!col1Header}" value="{!s.goal}" style="width:30px"/>
+                        </div>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col2Header} <br/> QTD</apex:facet>
+                              {!s.goalTd}
+                        </div>
+                      </apex:column>
+                      <apex:column >
+                        <div style="margin-left:20px">
+                              <apex:facet name="header">{!col3Header} QTD <br/> Actuals</apex:facet>
+                              {!s.actual}
+                        </div>
+                      </apex:column>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var" value="{!s.var}" style="width:30px"/>
+                        </div>
+                        <div style="margin-left:20px">
+                            <apex:column headerValue="Var %" value="{!s.varPer}" style="width:30px"/>
+                        </div>
+                  </apex:pageBlockTable>
+              <!--</apex:pageBlockSectionItem> -->
+             </apex:pageBlock>
+             
+          </apex:pageBlockSection>
+          
+          
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

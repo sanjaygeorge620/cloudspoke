@@ -1,0 +1,99 @@
+<apex:page standardController="ProductHelp__kav" showHeader="false" sidebar="false" extensions="SitesKnowledgeExtension">
+
+    <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+        <apex:define name="title"> 
+      <title>{!SITE_NICKNAME+' | '+ !$Label.Knowledgebase + ': '+ProductHelp.Title}</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+       <script type="text/javascript">
+                    jQuery(document).ready(function() {
+                        jQuery('.toolbar-knowledgebase').addClass('active');
+                        scaletowindow('#itarget',900, 400);
+                    });  
+                    
+                    jQuery(window).resize(function() {
+                         scaletowindow('#itarget',900, 400);
+                    });
+            </script>
+     </apex:define>
+        <apex:define name="body"> 
+           
+            
+              <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                            <a class="home" href="{!$Page.Home}">{!$Label.Home}</a>
+                            <a class="current" href="{!if($CurrentPage.parameters.retURL!='', $site.Prefix+$CurrentPage.parameters.retURL, $page.Knowledge)}">{!$Label.Knowledgebase}</a>
+                            <a href="#">{!ProductHelp.Title}</a>
+                </nav>
+               </div>
+              </div>
+                                    <div class="cp_core">
+<style type="text/css">
+        em { font-family: 'verdana';font-style: italic; }
+    </style>
+                <div class="column full-width"> 
+
+                   <div class="callout article"> 
+                   
+                    <a class="title-bar" target="_self" href="{!if($CurrentPage.parameters.retURL!='',  $site.Prefix+$CurrentPage.parameters.retURL, $page.Knowledge)}"><span class="sprite_cpicons knowledge">&nbsp;</span>{!$Label.Knowledgebase}</a> 
+                    <div class="callout-content"> 
+                        <!-- article information --> 
+                            <div class="inner-content-title-bar"> 
+                                <span><apex:outputtext value="{!ProductHelp.Title}" /></span> 
+                                <span class="small-buttons"> 
+                                    <!---<a class="sprite_cpicons email" href="#" title="Email this Article.">Bookmark</a>--->
+                                    <a class="sprite_cpicons print" href="#" onclick="window.print(); return false;" title="Print this article.">{!$Label.Print}</a> 
+                                </span> 
+                            </div> 
+                            <div class="article-details">
+                                {!$Label.Article_Num}: {!ProductHelp.ArticleNumber}<br />
+                                {!$Label.Last_Published_Date}:&nbsp;<apex:outputField value="{!ProductHelp.LastModifiedDate}" />
+                                <br /><br />
+                            </div> 
+                        <apex:iframe height="900" id="itarget" scrolling="true" src="{!SUBSTITUTE(ProductHelp.HelpURL__c,'http:','https:')}"/>
+                        
+                        <div class="clear"/>
+                        <apex:outputPanel layout="block" id="feeback" styleClass="kb-feedback">
+                               <apex:outputtext rendered="{!!ShowFeedback}">{!$Label.Feedback_Thanks}</apex:outputtext> 
+                               <apex:outputPanel rendered="{!showfeedback}">
+                                <apex:form >    
+                                      <apex:outputPanel layout="block" styleClass="kb-questionone">
+                                         <label>{!$Label.Looking_For_Topic}</label>
+                                         <apex:actionRegion >
+                                             <apex:selectRadio id="looking_for" value="{!Feedback.Looking_for__c}">
+                                                  <apex:selectOption itemValue="true" itemLabel="{!$Label.Yes}"/>
+                                                  <apex:selectOption itemValue="false" itemLabel="{!$Label.No}"/>
+                                                  <apex:actionSupport event="onclick" rerender="questiontwo"/>
+                                             </apex:selectRadio>
+                                         </apex:actionRegion>
+                                      </apex:outputPanel>      
+                                      
+                                      <apex:outputPanel id="questiontwo" >
+                                          <apex:outputPanel layout="block" styleClass="kb-questiontwo" rendered="{!Feedback.Looking_for__c='true'}">
+                                             <label>{!$Label.Issue_Resolved}</label>
+                                             <apex:selectRadio id="resolve_issue" value="{!Feedback.Resolve_Issue__c}">
+                                                  <apex:selectOption itemValue="True" itemLabel="{!$Label.Yes}"/>
+                                                  <apex:selectOption itemValue="False" itemLabel="{!$Label.No}"/>
+                                            </apex:selectRadio>
+                                         </apex:outputPanel>      
+                                     </apex:outputPanel>
+                                     <apex:outputPanel layout="block" styleClass="kb-submit">     
+                                       <apex:outputLabel value="{!$Label.Comments}:" for="comment"/>
+                                       <apex:inputTextarea id="comment" value="{!Feedback.Comment__c}" />
+                                       <br />
+                                       <apex:commandButton value=" " styleClass="submitbutton" action="{!SubmitFeedback}" reRender="feeback"/> 
+                                     </apex:outputPanel>        
+                                </apex:form>
+                              </apex:outputPanel>   
+                            </apex:outputPanel>
+                    </div> 
+                  
+                   </div>
+                </div>   
+            </div>
+
+        </apex:define>
+  </apex:composition>      
+</apex:page>

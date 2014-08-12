@@ -1,0 +1,90 @@
+<apex:page controller="lockComponentController">
+<html>
+<head>    
+
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>    
+    <script>
+        var j$ = jQuery.noConflict();
+        var oTable;
+        j$(document).ready(function() {
+          initTable();
+        });
+        
+        function initTable() {
+          oTable = j$(".jtable").dataTable({"iDisplayLength": 25,"aoColumnDefs": [
+       { "bSortable": false, "aTargets": [0,1,5]}
+       ],"fnDrawCallback":function(settings){} 
+          });
+        }
+        
+        function Refresh()
+        {
+        refreshTable();
+        
+        }
+      
+    </script>
+</head>
+<body>
+<apex:sectionHeader subtitle="Lock/Unlock Apex Components" title="{!$Organization.Name}"/>
+<apex:pageMessages id="error" />
+<apex:form >
+<apex:actionRegion >
+<apex:actionFunction name="refreshTable" rerender="jTable_view"  oncomplete="initTable()" status="spinner">
+</apex:actionFunction>
+<apex:pageBlock title="Select a View">           
+<apex:outputPanel id="View_Select"> 
+<apex:selectlist required="false"  size="1"  id="View_Selection" value="{!Selected_View}" onchange="Refresh()"> 
+<apex:selectoptions value="{!Items}"/>                    
+</apex:selectlist>
+   <apex:actionStatus id="spinner" >
+                         <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /></apex:facet>
+                       </apex:actionStatus>
+</apex:outputPanel> 
+</apex:pageBlock>
+</apex:actionRegion>
+<apex:pageBlock >
+<apex:outputPanel id="jTable_view">
+<table id="jtable" class="row-border jtable display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                      <th>Action</th>
+                      <th>View</th>
+                      <th>Component Name</th>                         
+                      <th>Component Type</th>    
+                      <th>Component Status</th>                                                                                  
+                      <th>Ready to Be Worked?</th>                                                                                                                                                                
+                      <th>Locked By</th>                                                                                  
+                      <th>Last Updated By</th>                                                                                  
+                    </tr>
+                </thead>
+         
+                <tbody>
+                   <apex:repeat value="{!AllComponents}" var="all">
+                   <apex:repeat value="{!all}" var="q">
+                        <tr> 
+                         <td><a href="/{!q.id}/e?" target="_blank">Lock/Unlock</a></td>         
+                         <td><a href="/{!q.id}" target="_blank">View svn Repo</a></td>         
+                         <td><apex:outputField value="{!q.Component_Link__c}"/></td>                                                     
+                         <td><apex:outputField value="{!q.Component_Type__c}"/></td>
+                         <td><apex:outputField value="{!q.Status__c}"/></td>
+                         <td><apex:outputField value="{!q.canWork__c}"/></td>                                                     
+                         <td><apex:outputField value="{!q.Locked_By__c}"/></td>                                                     
+                         <td><apex:outputField value="{!q.Last_Worked_By__c}"/></td> 
+                                                                             
+                        </tr>
+                        </apex:repeat>
+                    </apex:repeat>
+                 </tbody>  
+             </table>
+
+
+</apex:outputPanel> 
+</apex:pageBlock>
+</apex:form>
+</body>    
+</html>  
+
+</apex:page>

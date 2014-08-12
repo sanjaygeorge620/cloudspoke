@@ -1,0 +1,62 @@
+<!-- 
+ * ©Lexmark Front Office 2013, all rights reserved
+ * 
+ * Created Date : 07/01/2013
+ *
+ * Author : Kapil Reddy Sama.
+ * 
+ * Description : Custom Account Team edit page.
+ -->
+<apex:page standardController="Account" extensions="LX_AccountTeamUpdate">
+    
+    <apex:sectionHeader subtitle="Edit Member" title="Account Team"/>
+    <apex:form >
+    <apex:pageBlock mode="edit">
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton value="Save" action="{!UpdateTeamMember}"/>
+            <apex:commandButton value="Cancel" action="{!Cancel}"/>
+        </apex:pageBlockButtons>
+        
+        <apex:pageBlockSection columns="1" title="Update this team member:">            
+            <apex:pageBlockSectionItem >
+            <apex:outputLabel for="mem1"> Team Member</apex:outputLabel>
+            <apex:outputField value="{!teamMember.User.Name}" id="mem1"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >         
+            <apex:outputLabel value="Account Access" for="accts"></apex:outputLabel>
+            <apex:selectList id="accts" value="{!AccountAccessLevel}" size="1" title="Account Access" required="true">
+            <apex:selectOptions value="{!AccountAccessLevels}"></apex:selectOptions>
+            </apex:selectList> 
+            </apex:pageBlockSectionItem>
+            
+<!--            <apex:pageBlockSectionItem >         
+            <apex:outputLabel value="Contact Access" for="cons"></apex:outputLabel>
+            <apex:selectList id="cons" value="{!ContactAccessLevel}" size="1" title="Contact Access" required="true">
+            <apex:selectOptions value="{!ContactAccessLevels}"></apex:selectOptions>
+            </apex:selectList> 
+            </apex:pageBlockSectionItem>   -->
+            
+            <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Opportunity Access" for="opps"></apex:outputLabel>
+            <apex:selectList id="opps" value="{!OpportunityAccessLevel}" size="1" title="Opportunity Access" required="true">
+            <apex:selectOptions value="{!OpportunityAccessLevels}"></apex:selectOptions>
+            </apex:selectList>
+            </apex:pageBlockSectionItem>
+                        
+            <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Case Access" for="cases"></apex:outputLabel>
+            <apex:selectList id="cases" value="{!CaseAccessLevel}" size="1" title="Case Access" required="true">
+            <apex:selectOptions value="{!CaseAccessLevels}"></apex:selectOptions>
+            </apex:selectList>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem >
+            <apex:outputLabel for="roles"> Team Role</apex:outputLabel>
+            <apex:inputField value="{!teamMember.TeamMemberRole}" required="true"/>
+            </apex:pageBlockSectionItem>            
+        </apex:pageBlockSection>  
+        </apex:pageBlock>
+    
+    </apex:form>
+</apex:page>

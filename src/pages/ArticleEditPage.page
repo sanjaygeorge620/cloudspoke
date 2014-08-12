@@ -1,0 +1,24 @@
+<apex:page standardcontroller="Case" Extensions="ArticleEdit" id="pgId" >
+<apex:form id="frId">
+  <apex:pageBlock title="Article Submission Edit" id="pbId">
+
+    <apex:pageblockbuttons >
+        <apex:commandButton value="Save" action="{!Save}"/>
+        <apex:commandButton value="Save & New" action="{!SaveNew}"/>
+        <apex:commandButton value="Cancel" action="{!Cancel}"/>
+    </apex:pageblockbuttons>
+
+    <apex:pageBlockSection title="Information" collapsible="false" columns="1" id="pbsId">
+        <apex:inputField value="{!art.Status__c}" id="stId"/>
+        <apex:inputField value="{!art.Product_Family__c}" required="true"/>
+        <apex:inputField value="{!art.Title__c}"/>
+        <apex:inputField value="{!art.Article__c}"  />
+        <apex:inputField value="{!art.Resolution__c}" />
+        <apex:inputField value="{!art.Internal_Note__c}" />
+        <apex:inputField value="{!art.Department__c}" />
+        <apex:inputField value="{!art.Role__c}" />         
+        <apex:inputField value="{!art.Case_Source__c}" />
+     </apex:pageBlockSection>    
+     </apex:pageBlock>  
+     </apex:form>  
+</apex:page>

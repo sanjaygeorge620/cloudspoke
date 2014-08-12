@@ -1,0 +1,24 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | '+$Label.site.register}" controller="SitesGenericController">
+  <title>{!SITE_NICKNAME+' | '+$Label.site.register}</title>
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}">
+        <apex:define name="javascript">
+              //change icons
+              jQuery('.sprite_cpicons.secondary').removeClass('alert');
+              jQuery('.sprite_cpicons.secondary').addClass('profile');
+        </apex:define>
+        
+        <apex:define name="breadcrumb">
+            {!$Label.site.register}
+        </apex:define>
+        
+        <apex:define name="titlebar">
+             {!$Label.site.user_registration}
+        </apex:define>
+        
+        <apex:define name="content">
+            <p>
+               <apex:outputText escape="false" value="{!SITE_REGISTER_TEXT}" />
+            </p>   
+        </apex:define>
+  </apex:composition>
+</apex:page>

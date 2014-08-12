@@ -1,0 +1,139 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesLibraryController"> 
+<title>{!SITE_NICKNAME} | Results</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+         <!--     jQuery('.toolbar-downloads').addClass('active');-->
+              jQuery('.downloadstable').dataTable( {aaSorting: [], "bLengthChange": false, "iDisplayLength": 10, sDom: 'lfr<"dt_fixed_height"t>ip' }); 
+              $.urlParam = function(name){
+                    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                    return results[1] || 0;
+                } 
+                var workSpace = $.urlParam('workSpace');
+                if(workSpace == "Conference") {
+                    $('#j_id0:j_id2:j_id153:WorkspaceList option:eq(6)').attr('selected', 'selected');
+                }
+            });  
+        </script>
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                <li><a class="current" href="#">Results</a></li>
+            </ul>
+        </div>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.contentversion.accessible || !SITE_TAB_DOWNLOADS}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.contentversion.accessible &&SITE_TAB_DOWNLOADS}">
+            
+            <apex:pageMessages />
+            <div class="column leftcol">
+                <div class="callout download">
+                    <div class="title-bar">
+                        <span class="sprite_cpicons filter">&nbsp;</span>Filters
+                        <span class="returned-results"></span>
+                    </div><!-- /Filters Title Bar -->
+                    <apex:form >
+                        <div class="vertical-form" >
+                            <p>
+                                <label>Library: </label>
+                                <apex:selectlist size="1" id="WorkspaceList" value="{!SelectedWorkspace}">
+                                         <apex:selectoptions id="workspace"  value="{!Workspace}"/> 
+                                </apex:selectlist>
+                            </p>
+                            <p>
+                                <label>Track: </label>
+                                <apex:selectlist size="1" id="TrackList" value="{!SelectedTrack}">
+                                     <apex:selectoptions id="Track"  value="{!TrackOptions}"/> 
+                                </apex:selectlist>
+                            </p>
+                                
+                            <p>
+                                <apex:outputLabel rendered="false">Title Search:</apex:outputLabel> 
+                                <apex:inputText rendered="false"  value="{!searchbox}"/>
+                            </p> 
+                            
+                            <p>
+                                <apex:commandButton style="float:right;" styleclass="buttons" action="{!runQuery}" reRender="TheResults, error" status="SearchSpinner" value=" " rendered="false"/>
+                                <apex:commandButton style="float:right;" styleclass="submitbutton" action="{!runQuery}" value=" "/>
+                                <apex:commandButton style="float:right;" styleclass="cancel-button" action="{!Reset}" reRender="TheResults, error" value=" " rendered="false"/>
+                                <div class="clear"/>
+                                <span class="spinner">
+                                        <apex:actionStatus id="SearchSpinner" >
+                                            <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.WebContent, 'images/common/spinner.gif')}" /></apex:facet>
+                                        </apex:actionStatus>    
+                                </span>
+                            </p>    
+                        </div>
+                    </apex:form>
+                    
+                </div><!-- /filter-->
+            </div><!-- /Left Column -->
+            
+            <div class="column right-23">
+                <div class="callout downloads">
+                    <div class="title-bar">
+                        <span class="sprite_cpicons downloads">&nbsp;</span>Results
+                        <span class="returned-results">Filtered Results (max display: 1000 records)</span>
+                    </div><!-- /Downloads Results Title Bar -->
+                 <div class="callout-content">
+                            <apex:outputPanel layout="block">
+                                    <table cellpadding="0" cellspacing="0" border="0" class="display downloadstable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Type</th>
+                                                    <th>Title</th>
+                                                    <th>Date Published</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <apex:repeat value="{!ContentWorkspaceDocs}" var="c">
+                                                  <tr>  
+                                                        <td class="download-type">
+                                                            <apex:image url="{!
+                                                                        if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'XML'),URLFOR($Resource.WebContent, 'images/icons/doctype_xml_16.png'), 
+                                                                        if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'EXE'),URLFOR($Resource.WebContent, 'images/icons/doctype_exe_16.png'), 
+                                                                        if(OR(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'WORD'),Contains(c.ContentDocument.LatestPublishedVersion.FileType,'RTF')),URLFOR($Resource.WebContent, 'images/icons/doctype_word_16.png'), 
+                                                                        if(OR(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'POWER_POINT'),Contains(c.ContentDocument.LatestPublishedVersion.FileType,'POWER_POINT_X')),URLFOR($Resource.WebContent, 'images/icons/doctype_ppt_16.png'), 
+                                                                        if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'TXT'),URLFOR($Resource.WebContent, 'images/icons/doctype_txt_16.png'), 
+                                                                        if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'ZIP'),URLFOR($Resource.WebContent, 'images/icons/doctype_zip_16.png'), 
+                                                                        if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'PDF'),URLFOR($Resource.WebContent, 'images/icons/doctype_pdf_16.png'), 
+                                                                        URLFOR($Resource.WebContent, 'images/icons/doctype_unknown_16.png'))))))))}"/>
+                                                                        
+                                                       
+                                                       
+                                                        </td>
+                                                        <td class="download-meta">
+                                                              <apex:outputLink value="{!$page.libraryDetails}" styleClass="results-acct-id">{!SUBSTITUTE(c.ContentDocument.Title,'_',' ')}
+
+                                                                <apex:param name="id" value="{!c.ContentDocument.id}"/>
+                                                             </apex:outputLink>
+                                                              <!-- <apex:outputlink style="font-weight:bold;" target="_document" value="{!$Site.prefix}/sfc/servlet.shepherd/version/download/{!c.ContentDocument.LatestPublishedVersion.id}">{!SUBSTITUTE(c.ContentDocument.Title,'_',' ')}</apex:outputlink> -->
+
+                                                                    ({!if(c.ContentDocument.LatestPublishedVersion.ContentSize>1,ROUND(c.ContentDocument.LatestPublishedVersion.ContentSize / 1048576,2),c.ContentDocument.LatestPublishedVersion.ContentSize)}MB)
+                                                                    <p style="padding-left:8px;">
+                                                                    {!c.ContentDocument.LatestPublishedVersion.Type__c}<br />
+                                                            <!--        Track: {!if(c.ContentDocument.LatestPublishedVersion.Track__c!='',SUBSTITUTE(c.ContentDocument.LatestPublishedVersion.Track__c,';',', '),'n/a')}<br />-->
+                                                                    Presenter: {!if(c.ContentDocument.LatestPublishedVersion.Presenter__c!='',SUBSTITUTE(c.ContentDocument.LatestPublishedVersion.Presenter__c,';',', '),'n/a')}<br />
+                                                                    </p>     
+                                                        
+                                                        </td>
+                                                        <td class="download-date"><apex:outputText value="{0,date, yyyy/MM/dd}"><apex:param value="{!c.ContentDocument.LatestPublishedVersion.CreatedDate}" /></apex:outputText></td>
+                                                  </tr>
+                                                 </apex:repeat>
+                                            </tbody>
+                                      </table>
+                           </apex:outputPanel> 
+                           
+                        
+                        
+                     
+                </div>
+                </div><!-- /Downloads  Results -->
+            </div><!-- /Right Two-Thirds -->
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

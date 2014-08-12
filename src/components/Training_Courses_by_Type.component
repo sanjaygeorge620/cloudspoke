@@ -1,0 +1,16 @@
+<apex:component controller="TrainingDisplayController">
+      <apex:attribute assignTo="{!CourseRelease}" name="CourseRelease" description="Course Release" type="String" required="true"/>
+      <apex:pageBlocksection title="{!CourseRelease} Courses" columns="1" rendered="{!NOT(ISNULL(CoursesbyRelease))}">
+          <apex:pageBlockTable value="{!CoursesbyRelease}" var="c">
+                <apex:column style="width:25%;" headerValue="Course Name">
+                            <apex:outputLink value="{!$Page.Training_Course_Description}">
+                                {!c.name}
+                                <apex:param name="id" value="{!c.ID}"/>
+                            </apex:outputLink>
+                </apex:column>
+                <apex:column style="width:60%;" headerValue="Description" value="{!c.Short_Description__c}"/>
+                <apex:column style="width:15%;" value="{!c.Class_Duration__c}"/>
+                <!---<apex:column style="width:5%;" value="{!c.Release__c}"/>--->
+          </apex:pageBlockTable>
+      </apex:pageBlocksection>    
+</apex:component>

@@ -1,0 +1,12 @@
+<apex:component controller="SitesIdeasController">
+      <apex:repeat value="{!FeaturedIdeas}" var="fi">
+      <apex:form >
+          <div class="callout fi">
+                <span class="title-bar" href="#"><span class="sprite_cpicons fi">&nbsp;</span>Featured Idea</span>
+                <div class="callout-content">
+                    <c:ideaViewDetails idea="{!fi}" howUserVoted="{!howUserVoted}" />       
+                </div>
+            </div><!-- /Featured Idea -->      
+        </apex:form>
+       </apex:repeat>     
+</apex:component>

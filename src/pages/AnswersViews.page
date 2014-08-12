@@ -1,0 +1,3 @@
+<apex:page title="Answers Administration" tabStyle="Answers_Views__tab" >
+    <apex:enhancedList height="600" type="Question" />
+</apex:page>

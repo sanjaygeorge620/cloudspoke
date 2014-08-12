@@ -1,0 +1,81 @@
+<apex:page showHeader="false" Controller="SitesOrderController" standardStylesheets="false"> 
+<title>{!SITE_NICKNAME} | Details</title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-orders').addClass('active');
+          jQuery('.ordertable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Orders</a></li>
+                </ul>
+            </div> 
+            <apex:outputPanel rendered="{!!$ObjectType.Order__c.accessible || !SITE_TAB_ORDERS}">
+                  Insufficient Privileges
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!$ObjectType.Order__c.accessible  && SITE_TAB_ORDERS}">
+                
+            <apex:pageMessages />
+            
+            <div class="column full-width">
+                <div class="callout orders">
+                    
+                    
+                    <!-- Closed Won -->
+                    <span class="title-bar all-orders">Orders
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Orders.size==0}" value="No orders to display" />
+                            <apex:outputPanel rendered="{!orders.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display ordertable">
+                                    <thead>
+                                        <tr>
+                                            <th>Order Number</th>
+                                            <th>Amount</th>
+                                            <th>Close Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Orders}" var="o">
+                                          <tr>  
+                                                <td class="order-id">
+                                                    <apex:outputLink value="{!$page.orderdetails}" styleClass="results-order-id">{!o.Name}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="order-Amount">{!o.Amount__c}</td>
+                                                <td class="order-CloseDate">{!o.Close_Date__c}</td>
+                                                <td class="order-status">{!o.Status__c}</td>
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+                    <!-- /Closed Won -->
+                    
+                   
+                                
+                    
+                    
+                </div><!-- /Opportunities-->
+            </div><!-- /Right Two-Thirds -->
+            
+        </apex:outputPanel><!-- /Cp Core -->
+           
+        </div>
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

@@ -1,0 +1,79 @@
+<apex:page standardController="task">
+<apex:includeScript value="/support/console/26.0/integration.js"/>
+<apex:includeScript value="/soap/ajax/26.0/connection.js"/>
+
+  <script>
+ 
+ // window.parent.location="/00T/e?retURL=%2Fhome%2Fhome.jsp&RecordType={!$Label.LX_RecordType_Standard_Task}&ent=Task&nooverride=1"
+ 
+  var aQueryString = (location.search.substr(1)).split("&");
+  var RecordType='';
+  var URLPar='';
+  var retURL='';
+ var Communication='';
+
+    for (var i = 0; i < aQueryString.length; i++) 
+    {
+        var aTemp = aQueryString[i].split("=");
+        if (aTemp[1].length > 0) 
+        {
+        
+        if(aTemp[0]!='save_new')
+            URLPar+=aTemp[0]+'='+aTemp[1]+'&';
+        
+            if(aTemp[0]=='tsk12')
+            {
+            
+            RecordType='yes'; 
+            }
+            
+            if(aTemp[0]=='Communication')
+            {
+            
+            Communication='yes';
+            }
+            
+            if(aTemp[0]=='retURL')
+            {
+            
+            retURL=aTemp[1];
+            }
+                      
+        }
+    }  
+   // alert('=='+URLPar);
+   if(Communication=='yes')
+   {
+   if (sforce.console.isInConsole()) 
+   { 
+    sforce.console.getFocusedSubtabId(function(showTabId)
+{
+sforce.console.closeTab(showTabId.id);
+});
+
+sforce.console.getEnclosingPrimaryTabId(function(test)
+{
+sforce.console.openSubtab(test.id,'/00T/e?'+URLPar+'&RecordType={!$Label.Lx_Task_Log_Communication}&ent=Task&nooverride=1', true, '', null);
+});
+   }
+   else
+   {
+   window.parent.location="/00T/e?"+URLPar+"&RecordType={!$Label.Lx_Task_Log_Communication}&ent=Task&nooverride=1";
+   }  
+   }
+ 
+   else if( RecordType=='yes')
+    {
+    //alert(window.location.search);
+    window.parent.location="/00T/e?"+URLPar+"&RecordType={!$Label.Lx_Task_Log_a_Call}&ent=Task&nooverride=1";
+    }
+    else
+    {
+    window.parent.location="/00T/e?retURL="+retURL+"&RecordType={!$Label.LX_RecordType_Standard_Task}&ent=Task&nooverride=1"
+    
+    }       
+            
+            
+            
+             </script>
+</apex:page>

@@ -1,0 +1,110 @@
+<apex:page id="pgPrintUserStories" controller="PrintUserStoriesController"
+    sidebar="false" showChat="false" showHeader="false" standardStylesheets="false">
+    <apex:includeScript value="{!URLFOR($Resource.Planomatic, 'js/jquery-1.3.2.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.QRCode,     'jquery.qrcode.min.js')}" />  
+    <apex:includeScript value="{!URLFOR($Resource.QRCode,     'src/qrcode.js')}" />
+    
+    <style>
+    
+        body{
+            font-family: Verdana;
+        }
+    
+        .userStoryCard{
+                    
+            height: 13cm;
+            width:18.5cm;           
+            margin-left: 1cm;
+            margin-bottom: 2cm;
+            border:dashed 1px Black;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }       
+        #usCardtableCol11{
+            min-width:0.5cm;
+            min-height: 2.3cm;              
+        }
+        #usCardtableCol12{
+            min-width:3.0cm;
+            min-height: 2.3cm;          
+        }
+        .col3{
+            min-width:10.5cm;
+            min-height: 2.3cm;
+        }
+        .col4{
+            min-width:3.0cm;
+            min-height: 2.3cm;
+            font-size: 16pt;
+        }
+        .col5{
+            min-width:1.0cm;
+            min-height: 2.3cm;
+        }
+        #usCardtableCol21{
+            min-width:0.5cm;
+            min-height: 7cm;
+        }
+        .cardRow2Col2{
+            font-size: 26pt;
+            
+            height:7cm;
+            vertical-align:top;         
+        }
+        
+    </style> 
+    <apex:form id="frmPrintUserStories">
+        <apex:outputPanel id="outPnlUserStories" layout="block">
+            <apex:repeat id="rptPrintUserStories" value="{!UserStories}" var="userStory">
+                <div id="userStoryCard" class="userStoryCard">
+                    <table id="usCardtable">
+                        <tr id="usCardtableRow1" class="row1">
+                            <td id="usCardtableCol11"></td>
+                            <td id="usCardtableCol12">
+                                <h2>{!userStory.Name}</h2>
+                            </td>
+                            <td id="usCardtableCol13" class="col3">&nbsp;</td>  
+                            <td id="usCardtableCol14" class="col4">
+                                <apex:outputPanel rendered="{!LEN(userStory.SFDC_Story_Points__c)>0}">
+                                SFDC: {!userStory.SFDC_Story_Points__c}<br />
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!LEN(userStory.Story_points__c)>0}">
+                                FLEX: {!userStory.Story_points__c}<br />
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!LEN(userStory.Story_Points_SAP__c)>0}">
+                                SAP:  {!userStory.Story_Points_SAP__c}<br />
+                                </apex:outputPanel>
+                            </td>
+                            <td id="usCardtableCol15" class="col5"></td>                         
+                        </tr>
+                        <tr id="usCardtableRow2" >
+                            <td id="usCardtableCol21"></td> 
+                            <td id="usCardtableCol22" colspan="4" class="cardRow2Col2">
+                                {!userStory.User_Story__c}
+                            </td>                                                
+                        </tr>
+                        <tr id="usCardtableRow3">
+                            <td id="usCardtableCol31"></td>
+                            <td id="usCardtableCol32"> <h2>Priority: {!userStory.Priority__c} </h2></td>
+                            <td id="usCardtableCol33"></td>
+                            <td id="usCardtableCol34_{!userStory.Id}"> 
+                                <script type="text/javascript">                                 
+                                    jQuery('#usCardtableCol34_{!userStory.Id}').qrcode({
+                                        render  : "canvas",
+                                        text    : "{!sfdcBaseURL}/apex/mobileTracker?userStoryId={!userStory.Id}",
+                                        width   : 100,
+                                        height  : 100,
+                                        typeNumber  : -1,
+                                        encoding: 'UTF-8'
+                                    });
+                                </script>
+                                 
+                                                               
+                            </td>                            
+                        </tr>                                                                       
+                    </table>
+                </div>
+            </apex:repeat>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

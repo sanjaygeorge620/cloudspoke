@@ -1,0 +1,22 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:component >
+	<apex:attribute name="postings" type="PostingHelper[]" description="List of postings" required="true"/>
+	<apex:attribute name="doRender" type="boolean" description="Should the list be rendered" required="true"/>	
+	<apex:attribute name="msg" type="String" description="Message to display if there are no posts" required="true"/>
+	<apex:attribute name="cat" type="boolean" description="Display the category" required="true"/>
+	
+	<apex:dataList styleClass="postList" value="{!postings}" var="i" rendered="{!doRender}">
+		    <a href="/{!i.posting.id}"><apex:outputText value="{!i.posting.title__c}"/></a> 
+		    <apex:outputPanel rendered="{!NOT(ISNULL(i.posting.Price__c))}">
+		    	&nbsp;-&nbsp;<apex:outputField value="{!i.posting.Price__c}"/>
+		    </apex:outputPanel>
+		    <apex:outputPanel rendered="{!cat}">
+		    &nbsp;<i>(<apex:outputText value="{!i.posting.category__c}"/>)</i>
+		    </apex:outputPanel>
+		    <apex:outputText styleClass="date" value="{!i.localtime}"/>
+	</apex:dataList>
+	<apex:outputPanel layout="block" rendered="{!NOT(doRender)}">
+		<br/>
+		<apex:outputText value="{!msg}"/>
+	</apex:outputPanel>
+</apex:component>

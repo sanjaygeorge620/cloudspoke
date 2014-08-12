@@ -1,0 +1,46 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesGenericController"> 
+<apex:define name="javascriptcalls">
+       <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-documentation').addClass('active');
+          scaletowindow('#itarget',900,300);
+        });
+            
+        jQuery(window).resize(function() {
+          scaletowindow('#itarget',900,300);
+        });
+                
+        </script>
+     </apex:define>  
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+      <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | Product Documentation</title>
+    </apex:define>
+       
+    <apex:define name="body">  
+        
+        <div class="banner grid full-width breadcrumb">
+         <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                    <li><a class="current" href="{!$page.Documentation}">Product Documentation</a></li>
+                </ul>
+            </div> 
+                     </div>    
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!SITE_TAB_DOCUMENTATION}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!SITE_TAB_DOCUMENTATION}">
+            <apex:pageMessages />
+            
+            <apex:outputPanel layout="block" rendered="{!SITE_PROD_DOC_URL!=''}">
+                <iframe class="iframe-documentation" frameborder="0" height="900" id="itarget" name="itarget" scrolling="Auto" src="{!SITE_PROD_DOC_URL}" title="Content" width="99%" ></iframe>
+            </apex:outputPanel>
+            
+            <apex:outputPanel layout="block" rendered="{!SITE_PROD_DOC_URL==''}">
+                    <h3>Product Documentation is currently unavailable.</h3>
+            </apex:outputPanel>
+        </apex:outputPanel>  
+    </apex:define>
+  </apex:composition>
+</apex:page>

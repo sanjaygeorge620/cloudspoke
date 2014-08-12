@@ -1,0 +1,36 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | '+$Label.site.error2}" controller="SitesGenericController">
+ 
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}">
+         <apex:define name="title"> 
+      <title>{!SITE_NICKNAME+' | '+$Label.site.error2}</title>
+    </apex:define>
+        
+       <apex:define name="javascriptcalls">
+              //change icons
+              //jQuery('.sprite_cpicons.secondary').removeClass('alert');
+              //jQuery('.sprite_cpicons.secondary').addClass('  ');
+        </apex:define>
+        
+        <apex:define name="breadcrumb">
+             {!$Label.site.error2}
+        </apex:define>
+        
+        <apex:define name="titlebar">
+             {!$Label.site.error2}
+        </apex:define>
+        
+        <apex:define name="content">
+            <p>
+                <apex:outputText value="{!$Label.site.error}">      
+                   <apex:param value="{!$Site.ErrorMessage}"/>
+               </apex:outputText>
+              <br/>
+              <br/>
+              <apex:outputText escape="false" value=" {!$Label.site.get_in_touch}">
+               <apex:param value="mailto:{!$Site.AdminEmailAddress}"/>
+               <apex:param value="{!$Label.site.email_us}"/>
+              </apex:outputText>
+            </p>    
+        </apex:define>
+  </apex:composition>
+</apex:page>

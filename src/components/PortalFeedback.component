@@ -1,0 +1,52 @@
+<apex:component controller="PortalFeedbackController" allowDML="true">
+<apex:attribute assignTo="{!ReferenceTitle}" name="RefTitle" required="true" description="Title that will be passed into the controller" type="String"/>
+<apex:attribute assignTo="{!ReferenceID}" name="RefID" required="true" description="ID that will be passed into the controller" type="String"/>
+<apex:attribute assignTo="{!ReferenceType}" name="RefType" required="true" description="Type of object that will be passed into the controller" type="String"/>
+<apex:attribute assignTo="{!ReferenceURL}" name="RefURL" required="true" description="URL that will be passed into the controller" type="String"/>
+
+
+<style>
+    #corefeedback{width:800px;margin:5px;font:10px verdana, arial;}
+    #fieldplacement{width:800px;font:11px verdana, arial;color:#666;}
+    #fieldplacement td{padding:5px;font:11px verdana, arial;color:#666;}
+    input.feedback {background:url();background-color:#799ECB;color:white;float:left;margin-top:10px;height:25px;width:60px;}
+</style>
+<apex:pageMessages /><!---Error Messages --->
+
+
+<div id="corefeedback">
+    <apex:form >    
+        <apex:outputPanel rendered="{!not(ShowFeedback)}">Thank you for your feedback!</apex:outputPanel>
+        <apex:outputPanel id="fb" rendered="{!ShowFeedback}">
+          
+            <div id="fieldplacement">
+                <apex:actionRegion >
+                    <apex:panelGrid id="feedback_q" columns="4">
+                            <apex:outputText style="font-weight:bold;" value="Is this the topic you were looking for?" />
+                            <apex:selectRadio id="looking_for" value="{!lookingforpicklist}">
+                                        <apex:selectOptions value="{!items}"/>
+                                        <apex:actionSupport event="onclick" rerender="feedback_q" status="status"/>
+                            </apex:selectRadio>
+                            
+                            <apex:outputText style="font-weight:bold;" rendered="{!lookingforpicklist='True'}" 
+                                            value="Did this topic resolve your issue?" />
+                            <apex:selectRadio rendered="{!lookingforpicklist='True'}" id="resolve_issue" value="{!resultspicklist}">
+                                              <apex:selectOptions value="{!items}"/>
+                            </apex:selectRadio>
+                    </apex:panelGrid>
+                    <!---<p><apex:actionStatus startText="started" stopText="stopped" id="status"/></p>--->
+                </apex:actionRegion>     
+                  
+               <apex:outputLabel value="Comments:" for="comment"/><p />
+               <apex:inputTextarea id="comment" style="height:50px; width:800px;" value="{!Comment}"/>
+               <apex:commandButton styleClass="feedback"  reRender="feedbackmsg" value="Submit" action="{!Save}" oncomplete="submitme();"/> 
+               <apex:actionFunction action="{!HideFeedback}" name="submitme" status="thanks"/>
+               <apex:actionStatus startText="Thank you for your feedback!" stopText="" id="thanks"/>
+               
+            </div>
+                            
+    </apex:outputPanel>
+    </apex:form>
+</div>
+
+</apex:component>

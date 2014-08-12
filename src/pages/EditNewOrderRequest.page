@@ -1,0 +1,27 @@
+<apex:page standardController="LX_New_Order_Request__c" extensions="EditNewOrderRequest_Extension">
+     <apex:form >   
+     <apex:messages />
+        <apex:pageBlock title="New Order Request" mode="edit">
+        
+              <apex:pageBlockButtons >
+                <apex:commandButton action="{!saveNewReq}" value="Save"/>
+                <apex:commandButton action="{!cancel}" value="Cancel"/>
+              </apex:pageBlockButtons>
+              
+              <apex:pageBlockSection title="Order Details" columns="1">
+                <apex:outputField value="{!thisReq.LX_Account_Name__c}"/>
+                <apex:outputField value="{!thisReq.LX_Opportunity__c}"/>
+                <apex:outputField value="{!thisReq.LX_SAP_Contract_Number__c}"/>
+                <apex:inputField value="{!thisReq.LX_License_End_User__c}" required="true"/>
+                <apex:inputField value="{!thisReq.License_Contact__c}" required="true"/>
+                <apex:inputField value="{!thisReq.LX_SMSA_End_Date__c}" required="true"/>
+                <apex:inputField value="{!thisReq.LX_SMSA_Start_Date__c}" required="true"/>
+                <!--<apex:inputField value="{!thisReq.LX_Bill_To_ID__c}" required="true"/>
+                <apex:inputField value="{!thisReq.LX_Ship_To_ID__c}" required="true"/> -->
+                <apex:inputField value="{!thisReq.LX_PO_Number__c}"/>
+                <apex:inputField value="{!thisReq.LX_Special_Billing_Instructions__c}"/>
+              </apex:pageBlockSection>
+              
+        </apex:pageBlock>       
+  </apex:form> 
+</apex:page>

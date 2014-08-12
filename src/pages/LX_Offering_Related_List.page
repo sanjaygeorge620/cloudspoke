@@ -1,0 +1,60 @@
+<apex:page standardController="opportunity" extensions="LX_OfferingExtension" sidebar="true">
+  <apex:form id="theform" >
+      <apex:pageBlock mode="maindetail">
+      <apex:pageBlockButtons location="top">
+      
+      <apex:commandButton value="New Offering/Solution" onclick="window.open('/setup/ui/recordtypeselect.jsp?ent={!$Label.LX_Offering_Record_Selec}&save_new_url=%2Fa2H%2Fe%3FretURL%3D%252Fa2H%252Fo&{!$Label.LX_Offering_Opportunity_Name}={!URLENCODE(Opportunity.Name)}&{!$Label.LX_Offering_Opportunity_ID}={!Opportunity.Id}&{!$Label.LX_Offering_Account_Name}={!URLENCODE(Opportunity.Account.NAme)}&{!$Label.LX_Offering_Account_Id}={!Opportunity.AccountId}&{!$Label.LX_Offering_Sector}={!URLENCODE(Opportunity.Sector__c)}&retURL=%2F{!Opportunity.Id}&{!$Label.LX_Offering_Department}={!Opportunity.Department__c}','_parent');"  title="New Solution"/>
+      </apex:pageBlockButtons>
+      <!-- <apex:outputLink target="_top" value="/setup/ui/recordtypeselect.jsp?ent=01Ii0000000IPRU&save_new_url=%2Fa2H%2Fe%3FretURL%3D%252Fa2H%252Fo&CF00Ni0000001ufi0={!Opportunity.Name}&CF00Ni0000001ufi0_lkid={!Opportunity.Id}&CF00Ni0000001ufhv={!Opportunity.Account}&CF00Ni0000001ufhv_lkid={!Opportunity.AccountId}&00Ni0000001ufi3={!Opportunity.Sector__c}&retURL=%2F{!Opportunity.Id}&00Ni0000001ufhx={!Opportunity.Department__c}" id="CreateNewOffering">New Offering</apex:outputLink>-->
+       <apex:pageblockTable value="{!OfferingList}" var="Off" id="OfferingTabID">
+               <apex:column headerValue="Edit">
+                      <apex:outputLink target="_parent" value="/{!Off.id}/e?retURL={!OppRec.Id}" id="theLink">Edit</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Delete">
+                       <apex:outputLink value="javascript:;" target="_parent" onclick="DeleteFunction('{!Off.id}');">Del</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Record Type">
+                      <apex:outputText value="{!Off.RecordType.Name}"/>
+                </apex:column>
+                <apex:column headerValue="Solution">
+                      <apex:outputText value="{!Off.Business_Solution__c}"/>
+                 </apex:column>
+               <!-- <apex:column headerValue="Account">
+                      <apex:outputText value="{!Off.Account__r.Name}"/>
+                  </apex:column>                  
+                  <apex:column headerValue="Vertical">
+                      <apex:outputText value="{!Off.Sector__c}"/>
+                  </apex:column>-->
+                  
+                  <apex:column headerValue="Solution Status">
+                      <apex:outputText value="{!Off.Solution_Status__c}"/>
+                  </apex:column>
+                  
+                  <apex:column headerValue="Created Date">
+                   <apex:outputText value="{0,date,MM/dd/yyyy}">
+                        <apex:param value="{!Off.CreatedDate}" />
+                   </apex:outputText>
+                  </apex:column>
+       </apex:pageblockTable>
+      </apex:pageBlock>
+      
+       
+         <apex:outputpanel >
+             <apex:actionFunction action="{!DeleteOffering}" name="DeleteOffering" reRender="theform" oncomplete="window.open('/{!OppRec.Id}','_top');">
+                  <apex:param name="OffID" value="OffID" assignTo="{!SelectedOfferingId}"/>  
+            </apex:actionFunction> 
+        </apex:outputpanel>
+         <script>
+        function DeleteFunction(id1)
+        {
+        
+        var r=confirm('Are you sure?');
+        if (r==true)
+          {
+            DeleteOffering(id1);
+          }
+        
+        }
+        </script>
+   </apex:form>
+</apex:page>

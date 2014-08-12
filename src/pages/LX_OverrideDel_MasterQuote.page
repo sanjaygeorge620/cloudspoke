@@ -1,0 +1,33 @@
+<apex:page standardController="LX_Master_Quote_Line_Item__c" extensions="LX_MasterQuoteExtn">
+     <apex:Form >
+         <apex:outputPanel rendered="{!IF(del_MQList.size!=0,true,false)}"> 
+            <apex:pageBlock >
+                 <apex:pageBlockSection columns="1" >
+                  <h3 style="color:red;"><b> The following Master Quote Line Items will be deleted.</b></h3><br/>
+                     <apex:pageBlockTable value="{!del_MQList}" var="MQ" >
+                         <apex:repeat value="{!fields}" var="f">
+                             <apex:column headerValue="{!f.label}">
+                                 <apex:outputField value="{!MQ[f]}"  />
+                             </apex:column>
+                         </apex:repeat>
+                     </apex:pageBlockTable><br/>
+                   </apex:pageBlockSection>
+                   <apex:pageBlockButtons >
+                       <apex:commandButton action="{!deleteList}" value="Delete"/>
+                       <apex:commandButton action="{!Cancel}" value="Cancel"/>
+                    </apex:pageBlockButtons>
+             </apex:pageBlock>
+         </apex:outputPanel>
+         <apex:outputPanel rendered="{!IF(del_MQList.size!=0,false,true)}"> 
+             <apex:pageBlock >
+                 <apex:pageBlockSection >
+                     <h2 style="color:red;"><b>  Are you sure you want to delete the Master Quote Line Item Record? </b> </h2><br/>
+                 </apex:pageBlockSection>
+                 <apex:pageBlockButtons >
+                     <apex:commandButton action="{!deleteSingle}" value="Delete"/>
+                     <apex:commandButton action="{!Cancel}" value="Cancel"/>
+                 </apex:pageBlockButtons>
+             </apex:pageBlock>
+         </apex:outputPanel>
+     </apex:Form>
+ </apex:page>

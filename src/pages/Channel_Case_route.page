@@ -1,0 +1,122 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesCaseSubmitController"> 
+<title>{!SITE_NICKNAME} | Case Submit</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript"> 
+                jQuery(document).ready(function() {                              
+                  jQuery(".toolbar-cases").addClass("active");
+                  jQuery(".accbody").hide();
+                  jQuery(".accbody.step1.Showthisdiv").hide();
+                  jQuery(".accbody.step1").slideToggle("slow");
+                  jQuery(".environment").focus();
+                  jQuery(".field").val() == "Yes" ? jQuery(".hide1").show(1000):(jQuery(".hide1").hide());
+                  
+                  //disable enter
+                  jQuery("#landing").keyup(function(a) {
+                    if(a.keyCode == 13) {
+                      return!1
+                    }
+                  });
+                  jQuery(".field").change(function()
+                  {
+                   jQuery(".field").val() == "Yes" ? jQuery(".hide1").show(500):(jQuery(".hide1").hide(500));
+                  });
+                  //step 1
+                  jQuery(".case-subject-search").click(function() {
+                    jQuery(".new-case-subject").val() == "" || jQuery(".new-case-subject").val() == "Type in Subject here" ? jQuery(".new-case-subject").addClass("required-field") : (jQuery(".new-case-subject").removeClass("required-field"), jQuery(".accbody.step2").slideDown("slow"), jQuery(".accheader.step1").addClass("finished"), jQuery(".accheader.step2, .case-nav.recommended").addClass("active"), jQuery.scrollTo("#step2", 1E3), jQuery(".results-contents li:odd").addClass("odd"));
+                    return!1
+                  });                 
+                });
+        </script> 
+        <style>
+.custom
+{
+text-align:center;
+color:blue;
+}
+</style>
+       
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                <li><a href="{!$Page.Cases}">Cases</a><span>&#187;</span></li>
+                <li><a class="current" href="#">New Case</a></li>
+            </ul>
+        </div>  
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.case.accessible || !SITE_TAB_CASES_CHANNEL}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.case.accessible  && SITE_TAB_CASES_CHANNEL}">
+          
+            
+            
+            <div class="column right-23 column-23">
+                <apex:pageMessages id="error" />
+               
+                <apex:outputPanel rendered="{!!$ObjectType.case.createable}">
+                    <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+                </apex:outputPanel>
+              
+<!---Customer Portal---->
+              <!-- <apex:outputPanel rendered="{!$ObjectType.case.createable && SITE_CASE_RECORDTYPE=='Product Support'}">  -->
+               <apex:outputPanel rendered="true"> 
+                 <div class="callout cases">
+                    <div class="title-bar">
+                        <span class="sprite_cpicons submit-case">&nbsp;</span>Submit New Case
+                    </div><!-- /Cases Title Bar -->
+                                        
+                <apex:form > 
+                    <apex:actionFunction immediate="true" name="submitfeedback" action="{!SubmitFeedback}"/>
+                    
+                    
+                       
+                    <div class="case-accordion">
+                        <div id="step1" class="title-bar active accheader step1"><span class="barNum">1.</span> Get Started</div>
+                        <div class="content-inner accbody step1">
+                            <div class="inner-left-col">
+                                <p>          
+                                       <p style = "padding-left: 10px;"> Is this related to an issue with one of your customers                                        
+                                        <select class="field" name="cars"> 
+                                        <option value="No">No</option>                                         
+                                        <option value="Yes">Yes</option>                                                                                                                      
+                                        </select>
+                                        </p>
+                                        <br/>
+                                       <div class = "hide1">
+                                       <p style = "padding-left: 10px; width: 300px;font-weight:bold;">Please Select the Customer from the following list</p>
+                                       
+                                        <p style = "padding-left: 10px;">Select Customer: 
+                                        <apex:selectlist style="padding-left: 0px;" required="false" size="1" id="product" value="{!SelectedAccount}"> 
+                                                 <apex:selectoptions value="{!customers}"/> 
+                                             </apex:selectlist>    
+                                             </p>
+                                       </div>
+                                     
+                                </p>
+                            </div><!-- /Inner-Left-Col -->
+                            
+                            <div class="clear"/>
+                            <apex:actionRegion >
+                                <div class="inner-left-col case-search">
+                                   <p>
+                                   <apex:commandButton styleclass="case-subject-search nextbutton" action="{!routecase}" value="Save" id="theButton"/>                                        
+                                   </p>     
+                                </div><!-- /Case Search Field -->
+                            </apex:actionRegion>
+                        </div><!-- /Content-Inner -->
+
+                        
+                
+                    </div><!-- /Case Accordion -->
+             </apex:form>       
+                </div><!-- /Cases -->
+                </apex:outputPanel>
+            </div><!-- /Right Two-Thirds -->
+            
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

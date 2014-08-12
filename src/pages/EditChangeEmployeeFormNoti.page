@@ -1,0 +1,48 @@
+<!--
+Page Name-EditChangeEmployeeFormNoti
+Uses :- Override the edit butoon of New/ Change Employee Form Notfication object record
+        Populate the values from User records and place them in to Employee Form Notfication object record's fields
+Creation date- 09-Aug-2012        
+-->
+
+<apex:page standardController="Employee_Change_Request__c" extensions="EditChangeEmployeeFormNotifyController" action="{!Redirect}" recordSetVar="owner">
+<apex:pageMessages />
+ <apex:sectionHeader title="New/ Change Employee Form Notification Edit" subtitle="{!Employee_Change_Request__c.Name}"/>
+ <apex:form >
+   <apex:pageBlock title="New/ Change Employee Form Notification Edit">
+     <apex:pageBlockButtons >
+       <apex:commandButton value="Submit" action="{!submit}"/>
+       <apex:commandButton value="Cancel" action="{!cancel}"/>
+       <apex:commandButton value="Save" action="{!save}"/>
+     </apex:pageBlockButtons>
+     <div style="background-color:#F7D9BA;padding:3px;padding-left:20px;">
+       <b>Change Details </b>
+     </div>
+     <apex:pageBlockSection columns="2">
+       <apex:inputField value="{!empFormController.Effective_Date__c}" required="true"/>
+       <apex:inputField value="{!empFormController.Correction__c}"/>
+       <apex:inputField value="{!empFormController.Change_Reason__c}" required="true"/>
+       <apex:inputField value="{!empFormController.Desk_Number__c}"/>
+       <apex:inputField value="{!empFormController.New_Department__c}" required="true"/>       
+       <apex:inputField value="{!empFormController.Mobile_Option__c}"/>
+       <apex:inputField value="{!empFormController.New_Sub_Department__c}" required="true"/>
+       <apex:inputField value="{!empFormController.Notes_Creation__c}"/>
+       <apex:inputField value="{!empFormController.Business_Group__c}" required="true"/>
+       <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+       <apex:inputfield value="{!empFormController.Sales_Group__c}" />
+     </apex:pageBlockSection>
+     <br/> 
+     <div style="background-color:#F7D9BA;padding:3px;padding-left:20px;">
+       <b>PeopleSoft – Any changes within these fields will require a PeopleSoft request</b>
+     </div> 
+     <br/>  
+     <apex:pageBlockSection >
+       <apex:outputField value="{!empFormController.Business_Unit__c}"/>
+       <apex:outputField value="{!empFormController.New_Business_Title__c}"/>
+       <apex:outputField value="{!empFormController.New_Manager__c}"/>       
+       <apex:outputField value="{!empFormController.New_Office_Location_City_State__c}"/>
+       <apex:outputField value="{!empFormController.New_Cost_Center__c}"/>
+    </apex:pageBlockSection>   
+   </apex:pageBlock>
+ </apex:form>
+</apex:page>

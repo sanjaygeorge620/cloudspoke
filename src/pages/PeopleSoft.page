@@ -1,0 +1,156 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesController">
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+  <apex:define name="title"> 
+       <title>{!SITE_NICKNAME} | PeopleSoft</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+        <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-documentation').addClass('active');
+          scaletowindow('#itarget',900,300);
+        });
+            
+        jQuery(window).resize(function() {
+          scaletowindow('#itarget',900,300);
+        });
+                
+        </script>
+       </apex:define>
+    <apex:define name="body">  
+       
+       
+         <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                <a class="home" href="{!$Page.Home}">Home</a>
+                <a class="current" href="{!$page.PeopleSoft}">PeopleSoft</a>
+             </nav>
+            </div>
+         </div>      
+        
+         <div class="cp_core">
+            <apex:pageMessages />
+                         <div class="column full-width" >
+                  <div class="callout spotlight">    
+                  <!-- a class="title-bar" href="#"><span class="sprite_cpicons cases-view">&nbsp;</span>Datatel</a -->  
+                    <div class="callout-content">
+                      <br/>
+                         <div><H1 align="center">LearnMode with PeopleSoft</h1></div>
+                         <br />
+                         <hr />
+                         <br />
+                        
+        
+         <div class="callout-content">
+         <p>PeopleSoft is a web-based, ERP (enterprise resource planning) system. While it can be used in a variety of scenarios, it is most commonly integrated with ImageNow in Accounts Payable, Human Resources and Higher Education business processes.</p>
+         <br />
+<p>This page describes the different approaches to learning a PeopleSoft screen. Once a PeopleSoft screen has been successfully learned, it can be used to drive searching within ImageNow using a <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015696?popup=true">view action filter</a>.
+</p>
+         <br />
+         <p></p>
+         <br/>
+         <p><b>Note: </b> To learn a PeopleSoft screen, you will need the global privilege to Manage Application Plans within ImageNow, and optionally, access to PeopleTools, depending on the linking method utilized. </p>
+         <br/>
+         <br/>
+         <h2><font color= "FF9933">PeopleSoft screens (non-shifting values)</font></h2>
+         <br/>
+         <ul>
+         <li><h3>Internet Explorer (IE) LearnMode method</h3></li>
+         <br />
+         <p>If there is a “hard anchor” point on a screen, one that does not move and is consistent across all logins, use the dictionary data element definition of the IE method to capture data values. For details, refer to the <a href="https://perceptivesoftware.secure.force.com/articles/ProductHelp/Help-40001105?retURL=%2Fapex%2Fknowledge%3Fproductdocument%3Dtrue%26producthelp%3Dtrue%26s%3Ddefine%2Ba%2Bdictionary%2Bdata%2Belement%26supportarticle%3Dtrue%26supporttroubleshooting%3Dtrue%252">Define a dictionary data element using Internet Explorer</a> topic in Product Documentation. </p>
+         </ul>
+         <br />
+         <h2><font color= "FF9933">PeopleSoft screens (shifting values condition exists)</font></h2>
+         <br />
+         One challenge to learning PeopleSoft is that the values may shift within the application layer. To account for the shifting values, the following approaches are presented in order of effectiveness.
+         <br/>
+         <br/>
+         
+         <ul>
+         
+         <li><h3>Custom HTML tags</h3></li>
+         <br/>
+         If the HTML locations shift on the PeopleSoft screen, consider <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015576?popup=true">embedding hidden HTML tags</a>. Using anchored hidden HTML tags can be a quick approach for learning a screen.
+         <br />
+         <br />
+        
+         <li><h3>Scripting with Internet Explorer LearnMode functions</h3></li>
+         <br/>
+         On occasion, scripting is a necessary strategy to capture shifting data values when the use of hidden HTML tags is not an option. A VBScript can be designed to specifically locate and retrieve data from an IE element table. The article <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-00004367?popup=true">Using IE LearnMode VBScript functions</a> contains instructions for using a script to capture shifting data values.
+          <br />
+         <br />
+        
+         <li><h3>AppGetData function with AccExplorer</h3></li>
+         <br/>
+         If IE LearnMode VBScript functions are not an option, then AccExplorer can be used to create a VBScript with the AppGetData function to locate needed values. Refer to the <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015686?popup=true">Learning a business application with shifting values using the AppGetData function</a> article in Knowledgebase for more information.
+         <br />
+         <br />
+        
+         <li><h3>Viewpoint </h3></li>
+         <br/>
+         The Viewpoint method can be used to learn a PeopleSoft screen with either Internet Explorer or Mozilla Firefox web browsers. Viewpoint is a good option under the following conditions: 
+         <br/>
+         <br/>
+         <ol>
+       
+          <li>The linking information can be seen on the screen without scrolling.</li>
+          <li>Windows display settings are consistent, since Viewpoint is dependent on window mapping coordinates. </li> 
+          <li>For browser-delivered applications, the locations of browser toolbars are standardized. With toolbars standardized, this method can successfully obtain needed data values for linking.</li> 
+         <br/> 
+          
+         </ol>
+         
+         Refer to <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015659?popup=true">Tips for learning a browser-delivered application using the Viewpoint method</a> in Knowledgebase.
+         <br />
+            <br />
+              
+         <li><H3>HyperLearn</H3></li>
+         <br/>
+          Lastly, if the PeopleSoft screen cannot be learned with the previous options HyperLearn can be employed. Refer to <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015524?popup=true">HyperLearn Overview</a> in Knowledgebase for tips when using HyperLearn.      
+            <br/>
+         <br/>
+       
+         </ul>         
+          <br />
+          <br />
+        <H2><font color= "FF9933">Business Sectors using PeopleSoft: </font></H2>
+        <br/>
+        <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015708?pupup=true"><H3>Learning PeopleSoft for Accounts Payable</H3></a>
+        <br />
+        <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015787?popup=true?pupup=true"><H3>Learning PeopleSoft for Human Resources</H3></a>
+        <br />
+        <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015714?popup=true"><H3>Learning PeopleSoft for Higher Education</H3></a>
+        <br />
+        <br />
+        <br />
+          <div class="column rightcolumn">  
+
+                <div class="callout fd">
+
+                    <a class="title-bar" href="#"><span class="sprite_cpicons fd">&nbsp;</span><font color= "FF9933">Related Topics</font></a>
+
+                    <div class="callout-content">
+                    <br />
+                    <a href="{!$page.LearnModeStrategies}"><h3>LearnMode Strategies</h3></a>
+                    <br/>
+                   <a href="https://www.perceptivesoftware.com/PDFs/other/Integration/6.6/Integrate_ImageNow_PeopleSoft_6.6.pdf"><h3>Integrate ImageNow with PeopleSoft</h3></a>
+                    
+
+                        </div>                        
+                        </div>                        
+                        </div>
+        
+                   
+          
+         </div>
+        
+         </div>
+                           </div>
+                         </div>
+                           </div>
+        
+        
+         </apex:define>
+  </apex:composition>
+</apex:page>

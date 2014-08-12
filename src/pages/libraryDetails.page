@@ -1,0 +1,53 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesLibraryController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <apex:stylesheet value="{!URLFOR($Resource.Perceptive_Sites, 'css/inspire.css')}"/>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-home').addClass('active');
+              jQuery('#inspirekey').scrollFollow();
+              Shadowbox.init();
+            });
+        </script>
+        
+        <div class="cp_core">
+            <apex:pageMessages />
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                    <li><a href="library?workspace=05870000000PNYtAAO">Results</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Result Details</a></li>
+                </ul>
+            </div> 
+            <div class="column full-width">
+                <div class="callout inspire">
+                    <span class="title-bar" href="#"><span class="sprite_cpicons imagenow">&nbsp;</span>{!c.ContentDocument.Title}</span>
+                    <div class="callout-ap">
+                            <table>
+                                <tr>
+                                <td style="vertical-align: top;">
+                                    
+                                </td>
+                                <td>
+                                  <table id="inspirepresentation">
+                                        <tbody>
+                                           <embed id="renditionlarge" width="750px" height="750px" align="middle" type="application/x-shockwave-flash" wmode="opaque" pluginspage="http://www.adobe.com/go/getflashplayer" allowfullscreen="true" allowscriptaccess="sameDomain" name="renditionlarge" bgcolor="#ffffff" quality="high" flashvars="shepherd_prefix=/sfc/servlet.shepherd&v={!contentRecord}" src="/_swf/121310/sfc/flex/DocViewer.swf"></embed>
+                                           <noembed>&lt;p&gt;Flash file preview&lt;/p&gt;</noembed>
+                                        </tbody>    
+                                  </table>
+                                </td>
+                             </tr>
+                           </table>
+
+
+                    </div>
+
+                </div><!-- /inspire-->
+
+            </div><!-- /Full Width Column -->   
+               
+               
+        </div>        
+    </apex:define>
+  </apex:composition>
+</apex:page>

@@ -1,0 +1,46 @@
+<apex:page showHeader="true" sidebar="false" applyHtmlTag="true" controller="BIReportsController">
+     <apex:form >
+          <apex:actionFunction name="displayDashboard" action="{!displayReport}" reRender="dashboardBlock">
+              <apex:param name="firstParam" assignTo="{!selectedDashboard}" value="" />
+          </apex:actionFunction>
+          
+              
+          <br/>
+          <br/>
+          <h3>
+              BI Reports
+          </h3>
+                 <select id="selectDashboardName" >
+                      <optgroup label="Sales Dashboards---------">
+                          <option selected="true" value="Monday Morning">Monday Morning</option>
+                          <option value="Opportunity Management">Opportunity Management</option>
+                          <option value="Revenue Summary">Revenue Summary</option>
+                          <option value="Sales Honor Roll">Sales Honor Roll</option>
+                          <!--<option value="Professional Services">Professional Services</option>-->
+                          <!--<option value="Territory Management Asia Pacific">Territory Management Asia Pacific</option>-->
+                          <!--<option value="Territory Management EMEA">Territory Management EMEA</option>-->
+                          <!--<option value="Territory Management Latin America">Territory Management Latin America</option>-->
+                          <!--<option value="Territory Management North America">Territory Management North America</option>-->
+                      </optgroup>
+                      <!--<optgroup label="Enterprise Analytics--------">
+                          <option value="Daily Flash">Daily Flash</option>
+                          <option value="Corporate Flash">Corporate Flash</option>
+                          <option value="Backlog Overview">Backlog Overview</option>
+                          <option value="Backlog Analysis">Backlog Analysis</option>
+                      </optGroup>-->
+                  </select>
+                  &nbsp;
+                  &nbsp;
+                 <input type="button" name="Go" id="selectDashboard" value="Go" onclick="displayDashboard(document.getElementById('selectDashboardName').options[document.getElementById('selectDashboardName').selectedIndex].value)"/>
+                
+                  <br/>
+                  <br/>
+               
+                <apex:pageBlock id="dashboardBlock">
+                    <apex:pageBlockSection collapsible="false" title="{!selectedDashboard}">
+                        <p align="right"><object data="{!reportLink}" height="1700" width="1700"></object></p>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+                
+     </apex:form>    
+</apex:page>

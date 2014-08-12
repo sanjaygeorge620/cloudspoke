@@ -1,0 +1,52 @@
+<apex:page standardcontroller="PSE_Project_Reference__c" extensions="ProjectReference_Communications" >
+<apex:form >
+<apex:pageBlock id="block">
+         <apex:pageBlockTable value="{!ProjHistories}" var="proj" >    
+         <apex:column headerValue="Subject"  >
+             <apex:outputlink target="_parent" value="/{!proj.taskID}">{!proj.subject}</apex:outputlink>
+         </apex:column>
+       <!--  <apex:column headerValue="Communication Subject"  value="{!proj.CommunicationSubject}"/> -->
+         <apex:column headerValue="Name"> 
+             <apex:outputlink target="_parent" value="/{!proj.name}">{!proj.nameContact}</apex:outputlink>
+         </apex:column>
+         <apex:column headerValue="Task">
+            <apex:image value="{!URLFOR($Resource.CaseTimeLineResource, IF(proj.task, 'true.gif','false.gif'))}"/>
+          </apex:column>    
+         <apex:column headerValue="Due Date" >
+                <apex:outputtext value="{!proj.duedt}" />
+         </apex:column> 
+         <apex:column headerValue="Assigned To"> 
+             <apex:outputlink target="_parent" value="/{!proj.assignedTo}">{!proj.assignedToName}</apex:outputlink>
+         </apex:column>
+         <apex:column headerValue="Last Modified Date/Time"  value="{!proj.lastModifiedDate}"/> 
+              </apex:pageBlockTable>          
+  </apex:pageBlock>  
+ <!--    commented out because not displaying open activities 
+  <apex:pageBlock id="block2">
+  <b>Open Activities</b>
+         <apex:pageBlockTable value="{!OpenActivities}" var="open" >    
+         <apex:column headerValue="Subject"  >
+             <apex:outputlink target="_parent" value="/{!open.oTaskID}">{!open.oSubject}</apex:outputlink>
+         </apex:column>
+         <apex:column width="75" headerValue="Name"> 
+             <apex:outputlink target="_parent" value="/{!open.oName}">{!open.oNameContact}</apex:outputlink>
+         </apex:column>
+         <apex:column headerValue="Task">
+            <apex:image value="{!URLFOR($Resource.CaseTimeLineResource, IF(open.oTask, 'true.gif','false.gif'))}"/>
+          </apex:column>    
+         <apex:column headerValue="Due Date" >
+                <apex:outputtext value="{!open.oDuedt}" />
+         </apex:column> 
+       
+        <apex:column headerValue="Status"  value="{!open.oStatus}"/> 
+         <apex:column headerValue="Assigned To"> 
+             <apex:outputlink target="_parent" value="/{!open.oAssignedTo}">{!open.oAssignedToName}</apex:outputlink>
+         </apex:column>
+        
+              </apex:pageBlockTable>          
+  </apex:pageBlock> 
+  
+ --> 
+</apex:form>
+
+</apex:page>

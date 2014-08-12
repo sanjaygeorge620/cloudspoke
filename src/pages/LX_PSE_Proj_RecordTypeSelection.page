@@ -1,0 +1,17 @@
+<apex:page Controller="LX_pse_recordtypeSelection">
+    <apex:form id="frm">
+        <apex:pageblock title="Record Type Selection" id="pageID">
+            <apex:pageblockbuttons location="Bottom">
+                <apex:commandButton value="Continue" action="{!continueToRequest}"/>
+                <apex:commandbutton value="Cancel" action="{!CancelURL}"/>
+            </apex:pageblockbuttons>
+          
+            <apex:outputLabel value="Type of Request"/>
+                <apex:selectList id="Whatisthetypeofrequest" value="{!recordTypes}" size="1">
+                    <apex:selectOption itemValue="Pre-Sales" itemLabel="Pre-Sales"/>
+                    <apex:selectOption itemValue="Assessment" itemLabel="Assessment"/>                   
+                </apex:selectList>
+           
+        </apex:pageblock>
+    </apex:form>
+</apex:page>

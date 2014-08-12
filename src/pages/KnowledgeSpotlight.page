@@ -1,0 +1,95 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesKnowledgeController" title="{!SITE_NICKNAME + ' | ' + Substitute(PRODUCT_TITLE,'__','')}"> 
+    
+    <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+        <apex:define name="title"> 
+            <title>{!SITE_NICKNAME} | Knowledgebase</title>
+        </apex:define>
+        <apex:define name="javascriptcalls">
+            <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery('.toolbar-knowledgebase').addClass('active');
+                //Check the results table and display a msg if needed
+                var rowCount = jQuery('table.techoverviews-table tr').length;
+                if(rowCount==1) //Show footer for tables with no rows
+                    jQuery('table.techoverviews-table tr:last').after('<tr><td>Coming soon!</td><td class="to-r"></td></tr>');
+            });
+            </script>
+        </apex:define>
+        <apex:define name="body"> 
+            <style>         
+                .overview-summary{margin:5px 2px;color:#999;font: normal 12px verdana, arial, sans-serif;}
+                .section-header{font-size:11px;}
+                table.techoverviews-table{border-collapse: separate;}
+                table.techoverviews-table th.to-l{border-bottom: 1px solid #fbaa19;color: #fbaa19;min-width:250px;}
+                table.techoverviews-table th.to-r{border-bottom: 1px solid #fbaa19;color: #fbaa19;min-width:75px;margin-left:3px;border-left: 10px solid white;}
+                table.techoverviews-table td.to-l{background: transparent url({!URLFOR($Resource.Perceptive_Sites_CSS, 'images/bullet_portal_portalbox.gif')}) no-repeat scroll 0 6px;margin-left: 5px;padding: 2px 0 0 10px;}
+                table.techoverviews-table td.to-r{margin-left:3px;padding-left:5px;}
+            </style> 
+
+            <div class="banner grid full-width breadcrumb">
+                <div class="c5 m"> </div>
+                <div class="c11">
+                    <nav>
+                        <a class="home" href="{!$Page.Home}">Home</a>
+                        <a class="current" href="#">{!Substitute(PRODUCT_TITLE,'__','')}</a>
+                    </nav>
+                </div>
+            </div>  
+            <div class="cp_core">
+                <apex:form >
+                    <div class="column-23" > 
+                        <div class="callout two-thirds "> 
+                            <div class="callout-content"> 
+                                  <dl> 
+                                    <dt style="border-bottom:none;">
+                                        <div>{!Substitute(PRODUCT_TITLE,'__','')}</div>
+                                         <p class="overview-summary">
+                                            Technical Overviews are comprehensive documents containing specifications, introductory troubleshooting, 
+                                            sample configurations, and other pertinent information about a product or service. 
+                                            The summaries contained here are a starting point for understanding particulars of each offering.
+                                        </p>
+                                    </dt>
+                                  </dl>  
+                                  <table class="techoverviews-table"> 
+                                     <tr>      
+                                       <th class="to-l"></th>
+                                       <th class="to-r">Last Updated</th>
+                                     </tr>
+                                     <knowledge:articleList articleVar="article"
+                                        categories="{!KB_CATEGORIES}"
+                                        sortBy="title"
+                                        pageSize="{!if(TRIM(KB_CATEGORIES)=='',0,KB_PAGE_SIZE)}"
+                                        hasMoreVar="hasMore"
+                                        pageNumber="{!KB_CURRENT_PAGE_NUMBER}"
+                                        keyword="{!KB_KEYWORD}"
+                                        articleTypes="{!KB_ARTICLETYPES}"
+                                        >
+                                        <tr>
+                                            <td class="to-l">
+                                                <a target="_blank" href="{!URLFOR($Action.KnowledgeArticle.View, article.id)}">
+                                                    {!
+                                                        if(CONTAINS(article.title,':'),
+                                                            TRIM(MID(SUBSTITUTE(article.title,'Technical Overview',''), FIND(':', article.title)+1,255)),
+                                                            SUBSTITUTE(article.title,'Technical Overview','')
+                                                        )
+                                                    }
+                                                    </a> 
+                                            </td>
+                                            <td class="to-r">
+                                                <apex:outputText styleclass="dates" value="{0,date,MM/dd/yyyy}">
+                                                    <apex:param value="{!article.LastPublishedDate}" />
+                                                </apex:outputText>
+                                            </td>
+                                        </tr>
+                                        
+                                    </knowledge:articleList>        
+                                </table>
+                            </div> 
+                        </div>   
+                    </div><!-- /Column-full --> 
+                </apex:form>
+            </div>
+        </apex:define>
+    </apex:composition>  
+    
+</apex:page>

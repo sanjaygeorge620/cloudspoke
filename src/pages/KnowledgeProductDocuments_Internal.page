@@ -1,0 +1,13 @@
+<apex:page standardController="ProductDocuments__kav" showHeader="false" sidebar="false">
+<title>Knowledgebase | {!ProductDocuments__kav.Title}</title>
+    <!---Analytics --->
+    <apex:include pageName="CustomerPortalAnalytics"/>
+    <!---Frames --->
+    <frameset cols="*">
+      <frame name="kbFrame" scrolling="yes" src="{!SUBSTITUTE(ProductDocuments__kav.HelpURL__c,'http:','https:')}">
+         <noframes>
+           <body>Your browser does not handle frames!</body>
+         </noframes>
+      </frame>
+    </frameset>
+</apex:page>

@@ -1,0 +1,155 @@
+<apex:page standardController="LX_Serial_Number_Sales_Order__c" extensions="LX_SerialNumberOrder">
+    
+    <apex:sectionHeader title="{!$ObjectType.LX_Serial_Number_Sales_Order__c.label}" subtitle="{!LX_Serial_Number_Sales_Order__c.name}"/>
+    <apex:pageBlock mode="maindetail" >
+   
+    <apex:pagemessages id="msgs" ></apex:pagemessages>
+        <apex:pageBlockButtons location="Top">
+        
+        <apex:actionregion >
+        <apex:form >
+        
+            <apex:commandButton action="{!Edit}" value="Edit" rendered="{!OR((NOT(SalesOrder.LX_System_Locked__c)),(Profilecheck))}"/>
+                 <apex:commandButton action="{!Submit}" value="Submit" rendered="{!NOT(SalesOrder.LX_System_Locked__c)}"/>
+            <apex:commandButton action="{!Delete}" value="Delete" rendered="{!OR((NOT(SalesOrder.LX_System_Locked__c)),(Profilecheck))}"/>
+            
+        </apex:form>
+        </apex:actionregion>
+        
+        </apex:pageBlockButtons>
+        
+        <apex:pageBlockSection showHeader="true" title="Serial Number Sales Order Detail" columns="2">
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.Name}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Partner_Account__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Customer_Account__c}"/>
+            <apex:outputField value="{!salesorder.LX_Assigned_User__c}"/>
+           
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.CurrencyIsoCode}"/>
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="Account Details: Only if you could not find the specific account" columns="2">
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Account_Name__c}"/>
+            <apex:pageblockSectionItem ></apex:pageblockSectionItem>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_First_Name__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Last_Name__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Phone_Number__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Email_Address__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Street_Address__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Street_Address_Line_2__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_City__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_State__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Province__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Zip_Postal_Code__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Country__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Website__c}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="SMSA Renewal Information" columns="2">
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Bill_To_Name__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Ship_To_Name__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Address_Same_as_Account_BillTo__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Address_Same_as_Account_ShipTo__c}"/>
+             <apex:outputField value="{!salesorder.LX_Bill_To_Title__c}"/>
+          <br/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Bill_To_Address__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Ship_To_Address__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Bill_To_City__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Ship_To_City__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Bill_To_State_Province__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Ship_To_State_Province__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Bill_To_Postal_Code__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Ship_To_Postal_Code__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Bill_To_Country__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Ship_To_Country__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Bill_To_Email_Address__c}"/>
+            <br/>
+            <apex:outputField value="{!salesorder.LX_Bill_To_Phone__c}"/>
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="System Information" columns="2">
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.CreatedById}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LastModifiedById}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Status__c}"/>
+            <apex:outputField value="{!LX_Serial_Number_Sales_Order__c.LX_Account_Requested__c}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="Custom Links" columns="3">
+        </apex:pageBlockSection>
+        
+    </apex:pageBlock>
+      <apex:pageBlock title="Sales Order Items" id="SalesOrderItem" rendered="{!(NOT(SalesOrder.LX_System_Locked__c))}">
+   <apex:actionRegion > <apex:pagemessages ></apex:pagemessages>
+      <apex:form >
+       <apex:pageblockTable value="{!serialNumberList}" var="s">
+          
+            <apex:column width="33%"> 
+            <apex:facet name="header">Serial Number</apex:facet>
+               <apex:outputLink value="/{!s.serialnumberlineItem.id}">{!s.serialnumberlineItem.Serial_Number__c}</apex:outputLink>
+   
+        
+              </apex:column> 
+           
+            <apex:column width="33%"> 
+              <apex:facet name="header">Part Number</apex:facet>
+                <apex:outputfield value="{!s.serialnumberlineItem.Part_Number__c}"/> 
+            </apex:column>
+            
+            <apex:column width="33%"> 
+            <apex:facet name="header">Part Number</apex:facet>
+                <apex:outputfield value="{!s.serialnumberlineItem.Part_Name__c}"/> 
+            </apex:column>
+           
+           
+         
+         </apex:pageblockTable>
+          <apex:actionFunction action="{!updateserialNumberList}" name="methodOneInJavascript" rerender="SalesOrderItem">
+        <apex:param name="firstParam" assignTo="{!index}" value="" />
+          </apex:actionFunction>
+           <apex:actionFunction action="{!removeSerialNumberOrder}" name="methodTwoInJavascript" rerender="SalesOrderItem">
+        <apex:param name="firstParam" assignTo="{!index}" value="" />
+          </apex:actionFunction>
+     </apex:form>
+     </apex:actionRegion>
+       </apex:pageBlock>
+      <apex:pageBlock mode="maindetails" title="Sales Order Items" id="SalesOrderItemRead" rendered="{!(SalesOrder.LX_System_Locked__c)}">
+    
+      <apex:form >
+              
+       <apex:pageblockTable value="{!serialNumberList}" var="s">
+          <apex:column width="10%"> 
+          <apex:facet name="header">
+          <apex:commandButton id="Activate" title="Activate" value="Activate" action="{!activate}"   > 
+              </apex:commandButton>
+              </apex:facet>
+               <c:OutputCheckbox value="{!(s.serialnumberlineItem.License_Activated__c)}" rendered="{!(s.serialnumberlineItem.License_Activated__c)}">
+               </c:OutputCheckbox>
+               <apex:inputCheckbox value="{!s.serialnumberlineItem.License_Activated__c}" rendered="{!NOT(s.serialnumberlineItem.License_Activated__c)}"/>
+            </apex:column>
+         
+    
+            <apex:column width="30%"> 
+            <apex:facet name="header">Serial Number</apex:facet>
+            <apex:outputLink value="/{!s.serialnumberlineItem.id}">{!s.serialnumberlineItem.Serial_Number__c}</apex:outputLink>
+
+           </apex:column> 
+            
+            <apex:column width="30%"> 
+             <apex:facet name="header">Part Number</apex:facet>
+                <apex:outputfield value="{!s.serialnumberlineItem.Part_Number__c}"/> 
+            </apex:column>
+            
+            <apex:column width="30%"> 
+             <apex:facet name="header">Part Name</apex:facet>
+                <apex:outputfield value="{!s.serialnumberlineItem.Part_Name__c}"/> 
+            </apex:column>
+          
+           
+           
+           </apex:pageblockTable>
+          <apex:actionFunction action="{!updateserialNumberList}" name="methodOneInJavascript" rerender="SalesOrderItem">
+        <apex:param name="firstParam" assignTo="{!index}" value="" />
+          </apex:actionFunction>
+           <apex:actionFunction action="{!removeSerialNumberOrder}" name="methodTwoInJavascript" rerender="SalesOrderItem">
+        <apex:param name="firstParam" assignTo="{!index}" value="" />
+          </apex:actionFunction>
+     </apex:form>
+       </apex:pageBlock> 
+</apex:page>

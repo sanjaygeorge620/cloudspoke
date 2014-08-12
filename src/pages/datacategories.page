@@ -1,0 +1,133 @@
+<apex:page controller="CTLDataCategories" showHeader="false" ><!--contentType="application/vnd.ms-excel#DataCategoriesReleaseExport.xls"  -->
+ <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <apex:outputPanel rendered="false" >
+        <style>
+            .l1{margin-left:10px;}
+            .l2{margin-left:10px;}
+            .l3{margin-left:10px;}
+            .l4{margin-left:10px;}
+            .l5{margin-left:10px;}
+            .l6{margin-left:10px;}
+            div.box{float:left;width:500px;}
+            .hide{display:none;}
+        </style>
+        
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                  jQuery('.accordian').accordion({ heightStyle: "content", active:false, header: '.header', collapsible: true, icons: {"header": "ui-icon-plus","activeHeader": "ui-icon-minus"} });          
+            });
+            
+        </script>
+    </apex:outputPanel>
+</head>
+
+
+    
+    <apex:pageBlock title="Data Categories">
+        <table>
+        <apex:repeat value="{!DataCategory_Results}" var="dc1">
+            <tr>
+                <td>Product Family</td>
+                <td>Label</td>
+                <td>API Name</td>
+            </tr>
+            <apex:repeat value="{!DataCategory_Results[dc1]}" var="dc">
+               <tr>
+                <td>{!dc1}</td>
+                <td>{!dc.label}</td>
+                <td>{!dc.name}</td>
+               </tr> 
+            </apex:repeat>
+        </apex:repeat>    
+        </table>
+    </apex:pageBlock>
+    
+   <apex:outputPanel rendered="false" >  
+    <div class="box hide">
+        <apex:repeat value="{!DataCategory_Results}" var="dc1">
+           <b>{!dc1}</b><br />
+           <apex:repeat value="{!DataCategory_Results[dc1]}" var="dc2">
+               {!dc2.label} &nbsp; {!dc2.Name}<br />
+           </apex:repeat> 
+           
+        </apex:repeat>
+    </div>    
+    <div class="box hide">
+        <apex:repeat value="{!DataCategories}" var="dc1">
+           <b>{!dc1}</b><br />
+           <apex:repeat value="{!DataCategories[dc1]}" var="dc2">
+               {!dc2}<br />
+           </apex:repeat> 
+           
+        </apex:repeat>
+    </div>    
+    <div class="box hide">
+        <div class="accordian">
+            <div class="l1">
+            <apex:repeat value="{!ProductResults}" var="dc">
+                <div class="l2">
+                <apex:repeat value="{!dc.TopCategories}" var="t">
+                    <div class="l3">
+                    <apex:repeat value="{!t.ChildCategories}" var="cc1">
+                        <h3 class="header">{!cc1.Name}</h3>
+                        <div class="l4">
+                        <apex:repeat value="{!cc1.ChildCategories}" var="cc2">
+                            <input type="checkbox" name="{!cc2.Name}" value="{!cc2.Name}">{!cc2.Label}</input><br />
+                            <div class="l5">
+                                <apex:repeat value="{!cc2.ChildCategories}" var="cc3">
+                                    <input type="checkbox" name="{!cc3.Name}" value="{!cc3.Name}">{!cc3.Label}</input><br />
+                                    <div class="l6">
+                                        <apex:repeat value="{!cc3.ChildCategories}" var="cc4">
+                                            <input type="checkbox" name="{!cc4.Name}" value="{!cc4.Name}">{!cc4.Label}</input><br />
+                                        </apex:repeat>        
+                                    </div>
+                                </apex:repeat>        
+                            </div>
+                        </apex:repeat>        
+                        </div>
+                    </apex:repeat>        
+                    </div>
+                </apex:repeat>
+                </div>        
+            </apex:repeat>
+            </div>
+        </div>
+    </div>
+    <div class="box hide">
+        <div class="accordian">
+            <div class="l1">
+            <apex:repeat value="{!ReleaseResults}" var="dc">
+                <div class="l2">
+                <apex:repeat value="{!dc.TopCategories}" var="t">
+                    <div class="l3">
+                    <apex:repeat value="{!t.ChildCategories}" var="cc1">
+                        <h3 class="header">{!cc1.Name}</h3>
+                        <div class="l4">
+                        <apex:repeat value="{!cc1.ChildCategories}" var="cc2">
+                            <input type="checkbox" name="{!cc2.Name}" value="{!cc2.Name}">{!cc2.Label}</input><br />
+                            <div class="l5">
+                                <apex:repeat value="{!cc2.ChildCategories}" var="cc3">
+                                    <input type="checkbox" name="{!cc3.Name}" value="{!cc3.Name}">{!cc3.Label}</input><br />
+                                    <div class="l6">
+                                        <apex:repeat value="{!cc3.ChildCategories}" var="cc4">
+                                            <input type="checkbox" name="{!cc4.Name}" value="{!cc4.Name}">{!cc4.Label}</input><br />
+                                        </apex:repeat>        
+                                    </div>
+                                </apex:repeat>        
+                            </div>
+                        </apex:repeat>        
+                        </div>
+                    </apex:repeat>        
+                    </div>
+                </apex:repeat>
+                </div>        
+            </apex:repeat>
+            </div>
+        </div>
+    </div>
+    </apex:outputPanel>
+</apex:page>

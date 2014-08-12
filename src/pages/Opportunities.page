@@ -1,0 +1,245 @@
+<apex:page showHeader="false" Controller="SitesOpportunityController" standardStylesheets="false"> 
+<title>{!SITE_NICKNAME} | Details</title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-opportunity').addClass('active');
+          jQuery('.opptytable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Opportunities</a></li>
+                </ul>
+            </div> 
+            <apex:outputPanel rendered="{!!$ObjectType.Order__c.accessible || !SITE_TAB_OPPORTUNITIES}">
+                  Insufficient Privileges
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!$ObjectType.Order__c.accessible  && SITE_TAB_OPPORTUNITIES}">
+                
+            <apex:pageMessages />
+            
+            <div class="column full-width">
+                <div class="callout oppty">
+                    
+                    
+                    <!-- Pipeline -->
+                    <span class="title-bar closed-won"> Pipeline
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Oppty_pipeline.size==0}" value="No opportunities to display" />
+                            <apex:outputPanel rendered="{!Oppty_pipeline.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display opptytable">
+                                    <thead>
+                                        <tr>
+                                            <th>Opportunity Number</th>
+                                            <th>Account</th>  
+                                            <th>AEX</th>  
+                                            <th>Amount</th>
+                                            <th>CloseDate</th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Oppty_pipeline}" var="o">
+                                          <tr>  
+                                                <td class="oppty-id">
+                                                    <apex:outputLink value="{!$page.opportunitydetails}" styleClass="results-oppty-id">{!o.Opportunity_ID__c}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="oppty-account">{!o.Opportunity_Account_Name__c}</td>
+                                                <td class="oppty-account">{!o.AEX__c}</td>
+                                                <td class="oppty-amount">{!o.Opportunity_Amount__c}</td>
+                                                <td class="oppty-closedate">{!o.Opportunity_Close_Date__c}</td>                                                
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+                    <!-- /Pipeline -->
+                    
+                    <!-- best Case -->
+                    <span class="title-bar best-case"> Best Case
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Oppty_BestCase.size==0}" value="No opportunities to display" />
+                            <apex:outputPanel rendered="{!Oppty_BestCase.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display opptytable">
+                                    <thead>
+                                        <tr>
+                                            <th>Opportunity Number</th>
+                                            <th>Account</th>
+                                             <th>AEX</th>  
+                                            <th>Amount</th>                                            
+                                            <th>Close Date</th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Oppty_BestCase}" var="o">
+                                          <tr>  
+                                                <td class="oppty-id">
+                                                    <apex:outputLink value="{!$page.opportunitydetails}" styleClass="results-oppty-id">{!o.Opportunity_ID__c}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="oppty-account">{!o.Opportunity_Account_Name__c}</td>
+                                                <td class="oppty-account">{!o.AEX__c}</td>
+                                                <td class="oppty-amount">{!o.Opportunity_Amount__c}</td>
+                                                <td class="oppty-closedate">{!o.Opportunity_Close_Date__c}</td>
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+                    <!-- /Best Case -->
+                    
+                     <!-- Commit -->
+                    <span class="title-bar closed-dead"> Commit
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Oppty_Commit.size==0}" value="No opportunities to display" />
+                            <apex:outputPanel rendered="{!Oppty_Commit.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display opptytable">
+                                    <thead>
+                                        <tr>
+                                            <th>Opportunity Number</th>
+                                            <th>Account</th>
+                                             <th>AEX</th>  
+                                            <th>Amount</th>                                            
+                                            <th>Close Date</th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Oppty_commit}" var="o">
+                                          <tr>  
+                                                <td class="oppty-id">
+                                                    <apex:outputLink value="{!$page.opportunitydetails}" styleClass="results-oppty-id">{!o.Opportunity_ID__c}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="oppty-account">{!o.Opportunity_Account_Name__c}</td>
+                                                <td class="oppty-account">{!o.AEX__c}</td>
+                                                <td class="oppty-amount">{!o.Opportunity_Amount__c}</td>
+                                                <td class="oppty-closedate">{!o.Opportunity_Close_Date__c}</td>
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+                    <!-- /Commit -->
+                    
+                     <!-- Closed-->
+                    <span class="title-bar closed-dead"> Closed
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Oppty_closed.size==0}" value="No opportunities to display" />
+                            <apex:outputPanel rendered="{!Oppty_closed.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display opptytable">
+                                    <thead>
+                                        <tr>
+                                            <th>Opportunity Number</th>
+                                            <th>Account</th>
+                                             <th>AEX</th>  
+                                            <th>Amount</th>                                            
+                                            <th>Close Date</th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Oppty_closed}" var="o">
+                                          <tr>  
+                                                <td class="oppty-id">
+                                                    <apex:outputLink value="{!$page.opportunitydetails}" styleClass="results-oppty-id">{!o.Opportunity_ID__c}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="oppty-account">{!o.Opportunity_Account_Name__c}</td>
+                                                <td class="oppty-account">{!o.AEX__c}</td>
+                                                <td class="oppty-amount">{!o.Opportunity_Amount__c}</td>
+                                                <td class="oppty-closedate">{!o.Opportunity_Close_Date__c}</td>
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+                    <!-- /closed-->
+                    
+                     <!-- ommitted-->
+                    <span class="title-bar closed-dead"> Omitted
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Oppty_omitted.size==0}" value="No opportunities to display" />
+                            <apex:outputPanel rendered="{!Oppty_omitted.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display opptytable">
+                                    <thead>
+                                        <tr>
+                                            <th>Opportunity Number</th>
+                                            <th>Account</th>
+                                             <th>AEX</th> 
+                                            <th>Amount</th>                                            
+                                            <th>Close Date</th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Oppty_omitted}" var="o">
+                                          <tr>  
+                                                <td class="oppty-id">
+                                                    <apex:outputLink value="{!$page.opportunitydetails}" styleClass="results-oppty-id">{!o.Opportunity_ID__c}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="oppty-account">{!o.Opportunity_Account_Name__c}</td>
+                                                <td class="oppty-account">{!o.AEX__c}</td>
+                                                <td class="oppty-amount">{!o.Opportunity_Amount__c}</td>
+                                                <td class="oppty-closedate">{!o.Opportunity_Close_Date__c}</td>
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+                    <!-- /closed-->
+                                
+                    
+                    
+                </div><!-- /Opportunities-->
+            </div><!-- /Right Two-Thirds -->
+            
+        </apex:outputPanel><!-- /Cp Core -->
+           
+        </div>
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

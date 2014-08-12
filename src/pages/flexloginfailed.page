@@ -1,0 +1,27 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | '+$Label.site.file_not_found}" controller="SitesGenericController">
+  <title>{!SITE_NICKNAME+' | '+$Label.site.file_not_found}</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}">
+        <apex:define name="javascript">
+              //change icons
+              //jQuery('.sprite_cpicons.secondary').removeClass('alert');
+              //jQuery('.sprite_cpicons.secondary').addClass('  ');
+        </apex:define>      
+                
+        <apex:define name="body">        
+        <style type="text/css">
+
+h1
+{
+color:red;
+text-align:Center;
+font-family:"Times New Roman";
+font-size:15px;
+}
+
+</style>
+            <h1>Your requested connection to the downloads server has failed. Please try to re-establish a connection by closing this window and selecting the "Downloads" tab.
+            If the problem persists contact Product Support at support@perceptivesoftware.com or dial 1-800-941-7460 and select option 2 for additional assistance.</h1>
+            
+        </apex:define>
+  </apex:composition>
+</apex:page>

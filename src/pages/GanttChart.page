@@ -1,0 +1,3 @@
+<apex:page >
+  <apex:flash src="{!$Resource.IS_GanttChart}" height="600" width="800" id="Flex" flashvars="userId={!$User.Id}&session_id={!$Api.Session_ID}&server_url={!$Api.Partner_Server_URL_130}" />
+</apex:page>

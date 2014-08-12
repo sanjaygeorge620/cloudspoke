@@ -1,0 +1,33 @@
+<apex:component controller="IdeaController">
+   
+                <div class="callout new-idea">
+                    <apex:outputPanel layout="block" styleClass="ibtPostIdeaButton" rendered="{!!isLoggedIn || $ObjectType.Idea.createable}">
+                       <apex:outputLink styleclass="new-idea" value="{!ideaPostPage}"/>
+                    </apex:outputPanel>
+                </div><!-- /New Idea Button -->
+                 <c:Sites_Idea_Widget />
+                
+                <div class="callout if">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons if">&nbsp;</span>Search Ideas</a>
+                    <div class="callout-content">
+                        <form action="{!searchResultsUrl}">
+                            <input type="text" id="" class="idea-search" value="Keyword Search." name="{!searchTermParamName}" title="Keyword Search" onfocus="if (this.value == 'Keyword Search.') { this.value=''; }" onblur="if (this.value == '') { this.value='Keyword Search.'; }"/>
+                            <input type="submit" id="" class="idea-search-btn" value=" " />
+                        </form>
+                    </div>
+                    <div class="callout-content if">
+                        <span class="title-bar">Ideas by Category:</span>
+                        <ul>
+                            <li><ideas:listOutputLink communityId="{!communityId}" page="{!ideaListPage}" category="" sort="{!sortForFilters}">All Categories</ideas:listOutputLink></li>
+                            <apex:repeat value="{!categories}" var="c">
+                                     <apex:outputpanel rendered="{!Contains(c,'--')}">
+                                        <li style="font-weight:bold;"><apex:outputText value="{!SUBSTITUTE(c,'--','')}" /></li>
+                                    </apex:outputPanel>
+                                    <apex:outputpanel rendered="{!!Contains(c,'--')}">
+                                        <li style="margin-left:10px;"><ideas:listOutputLink communityId="{!communityId}" page="{!ideaListPage}" category="{!c}" sort="{!sortForFilters}">{!c}</ideas:listOutputLink><span style="display:none;" class="count">&nbsp;</span></li>
+                                    </apex:outputPanel>
+                            </apex:repeat>
+                        </ul>
+                    </div>
+                </div><!-- /Idea Funnel -->
+</apex:component>

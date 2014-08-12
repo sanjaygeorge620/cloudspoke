@@ -1,0 +1,24 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:page controller="PostingListController" tabStyle="Posting__c"   standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.postingstylesheet}"/>
+<apex:outputPanel layout="block" styleClass="doc">
+<apex:messages />
+<p/>
+<div class="postListContainer">
+	<div class="catHeader">
+	<apex:outputText value="{!$CurrentPage.parameters.cat}" rendered="{!NOT(ISNULL($CurrentPage.parameters.cat))}"/>
+	<apex:outputPanel rendered="{!NOT(ISNULL($CurrentPage.parameters.kw))}">
+		Search Results for <i><apex:outputText value="{!$CurrentPage.parameters.kw}" /></i>
+	</apex:outputPanel>
+	<apex:outputPanel rendered="{!NOT(ISNULL($CurrentPage.parameters.zip))}">
+	near {!$CurrentPage.parameters.zip}
+	
+	 (<apex:outputLink value="postList?{!param}">Search anywhere</apex:outputLink>)
+	</apex:outputPanel>
+	</div>
+	<div class="listWrapper">
+	<c:PostingList cat="{!showCat}" postings="{!postings}" doRender="{!areTherePostings}" msg="{!noPostMsg}"/>
+	</div>
+</div>
+</apex:outputPanel>
+</apex:page>

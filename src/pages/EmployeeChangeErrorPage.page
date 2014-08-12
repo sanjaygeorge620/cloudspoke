@@ -1,0 +1,10 @@
+<apex:page Controller="EmployeeChangeValidation" action="{!Error}">
+<!--
+ * Name: EmployeeChangeValidation
+ *
+ * Description: to display the error message for the Employee Change Validation button
+ * Created By: Manoj Kolli
+ * Created Date: 4/17/2012
+ */-->
+<apex:pageMessages />
+</apex:page>

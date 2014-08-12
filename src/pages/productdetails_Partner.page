@@ -1,0 +1,109 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesPartnerAccountController"> 
+<title>{!SITE_NICKNAME} | Account</title>
+
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-partner-account').addClass('active');
+              jQuery('.accounttable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+            });
+        </script>
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+               <li><a href="{!$page.account_partner}">Partner Accounts</a><span>&#187;</span></li>
+                <li><apex:outputLink value="{!$page.partneracctdetails}">{!assetDetail.Account__r.Name}<apex:param name="accountId" value="{!assetDetail.Account__c}" /><apex:param name="id" value="{!assetDetail.Account__c}"/></apex:outputLink><span>&#187;</span></li>
+                <li><a class="current" href="#">{!AssetDetail.Name}</a></li>
+            </ul>
+        </div>  
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.asset_Clone__c.accessible || !$ObjectType.license_key_Clone__c.accessible}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.account.accessible && $ObjectType.license_key_Clone__c.accessible}">
+            <div class="column full-width">
+                <div class="callout product">
+                    <span class="title-bar"><span class="sprite_cpicons imagenow">&nbsp;</span>Products &amp; Licensing</span>
+                    <div class="callout-content">
+                       <p><apex:pageMessages /></p>
+                                  <div class="inner-content inner-content-title-bar">
+                                        <span>{!AssetDetail.Name}</span>
+                                  </div>
+                                  <div class="inner-content">
+                                    <div class="left-inner-col">
+                                        <p class="item server-info-title">Product Name: <span>{!AssetDetail.Name}</span></p>
+                                        <p class="item server-info-title">Created Date: <span><apex:outputField value="{!AssetDetail.CreatedDate}"/></span></p>
+                                    </div>
+                                    <div class="right-inner-col">
+                                        <p class="item server-info-title">Machine Name: <span>
+                                            <apex:outputPanel rendered="{!SITE_CONTACT.Contact_Role__c=='ImageNow Admin'}">
+                                                <apex:outputlink value="{!$page.serverdetails}">
+                                                    {!if(AssetDetail.Server__r.Machine_Name__c!='',AssetDetail.Server__r.Machine_Name__c,'Null')}
+                                                    <apex:param name="id" value="{!AssetDetail.Server__r.id}"/>
+                                                    <apex:param name="retURL" value="{!$CurrentPage.URL}"/>
+                                                </apex:outputlink>
+                                            </apex:outputPanel>  
+                                             
+                                            <apex:outputPanel rendered="{!SITE_CONTACT.Contact_Role__c!='ImageNow Admin'}">
+                                                {!if(AssetDetail.Server__r.Machine_Name__c!='',AssetDetail.Server__r.Machine_Name__c,'Null')}
+                                            </apex:outputPanel>   
+                                        </span></p>
+                                        <p class="item server-info-title">Environment Type: <span>{!AssetDetail.Server__r.Server_Type__c}</span></p>
+                                    </div>
+                                    
+                                  </div>
+                                  <div class="inner-content inner-content-title-bar">
+                                        <span>Licenses</span>
+                                  </div>
+                                  <div class="inner-content">
+                                      <apex:outputtext rendered="{!Licenses.size==0}" value="No Licenses"/>
+                                      <apex:outputPanel rendered="{!Licenses.size!=0}">
+                                          <div class="license-note">
+                                              <span>Note:</span> To download a license key, right-click the link and then click <span>Save Target As...</span> to save the license key to your computer.
+                                          </div>
+                                          <table id="license-view" cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product Name</th>
+                                                        <th>Environment</th>
+                                                        <th>Quantity</th>
+                                                        <th>Keys</th>
+                                                        <th>Created Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!Licenses}" var="l">
+                                                      <tr>  
+                                                            <td class="product-name">{!l.Asset_Item_Clone__r.Name}</td>
+                                                            <td class="product-environment">{!l.Environment_Type__c}</td>
+                                                            <td class="product-qty">{!l.Quantity__c}</td>
+                                                            <td class="product-keys">
+                               
+                                                                <apex:outputText rendered="{!l.attachments.size==null || l.attachments.size==0}">
+                                                                    Not Available
+                                                                </apex:outputText>
+                                                                <apex:repeat value="{!l.attachments}" var="a" rendered="{!l.attachments.size!=0}">
+                                                                    <!--Downloadable-->
+                                                                    &#9660;&nbsp;<apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, a.id)}">{!a.Name}</apex:outputLink><br />
+                                                                </apex:repeat>
+                                                            </td> 
+                                                            <td class="product-date">    
+                                                                <apex:outputField value="{!l.createddate}" />
+                                                            </td>                                                   
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                        </apex:outputPanel>
+                                       </div>  
+                                   
+                    </div>
+                </div><!-- /Product Details -->
+            </div><!-- /Right Two-Thirds -->
+            
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

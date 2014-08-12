@@ -1,0 +1,679 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesAccountController"> 
+
+
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+     <apex:define name="title"> 
+       <title>{!SITE_NICKNAME} | {!$Label.Account}</title>
+    </apex:define>
+    <apex:define name="javascriptcalls">
+    <script type="text/javascript">
+            jQuery(document).ready(function() {
+                
+              jQuery('.toolbar-account').addClass('active');
+              jQuery('.accounttable').dataTable( {aaSorting: [], "iCookieDuration": 60*60*24 /* 1 day */, "bLengthChange": false, "bStateSave": true, sDom: 'lfr<"dt_fixed_height"t>ip' });
+              //Tabs
+              var topTabs = jQuery('#tabs').tabs({ cookie: { expires: null} });
+              var subTabs = jQuery("#tabs-c, #tabs-p, #tabs-s, #tabs-o").tabs({ cookie: { expires: null} });//contacts, Products and servers
+              
+              //open tab by url param
+              var openTab =  '{!$CurrentPage.parameters.tab}';
+                  if (openTab=='contacts'){
+                      topTabs.tabs('select', 0); // open contacts
+                  } else if (openTab=='products'){
+                      topTabs.tabs('select', 1); // open product
+                  } else if (openTab=='servers'){
+                      topTabs.tabs('select', 2); // open servers    
+                  }    
+              jQuery('.order-view').hide(); 
+              jQuery('.form-license').hide();
+              //View orders
+              jQuery('.order-viewlink').click(function() { // bind click event to link
+                    topTabs.tabs('select', 1); // switch to Products
+                    jQuery('.form-license').hide();
+                    jQuery('#tabs-p').hide(); 
+                    jQuery('.order-view').show();
+                   return false;
+                });
+                
+                //View Licenses
+              jQuery('.license-view, .title-bar.lc').click(function() { // bind click event to link
+                    topTabs.tabs('select', 1); // switch to Products
+                    jQuery('.order-view').hide(); 
+                    jQuery('#tabs-p').show();
+                    jQuery('.form-license').hide();
+                     
+                   return false;
+                });
+              
+              //Submit License
+               
+              jQuery('.license-submit').click(function() { // bind click event to link
+                    topTabs.tabs('select', 1); // switch to Products
+                    jQuery('.form-license').show();
+                    jQuery('.order-view').hide();
+                    jQuery('#tabs-p').hide();
+                    return false;
+                });
+            });
+        </script>
+    </apex:define>
+    <apex:define name="body">  
+       <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                <a class="home" href="{!$Page.Home}">{!$Label.Home}</a>
+                <a class="current" href="#">{!$Label.Account_Profile}</a>
+              </nav>
+            </div>
+         </div>   
+     
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.account.accessible}">
+            <p>{!$Label.Insufficient_Privileges}</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.account.accessible}">
+            <apex:pageMessages />
+            <div class="column full-width">
+                <div class="callout ap">
+                    <span class="title-bar"><span class="sprite_cpicons ap">&nbsp;</span>{!$Label.Account_Details}</span>
+                    <div class="callout-content">
+                            
+                            <table >
+                            <tr>
+                                <td width ='38%'>
+                                    <ul>
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!$Label.Name}: {!SITE_ACCOUNT.Name} &nbsp;&nbsp;&nbsp;</li>
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!$Label.SMSA_Status}: {!SITE_ACCOUNT.SMA_Status__c}&nbsp;&nbsp;&nbsp;</li>
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!$Label.Website}: <a target="_blank" title="{!SITE_ACCOUNT.Website}" href="{!SITE_ACCOUNT.Website}">{!If(len(SITE_ACCOUNT.Website)>30,mid(SITE_ACCOUNT.Website,1,30)+'...',SITE_ACCOUNT.Website)}</a> &nbsp;&nbsp;&nbsp;</li>
+                                    </ul>
+                                </td>
+                                
+                                <td width ='38%'>
+                                    <ul>
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!$Label.Account_Executive}: {!IF(ISBLANK(SITE_ACCOUNT.LX_Software_AEX__c),SITE_ACCOUNT.owner.name,SITE_ACCOUNT.LX_Software_AEX__r.Name)}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li> 
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!$Label.ISR}: {!SITE_ACCOUNT.ISR__r.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!$Label.CSA}: {!SITE_ACCOUNT.CSA__c}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                                           
+                                    </ul>
+                                </td>
+                                
+                                <td >
+                                    <ul>
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputLink styleClass="order-viewlink" rendered="{!$ObjectType.license_key__c.accessible}">{!$Label.Order_History}</apex:outputLink></li>                    
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputLink styleClass="license-submit" rendered="{!$ObjectType.case.createable}">{!$Label.Submit_License_Request}</apex:outputLink></li>
+                                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputLink styleClass="license-install" rendered="{!$ObjectType.knowledgearticleversion.accessible}" value="{!$site.prefix}/articles/Support_Articles/Article-00003858">{!$Label.Install_License_Key}</apex:outputLink></li>
+                                
+                                    </ul>
+                                </td> 
+                            </tr>
+                            </table>
+                            
+                    </div>
+                </div>
+            </div> 
+            
+            <!-- / End of Account Details ------------------------------------------------------------------------------------------------------------------------------------------------------------>
+            
+            
+            <div class="column full-width">
+                <div class="callout accounts">
+                    <div id="tabs" class="tab-container">
+                    
+                        <!-- Account Profile Tabs -->
+                        <ul class="ui-tabs-nav">
+                            <li><a href="#tabs-1" class="tab tab-contacts">{!$Label.Contacts}</a></li>
+                            <li><a href="#tabs-2" class="tab tab-licenses">{!$Label.Licenses}</a></li>
+                            <li><a href="#tabs-3" class="tab tab-servers">{!$Label.Servers}</a></li>                          
+                            <li><a href="#tabs-4" class="tab tab-products">{!$Label.Products}</a></li> <!-- NEED TO WORK ON THIS FOR CSS -->
+                        </ul>
+                        <!-- /Account Profile Tabs -->
+                        
+                        <!-- /Start of Contacts Tab1 -------------------------------------------------------------------------------------------------------------------------------------->
+                        
+                        <div id="tabs-1" Class="tab-content tab-content-1a" >
+                            <apex:outputText rendered="{!!$ObjectType.contact.accessible}"><p>{!$Label.No_Access_Contacts}</p></apex:outputText>
+                            <apex:outputPanel rendered="{!$ObjectType.Contact.accessible}">
+
+                                <div id="tabs-c" class="tab-container">
+                                    <ul>
+                                        <li><a href="#tabs-4" class="tab tab-contacts-active">{!$Label.Active}</a></li>
+                                        <li><a href="#tabs-5" class="tab tab-contacts-portal">{!$Label.Portal}</a></li>
+                                     <!--   <li ><a href="#tabs-6" class="tab tab-contacts-inactive">Inactive</a></li> -->
+                                        <li><a href="#tabs-7" class="tab tab-contacts-add">{!$Label.Add_Contact}</a></li>
+                                    </ul>
+                                    <div id="tabs-4" class="tab-content tab-content-1b">
+                                         <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{!$Label.Name}</th>
+                                                        <th>{!$Label.Email}</th>
+                                                        <th>{!$Label.Phone}</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!ActiveContacts}" var="c">
+                                                      <tr>  
+                                                            <td class="contact-name">
+                                                                <apex:outputLink value="{!$page.contactdetails}" rendered="{!$ObjectType.contact.updateable}">
+                                                                    {!c.lastname+', '+c.firstname}
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                                </apex:outputLink>
+                                                                <apex:outputText rendered="{!!$ObjectType.contact.updateable}">{!c.lastname+', '+c.firstname}</apex:outputText>
+                                                            </td>
+                                                            <td class="contact-email">{!c.email}</td>
+                                                            <td class="contact-phone">{!c.phone}</td>
+                                                            
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                    <div id="tabs-5" class="tab-content tab-content-2b">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{!$Label.Name}</th>
+                                                        <th>{!$Label.Username}</th>
+                                                        <th>{!$Label.Profile}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!PortalContacts}" var="c">
+                                                      <tr>  
+                                                            <td class="contact-name">
+                                                                <apex:outputLink value="{!$page.contactdetails}" rendered="{!$ObjectType.contact.updateable}">
+                                                                    {!c.Contact.lastname+', '+c.Contact.firstname}
+                                                                    <apex:param name="id" value="{!c.Contact.id}"/>
+                                                                </apex:outputLink>
+                                                                <apex:outputText rendered="{!!$ObjectType.contact.updateable}">{!c.Contact.lastname+', '+c.Contact.firstname}</apex:outputText>
+                                                            </td>
+                                                            <td class="contact-email">{!c.username}</td>
+                                                            
+                                                            <td class="contact-profile">{!if(CONTAINS(LOWER(c.Profile.Name),'admin'),'Admin','User')}</td>
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                    <!--
+                                    <div id="tabs-6"  class="tab-content tab-content-3b">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Phone</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!InActiveContacts}" var="c">
+                                                      <tr>  
+                                                            <td class="contact-name">
+                                                                <apex:outputLink value="{!$page.contactdetails}" rendered="{!$ObjectType.contact.updateable}">
+                                                                     {!c.lastname+', '+c.firstname}
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                                </apex:outputLink>
+                                                                <apex:outputText rendered="{!!$ObjectType.contact.updateable}">{!c.lastname+', '+c.firstname}}</apex:outputText>
+                                                            </td>
+                                                            <td class="contact-email">{!c.email}</td>
+                                                            <td class="contact-phone">{!c.phone}</td>
+                                                            
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                          
+                                    </div>
+                                    -->
+                                    <div id="tabs-7"  class="tab-content tab-content-4b">
+                                        <apex:outputText rendered="{!!$ObjectType.contact.createable}"><p>{!$Label.No_Create_Contacts}</p></apex:outputText>
+                                        <apex:outputPanel rendered="{!$ObjectType.contact.createable}">
+                                           <apex:form id="form-contact">
+                                               <apex:pageMessages />
+                                               <div class="form-contact" style="margin:10px;">
+                                                    <label>{!$Label.First_Name}</label><br clear="both" /><apex:inputField required="true" value="{!NewContact.FirstName}" /><br clear="both" />
+                                                    <label>{!$Label.Last_Name}</label><br clear="both"/><apex:inputField value="{!NewContact.LastName}" /><br clear="both"/>
+                                                    <label>{!$Label.Email}</label><br clear="both"/><apex:inputField required="true" value="{!NewContact.Email}" /><br clear="both"/>
+                                                    <label>{!$Label.Phone}</label><br clear="both"/><apex:inputField required="true" value="{!NewContact.Phone}" /><br clear="both"/>
+                                                    <apex:commandButton value=" " reRender="form-contact" action="{!createContact}" styleClass="submitbutton"/>
+                                               </div> 
+                                            </apex:form>
+                                      </apex:outputPanel>
+                                    </div>
+                                </div><!-- /Inner Tabs for Contacts Sorting -->
+                            </apex:outputPanel>
+                        </div>
+                        
+                        <!-- /End of Contacts Tab1 -------------------------------------------------------------------------------------------------------------------------------------->
+                        
+                        
+                        
+                        <!-- /Start of Licenses Tab2 -------------------------------------------------------------------------------------------------------------------------------------->
+                        <div id="tabs-2" class="tab-content tab-content-3a">
+
+                            <apex:outputText rendered="{!!$ObjectType.Asset.accessible}"><p>{!$Label.No_Access_Products_Licenses}</p></apex:outputText>
+                            <apex:outputPanel rendered="{!$ObjectType.Asset.accessible}">
+                                <apex:form >
+                                    <div class="form-license callout-content">
+                                        <apex:outputpanel rendered="{!$ObjectType.case.createable}" >
+                                            
+                                            <dl>
+                                                <dd class="no-arrow"><p class="note">{!$Label.Note_Submit_Production_Down}</p></dd>
+                                                <br />
+                                                <dt>{!$Label.License_Request}</dt>
+                                                <dd class="no-arrow"><p class="note">{!$Label.Note_Brief_Description}</p></dd>
+                                                <dd>{!$Label.Product}</dd>
+                                                <dd>{!$Label.Release}</dd>
+                                                <dd>{!$Label.Environments_Etc}</dd>
+                                                <br />
+                                                <dd class="no-arrow"><p class="note">{!$Label.Description}:</p></dd>
+                                                <dd class="no-arrow"><apex:inputTextarea style="width:550px;" value="{!LicenseCase.Description}"/></dd>
+                                                <br />
+                                                <dd class="no-arrow"><p class="note">{!$Label.Type}:</p></dd>
+                                                <dd class="no-arrow">
+                                                        <apex:selectList value="{!RequestType}" style="margin-left:3px;width:220px;font: 11px/15px Arial,Helvetica,sans-serif;" id="chooselicensetype" size="1">
+                                                        <apex:selectOption itemValue="" itemLabel="--none--"/>
+                                                        <apex:selectOption itemValue="New --" itemLabel="New license request"/>
+                                                        <apex:selectOption itemValue="Reissue --" itemLabel="Reissue of existing license request"/>
+                                                    </apex:selectList> 
+                                                </dd>
+                                                
+                                                <br />
+                                                <dt>{!$Label.Hardware_Fingerprint_Attachment}</dt>
+                                                <br />
+                                                <dd class="no-arrow"><p class="note">{!$Label.Attach_Fingerprint}:</p></dd>
+                                                <dd class="no-arrow"><apex:outputLabel ></apex:outputLabel><apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="details-submit" styleclass="browse-button" title="Attach multiple files into one compressed zip files"/></dd>
+                                                <br />
+                                                <dd class="no-arrow">{!$Label.Assistance_Fingerprint}<apex:outputLink target="_blank" value="{!$site.prefix}/articles/Support_Articles/Article-00003942">{!$Label.Knowledgebase_Article}</apex:outputLink></dd>
+                                                <br />
+                                            </dl>
+                                            <apex:commandButton value=" " action="{!submitLicenseRequest}" styleClass="submitbutton"/>
+                                        
+                                        </apex:outputPanel>
+                                        
+                                        
+                                    </div>
+                                </apex:form>
+                                 <div id="tabs-o" class="order-view callout-content">
+                                         <table id="order-view" cellpadding="0" cellspacing="0" border="0"  class="display accounttable">
+                                            <thead>
+                                        <tr>
+                                            <th>{!$Label.Order_Number}</th>
+                                            <th>{!$Label.PO_Number}</th>
+                                            <th>{!$Label.Close_Date}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!orders}" var="o">
+                                          <tr>  
+                                                 <td class="order-id">
+                                                    <apex:outputLink value="{!$page.orderdetails}" styleClass="results-order-id">{!o.Name}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="order-po-number">{!o.PO_Number__c}</td>
+                                                <td class="order-closedate">    
+                                                            <apex:outputField value="{!o.Close_Date__c}" />
+                                                 </td>  
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                                      </table>
+                                </div>
+                                <div id="tabs-p" class="tab-container">
+                                <ul>
+                                    <li><a href="#ptab-1" class="tab tab-products-live">{!$Label.Live}</a></li>
+                                    <li><a href="#ptab-2" class="tab tab-products-failover">{!$Label.Failover}</a></li>
+                                    <li><a href="#ptab-3" class="tab tab-products-test">{!$Label.Test}</a></li>
+                                </ul>
+                                
+                                <div id="ptab-1" class="tab-content tab-content-1c">
+                                         <table id="license-view" cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{!$Label.Product_Server}</th>
+                                                        <!--<th>Environment</th>-->
+                                                        <!--<th>Quantity</th>-->
+                                                        <th>{!$Label.Key}</th>
+                                                        <th>{!$Label.Created_Date}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!LiveLicenses}" var="l">
+                                                      <tr>  
+                                                            <td class="product-name">                                                           
+                                                                <!--<apex:outputLabel value="{!l.Asset_Item__r.Name}"/>
+                                                                <apex:outputLabel value="{!l.ServerName__c}" rendered="{!IF((l.NumberForAcuo__c > 0), true, false)}"/>-->
+                                                                <apex:outputLabel value="{!l.Name}"/>
+                                                            </td>
+                                                            <!--<td class="product-environment">{!l.Environment_Type__c}</td>-->
+                                                            <!--<td class="product-qty">{!l.Quantity__c}</td>-->
+                                                            <td class="product-keys">
+                                                                <!--<apex:outputText rendered="{!l.lk.attachments.size==null || l.lk.attachments.size==0}">
+                                                                    Not Available
+                                                                </apex:outputText>-->
+                                                                <apex:repeat value="{!l.lk.attachments}" var="a" rendered="{!l.lk.attachments.size!=0 && !l.isSolution}">
+                                                                    <!--Downloadable-->
+                                                                    &#9660;&nbsp;<apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, a.id)}">{!a.Name}</apex:outputLink><br />
+                                                                </apex:repeat>
+                                                                <apex:repeat value="{!l.attlst}" var="a" rendered="{!l.attlst.size!=0 && l.isSolution}">
+                                                                    <!--Downloadable-->
+                                                                    &#9660;&nbsp;<apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, a.id)}">{!a.Name}</apex:outputLink><br />
+                                                                </apex:repeat>
+                                                            </td> 
+                                                            <td class="product-date">    
+                                                                <apex:outputField value="{!l.lk.createddate}" /> 
+                                                            </td>                                                   
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                </div>
+                                <div id="ptab-2" class="tab-content tab-content-2c">
+                                    
+                                      <table id="license-view" cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{!$Label.Product_Server}</th>
+                                                        <!--<th>Environment</th>-->
+                                                        <!--<th>Quantity</th>-->
+                                                        <th>{!$Label.Key}</th>
+                                                        <th>{!$Label.Created_Date}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!FailoverLicenses}" var="l">
+                                                      <tr>  
+                                                            <td class="product-name">{!l.Name}</td>
+                                                            <!--<td class="product-environment">{!l.Environment_Type__c}</td>-->
+                                                            <!--<td class="product-qty">{!l.Quantity__c}</td>-->
+                                                            <td class="product-keys">
+                                                                <apex:repeat value="{!l.lk.attachments}" var="a" rendered="{!l.lk.attachments.size!=0 && !l.isSolution}">
+                                                                    <!--Downloadable-->
+                                                                    &#9660;&nbsp;<apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, a.id)}">{!a.Name}</apex:outputLink><br />
+                                                                </apex:repeat>
+                                                                <apex:repeat value="{!l.attlst}" var="a" rendered="{!l.attlst.size!=0 && l.isSolution}">
+                                                                    <!--Downloadable-->
+                                                                    &#9660;&nbsp;<apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, a.id)}">{!a.Name}</apex:outputLink><br />
+                                                                </apex:repeat>
+                                                            </td> 
+                                                            <td class="product-date">    
+                                                                <apex:outputField value="{!l.lk.Asset_Item__r.createddate}" />
+                                                            </td>                                                   
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                </div>
+                                <div id="ptab-3"  class="tab-content tab-content-3c">
+                                     
+                                      <table id="license-view" cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{!$Label.Product_Server}</th>
+                                                        <!--<th>Environment</th>-->
+                                                        <!--<th>Quantity</th>-->
+                                                        <th>{!$Label.Key}</th>
+                                                        <th>{!$Label.Created_Date}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!TestLicenses}" var="l">
+                                                      <tr>  
+                                                            <td class="product-name">{!l.Name}</td>
+                                                            <!--<td class="product-environment">{!l.Environment_Type__c}</td>-->
+                                                            <!--<td class="product-qty">{!l.Quantity__c}</td>-->
+                                                            <td class="product-keys">
+                                                                <apex:repeat value="{!l.lk.attachments}" var="a" rendered="{!l.lk.attachments.size!=0 && !l.isSolution}">
+                                                                    <!--Downloadable-->
+                                                                    &#9660;&nbsp;<apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, a.id)}">{!a.Name}</apex:outputLink><br />
+                                                                </apex:repeat>
+                                                                <apex:repeat value="{!l.attlst}" var="a" rendered="{!l.attlst.size!=0 && l.isSolution}">
+                                                                    <!--Downloadable-->
+                                                                    &#9660;&nbsp;<apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, a.id)}">{!a.Name}</apex:outputLink><br />
+                                                                </apex:repeat>
+                                                            </td> 
+                                                            <td class="product-date">    
+                                                                <apex:outputField value="{!l.lk.Asset_Item__r.createddate}" />
+                                                            </td>                                                   
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>        
+                                </div>
+                            </div><!-- /Inner Tabs for Products Sorting -->
+                          </apex:outputPanel>
+                        
+                        </div>
+                        <!-- /End of License Tab2 ------------------------------------------------------------------------------------------------------------------------------->
+                        
+                        
+                        <!-- /Start of Servers Tab 3 -------------------------------------------------------------------------------------------------------------------------------------->
+                        <div id="tabs-3"  class="tab-content tab-content-3a">
+                            <apex:outputText rendered="{!!$ObjectType.Server__c.accessible}"><p>{!$Label.No_Access_Servers}</p></apex:outputText>
+                            <apex:outputPanel rendered="{!$ObjectType.Server__c.accessible}">
+                                <div id="tabs-s" class="tab-container">
+                                    <ul>
+                                        <li><a href="#tabs-8" class="tab tab-products-live">{!$Label.Live}</a></li>
+                                        <li><a href="#tabs-9" class="tab tab-products-failover">{!$Label.Failover}</a></li>
+                                        <li><a href="#tabs-10" class="tab tab-products-test">{!$Label.Test}</a></li>
+                                    </ul>
+                                    <div id="tabs-8" class="tab-content tab-content-1c">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <apex:outputText rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}"><th>&nbsp;</th></apex:outputText>
+                                                        <th>{!$Label.Name}</th>
+                                                        <th>{!$Label.Release}</th>
+                                                        <th>{!$Label.Database}</th>
+                                                        <th>{!$Label.Platform}</th>
+                                                        <th>{!$Label.Verified}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!LiveServers}" var="s">
+                                                      <tr>  
+                                                            <apex:outputpanel rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}">
+                                                                <td><apex:outputLink value="{!$page.serverdetails}" rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}">{!$Label.Edit}<apex:param name="id" value="{!s.id}"/></apex:outputLink></td>
+                                                            </apex:outputpanel>
+                                                            <td class="server-name">{!if(s.machine_name__c=='','Null',s.machine_name__c)}</td>
+                                                            <td class="server-release">{!s.Release__r.name}</td>
+                                                            <td class="server-db">{!s.Database__c +' '+s.Database_Version__c}</td>
+                                                            <td class="server-platform">{!s.Platform__c +' '+s.Platform_Version__c}</td>{
+                                                            <td class="server-date"><apex:outputField value="{!s.Date_Verified_by_Customer__c}" /></td>
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                    <div id="tabs-9" class="tab-content tab-content-2c">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <apex:outputText rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}"><th>&nbsp;</th></apex:outputText>
+                                                        <th>{!$Label.Name}</th>
+                                                        <th>{!$Label.Release}</th>
+                                                        <th>{!$Label.Database}</th>
+                                                        <th>{!$Label.Platform}</th>
+                                                        <th>{!$Label.Verified}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!FailoverServers}" var="s">
+                                                      <tr>  
+                                                            <apex:outputpanel rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}">
+                                                                <td><apex:outputLink value="{!$page.serverdetails}" rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}">{!$Label.Edit}<apex:param name="id" value="{!s.id}"/></apex:outputLink></td>
+                                                            </apex:outputpanel>
+                                                            <td class="server-name">{!if(s.machine_name__c=='','Null',s.machine_name__c)}</td>
+                                                            <td class="server-release">{!s.Release__r.name}</td>
+                                                            <td class="server-db">{!s.Database__c +' '+s.Database_Version__c}</td>
+                                                            <td class="server-platform">{!s.Platform__c +' '+s.Platform_Version__c}</td>
+                                                            <td class="server-date"><apex:outputField value="{!s.Date_Verified_by_Customer__c}" /></td>
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                    <div id="tabs-10"  class="tab-content tab-content-3c">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <apex:outputText rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}"><th>&nbsp;</th></apex:outputText>
+                                                        <th>{!$Label.Name}</th>
+                                                        <th>{!$Label.Release}</th>
+                                                        <th>{!$Label.Database}</th>
+                                                        <th>{!$Label.Platform}</th>
+                                                        <th>{!$Label.Verified}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!TestServers}" var="s">
+                                                      <tr>  
+                                                            <apex:outputpanel rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}">
+                                                                <td><apex:outputLink value="{!$page.serverdetails}" rendered="{!SITE_CONTACT.Contact_Role__C=='ImageNow Admin'}">{!$Label.Edit}<apex:param name="id" value="{!s.id}"/></apex:outputLink></td>
+                                                            </apex:outputpanel>
+                                                            <td class="server-name">{!if(s.machine_name__c=='','Null',s.machine_name__c)}</td>
+                                                            <td class="server-release">{!s.Release__r.name}</td>
+                                                            <td class="server-db">{!s.Database__c +' '+s.Database_Version__c}</td>
+                                                            <td class="server-platform">{!s.Platform__c +' '+s.Platform_Version__c}</td>
+                                                            <td class="server-date"><apex:outputField value="{!s.Date_Verified_by_Customer__c}" /></td>
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                </div><!-- /Inner Tabs for Server Sorting -->
+                             </apex:outputPanel>   
+                        </div>
+                        <!-- /End of Server Tab3 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                        
+                       
+                        <!-- /Start of Products Tab4 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                        <div id="tabs-4" class="tab-content tab-content-3a">
+
+                            <apex:outputText rendered="{!!$ObjectType.Asset.accessible}"><p>{!$Label.No_Access_Products_Licenses}</p></apex:outputText>
+                            <apex:outputPanel rendered="{!$ObjectType.Asset.accessible}">
+                                <apex:form >
+                                    <div class="form-license callout-content">
+                                        <apex:outputpanel rendered="{!$ObjectType.case.createable}" >
+                                            
+                                            <dl>
+                                                <dd class="no-arrow"><p class="note">{!$Label.Note_Submit_Production_Down}</p></dd>
+                                                <br />
+                                                <dt>{!$Label.License_Request}</dt>
+                                                <dd class="no-arrow"><p class="note">{!$Label.Note_Brief_Description}</p></dd>
+                                                <dd>{!$Label.Product}</dd>
+                                                <dd>{!$Label.Release}</dd>
+                                                <dd>{!$Label.Environments_Etc}</dd>
+                                                <br />
+                                                <dd class="no-arrow"><p class="note">{!$Label.Description}:</p></dd>
+                                                <dd class="no-arrow"><apex:inputTextarea style="width:550px;" value="{!LicenseCase.Description}"/></dd>
+                                                <br />
+                                                <dd class="no-arrow"><p class="note">{!$Label.Type}:</p></dd>
+                                                <dd class="no-arrow">
+                                                        <apex:selectList value="{!RequestType}" style="margin-left:3px;width:220px;font: 11px/15px Arial,Helvetica,sans-serif;" id="chooselicensetype" size="1">
+                                                        <apex:selectOption itemValue="" itemLabel="--none--"/>
+                                                        <apex:selectOption itemValue="New --" itemLabel="New license request"/>
+                                                        <apex:selectOption itemValue="Reissue --" itemLabel="Reissue of existing license request"/>
+                                                    </apex:selectList> 
+                                                </dd>
+                                                
+                                                <br />
+                                                <dt>{!$Label.Hardware_Fingerprint_Attachment}</dt>
+                                                <br />
+                                                <dd class="no-arrow"><p class="note">{!$Label.Attach_Fingerprint}:</p></dd>
+                                                <dd class="no-arrow"><apex:outputLabel ></apex:outputLabel><apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="details-submit" styleclass="browse-button" title="Attach multiple files into one compressed zip files"/></dd>
+                                                <br />
+                                                <dd class="no-arrow">{!$Label.Assistance_Fingerprint}<apex:outputLink target="_blank" value="{!$site.prefix}/articles/Support_Articles/Article-00003942">{!$Label.Knowledgebase_Article}</apex:outputLink></dd>
+                                                <br />
+                                            </dl>
+                                            <apex:commandButton value=" " action="{!submitLicenseRequest}" styleClass="submitbutton"/>
+                                        
+                                        </apex:outputPanel>
+                                        
+                                        
+                                    </div>
+                                </apex:form>
+                                 <div id="tabs-o" class="order-view callout-content">
+                                         <table id="order-view" cellpadding="0" cellspacing="0" border="0"  class="display accounttable">
+                                            <thead>
+                                        <tr>
+                                            <th>{!$Label.Order_Number}</th>
+                                            <th>{!$Label.PO_Number}</th>
+                                            <th>{!$Label.Close_Date}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!orders}" var="o">
+                                          <tr>  
+                                                 <td class="order-id">
+                                                    <apex:outputLink value="{!$page.orderdetails}" styleClass="results-order-id">{!o.Name}
+                                                        <apex:param name="id" value="{!o.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="order-po-number">{!o.PO_Number__c}</td>
+                                                <td class="order-closedate">    
+                                                            <apex:outputField value="{!o.Close_Date__c}" />
+                                                 </td>  
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                                      </table>
+                                </div>
+                                <!--<div id="tabs-p" class="tab-container">
+                                <ul>
+                                    <li><a href="#ptab-1" class="tab tab-products-live">Live</a></li>
+                                    <li><a href="#ptab-2" class="tab tab-products-failover">Failover</a></li>
+                                    <li><a href="#ptab-3" class="tab tab-products-test">Test</a></li>
+                                </ul>-->
+                                
+                                <div id="ptab-1" class="tab-content tab-content-1c">
+                                         <table id="license-view" cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                            <thead>
+                                                <tr>
+                                                    <th>{!$Label.Product_Name}</th>
+                                                    <th>{!$Label.Environments}</th>
+                                                    <!--<th>Quantity</th>
+                                                    <th>Key</th>
+                                                    <th>Created Date</th>-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <apex:repeat value="{!AllProducts}" var="l">
+                                                  <tr>  
+                                                        <td class="product-name">
+                                                            <!--<apex:outputLink value="{!$page.productdetails}">-->
+                                                                {!l.asse.Name}
+                                                                <!--<apex:param name="id" value="{!l.asse.id}"/>
+                                                            </apex:outputLink>-->
+                                                        </td>
+                                                        <!--<td class="product-environment">{!l.Server__r.Server_Type__c}</td>-->
+                                                        <td class="product-environment">{!l.environment}</td>
+                                                        <!--<td class="product-qty">{!l.Quantity__c}</td>-->
+                                                        <!--<td></td>-->
+                                                        <!--<td class="product-date">    
+                                                            <apex:outputField value="{!l.createddate}" />
+                                                        </td> -->                                                 
+                                                  </tr>
+                                                 </apex:repeat>
+                                            </tbody>
+                                      </table>
+                                </div>                               
+                            <!-- /Inner Tabs for Products Sorting -->
+                          </apex:outputPanel>
+                        
+                        </div>
+                        <!-- /End of Products Tab4 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                                              
+                    </div><!-- /Tabs -->
+                </div><!-- /Accounts -->
+            
+            </div><!-- /Right Two-Thirds -->
+            
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

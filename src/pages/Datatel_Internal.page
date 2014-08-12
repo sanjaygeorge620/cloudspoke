@@ -1,0 +1,57 @@
+<!-- This Page has internal links for LearnMode Strategies Page under Learning Business Applications for Datatel  -->
+<!-- Created by Pemmanni on October 25th 2011 -->
+<apex:page controller="SitesControllerInternal">
+<title>Datatel</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript">
+        jQuery(document).ready(function() {
+        jQuery('.toolbar-documentation').addClass('active');
+        scaletowindow('#itarget',900,300);});
+        jQuery(window).resize(function() {
+        scaletowindow('#itarget',900,300);});
+        </script>
+        <div class="breadcrumb">
+        <ul>
+        <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+        <li><a class="current" href="{!$page.Datatel_Internal}">Datatel</a></li>
+        </ul>
+        </div>     
+        <div class="cp_core">
+        <apex:pageMessages />
+        <div class="column full-width" >
+        <div class="callout spotlight">    
+        <div class="callout-content">
+        <br/>
+        <div><H1 align="center">LearnMode with Datatel Colleague</h1></div><br /><hr /><br />
+        </div>
+        <div class="callout-content">
+        <p>Datatel Colleague is a SIS (student information system) used in many Higher Education institutions. It is most commonly integrated with ImageNow in business processes such as Admissions and Financial Aid.</p><br/>
+        <p>This page contains links to articles detailing the best LearnMode methods to use by Datatel version. Once a Datatel screen has been successfully learned, it can be used to drive searching within ImageNow using a <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwr&popup=true">view action filter</a>.</p><br />
+        <p><b>Note:</b> To learn a Datatel Colleague screen, you will need the global privilege to Manage Application Plans within ImageNow.</p><br/><br/>
+        <p><font color= "FF9933"><H2>Various approaches to learning screens by Datatel version</h2></font></p><br/>
+        <p><H2>Datatel Colleague 4.3</h2></p><br />
+        <p>Information on learning Datatel Colleague 4.3 screens using the Internet Explorer LearnMode method can be found in the “Integration linking with LearnMode” section of the <a href="https://c.na5.visual.force.com/apex/KnowledgeProductDocuments_Internal?id=kA2700000004CQx&popup=true">ImageNow Datatel Colleague 4.3 Integration Guide.</a></p><br />
+        <p><H2>Datatel Colleague 4.2</h2></p><br/>
+        <p>Information on learning Datatel Colleague 4.2 screens, using a combination of Viewpoint LearnMode method and <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNZD&popup=true">IE LearnMode VBScript  functions</a> can be found in the “Integration linking with LearnMode” section of the <a href="https://c.na5.visual.force.com/apex/KnowledgeProductDocuments_Internal?id=kA2700000004CQs&popup=true">ImageNow Datatel Colleague 4.2 Integration Guide.</a></p><br />
+        <p><H2>Datatel Colleague 4.1</h2></p><br />
+        <p>Information on learning Datatel Colleague 4.1 screens, using a combination of Window Walker LearnMode method and <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNZD&popup=true">IE LearnMode VBScript  functions</a> can be found in the “Integration linking with LearnMode” section of the <a href="https://c.na5.visual.force.com/apex/KnowledgeProductDocuments_Internal?id=kA2700000004CQn&popup=true">ImageNow Datatel Colleague 4.1 Integration Guide.</a></p><br /><br />
+        <p><H2>Datatel Desktop Client 2.3</h2></p><br />
+        <p>Information on learning Datatel Colleague Desktop 2.3 screens using ImageNow Window Walker LearnMode method can be found in the "Integrate linking with LearnMode” section of the <a href="https://c.na5.visual.force.com/apex/KnowledgeProductDocuments_Internal?id=kA2700000004CR2&popup=true">ImageNow Datatel Colleague 2.3 Integration Guide.</a></p><br />
+        <div class="column rightcolumn">  
+        <div class="callout fd">
+        <a class="title-bar" href="#"><span class="sprite_cpicons fd">&nbsp;</span><font color= "FF9933">Related Topics</font></a>
+        <div class="callout-content"><br />
+        <a href="{!$page.LearnMode_Strategies_FCL}"><H3>LearnMode Strategies</H3></a><br/>
+        <a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SJO&popup=true"><H3>Define a dictionary data element using Internet Explorer</H3></a><br/>
+        <a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008QBA&popup=true"><H3>Define a dictionary data element using Window Walker</H3></a>
+        </div>                        
+        </div>                        
+        </div>
+        </div> 
+        </div>
+        </div>
+        </div>
+    </apex:define>
+  </apex:composition>
+</apex:page>

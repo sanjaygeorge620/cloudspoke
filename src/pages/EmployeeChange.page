@@ -1,0 +1,10 @@
+<apex:page standardController="Employee_Change_Request__c" extensions="EmployeeChangeValidation" action="{!Redirect}" tabStyle="Employee_Change_Request__c" recordSetVar="Owner">
+ <!--
+ * Name: EmployeeChange
+ *
+ * Description: to handle the New button functionality from the contact page
+ * Created By: Manoj Kolli
+ * Created Date: 4/17/2012
+ */-->
+ <apex:detail />
+</apex:page>

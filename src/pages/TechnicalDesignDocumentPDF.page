@@ -1,0 +1,343 @@
+<apex:page controller="TechnicalDocumentController"  renderAs="pdf" standardstylesheets="false" sidebar="false" showheader="false" >
+    <head>
+        <apex:stylesheet value="{!URLFOR($Resource.iConnectTemplate,'iconnectTechnicalForm.css')}"/>
+    </head>
+   
+    <body>
+
+        <div class="header">
+             <table>
+                <tr>
+                    <td>
+                       Project Name :<apex:outputText value="{!Project_Name}"/>
+                    </td>
+                    <td>
+                       Deliverable Id :<apex:outputText value="{!Deliverable_Id}"/>  
+                    </td>
+                    <td>
+                       Version : <apex:outputText value="{!version}"/>  
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class = "horizontalRule"> </div>
+        <div class="footer">
+            <table>
+                <tr>
+                    <td>
+                       Effective Date : <apex:outputText value="{0,date,dd-MMMM-yyyy}"><apex:param value="{!NOW()}"/></apex:outputText>
+                    </td>
+                    <td>
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lexmark <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Confidential
+                    </td>
+                    <td>
+                         Page <span class="pagenumber"/> of <span class="pagecount"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class = "horizontalRule"> </div>
+        <apex:form >
+           
+       
+            <div id="container">
+                <div id="top_image">
+                    <img src="{!URLFOR($Resource.iConnectTemplate,'/images/Lexmark.png')}" />
+                </div>
+                <div id="table_title">
+                    <table>
+                        <tr>
+                            <td>
+                                <h1><apex:outputText value="{!Organization}"/></h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h1><apex:outputText value="{!Project_Name}"></apex:outputText></h1>
+                                <h2>Design Document</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h2>Deliverable ID :<apex:outputText value="{!Deliverable_Id}"/></h2>
+                                <h2>Version:  <apex:outputText value="{!version}"/> </h2>
+                            </td>
+                        </tr>
+                    </table>                    
+                </div>
+                <div id="table_title_approval">
+                    <table class="tableApproval">
+                        <tr>
+                            <th>Role</th>
+                            <th>Name and Title</th>
+                            <th>Signature and Date</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Author:</th>
+                        </tr>
+                        <tr>
+                            <td>{!AuthorRole}</td>
+                            <td>{!Author}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Review and Approval:</th>
+                        </tr>
+                        <tr>
+                            <td>{!ReviewAuthorRole1}</td>
+                            <td>{!ReviewAuthor1}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>{!ReviewAuthorRole2}</td>
+                            <td>{!ReviewAuthor2}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>{!ReviewAuthorRole3}</td>
+                            <td>{!ReviewAuthor3}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>{!ReviewAuthorRole4}</td>
+                            <td>{!ReviewAuthor4}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>{!ReviewAuthorRole5}</td>
+                            <td>{!ReviewAuthor5}</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="chapterBreak"></div>
+                <div id="table_of_contents">
+                    <h1>Table of Contents</h1>
+                    <p>Table of Contents</p><br/>
+                    
+                    <p> <h2>1. Purpose </h2></p>
+                    <p> <h2>2. Scope </h2></p>
+                    <p> <h2>3. Definitions</h2></p>
+                    <p> <h2>4. References</h2></p>
+                    <p> <h2>5. Design Details</h2></p>
+                     <apex:variable var="numberOfRepeatsx" value="{!1}" />
+                    <p> <apex:repeat value="{!designQuery}" var="design" id="theRepeaterx">                            
+                          &nbsp;&nbsp;&nbsp; 5.{!numberOfRepeatsx}     Design Reference - {!design.Name} <br/>
+                         <apex:variable var="numberOfRepeatsx" value="{!numberOfRepeatsx + 1}" />
+                        </apex:repeat>        
+                    </p>
+                    <p> <h2>6. Revision History</h2></p>
+                    
+                </div>
+                <div class="chapterBreak"></div>
+                <div id="chapters">
+                    <div id="chapter_Purpose">
+                        <h1>1.  Purpose</h1>
+                        <p>
+                            The purpose of this document is to specify for a specific set of requirements (‘user stories’), the design details.<br/>
+                            It’s format is specific for Salesforce.com requirements.
+
+                        </p>
+                    </div>
+                    <div class="chapterBreak"></div>
+                    <div id="chapter_Scope" >
+                        <h1>2.  Scope</h1>
+                        <p>
+                            <span>
+                                This design document describes the design for following User Stories:<br/>
+                            </span>
+                         </p>       
+                          <table id ="table_Scope">
+                             <tr>
+                                <th> User Story</th>
+                                <th> Sprint </th>
+                                <th> Functional Area</th>
+                                <th> Sub Process</th>
+                              </tr> 
+                               <apex:repeat value="{!designQuery}" var="design1">
+                                    <apex:repeat value="{!designQuery[design1]}" var="listUS">
+                                            <tr>
+                                             <td>{!listUS.Name} (Rally ID - {!listUS.Rally_ID__c})</td>
+                                             <td>{!listUS.Planned_Sprint_del__r.Name}</td>
+                                             <td>{!listUS.Functional_Area__c}</td>
+                                             <td>{!listUS.Sub_Process__c}</td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </apex:repeat>
+                                </table>
+                         </div>
+                         <div class="chapterBreak"></div>
+                       
+                    <div id="chapter_definitions" >
+                        <h1>3.  Definitions</h1>
+                        <p>
+                            See the SDLC Glossary for general definitions.
+                        </p>
+                        <apex:outputPanel rendered="{!DefinitionsExist}">       
+                            <table id="table_definitions">
+                                <tr>                                
+                                    <th>Term/Acronym</th>
+                                    <th>Definition</th>
+                                    <th>Project</th>
+                                </tr>
+                               <apex:repeat value="{!Definitions}" var="Def">
+                                <tr>                                
+                                    <td>{!Def.Term_Acronym__c}</td>
+                                    <td>{!Def.Name}</td>
+                                    <td>{!Def.Project__r.Name}</td>
+                                </tr>
+                              </apex:repeat> 
+                            </table>
+                        </apex:outputPanel> 
+                    </div>
+                    
+                    <div class="chapterBreak"></div>
+                    
+                    <div id="chapter_references">
+                        <h1>4. References</h1>
+                        <p>
+                        </p>
+                        <apex:outputPanel rendered="{!ReferencesExist}">
+                        
+                            <table id="table_references">
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Document ID</th>
+                                    <th>Project</th>
+                                </tr>
+                               <apex:repeat value="{!References}" var="Ref">
+                                  <tr>
+                                    <td>{!"Ref.Name"}</td>
+                                    <td>{!"Ref.Term_Acronym__c"}</td>
+                                    <td>{!"Ref.Project__c"}</td>
+                                  </tr>
+                               </apex:repeat>
+                            </table>
+                        </apex:outputPanel>
+                    </div>
+                    <div class="chapterBreak"></div>
+                    <div id="chapter_designDetails">
+                        <h1>5.  Design Details</h1>
+                        <apex:variable var="numberOfRepeats" value="{!1}" />
+                        <apex:repeat value="{!designQuery}" var="design" id="theRepeater">
+                            <div id="chapter_designDetails_DesignRef">
+                                <h2>5.{!numberOfRepeats}     Design Reference - {!design.Name}</h2>
+                                <p>
+                                    Tracker Design Reference:&nbsp;<apex:outputField value="{!design.Name}" /><br/>
+                                    <br/>
+                                    Linked User Stories: <br/>                                
+                                    <ul>
+                                        <apex:repeat value="{!designQuery[design]}" var="listUS">
+                                            <li>
+                                                <apex:outputField value="{!listUS.Name}" />
+                                            </li>
+                                        </apex:repeat>
+                                    </ul>
+                                </p>
+                            </div>
+                            <div id="chapter_designDetails_Overview">
+                                <h3>5.{!numberOfRepeats}.1   Summary</h3>
+                                <p>
+                                    <apex:outputField value="{!design.Design_Summary__c}" />
+                                </p>
+                            </div>
+							<div id="chapter_designDetails_Deteails">
+                                <h3>5.{!numberOfRepeats}.2   Design Details</h3>
+                                <p>
+                                    <apex:outputField value="{!design.Design_Details__c}" />
+                                </p>
+                            </div>
+                            <div id="chapter_designDetails_DataModel">
+                                <h3>5.{!numberOfRepeats}.3   Data model</h3>
+                                <p>
+                                    <apex:outputField value="{!design.Data_Model__c}" />
+                                </p>
+                            </div>
+                            <div id="chapter_designDetails_Components">
+                                <h3>5.{!numberOfRepeats}.4   Components</h3>
+                                <div id="chapter_deisgnDetails_Components_Objects">
+                                    <h4>5.{!numberOfRepeats}.4.1     Objects</h4>
+                                    <p>
+                                        <apex:outputField value="{!design.Objects__c}" />
+                                    </p>
+                                </div>
+                                <div id="chapter_deisgnDetails_Components_Fields">
+                                    <h4>5.{!numberOfRepeats}.4.2     Fields</h4>
+                                    <p>
+                                        <apex:outputField value="{!design.Fields__c}" /> 
+                                    </p>
+                                </div>
+                                <div id="chapter_deisgnDetails_Components_Fields">
+                                    <h4>5.{!numberOfRepeats}.4.3     Page Layouts</h4>
+                                    <p>
+                                        <apex:outputField value="{!design.Page_Layouts__c}" /> 
+                                    </p>
+                                </div>
+                                <div id="chapter_deisgnDetails_Components_ApexClasses">
+                                    <h4>5.{!numberOfRepeats}.4.4     Apex Classes</h4>
+                                    <p>
+                                        <apex:outputField value="{!design.Apex_Classes__c}" /> 
+                                    </p>
+                                </div>
+                                <div id="chapter_deisgnDetails_Components_VisualForcePages">
+                                    <h4>5.{!numberOfRepeats}.4.5     VisualForce Pages</h4>
+                                    <p>
+                                        <apex:outputField value="{!design.Visualforce_Pages__c}" /> 
+                                    </p>
+                                </div>
+                                <div id="chapter_deisgnDetails_Components_ApexTriggers">
+                                    <h4>5.{!numberOfRepeats}.4.6     Apex Triggers</h4>
+                                    <p>
+                                        <apex:outputField value="{!design.Apex_Trigger__c}" /> 
+                                    </p>
+                                </div>
+                                <div id="chapter_deisgnDetails_Components_Others">
+                                    <h4>5.{!numberOfRepeats}.4.7     Others</h4>
+                                    <p>
+                                        <apex:outputField value="{!design.Other_Components__c}" />                               
+                                    </p>
+                                </div>                              
+                            </div>
+                            
+                            <div id="chapter_designDetails_Comments">
+                                <h3>5.{!numberOfRepeats}.5   Comments</h3>
+                                <p>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                </p>
+                            </div>                            
+                            <apex:variable var="numberOfRepeats" value="{!numberOfRepeats + 1}" />
+                            <div class="chapterBreak"></div>
+                        </apex:repeat>
+                    </div>
+                    
+                    <div id="chapter_RevisionHistory">
+                        <h1>6.  Revision History</h1>
+                        <p>
+
+                        </p>
+                        <br/>
+                        <table id="table_revisionHistory">
+                            <tr>
+                                <th>Version</th>
+                                <th>Date</th>
+                                <th>Author</th>
+                                <th>Change Descriptions</th>
+                            </tr>                           
+                            <tr>
+                                <td>{!Version}</td>
+                                <td> <apex:outputText value="{0,date,dd-MMMM-yyyy}"><apex:param value="{!NOW()}"/></apex:outputText></td>
+                                <td>{!$User.FirstName}&nbsp;{!$User.LastName}</td>
+                                <td>{!Change_Desp}</td>
+                            </tr>
+                        </table>
+                        
+                    </div>
+                </div>
+            </div>
+        </apex:form>
+    </body>
+</apex:page>

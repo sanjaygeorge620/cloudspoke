@@ -1,0 +1,59 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:page >
+<style>
+img {
+margin: 5px 0px;
+}
+
+pre {
+font-size: 1.5em;
+}
+
+h1 {
+	font-size: 1.5em;
+}
+</style>
+Thank you for installing CraigsForce, enterprise classified ads made easy.
+<p/>
+CraigsForce allows all users in an organization to post ads to buy, sell, give away, borrow, or trade goods.  
+Although users may not know each other personally, there is a very high trust factor among users in the same organization, making it much safer than posting anonymous classified ads on public websites.
+<p/>
+<hr/>
+<h1>Exposing CraigsForce to Your Users</h1>
+<p/>
+Expose the app to your users via profiles.  The <i>CraigsForce User</i> custom profile has been created as an example.  Under <b>Setup | Manage Users | Profiles</b>, do the following <b>for each profile to which you would like to enable CraigsForce</b>:
+	<ol>
+	<li>Make the CraigsForce app visible to that profile.
+	<li>Set the tab setting for the Posts custom tab to be <i>Default On</i>
+	<li>Give them access to the Post custom object, specifically read, create, edit, delete, and view all:
+		<br/>
+		<img src="{!$Resource.postCustomObjectPref}"/>
+	<li>Give them access to the following VisualForce pages:
+		<br/>
+		<img src="{!$Resource.cfVfAccess}"/>
+</ol>
+<hr/>
+<h1>Scheduling a Process to Clean Up Old Posts</h1><p/>
+Posts are likely to be timely, so you can schedule a process to automatically delete them after thirty days.  To do this:
+<ol>
+<li>Go to <b>System Log</b>.
+<li>Under <b>Execute Apex</b>, copy and paste the following:
+<pre>
+PostingReaper.schedule();
+</pre>
+<li> Click <b>Execute</b>.
+</ol>
+<p/>
+<hr/>
+<h1>Customizing Categories (optional)</h1>
+<p/>
+CraigsForce comes with a set of preconfigured categories, but you are free to customize the categories for your organization.  To customize the categories:
+<ol>
+<li> Select <b>Setup | Create | Objects | Post | Category</b>.
+<li> From there, you may edit, delete, or add new categories.
+<li> When you are finished, select <b>Setup | Develop | Apex Classes</b>.
+<li> Select <b>Edit</b> next to <b>PostingCategoryMapping</b>.
+<li> This apex class lists the categories that are associated with prices.  Update this list based on the changed you made to the list of Categories in the prior steps.
+<li> Save the class.  Return to the Posts tab and you should see your updated list of categories.
+
+</apex:page>

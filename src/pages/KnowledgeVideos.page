@@ -1,0 +1,93 @@
+<apex:page standardController="Video__kav" showHeader="false" sidebar="false" extensions="SitesKnowledgeExtension">
+
+    <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+       <apex:define name="title"> 
+<title>{!SITE_NICKNAME+' | Knowledgebase: '+Video.Title}</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+       <script type="text/javascript">
+                    jQuery(document).ready(function() {
+                        jQuery('.toolbar-knowledgebase').addClass('active');
+                    });  
+            </script>
+     </apex:define>
+        <apex:define name="body"> 
+            
+            
+                 <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                            <a class="home" href="{!$page.home}">Home</a>
+                            <a class="current" href="{!if($CurrentPage.parameters.retURL!='', $site.Prefix+$CurrentPage.parameters.retURL, $page.Knowledge)}">Knowledgebase</a>
+                            <a href="#">{!Video.Title}</a>
+                        </nav>
+            </div>
+         </div>    
+                
+                <div class="cp_core">
+                <style type="text/css">
+        em { font-family: 'verdana';font-style: italic; }
+    </style>
+                <div class="column full-width"> 
+                   <div class="callout article"> 
+                    <a class="title-bar" target="_self" href="{!if($CurrentPage.parameters.retURL!='', $site.Prefix+$CurrentPage.parameters.retURL, $page.Knowledge)}"><span class="sprite_cpicons knowledge">&nbsp;</span>Knowledgebase</a> 
+                    <div class="callout-content"> 
+                        <!-- article information --> 
+                            <div class="inner-content-title-bar"> 
+                                <span><apex:outputtext value="{!Video.Title}" /></span> 
+                                <span class="small-buttons"> 
+                                    <!---<a class="sprite_cpicons email" href="#" title="Email this Article.">Bookmark</a>--->
+                                    <a class="sprite_cpicons print" href="#" onclick="window.print(); return false;" title="Print this article.">Print</a> 
+                                </span> 
+                            </div> 
+                            <div class="article-details">
+                                Article #: {!Video.ArticleNumber}<br />
+                                Last Published Date:&nbsp;<apex:outputField value="{!Video.LastModifiedDate}" />
+                                <br /><br />
+                            </div>  
+                        <apex:outputText escape="false" value="{!Video.Description__c}" />
+                        <div class="clear"/>
+                        <br />
+                        <apex:outputText escape="false" value="{!Video.Video__c}" />
+                        <div class="clear"/>
+                        <apex:outputPanel layout="block" id="feeback" styleClass="kb-feedback">
+                               <apex:outputtext rendered="{!!ShowFeedback}">Thank you for your feedback!</apex:outputtext> 
+                               <apex:outputPanel rendered="{!showfeedback}">
+                                <apex:form >    
+                                      <apex:outputPanel layout="block" styleClass="kb-questionone">
+                                         <label>Is this the topic you were looking for?</label>
+                                         <apex:actionRegion >
+                                             <apex:selectRadio id="looking_for" value="{!Feedback.Looking_for__c}">
+                                                  <apex:selectOption itemValue="true" itemLabel="Yes"/>
+                                                  <apex:selectOption itemValue="false" itemLabel="No"/>
+                                                  <apex:actionSupport event="onclick" rerender="questiontwo"/>
+                                             </apex:selectRadio>
+                                         </apex:actionRegion>
+                                      </apex:outputPanel>      
+                                      
+                                      <apex:outputPanel id="questiontwo" >
+                                          <apex:outputPanel layout="block" styleClass="kb-questiontwo" rendered="{!Feedback.Looking_for__c='true'}">
+                                             <label>Did this topic resolve your issue?</label>
+                                             <apex:selectRadio id="resolve_issue" value="{!Feedback.Resolve_Issue__c}">
+                                                  <apex:selectOption itemValue="True" itemLabel="Yes"/>
+                                                  <apex:selectOption itemValue="False" itemLabel="No"/>
+                                            </apex:selectRadio>
+                                         </apex:outputPanel>      
+                                     </apex:outputPanel>
+                                     <apex:outputPanel layout="block" styleClass="kb-submit">     
+                                       <apex:outputLabel value="Comments:" for="comment"/>
+                                       <apex:inputTextarea id="comment" value="{!Feedback.Comment__c}" />
+                                       <br />
+                                       <apex:commandButton value=" " styleClass="submitbutton" action="{!SubmitFeedback}" reRender="feeback"/> 
+                                     </apex:outputPanel>        
+                                </apex:form>
+                              </apex:outputPanel>   
+                            </apex:outputPanel>   
+                    </div>
+                   </div>
+                 </div>  
+             </div>   
+        </apex:define>
+  </apex:composition>      
+</apex:page>

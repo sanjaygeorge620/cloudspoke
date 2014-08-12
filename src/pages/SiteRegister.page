@@ -1,0 +1,52 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | '+$Label.site.register}" controller="SiteRegisterController">
+  <title>{!SITE_NICKNAME+' | '+$Label.site.register}</title>
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}">
+        <apex:define name="javascript">
+              //change icons
+              jQuery('.sprite_cpicons.secondary').removeClass('warning');
+              jQuery('.sprite_cpicons.secondary').addClass('profile');
+        </apex:define>
+        
+        <apex:define name="breadcrumb">
+             {!$Label.site.register}
+        </apex:define>
+        
+        <apex:define name="titlebar">
+             {!$Label.site.user_registration}
+        </apex:define>
+        
+        <apex:define name="content">
+            <p>
+                <apex:outputPanel layout="block" styleClass="topPanel">
+                  <apex:panelGrid width="400" cellpadding="0" cellspacing="0" bgcolor="white" columns="2"> 
+                    <apex:panelGroup >
+                      <br/>
+                      <apex:form id="theForm" forceSSL="true">
+                        <apex:pageMessages id="error"/>
+                        <apex:panelGrid columns="2" style="margin-top:1em;">
+                          <apex:outputLabel value="{!$Label.site.username}" for="username"/>
+                          <apex:inputText styleClass="registration_field"  required="true" id="username" value="{!username}"/>
+                          <apex:outputLabel value="{!$Label.site.community_nickname}" for="communityNickname"/>
+                          <apex:inputText styleClass="registration_field"  required="true" id="communityNickname" required="true" value="{!communityNickname}"/>
+                          <apex:outputLabel value="{!$Label.site.email}" for="email"/>
+                          <apex:inputText styleClass="registration_field" required="true" id="email" required="true" value="{!email}"/>
+                          <apex:outputLabel value="{!$Label.site.password}" for="password"/>
+                          <apex:inputSecret styleClass="registration_field"  id="password" value="{!password}"/>
+                          
+                          <apex:outputLabel value="{!$Label.site.confirm_password}" for="confirmPassword"/>
+                          <apex:inputSecret styleClass="registration_field"  id="confirmPassword" value="{!confirmPassword}"/>
+                          
+                          <apex:outputText value=""/>
+                          <apex:commandButton action="{!registerUser}" value="{!$Label.site.submit}" id="submit"/>
+                        </apex:panelGrid> 
+                        </apex:form>                  
+                      <br/>
+                    </apex:panelGroup>
+                  </apex:panelGrid> 
+                </apex:outputPanel>
+              <br/>
+
+            </p>
+        </apex:define>
+  </apex:composition>
+</apex:page>

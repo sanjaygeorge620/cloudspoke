@@ -1,0 +1,26 @@
+<apex:page standardcontroller="pse__Proj__c" extensions="LX_CreateProjectfromPreSales">
+<apex:form >
+<apex:pageblock >
+      <apex:pageblockbuttons >
+                <apex:commandButton value="Continue" action="{!continueToProject}"/>
+                <apex:commandbutton value="Cancel" action="{!Cancel}"/>
+      </apex:pageblockbuttons>
+  <apex:outputpanel >
+                <apex:pageblocksection title="Select Project Record Type" showheader="true" columns="1">
+                   <apex:selectList id="Recordtypeofnewproject" value="{!recordType}" size="1" label="Record Type of New Project" required="true">
+                    <apex:selectOption itemValue="Database Services" itemLabel="Database Services"/>
+                    <apex:selectOption itemValue="MS Implementation" itemLabel="MS Implementation"/>
+                    <apex:selectOption itemValue="MS Upgrades" itemLabel="MS Upgrades"/>
+                    <apex:selectOption itemValue="Professional Services" itemLabel="Professional Services"/>
+                    <apex:selectOption itemValue="ISS Implementation" itemLabel="ISS Implementation"/>
+                    
+        </apex:selectList> 
+
+                    
+
+                    
+                </apex:pageblocksection>
+  </apex:outputpanel>
+  </apex:pageblock>
+</apex:form>
+</apex:page>

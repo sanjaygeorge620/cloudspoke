@@ -1,0 +1,179 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesKnowledgeController" title="{!SITE_NICKNAME + ' | Knowledgebase'}"> 
+<title>{!SITE_NICKNAME} | Knowledgebase</title>
+     <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-knowledgebase').addClass('active');
+          oTable = jQuery('#datatable').dataTable( {aaSorting: [],"aoColumns": [null, null, {"sType": "date" }], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+          
+          jQuery('input[name=producthelp]').attr('checked', {!PRODUCT_HELP!=''});
+          jQuery('input[name=supportarticle]').attr('checked', {!SUPPORT_ARTICLES!=''});
+          jQuery('input[name=technicaloverview]').attr('checked', {!TECHNICAL_OVERVIEWS!=''});
+
+          jQuery('.accordion').accordion({ active:{!if($CurrentPage.parameters.tab=='1',1,0)}, collapsible: true, autoHeight: false, icons: { 'header': 'sprite_cpicons closed', 'headerSelected': 'sprite_cpicons open'} });          
+           //Add the accordion to sublists
+              var split_at = 'ul.filter li.L1';
+              jQuery('.lvl1').attr('onclick','').unbind('click');
+              jQuery(split_at).each(function() {
+                   
+                   jQuery(this).next().add(jQuery(this).nextUntil(split_at)).wrapAll("<ul />");
+              });
+              jQuery('.sub-accordian').accordion({ active:false, header: '.header', collapsible: true, autoHeight: false, icons: { 'header': 'sprite_cpicons closed', 'headerSelected': 'sprite_cpicons open'} });          
+        });
+    </script>
+   
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+         <style>
+            ul li.L1{font-size:1.1em;font-weight:bold;}
+            ul li.L2{margin-left:15px;}
+            .sub-accordian .header{cursor:pointer;}
+        </style>
+    
+
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                <li><a class="current" href="#">Knowledgebase</a></li>
+            </ul>
+        </div>   
+        <div class="cp_core">
+                  <apex:form id="kbtypes">
+                    <!--ajax filter--->
+                        <apex:actionFunction name="dosearch" action="{!doSearch}" rerender="">
+                                <apex:param name="filter" value="" />
+                        </apex:actionFunction>
+                        
+                        <apex:actionFunction name="filterkb" action="{!doFilter}" rerender="">
+                                <apex:param name="filter" value="" />
+                                <apex:param name="filtertype" value="" />
+                                <apex:param name="filtertitle" value="" />
+                        </apex:actionFunction>
+                          
+                        <apex:actionFunction name="unfilterkb" action="{!doUnFilter}" rerender="">
+                                <apex:param name="unfiltertype" value="" />
+                        </apex:actionFunction>
+                        
+                        <!--/ajax filter--->    
+                    <div class="column leftcol" id="resettable"> 
+                        <div class="callout filter"> 
+                            <div class="title-bar" > 
+                                <span class="sprite_cpicons filter">&nbsp;</span>Search Filter
+                                <apex:outputlink styleclass="remove" title="Remove all filters" value="{!$page.knowledge}">
+                                        Remove all filters
+                                        <apex:param name="s" value="{!KEYWORDS}"/>
+                                </apex:outputlink>
+                            </div> 
+                            <div class="callout-content current-filters"> 
+                                <div class="container results"> 
+                                    <h3>Current Filters:</h3> 
+                                    <apex:outputPanel id="kb-filter">
+                                            <dl class="current-filters"> 
+                                                <dd class="filter-1">
+                                                    <dl> 
+                                                       <apex:outputPanel rendered="{!RELEASE!=''}">
+                                                           <dd class="filter-1">
+                                                               <dl>
+                                                                   <dd>Release: {!if(RELEASE_TITLE!='',RELEASE_TITLE,RELEASE)}
+                                                                       <a class="sprite_cpicons remove" title="Remove filter" onclick="unfilterkb('release')">&nbsp;</a>
+                                                                   </dd>
+                                                                </dl>
+                                                            </dd>
+                                                       </apex:outputPanel>
+                                                       <apex:outputPanel rendered="{!PRODUCT!=''}">
+                                                           <dd class="filter-1">
+                                                               <dl>
+                                                                   <dd>Product: {!if(PRODUCT_TITLE!='',PRODUCT_TITLE,PRODUCT)}
+                                                                       <a class="sprite_cpicons remove" title="Remove filter" onclick="unfilterkb('product')">&nbsp;</a>
+                                                                   </dd>
+                                                               </dl>
+                                                            </dd>
+                                                      </apex:outputPanel>     
+                                                    </dl> 
+                                                </dd> 
+                                            </dl> 
+                                    </apex:outputPanel>
+                                </div> 
+                            </div><!-- /Current Filters --> 
+                            <div class="callout-content add-filters"> 
+                                <ul class="accordion"> 
+                                    <li> 
+                                        <a class="results-link" href="#" title="Open Filter">Release:</a> 
+                                        <div class="sub-accordian">
+                                            <ul class="filter">
+                                                <knowledge:categoryList categoryVar="category" categoryGroup="Release" rootCategory="All" level="-1">
+                                                     <li class="{!if(!CONTAINS(category.label,'__'),'header L1','L2')}"><apex:outputlink styleclass="{!if(!CONTAINS(category.label,'__'),'lvl1','')}" title="Click '{!category.label}' to Filter." value="#" onclick="filterkb('{!category.name}','release','{!category.label}')">{!Substitute(category.label,'__','')}</apex:outputlink></li>
+                                                </knowledge:categoryList> 
+                                            </ul> 
+                                         </div>   
+                                    </li> 
+                                    <li> 
+                                        <a class="results-link" href="#" title="Open Filter">Product:</a> 
+                                        <div class="sub-accordian">
+                                            <ul class="filter"> 
+                                                <knowledge:categoryList categoryVar="category" categoryGroup="Product" rootCategory="All" level="-1">
+                                                     <li class="{!if(!CONTAINS(category.label,'__'),'header L1','L2')}"><apex:outputlink styleclass="{!if(!CONTAINS(category.label,'__'),'lvl1','')}" title="Click '{!category.label}' to Filter." value="#" onclick="filterkb('{!category.name}','product','{!category.label}')">{!Substitute(category.label,'__','')}</apex:outputlink></li>
+                                                </knowledge:categoryList> 
+                                            </ul> 
+                                        </div>  
+                                    </li>
+                                </ul> 
+                            </div><!-- /Filters Available -->
+                        </div><!-- /Search Filter --> 
+                        <div class="callout kbspotlight"> <!-- spotlight--> 
+                                <span class="title-bar" href="#"><span class="sprite_cpicons fd">&nbsp;</span>Knowledge Spotlight</span> 
+                                <div class="callout-content kb-spotlight"> 
+                                        <dl class="left-third">
+                                            <apex:repeat value="{!WidgetKnowledgeSpotlight}" var="w">
+                                            <apex:outputText escape="false" value="{!w.Description_text__c}" />
+                                            </apex:repeat>
+                                        </dl>
+                                </div>
+                        </div> <!-- /spotlight-->
+                    </div><!-- /Left Column --> 
+                    
+                    <div class="two-thirds right-23"> 
+                        <div class="column-23"> 
+                            <div class="callout kbsearch"> 
+                                <span class="title-bar"><span class="sprite_cpicons knowledge">&nbsp;</span>Knowledgebase Search</span> 
+                                <div class="callout-content kb-content"> 
+                                    <div class="search-box"> 
+                                        <apex:inputtext id="kbsearch" styleclass="kbsearch" value="{!KEYWORDS}" onfocus="if (this.value == 'Start searching here.') { this.value=''; }" onblur="if (this.value == '') { this.value='Start searching here.'; }" />
+                                        <apex:commandButton action="{!dosearch}" styleclass="kbsubmit" value=" "/>
+                                    </div> 
+                                    <ul class="secondary-filter">
+                                        <li><input onclick="unfilterkb('PRODUCT_HELP')" class="submitform" type="checkbox" value="true" id="product-help"  name="producthelp"/><label for="product-help">Product Documentation</label></li>
+                                        <li><input onclick="unfilterkb('SUPPORT_ARTICLES')" class="submitform" type="checkbox" value="true" id="support_articles" name="supportarticle"/><label for="support_articles">Support Articles</label></li>
+                                        <li><input onclick="unfilterkb('TECHNICAL_OVERVIEWS')" class="submitform" type="checkbox" value="true" id="technical_overview" name="technicaloverview"/><label for="technical_overview">Technical Overviews</label></li>
+                                    </ul> 
+                                </div> 
+                                
+                                <c:Sites_Knowledge_Widget KB_ARTICLETYPES="{!KB_ARTICLETYPES}"
+                                     KB_CATEGORIES="{!KB_CATEGORIES}"
+                                     KB_CURRENT_PAGE_NUMBER="{!KB_CURRENT_PAGE_NUMBER}"
+                                     KB_KEYWORD="{!KB_KEYWORD}"
+                                     KB_PAGE_SIZE="{!KB_PAGE_SIZE}"
+                                     KB_SORTBY="{!KB_SORTBY}"
+                                     KB_WINDOW="_self"
+                                />
+                                
+                            </div><!-- /KB Search --> 
+                        </div><!-- /Column-23 --> 
+                        
+                    </div><!-- /Two-Thirds Right-23--> 
+           </apex:form>
+        </div>
+        
+        <apex:outputPanel id="kbdetails" rendered="false">
+                1. KB_CATEGORIES: {!KB_CATEGORIES}<br/>
+                2. KEYWORDS: {!KEYWORDS}<br/>
+                3. PRODUCT: {!PRODUCT}<br/>
+                4. RELEASE: {!RELEASE}<br/>
+                5. Product Help: {!PRODUCT_HELP}<br/>
+                6. Support Articles: {!SUPPORT_ARTICLES}<br/>
+                7. Technical_Overview: {!TECHNICAL_OVERVIEWS}<br/>
+                8. Types: {!KB_ARTICLETYPES}
+        </apex:outputPanel>                
+    </apex:define>
+  </apex:composition>  
+        
+</apex:page>

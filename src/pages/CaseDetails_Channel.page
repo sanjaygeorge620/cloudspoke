@@ -1,0 +1,91 @@
+<apex:page showHeader="false" standardController="case" standardStylesheets="false" extensions="SitesCaseController_Channel"> 
+<title>{!SITE_NICKNAME} | Case {!case.CaseNumber}</title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-cases').addClass('active');
+          
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$Page.CasesChannel}">Cases</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">{!case.CaseNumber}</a></li>
+                </ul>
+            </div> 
+            <apex:outputPanel rendered="{!$ObjectType.case.accessible}">
+            <div class="column full-width">
+                <div class="callout oppty">
+                    <div class="title-bar">
+                        <span class="sprite_cpicons cases-view">&nbsp;</span>Case ID: 
+                        <span class="case-id"><apex:outputText value="{!case.CaseNumber}"/></span> 
+                    </div><!-- /Cases Title Bar -->
+                    <apex:pageMessages />
+                    <div class="callout-content cases-content cases-content-inner"> 
+                      <!-- CaseDetail --> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Case Detail</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Contact Name</p> 
+                                <p><apex:outputfield value="{!case.Contact.Name}" /></p> 
+                                <p class="label course-type">Case Owner</p> 
+                                <p ><apex:outputfield value="{!case.ownerid}" /></p> 
+                                <p class="label course-type">Status</p> 
+                                <p ><apex:outputfield value="{!case.status}" /></p> 
+
+                               
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Email</p> 
+                                <p><apex:outputfield value="{!case.Contact.Email}" /></p>  
+                                <p class="label course-type">Phone</p> 
+                                <p><apex:outputfield value="{!case.Contact.Phone}" /></p>  
+                                <p class="label course-type">Type</p> 
+                                <p><apex:outputfield value="{!case.Type}" /></p>  
+ 
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        
+                        <!-- CaseDetail --> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Case Detail</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Subject</p> 
+                                <p><apex:outputfield value="{!case.Subject}" /></p> 
+                                <p class="label course-type">Description</p> 
+                                <p ><apex:outputfield value="{!case.Description}" /></p> 
+                            </div> 
+                            <div class="right-inner-col"> 
+                            </div> 
+                       
+                            <div class="left-inner-col"> 
+                                <p class="label course-type">Date/Time Opened</p> 
+                                <p><apex:outputfield value="{!case.createddate}" /></p> 
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Date/Time Closed</p> 
+                                <p><apex:outputfield value="{!case.closeddate}" /></p> 
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        
+                        
+                    </div><!-- /Case content -->
+                        
+                </div><!-- /Cases -->
+            </div><!-- /Right Two-Thirds -->
+            
+            </apex:outputPanel>
+            <apex:outputPanel rendered="({!$ObjectType.case.accessible)"><p>No record to display.</p></apex:outputPanel>
+
+        </div>
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

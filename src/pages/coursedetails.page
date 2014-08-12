@@ -1,0 +1,265 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesTrainingController"> 
+ 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+  <apex:define name="javascriptcalls">
+       <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-training').addClass('active');
+              jQuery('.trainingtable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+              jQuery('.scrolltoanchor').click(function(){               
+                    jQuery.scrollTo( '#scrollto-classes', 1000);
+                });
+              jQuery('.toggle-1-desc, #toggle-hide-desc').hide()
+              jQuery('.toggle-1-click').click(function () {
+                       jQuery('.toggle-1-desc').slideToggle('slow');
+                       jQuery('#toggle-show-desc, #toggle-hide-desc').toggle('fast');
+                });
+                                jQuery(document).LockMe({
+                     oid: '00Di0000000HrWi',   
+                    pid: '060i0000000LnqW'   
+                    });
+
+            });  
+        </script>
+     </apex:define>
+        <apex:define name="title"> 
+            <title>{!SITE_NICKNAME} | Training Course {!CourseDetails.Name}</title>
+        </apex:define>
+    
+    
+    <apex:define name="body">  
+       
+        <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Site.CurrentSiteURL}">Home</a>
+                    <a href="{!$page.Training}">Training</a>
+                        <apex:outputLink rendered="{!CourseDetails.Course_Type__C=='Live Online'}" value="{!$Page.training_liveonline}">Live Online</apex:outputLink>
+                        <apex:outputLink rendered="{!CourseDetails.Course_Type__C=='E-Learning'}" value="{!$Page.training_elearning}">eLearning</apex:outputLink>
+                        <apex:outputLink rendered="{!CourseDetails.Course_Type__C=='Classroom'}" value="{!$Page.training_classroom}">Classroom</apex:outputLink>                       
+                    <a class="current" href="#">{!CourseDetails.Name}</a>
+                </nav>
+            </div>
+         </div>   
+
+        <div class="cp_core"> 
+            <div class="column full-width"> 
+                <div class="callout classroom"> 
+                    <span class="title-bar" href="#"><span class="sprite_cpicons class">&nbsp;</span>{!CourseDetails.Name}</span> 
+                    <!---<a class="sprite_fields enroll scrolltoanchor" href="#">Enroll</a>--->
+                    <div class="callout-content"> 
+                    
+                        <!-- course information --> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Course Information:</span> 
+                            <span class="small-buttons"> 
+                                <!---<a class="sprite_cpicons bookmark" href="#" onclick="doBookmark('{!$CurrentPage.URL}','{!$Organization.Name+' | '+CourseDetails.Name}');return false;" title="Bookmark this class.">Bookmark</a>--->
+                                <a class="sprite_cpicons print" href="#" onclick="window.print(); return false;" title="Print this class information.">Print</a> 
+                            </span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                            <apex:outputPanel rendered="{!CourseDetails.Course_Type__C != 'E-Learning'}">
+                                 
+                               
+                                </apex:outputPanel> 
+                                <p class="label course-title">Course Catalog Name:</p> 
+                                <p class="item course-title"><apex:outputfield value="{!CourseDetails.Name}" /></p> 
+                                <p class="label course-type">Course Type</p> 
+                                <p class="item course-type"><apex:outputfield value="{!CourseDetails.Course_Type__C}" /></p> 
+                                <p class="label course-duration">Duration:</p> 
+                                <p class="item course-duration"><apex:outputfield value="{!CourseDetails.Class_Duration__c}" /></p> 
+                                <p class="label course-short">Short Description:</p> 
+                                <p class="item course-short">
+                                    <apex:outputfield value="{!CourseDetails.Short_Description__c}" />
+                                    <div class="toggle-1-click">
+                                        <a id="toggle-show-desc" href="#" class="show-details">&nbsp;</a>
+                                        <a id="toggle-hide-desc" href="#" class="hide-details">&nbsp;</a>
+                                        
+                                    </div>
+                                </p> 
+                            </div> 
+                            <div class="right-inner-col"> 
+                            <apex:outputPanel rendered="{!CourseDetails.Course_Type__C == 'E-Learning'}">
+                            <p class="label course-type">Language:</p> 
+                                    <p class="item course-type"><apex:outputfield value="{!CourseDetails.Language__c}" /></p>
+                            </apex:outputpanel>
+                                <apex:outputPanel rendered="{!isLoggedIN}">
+                                    <p class="label course-tuition">Tuition:</p> 
+                                    <p class="item course-tuition"><apex:outputfield value="{!CourseDetails.Currency__c}" />&nbsp;<apex:outputfield value="{!CourseDetails.Tuition__c}" /></p> 
+                                </apex:outputPanel>
+                                
+                                <!---Removed per Training -JD
+                                    <p class="label course-materials">Course has Materials: <span class="sprite_cpicons attachments">attachments</span></p> 
+                                -->
+                                <apex:outputPanel rendered="{!isLoggedIN}">
+                                    <p class="label couse-notes">Course Notes:</p> 
+                                    <p class="item course-notes"><apex:outputfield value="{!CourseDetails.Notes__c}" /></p> 
+                                </apex:outputPanel>    
+                            </div> 
+                        </div><!-- /Inner Content --> 
+                        <!-- /course information --> 
+                        <div class="toggle-1-desc"> <!-- /toggle --> 
+                            <!-- description information --> 
+                            <div class="inner-content-title-bar"> 
+                                <span>Description Information:</span> 
+                            </div> 
+                            <div class="inner-content"> 
+                                <div class="inner-description"> 
+                                    <p><strong>Description:</strong></p> 
+                                    <p><apex:outputfield value="{!CourseDetails.Description__c}" /></p> 
+                                </div> 
+                                <div class="inner-description"> 
+                                    <p><strong>Topics:</strong></p> 
+                                    <p><apex:outputfield value="{!CourseDetails.Topics__c}" /></p>
+                                </div> 
+                                <div class="inner-description"> 
+                                    <p><strong>Audience:</strong></p> 
+                                    <p><apex:outputfield value="{!CourseDetails.Audience__c}" /></p> 
+                                </div> 
+                                <apex:outputPanel rendered="{!CourseDetails.Course_Type__C == 'Classroom'}">
+                                <div class="inner-description"> 
+                                    <p><strong>Prerequisite Information:</strong></p> 
+                                    <p><apex:outputfield value="{!CourseDetails.Course_Prerequisites__c}" /></p> 
+                                </div> 
+                                </apex:Outputpanel>
+                                
+                                
+                            </div><!-- /Inner Content --> 
+                            <!-- /description information --> 
+                        
+                            <!-- prerequsite information --> 
+                            <apex:outputPanel rendered="{!CourseDetails.Course_Type__C != 'Classroom'}">
+                            <div class="inner-content-title-bar"> 
+                                <span>Prerequisite Information:</span> 
+                            </div> 
+                            <div class="inner-content"> 
+                                <div class="inner-left-col"> 
+                                    <p class="label prereq-requirements">Requirements:</p> 
+                                    <p class="item prereq-requirements"><apex:outputfield value="{!CourseDetails.Viewing_Requirement__c}" /></p> 
+                                </div> 
+                                <div class="inner-right-col"> 
+                                    <p class="label prereq-environment">Environment:</p> 
+                                    <p class="item prereq-environment"><apex:outputfield value="{!CourseDetails.Environment__c}" /></p> 
+                                </div> 
+                            </div><!-- /Inner Content --> 
+                            <!-- /prerequsite information --> 
+                            </apex:Outputpanel>
+                        </div><!-- /toggle --> 
+                        <!-- available classes --> 
+                        <div id="scrollto-classes" class="inner-content-title-bar"> 
+                            <span>Available Classes:</span>
+                        </div> 
+                        <div class="inner-content">                              
+                             <apex:outputText rendered="{!ClassesbyCourse.size==0}" value="No Classes Available" />
+                             <apex:outputPanel rendered="{!ClassesbyCourse.size!=0}" >
+                                <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                
+                                             <!--  <th>Name</th>  -->
+                                                <!---show for non elearning courses-->  
+                                                <apex:outputPanel rendered="{!CourseDetails.Course_Type__C!='E-Learning'}">
+                                                    <th>Class Date</th>
+                                                    <th>Open Seats</th>
+                                                <!--    <th>Days Until Class</th>  -->
+                                                    <th>Class Country</th>  
+                                                    <th>Class Language</th>  
+                                                    <th>Training Location</th>
+                                                </apex:outputPanel>        
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <apex:repeat value="{!ClassesbyCourse}" var="c">
+                                              <tr>
+                                                  <apex:outputPanel rendered="{!isLoggedIN && c.class_status__c == 'Available'}">
+                                                        <td class="class-enroll">
+                                                              <apex:outputLink value="{!$page.registration_class}" rendered="{!c.class_status__c == 'Available'}">
+                                                                                                      Enroll       
+                                                                  <apex:param name="id" value="{!c.id}"/> 
+                                                                  
+                                                               </apex:outputLink>
+                                                        </td>
+                                                      
+                                                  </apex:outputPanel>
+                                                   
+                                                  <apex:outputPanel rendered="{!isLoggedIN && c.class_status__c == 'At Capacity'}">
+                                                          <td>At Capacity</td> 
+                                                  </apex:outputPanel>
+                                                   
+                                                  <apex:outputPanel rendered="{! !isLoggedIN && c.class_status__c == 'Available'}">
+          												<td class="class-enroll" rendered="{!c.class_status__c == 'Available'}" >
+                  											<apex:outputLink rendered="{!c.class_status__c == 'Available'}" value="{!$page.registration_class}" styleClass="locked">
+                                                                Enroll 
+                                							<apex:param name="id" value="{!c.id}"/>                                                   
+                                                        	</apex:outputLink>
+          												</td>
+                                                  </apex:outputPanel>
+                                                   
+                                                  <apex:outputPanel rendered="{! !isLoggedIN && c.class_status__c == 'At Capacity'}">
+                                                        <td>At Capacity</td> 
+                                                  </apex:outputPanel>
+
+                                              <!--      <td class="class-name">{!CourseDetails.name}</td>  -->
+                                                    <!---show for non elearning courses-->  
+                                                    <apex:outputPanel rendered="{!CourseDetails.Course_Type__C!='E-Learning'}">
+                                                        <td class="class-date">{!c.Class_Date_Str__c}</td>
+                                                        <td class="open-seats">{!ROUND(c.Open_Seats__c,0)}</td>
+                                                  <!--      <td class="until-class">{!ROUND(c.Days_Until_Class__c,0)}</td>  -->
+                                                        <td class="until-class">{!c.Country__c}</td>
+                                                        <td class="until-class">{!c.Language__c}</td>                                                        
+                                                        <td class="training-locations">{!c.Training_Location__r.name}</td>
+                                                     </apex:outputPanel>    
+                                              </tr>
+                                             </apex:repeat>
+                                        </tbody>
+                                  </table> 
+                              </apex:outputPanel>
+                        </div><!-- /Inner Content --> 
+                        <!-- /available classes --> 
+                        
+                        <!-- course materials --> 
+                        <div class="inner-content-title-bar"> 
+                            <span>Course Agenda:</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <apex:outputText rendered="{!CourseAttachments.size==0}" value="No Agenda" />
+                            <apex:outputPanel rendered="{!CourseAttachments.size!=0}" >
+                                <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>Title</th>
+                                                <th>Type</th>
+                                                <th>LastModifiedDate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <apex:repeat value="{!CourseAttachments}" var="c">
+                                              <tr>
+                                                    <td class="attach-view"><a target="_blank" href="{!URLFOR($Action.Attachment.Download,c.id)}">View</a></td>
+                                                    <td class="attach-name">{!c.Name}</td>
+                                                    <td class="attach-type">{!c.ContentType}</td>
+                                                    <td class="attach-date">
+                                                        <apex:outputText value="{0,date, MM/dd/yyyy}">
+                                                             <apex:param value="{!c.LastModifiedDate}" />
+                                                        </apex:outputText>
+                                                    </td>
+                                              </tr>
+                                             </apex:repeat>
+                                        </tbody>
+                                  </table>
+                               </apex:outputpanel>   
+                        </div><!-- /Inner Content --> 
+                        <!-- /course materials --> 
+                        
+                    </div><!-- /Content --> 
+                </div><!-- /Course Content --> 
+            </div><!-- /Full Width Column --> 
+            
+        </div><!-- /Cp Core -->         
+   </apex:define>
+  </apex:composition>
+</apex:page>

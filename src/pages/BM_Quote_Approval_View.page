@@ -1,0 +1,114 @@
+<apex:page controller="BM_Quote_View_Controller" >
+<html>
+<head>    
+
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>    
+    <script>
+        var j$ = jQuery.noConflict();
+        var oTable;
+        j$(document).ready(function() {
+          initTable();
+        });
+        
+        function initTable() {
+          oTable = j$(".jtable").dataTable({"iDisplayLength": 25,"aoColumnDefs": [
+       { "bSortable": false, "aTargets": [ 0,6]}
+       ],"fnDrawCallback":function(settings){} 
+          });
+        }
+        
+        function Refresh()
+        {
+        refreshTable();
+        
+        }
+    </script>
+</head>
+<body>
+
+<apex:sectionHeader subtitle="Deal Desk Quote Approval View" title="{!$Organization.Name}"/>
+<apex:pageMessages id="error" />
+<apex:form >
+<apex:actionRegion >
+<apex:actionFunction name="refreshTable" action="{!refreshQuotes}" rerender="jTable_view"  oncomplete="initTable()" status="spinner">
+</apex:actionFunction>
+<apex:pageBlock title="Select a View">           
+<apex:outputPanel id="View_Select"> 
+<apex:selectlist required="false"  size="1"  id="View_Selection" value="{!Selected_View}" onchange="Refresh()"> 
+<apex:selectoptions value="{!View_Options}"/>                    
+</apex:selectlist>
+   <apex:actionStatus id="spinner" >
+                         <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /></apex:facet>
+                       </apex:actionStatus>
+</apex:outputPanel> 
+</apex:pageBlock>
+</apex:actionRegion>
+<apex:pageBlock >
+<apex:outputPanel id="jTable_view">
+<!--{!Selected_View}
+{!user_KeySet}-->
+
+<table id="jtable" class="row-border jtable display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Assigned To</th>
+                        <th>Quote Number</th>
+                        <th>Quote Name</th> 
+                        <th>Description </th>
+                        <th>Quote Type</th>
+                        <th>Quote Deal Type</th>
+                        <th>Quote Category</th>
+                        <th>Sales Region</th>
+                        <th>Sales GEO</th>
+                        <th>Opportunity</th>                       
+                        <th>Quote Control Number</th>  
+                        <th>Enduser Name</th>
+                        <th>Quote Owner</th>
+                        <th>Sales Rep Name</th>
+                       <!-- <th>Amount</th> -->   
+                        <th>Submitted Date</th>
+                        <th>Copy Reason</th>
+                        <th>Status</th> 
+                      <!--  <th>Is Primary?</th> -->                             
+                                                                               
+                    </tr>
+                </thead>
+         
+                <tbody>
+                   <apex:repeat value="{!Quote_List_SelectedView}" var="q">
+                        <tr>                 
+                            <td><a href="/{!q.id}/e" target="_blank">Approve/Reject</a></td>
+                             <td>{!q.Assigned_To__c}</td>
+                            <td><a href="/{!q.id}" target="_blank">{!q.name}</a></td>       
+                            <td>{!q.Quote_Name__c}</td>
+                            <td><apex:outputField value="{!q.BigMachines__Description__c}"/></td>
+                            <td>{!q.Quote_Type__c}</td>
+                            <td>{!q.Quote_Deal_Type__c}</td>
+                            <td>{!q.Quote_Category__c}</td>
+                            <td>{!q.Sales_Region__c}</td>
+                            <td>{!q.Sales_GEO__c}</td>
+                            <td><a href="/{!q.BigMachines__Opportunity__c}" target="_blank">{!q.BigMachines__Opportunity__r.name}</a></td>       
+                            <td>{!q.Quote_Control_Number__c}</td>    
+                            <td>{!q.Enduser_Name__c}</td>
+                            <td>{!q.owner.Name}</td>
+                            <td>{!q.Sales_Rep_Name__c}</td>
+                          <!--  <td><apex:outputField value="{!q.BigMachines__Total_Amount__c}"/></td> -->
+                            <td>{!q.Submitted_Date__c}</td>
+                            <td>{!q.Copy_Reason__c}</td>
+                            <td>{!q.BigMachines__Status__c}</td>    
+                          <!--  <td><apex:outputField value="{!q.BigMachines__Is_Primary__c}"/></td> -->                           
+                        </tr>
+                    </apex:repeat>
+                 </tbody>  
+             </table>
+
+
+</apex:outputPanel> 
+</apex:pageBlock>
+</apex:form>
+</body>    
+</html>  
+</apex:page>

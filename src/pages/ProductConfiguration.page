@@ -1,0 +1,152 @@
+<apex:page standardController="Product_Configuration__c" extensions="ControllerProductConfiguration" id="pc">
+    <apex:form id="frm" >
+        
+        <apex:pageBlock title="Product Information" >
+            <apex:pageBlockButtons location="top" >
+                <!-- <c:ProductConfigurationHeader /> -->
+                <apex:commandButton action="{!save}" value="Save" rendered="{!isEdit}"/>
+                <apex:commandButton action="{!edit}" value="Edit" rendered="{!NOT(isEdit)}"/>
+                <apex:commandButton action="{!cancel}" value="Cancel" rendered="{!isEdit}"/>
+            </apex:pageBlockButtons>
+            
+            
+            
+           <apex:pageBlockSection title="Product" collapsible="true" columns="2">
+                <!--
+                <apex:inputField value="{!Product_Configuration__c.Name}" rendered="{!isEdit}" required="true"/>
+                
+                <apex:outputField value="{!Product_Configuration__c.Name}" rendered="{!NOT(isEdit)}"/>
+                -->
+                <apex:inputField value="{!Product_Configuration__c.Product__c}" rendered="{!isEdit}" required="true"/>
+                <apex:outputField value="{!Product_Configuration__c.Product__c}" rendered="{!NOT(isEdit)}"/>
+                
+                <apex:inputField value="{!Product_Configuration__c.ProductRelease__c}" rendered="{!isEdit}" required="true"/>
+                <apex:outputField value="{!Product_Configuration__c.ProductRelease__c}" rendered="{!NOT(isEdit)}"/>
+                
+                <apex:inputField value="{!Product_Configuration__c.Product_Name__c}" rendered="{!isEdit}"/>
+                <apex:outputField value="{!Product_Configuration__c.Product_Name__c}" rendered="{!NOT(isEdit)}"/>
+                
+                <apex:inputField value="{!Product_Configuration__c.Brand__c}" rendered="{!isEdit}"/>
+                <apex:outputField value="{!Product_Configuration__c.Brand__c}" rendered="{!NOT(isEdit)}"/>
+                
+                <apex:inputField value="{!Product_Configuration__c.Model__c}" rendered="{!isEdit}"/>
+                <apex:outputField value="{!Product_Configuration__c.Model__c}" rendered="{!NOT(isEdit)}"/>
+                
+                <apex:inputField value="{!Product_Configuration__c.Release_Value__c}" rendered="{!isEdit}"/>
+                <apex:outputField value="{!Product_Configuration__c.Release_Value__c}" rendered="{!NOT(isEdit)}"/>
+                
+                <apex:inputField value="{!Product_Configuration__c.Status__c}" rendered="{!isEdit}"/>
+                <apex:outputField value="{!Product_Configuration__c.Status__c}" rendered="{!NOT(isEdit)}"/>
+
+                <apex:outputField value="{!Product_Configuration__c.Release_Code_Name__c}" rendered="{!isEdit}"/>
+                <apex:outputField value="{!Product_Configuration__c.Release_Code_Name__c}" rendered="{!NOT(isEdit)}"/>
+                
+                <apex:inputField value="{!Product_Configuration__c.SKU__c}" rendered="{!isEdit}"/>
+                <apex:outputField value="{!Product_Configuration__c.SKU__c}" rendered="{!NOT(isEdit)}"/>
+
+
+            </apex:pageBlockSection> 
+
+        </apex:pageBlock>
+         
+          
+        <apex:pageBlock title="Current Platforms" rendered="{!blockRender}">
+            <apex:pageBlockButtons location="top" >
+                <apex:commandButton action="{!actionAddPlatforms}" value="Add Platforms" rendered="{!buttonsRender}"/>
+                <apex:commandButton action="{!actionDeletePlatforms}" value="Delete Platforms" rendered="{!buttonsRender}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection title="Platforms" collapsible="true" columns="1">
+                <apex:dataTable value="{!currentPlatforms}" var="env" id="theTable"
+                    styleClass="list" width="100%" >
+                    <apex:column >
+                        <apex:facet name="header">Platform</apex:facet>
+                        <apex:outputLink value="/{!env.id}" onclick="window.parent.location.href='/{!env.id}';">{!env.Platform__c}</apex:outputLink>
+                        
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">Platform Version</apex:facet>
+                        <apex:outputField value="{!env.Platform_Version__c}" />
+                    </apex:column>
+                </apex:dataTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock> 
+
+        <apex:pageBlock title="Current Databases"  rendered="{!blockRender}">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!actionAddDatabases}" value="Add Databases" rendered="{!buttonsRender}"/>
+                <apex:commandButton action="{!actionDeleteDatabases}" value="Delete Databases" rendered="{!buttonsRender}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Databases" collapsible="true" columns="1">
+            
+            <apex:dataTable value="{!currentDatabases}" var="env" id="theTable"
+                styleClass="list" width="100%" >
+                <apex:column >
+                    <apex:facet name="header">Database</apex:facet>
+<!--                      <apex:outputField value="{!env.Database__c}" />-->
+                    <apex:outputLink value="/{!env.id}" onclick="window.parent.location.href='/{!env.id}';">{!env.Database__c}</apex:outputLink>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Database Version</apex:facet>
+                    <apex:outputField value="{!env.Database_Version__c}" />
+                </apex:column>
+            </apex:dataTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock> 
+        
+        <apex:pageBlock title="Current License Options" rendered="{!blockRender}" >
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!actionAddLicenseOptions}" value="Add License Options" rendered="{!buttonsRender}"/>
+                <apex:commandButton action="{!actionDeleteLicenseOptions}" value="Delete License Options" rendered="{!buttonsRender}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="License Options" collapsible="true" columns="1">
+            
+            <apex:dataTable value="{!currentLicenseOptions}" var="license" id="theTable"
+                styleClass="list" width="100%" >
+                <apex:column >
+                    <apex:facet name="header">Description</apex:facet>
+<!--                      <apex:outputField value="{!license.Description__c}" />-->
+                    <apex:outputLink value="/{!license.id}" onclick="window.parent.location.href='/{!license.id}';">{!license.Description__c}</apex:outputLink>
+                    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">License Option ID</apex:facet>
+                    <apex:outputField value="{!license.License_Option_ID__c}" />
+                </apex:column>
+            </apex:dataTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock title="Current Components" rendered="{!blockRender}" >
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!actionAddComponents}" value="Add Components" rendered="{!buttonsRender}"/>
+                <apex:commandButton action="{!actionDeleteComponents}" value="Delete Components" rendered="{!buttonsRender}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Components" collapsible="true" columns="1">
+           
+            <apex:dataTable value="{!currentComponents}" var="component" id="compTable"
+                styleClass="list" width="100%" >
+                <apex:column >
+                    <apex:facet name="header">Component Name</apex:facet>
+                    <apex:outputLink value="/{!component.id}" onclick="window.parent.location.href='/{!component.id}';">{!component.Component_Name__c}</apex:outputLink>
+                    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Component Description</apex:facet>
+                    <apex:outputField value="{!component.Component_Description__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Component Status</apex:facet>
+                    <apex:outputField value="{!component.Component_Status__c}" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Product Manager</apex:facet>
+                    <apex:outputField value="{!component.Product_Manager__r.Name}" />
+                </apex:column>
+            </apex:dataTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+         
+        
+    </apex:form>
+    <apex:relatedList subject="{!Product_Configuration__c}" list="NotesAndAttachments" rendered="{!NOT(isEdit)}"/>
+    </apex:page>

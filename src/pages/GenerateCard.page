@@ -1,0 +1,47 @@
+<apex:page renderAs="pdf" controller="TechnicalDocumentController">
+  <head>
+      <title>helooo</title>
+       <style type="text/css">
+  
+        </style>
+        </head>
+<apex:repeat value="{!selectedUS}" var="a"> 
+<div style="page-break-inside:avoid">
+
+    <table border="1" cellpadding="0" cellspacing="0" height="14.7cm" width="14.7cm" style="text-align:center;min-width:340px;">
+        <tr style="height:80px;">
+            <td style="background-color:#DCDCDC;width:33%;"><apex:outputText style="font-size:22px" value=" {!a.name}"/></td>
+            <td style="width:33%;"><apex:outputText style="font-size:22px" value=" {!a.Story_Points_Dummy__c}"/></td>
+            <td style="width:33%;" rowspan="2">
+            <apex:image value="https://chart.googleapis.com/chart?chf=bg,s,ffffff&cht=qr&chs=150x150&chl='&{!domainName}&'/QRScan/?id='&{!a.id}&'&chld=|0"/>
+            </td>
+        </tr>
+        <tr >
+            <td colspan="2">{!a.Functional_Area__c}</td>
+        </tr>
+        <tr style="height:220px;">
+            <td colspan="3" style="text-align:Left;padding-left:2mm;">
+                <apex:outputlabel style="font-size:22px;font-weight:bold">As a : </apex:outputlabel><apex:outputText style="font-size:18px" value=" {!a.User_Type__c}"/><br/><br/>
+                <apex:outputlabel style="font-size:22px;font-weight:bold">I want to: </apex:outputlabel>
+               <br/>
+                <apex:outputText style="font-size:18px;width:300px;word-wrap:break-word;" value="{!if(len(a.User_Story__c)>170,LEFT(a.User_Story__c, 170)&'...',a.User_Story__c)}"/><br/><br/>
+                <apex:outputlabel style="font-size:22px;font-weight:bold">So that: </apex:outputlabel>
+                <br/><apex:outputText style="font-size:18px;" value="{!if(len(a.So_that__c)>170,LEFT(a.So_that__c, 170)&'...',a.So_that__c)}"/> 
+            </td>
+        </tr>
+        <tr style="height:25px;font-size:18px;background-color:#DCDCDC">
+            <td>BP Champion</td>
+            <td>Consultant</td>
+            <td>Developer</td>
+        </tr>
+        <tr style="height:25px;font-size:16px">   
+            <td>{!a.User__r.Name}</td>
+            <td>{!a.Supporting_BA__r.name}</td>
+            <td>{!a.Developer_Name__c}</td>
+        </tr>
+    </table>
+    <br/>
+
+</div>
+</apex:repeat>
+</apex:page>

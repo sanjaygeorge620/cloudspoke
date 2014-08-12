@@ -1,0 +1,4 @@
+<apex:page standardController="Employee_Change_Request__c" action="{!URLFOR($page.EditChangeEmployeeFormNoti,null,[id = Employee_Change_Request__c.ID])}">
+
+ 
+</apex:page>

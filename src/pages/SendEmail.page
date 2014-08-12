@@ -1,0 +1,61 @@
+<apex:page showHeader="true" sidebar="false" >
+ <div class="bPageTitle">
+  <div class="ptBody" >
+   <div class="content">
+       <img src="/s.gif" alt="Home" class="pageTitleIcon" title="Home"></img>
+       <h1 class="pageType">Task</h1>
+       <span class="titleSeparatingColon">:</span>
+       <h2 class="pageDescription"><span style="color:Indigo">Send an Email</span></h2>
+       <div class="blank">&nbsp;
+   </div>
+  </div>
+ <div class="links">
+       <a href="javascript:openPopupFocusEscapePounds(%27https://help.salesforce.com/apex/htdoor?loc=help&target=email_send.htm&section=Email&language=en_US&release=188.17.1&instance=CS14%27, %27Help%27, 1024, 768, %27width=1024,height=768,resizable=yes,toolbar=yes,status=yes,scrollbars=yes,menubar=yes,directories=no,location=yes,dependant=no%27, false, false);" 
+       title="Help for this Page (New Window)">
+       <span class="helpLink">Help for this Page</span>
+       <img src="/s.gif" alt="" class="helpIcon"></img></a>
+  </div>
+ </div>
+ <div class="ptBreadcrumb">
+ </div>
+ </div>   
+
+
+<apex:pageBlock >
+            <div class="pbHeader">
+              <table border="0" cellpadding="0" cellspacing="0">
+               <tbody>
+                <tr>
+                 <td class="pbTitle">
+                   <img src="/s.gif" alt="" width="1" height="1" class="minWidth" title=""/>
+                   <h2 class="mainTitle"></h2>
+                 </td>
+                 <td class="pbButton" id="topButtonRow">
+                   <input value=" Send " style="color:orange" class="btn" title="Send" name="send" onclick="sendEmail();" type="button"/>
+                  <input   value="Select Template" style="color:blue" class="btn" title="Select Template (New Window)" name="template" onclick="openTemplateSelector(event)" type="button"/>
+                   <input value="Attach File" style="color:green" class="btn" title="Attach File (New Window)" name="attach" onclick="openDocumentUpload(event)" type="button"/> 
+                   <input value="Check Spelling" style="color:black" class="btn" title="Check Spelling (New Window)" name="spell" onclick="doSpell({ctrl:'p7',lang:'en_US',title:'Check Spelling',intLang:'en_US'}, '/servlet/SProxyWrapper', document.location.protocol + '//' + 'spell-chi.salesforce.com/spellcheck', 'There is nothing to check', 'We are sorry,our spellchecker currently does not support the browser you are using. Please upgrade your browser.', 'The Spell Checker is not available in this language.');" type="button"/>
+                   <input value="Cancel" style="color:red" class="btn" title="Cancel" name="cancel" onclick="cancelForm();" type="button"/>
+                  </td>
+                 </tr>
+                </tbody>
+               </table>
+              </div>    
+
+                    <div class="pbSubheader brandTertiaryBgr first tertiaryPalette" id="head_1_ep">
+                       <span class="pbSubExtra">
+                        <span class="requiredLegend brandTertiaryFgr">
+                         <span class="requiredExampleOuter">
+                          <span class="requiredExample">&nbsp;</span>
+                         </span>
+                        <span class="requiredMark">*</span>
+                       <span class="requiredText"> = Required Information</span>
+                      </span>
+                     </span>
+                         <h3><span style="color:black">Edit Email</span></h3>
+                   </div>
+
+
+
+</apex:pageBlock>
+</apex:page>

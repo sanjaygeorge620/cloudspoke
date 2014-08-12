@@ -1,0 +1,56 @@
+<apex:page showHeader="false"  controller="LX_Enrollment_ProgramsController" sidebar="false">
+    <body onload="if(this.bodyOnLoad)bodyOnLoad();" onbeforeunload="if(this.bodyOnBeforeUnload){var s=bodyOnBeforeUnload();if(s)return s;}" onunload="if(this.bodyOnUnload)bodyOnUnload();" onfocus="if(this.bodyOnFocus)bodyOnFocus();" class="hasMotif lookupTab  LookupSearchFrame  brandNoBgrImg" marginwidth="0" marginheight="0">
+    <!-- Main Body Starts Here -->
+    <apex:form >
+        <div class="lookup"><div class="bPageTitle">
+        <div class="ptBody secondaryPalette"><div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" />
+        <h1>Lookup</h1></div></div></div><div class="pBody"><label for="lksrch">Search</label>
+
+        <apex:inputText id="txtSearch" value="{!searchString}" />
+        <apex:commandButton id="btnGo" value="Go!" action="{!searchPartnerPrograms}" rerender="searchResults"></apex:commandButton>
+        </div></div>
+        <apex:pageBlock title="Partner Programs"  id="searchResults" >
+            <apex:outputLabel rendered="{!ISNULL(lstPartnerProgramRecords)}">No records found due to one of the following:
+            <ul><li>There are no records of this type</li><li>You don't have permission to see any of the records</li>
+            <li>Records do not fit the filter criteria set by your administrator</li>
+            </ul>
+            </apex:outputLabel>
+            
+            <apex:outputLabel rendered="{!ISNULL(lstPartnerProgramRecords) && objAcct.RecordType.Name = 'Location Partner'}"><h2>Partner Programs and Promotions Filter:</h2>
+            <ul>
+            <li>Country :<b> {!objAcct.Billingcountry}</b></li>
+            <li>Region : <b>{!objAcct.LXK_Region__c}</b></li>
+            <li>GEO:<b>{!objAcct.LX_Geo__c}</b></li>
+            <li>Party Type: <b>{!objAcct.Party_Type__c}</b></li>
+            <li>Partner ISS Solutions Capability Score: <b>{!objAcct.Partner_ISS_Solutions_Capability_Score__c}</b></li>
+            <li>Partner MPS Capability Score:<b>{!objAcct.Partner_MPS_Capability_Score__c}</b></li>         
+            <li>ISS Coverage Method :<b> {!objAcct.ISS_Coverage_Method__c}</b></li>  
+            <li>Partner ISS Capability Segment :<b> {!objAcct.Partner_ISS_Capability_Segment__c}</b></li>  
+            <li>Primary ISS Internal Segment :<b> {!objAcct.Primary_ISS_Internal_Segment__c}</b></li>  
+            <li>Total Capability Score :<b> {!objAcct.LX_Total_Capability_Score__c}</b></li>            
+            </ul>
+            </apex:outputLabel>
+            
+            <apex:pageBlockTable var="Local" rendered="{!NOT(ISNULL(lstPartnerProgramRecords))}"  id="tblResults"  value="{!lstPartnerProgramRecords}">
+            <apex:column >
+            <apex:facet name="header">
+            <apex:outputPanel >Name</apex:outputPanel>
+            </apex:facet>
+            <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!Local.Id}','{!Local.Name}', false)" rendered="{!NOT(ISNULL(Local.Id))}">{!Local.Name}</apex:outputLink> 
+            </apex:column>
+            <apex:column value="{!Local.LX_Program_Type__c}" ></apex:column>   
+            <apex:column value="{!Local.Program_Status__c}" ></apex:column>            
+            <apex:column value="{!Local.LX_Country__c}" ></apex:column>
+            <apex:column value="{!Local.LX_Region__c}" ></apex:column>
+            <apex:column value="{!Local.LX_GEO__c}" ></apex:column>
+            <apex:column value="{!Local.LX_Party_Type__c}" ></apex:column>
+            <apex:column value="{!Local.LX_T_Minimum_MPS_Capability_Score__c}" ></apex:column>
+            <apex:column value="{!Local.LX_T_Minimum_Solution_Capability_Score__c}" ></apex:column>
+            <apex:column value="{!Local.LX_ISS_Coverage_Method__c}" ></apex:column>         
+            <apex:column value="{!Local.LX_Start_Date__c}" ></apex:column>
+            <apex:column value="{!Local.Program_End_Date__c}" ></apex:column>           
+            </apex:pageBlockTable>
+        </apex:PageBlock>
+    </apex:form>
+    </body>
+</apex:page>

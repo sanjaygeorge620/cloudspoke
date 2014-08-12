@@ -1,0 +1,104 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesContactController"> 
+    <apex:composition template="{!SITE_TEMPLATE_SECONDARY}" >
+    <apex:define name="title"> 
+       <title>{!SITE_NICKNAME} | Contact Details</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+        <script type="text/javascript">
+                jQuery(document).ready(function() {
+                jQuery('.toolbar-account').addClass('active');
+                });
+            </script>
+        </apex:define>
+        <apex:define name="body">  
+           
+             <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">Home</a>
+                    <apex:outputLink value="{!$page.Account}"><apex:param name="tab" value="contacts"/>Account Profile</apex:outputLink>
+                    <a class="current" href="#">{!c.name}</a>
+                 </nav>
+            </div>
+         </div>     
+            <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.contact.accessible}">
+                <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+            </apex:outputPanel>
+            <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.contact.accessible}">
+                <div class="column full-width"> <!----Full column-->
+                    <div class="callout profile">
+                        <a class="title-bar" href="#">
+                            <span class="sprite_cpicons profile">&nbsp;</span>
+                            Contact Details
+                        </a>
+                        <div class="callout-content">
+                            <apex:pageMessages id="error" />
+                            
+                            
+                            <div class="inner-content">
+                                <apex:form >
+                                    <apex:outputPanel >
+                                        <apex:outputPanel id="topbuttons" layout="block">
+                                            <apex:commandButton value="Save" action="{!updateContact}" styleClass="savebutton" disabled="{!(SITE_CONTACT.ID==c.id)}" rendered="{!$ObjectType.contact.updateable}"/>
+                                            <apex:commandButton action="{!enableUser}" value="Enable Portal User" styleClass="enablebutton" reRender="userinfo,topbuttons,error" rendered="{!!u.isactive && $ObjectType.contact.updateable}"/>
+                                            <apex:commandButton disabled="{!(SITE_CONTACT.ID==c.id)}" action="{!resetPassword}" styleClass="resetpasswordbutton" value="ResetPassword" reRender="topbuttons, userinfo,error" rendered="{!u.isactive && isExistingUser && $ObjectType.contact.updateable}"/>
+                                        </apex:outputPanel>
+                                        <div class="clear" />
+                                        <apex:outputPanel rendered="{!(SITE_CONTACT.ID==c.id)}">
+                                            Visit&nbsp;<apex:outputlink value="{!$page.MyProfilePage}">My Profile</apex:outputlink>&nbsp;to edit your information.
+                                        </apex:outputPanel>
+                                        
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>{!$Label.site.contact_information}</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.contact.updateable}">
+                                            <div class="inner-content"><!---CONTACT DETAILS--->
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">First Name: <div><apex:inputField required="true" id="editfirstName" value="{!c.firstName}"/> </div></p>
+                                                    <p class="item user-info-title">Last Name: <div><apex:inputField required="true" id="editlastName" value="{!c.lastName}"/> </div></p>
+                                                    <p class="item user-info-title">Title: <div><apex:inputField id="edittitle" value="{!c.title}"/> </div></p>
+                                                    
+                                                </div>
+                                                <div class="right-inner-col">
+                                                    <p class="item user-info-title">Email: <div><apex:inputField required="true" id="editemail" value="{!c.email}"/> </div></p>
+                                                    <p class="item user-info-title">Phone: <div><apex:inputField required="true" id="editphone" value="{!c.phone}"/></div></p>
+                                                    <p class="item user-info-title">Region: <div><apex:inputField required="true" id="editregion" value="{!c.region__c}"/></div></p>
+                                                    <p class="item user-info-title">Status: <div><apex:inputField id="editstatus" value="{!c.status__c}"/></div></p>
+                                                </div>
+                                            </div>  <!---/CONTACT DETAILS--->
+                                            <div class="clear"/>
+                                            
+                                            <apex:outputPanel id="userinfo"><!---USER DETAILS--->
+                                                
+                                                <apex:outputPanel rendered="{!u.isactive}">
+                                                    <div class="inner-content inner-content-title-bar"><!---USER DETAIL--->
+                                                        <span>Portal {!$Label.site.user_information}</span>
+                                                    </div>
+                                                    <div class="inner-content">
+                                                        <div class="left-inner-col">
+                                                            <p class="item user-info-title">UserName: (must be in form of email address, user@company.com) <div><apex:inputField id="editusername" value="{!u.username}"/> </div></p>
+                                                        </div>
+                                                        <div class="right-inner-col">
+                                                            <p class="item user-info-title">Active Portal User: <div><apex:inputField id="edituserisactive" value="{!u.isactive}"/> </div></p>                                            
+                                                            <p class="item user-info-title">Last Login Date: <span><apex:outputField rendered="true" id="editLastLoginDate" value="{!u.LastLoginDate}"/> </span></p>                                            
+                                                        </div>
+                                                    </div><!---/USER DETAIL--->
+                                                    
+                                                </apex:outputPanel>
+                                                
+                                            </apex:outputPanel>
+                                               
+                                        </apex:outputPanel>
+                                        
+                                    </apex:outputPanel>
+                                </apex:form>               
+                            </div>
+                        </div> 
+                    </div>          
+                </div>     
+            </apex:outputPanel>
+            
+        </apex:define>
+    </apex:composition>
+</apex:page>

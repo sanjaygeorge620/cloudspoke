@@ -1,0 +1,218 @@
+<apex:page controller="ContentController" sidebar="false" title="{!SiteNickName} | Downloads">
+
+<style>
+        input.buttons{
+            font-size:100%;
+            color:#F4F4F4;
+            <apex:outputtext rendered="{!(ISPICKVAL($User.UserType,'Standard'))}">
+                 background-image:none;
+                background-color:#69C;
+            </apex:outputtext>   
+            }
+        
+        
+        .headerRow {
+            background-color:#DFE9F7;
+        }
+        /*Salesforce Override*/       
+        body .bPageBlock .pbBody .labelCol, body .bPageBlock .pbBody .dataCol, body .bPageBlock .pbBody .data2Col {
+            padding-bottom: 2px;
+            padding-top: 2px;
+            } 
+        .return-old-content{
+            font-size:100%;
+            color:#000;
+            line-height:20px;
+            float:right;
+            layout:block;
+            width:250px;
+            text-align:right;
+            }
+        
+        #sfcontent .featured{
+            padding:1px;
+        }
+        #sfcontent table .td-title{
+            width:80%;
+            border:0px;
+            } 
+        #sfcontent table .td-column{
+            width:20%;
+            border:0px;
+            }
+       
+</style>
+ <script type="text/javascript">          
+    function noenter(e){               
+        if(window.event){key = window.event.keyCode;}/*IE*/        
+        else{key = e.which;} /*Firefox*/               
+            if(key == 13) {  
+                return false;               
+            } else{                    
+                return true;               
+            }          
+    }    
+     
+</script>  
+ 
+   
+<apex:sectionHeader title="Perceptive Software" subtitle="Product Downloads" />
+<apex:pageMessages id="error" />
+<apex:form >
+    <div class="return-old-content">
+       You are viewing the Beta Downloads experience.&nbsp;
+       <apex:outputlink value="{!URLFOR('/sfc/#search')}">View previous Downloads</apex:outputlink>.
+   </div>    
+    
+        <apex:pageBlock >
+            <apex:pageBlockSection id="TheSearch" columns="1" collapsible="false" >
+                    <apex:pageBlockSectionItem >
+                              <apex:outputLabel value="Workspace" for="Workspace_list"/>
+                              <apex:outputPanel styleClass="requiredInput" layout="block">
+                              <apex:outputPanel rendered="false" id="WorkspaceBlock" styleClass="requiredBlock" layout="block"/>
+                                  <apex:actionRegion >
+                                  <apex:selectlist size="1" id="WorkspaceList" value="{!SelectedWorkspace}">
+                                     <apex:selectoptions id="Platform"  value="{!Workspace}"/> 
+                                  </apex:selectlist>
+                                  </apex:actionRegion>
+                              </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                
+                
+                       <apex:pageBlockSectionItem >
+                              <apex:outputLabel value="Product" for="product_list"/>
+                              <apex:outputPanel styleClass="xrequiredInput" layout="block">
+                              <apex:outputPanel id="ProductBlock" styleClass="requiredBlock" layout="block"/>
+                                  <apex:actionRegion >
+                                  <apex:selectlist size="1" id="ProductList" value="{!SelectedProduct}">
+                                     <apex:selectoptions id="Product"  value="{!MyProducts}"/> 
+                                  </apex:selectlist>
+                                  </apex:actionRegion>
+                              </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem rendered="true" >
+                              <apex:outputLabel value="Release" for="Release_list"/>
+                              <apex:outputPanel styleClass="xrequiredInput" layout="block">
+                              <apex:outputPanel id="ReleaseBlock" styleClass="requiredBlock" layout="block"/>
+                                  <apex:actionRegion >
+                                  <apex:selectlist size="1" id="ReleaseList" value="{!SelectedRelease}">
+                                     <apex:selectoptions id="Database"  value="{!ReleaseOptions}"/> 
+                                  </apex:selectlist>
+                                  </apex:actionRegion>
+                              </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                              <apex:outputLabel value="Platform" for="Platform_list"/>
+                              <apex:outputPanel styleClass="requiredInput" layout="block">
+                              <apex:outputPanel rendered="false" id="PlatformBlock" styleClass="requiredBlock" layout="block"/>
+                                  <apex:actionRegion >
+                                  <apex:selectlist size="1" id="PlatformList" value="{!SelectedPlatform}">
+                                     <apex:selectoptions id="Platform"  value="{!PlatformOptions}"/> 
+                                  </apex:selectlist>
+                                  </apex:actionRegion>
+                              </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                              <apex:outputLabel value="Database" for="Database_list"/>
+                              <apex:outputPanel styleClass="requiredInput" layout="block">
+                              <apex:outputPanel rendered="false" id="DatabaseBlock" styleClass="requiredBlock" layout="block"/>
+                                  <apex:actionRegion >
+                                  <apex:selectlist size="1" id="DatabaseList" value="{!SelectedDatabase}">
+                                     <apex:selectoptions id="Database"  value="{!DatabaseOptions}"/> 
+                                  </apex:selectlist>
+                                  </apex:actionRegion>
+                              </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                              <apex:outputLabel value="Type" for="Type_list"/>
+                              <apex:outputPanel styleClass="requiredInput" layout="block">
+                              <apex:outputPanel rendered="false" id="TypeBlock" styleClass="requiredBlock" layout="block"/>
+                                  <apex:actionRegion >
+                                  <apex:selectlist size="1" id="TypeList" value="{!SelectedType}">
+                                     <apex:selectoptions id="Type"  value="{!TypeOptions}"/> 
+                                  </apex:selectlist>
+                                  </apex:actionRegion>
+                              </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageblockSectionItem rendered="true" >
+                        <apex:outputLabel value="Title Search: " />
+                        <apex:inputText value="{!searchbox}"  onkeypress="return noenter(event)"/>
+                   </apex:pageblockSectionItem> 
+                       
+                    <apex:pageBlockSectionitem >
+                        <apex:outputText />
+                        <apex:outputPanel >
+                            <apex:commandButton styleclass="buttons" action="{!runQuery}" reRender="TheResults, error" status="SearchSpinner" value="Search"/>
+                            <apex:commandButton styleclass="buttons" action="{!Reset}" reRender="TheResults, error" value="Reset"/>
+                            <apex:actionStatus id="SearchSpinner">
+                                <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.WebContent, 'images/common/spinner.gif')}" /></apex:facet>
+                            </apex:actionStatus>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionitem>
+            </apex:pageblockSection>
+             <br />  
+             <br />
+            <!--- Content URL taken directly from Salesforce Sites PDM: http://boards.developerforce.com/t5/Force-com-Sites/Make-ContentVersion-downloadable-accessible-via-Sites/m-p/200368 --->
+            <apex:pageBlockSection id="TheResults" columns="1" collapsible="false">
+                <apex:pageBlockTable value="{!ContentWorkspaceDocs}" var="c" rendered="{!ContentWorkspaceDocs!=null}">
+                <apex:facet name="footer">
+                    <apex:outputText rendered="{!OR(isnull(ContentWorkspaceDocs),ContentWorkspaceDocs.size==0)}">
+                        No Records to Display.
+                    </apex:outputText>
+                 </apex:facet>
+                <apex:column styleClass="td-title" headerClass="td-title" headerValue="Title">
+                    <div id="sfcontent">
+                        <table>
+                        <tr>
+                            <td>
+                                <apex:image url="{!
+                                                if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'XML'),URLFOR($Resource.WebContent, 'images/icons/doctype_xml_16.png'), 
+                                                if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'EXE'),URLFOR($Resource.WebContent, 'images/icons/doctype_exe_16.png'), 
+                                                if(OR(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'WORD'),Contains(c.ContentDocument.LatestPublishedVersion.FileType,'RTF')),URLFOR($Resource.WebContent, 'images/icons/doctype_word_16.png'), 
+                                                if(OR(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'POWER_POINT'),Contains(c.ContentDocument.LatestPublishedVersion.FileType,'POWER_POINT_X')),URLFOR($Resource.WebContent, 'images/icons/doctype_ppt_16.png'), 
+                                                if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'TXT'),URLFOR($Resource.WebContent, 'images/icons/doctype_txt_16.png'), 
+                                                if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'ZIP'),URLFOR($Resource.WebContent, 'images/icons/doctype_zip_16.png'), 
+                                                if(Contains(c.ContentDocument.LatestPublishedVersion.FileType,'PDF'),URLFOR($Resource.WebContent, 'images/icons/doctype_pdf_16.png'), 
+                                                URLFOR($Resource.WebContent, 'images/icons/doctype_unknown_16.png'))))))))}"/>
+                                <br />
+                                <small>{!
+                                        if(c.ContentDocument.LatestPublishedVersion.FileType='UNKNOWN','',
+                                            if(c.ContentDocument.LatestPublishedVersion.FileType='POWER_POINT','ppt', 
+                                                if(c.ContentDocument.LatestPublishedVersion.FileType='POWER_POINT_X','ppt',
+                                                  if(CONTAINS(c.ContentDocument.LatestPublishedVersion.FileType,'WORD'),'doc', 
+                                                     LOWER(c.ContentDocument.LatestPublishedVersion.FileType)))))}
+                                </small>
+                            </td>
+                            <td>
+                                
+                                <apex:outputlink style="font-weight:bold;" target="_document" value="{!$Site.prefix}/sfc/servlet.shepherd/version/download/{!c.ContentDocument.LatestPublishedVersion.id}">{!c.ContentDocument.Title}</apex:outputlink>
+                                ({!if(c.ContentDocument.LatestPublishedVersion.ContentSize>1,ROUND(c.ContentDocument.LatestPublishedVersion.ContentSize / 1048576,2),c.ContentDocument.LatestPublishedVersion.ContentSize)}MB)
+                                <p style="padding-left:8px;">
+                                {!c.ContentDocument.LatestPublishedVersion.Type__c}<br />
+                                Release: {!if(c.ContentDocument.LatestPublishedVersion.ProductRelease__c!='',SUBSTITUTE(c.ContentDocument.LatestPublishedVersion.ProductRelease__c,';',','),'n/a')}<br />
+                                Database: {!if(c.ContentDocument.LatestPublishedVersion.Database__c!='',SUBSTITUTE(c.ContentDocument.LatestPublishedVersion.Database__c,';',','),'n/a')}<br />
+                                Platform: {!if(c.ContentDocument.LatestPublishedVersion.Platform__c!='',SUBSTITUTE(c.ContentDocument.LatestPublishedVersion.Platform__c,';',','),'n/a')}<br />
+                                </p>
+                            </td>    
+                        </tr>
+                        </table>
+                    </div>
+                </apex:column>
+                <!--<apex:column styleClass="td-column" headerClass="td-column" rendered="true" headerValue="Published">
+                    <apex:outputText value="{0,date,ddMMMyyyy}">
+                        <apex:param value="{!c.ContentDocument.LatestPublishedVersion.CreatedDate}" />
+                    </apex:outputText>
+                </apex:column>-->
+                </apex:pageBlockTable>
+             </apex:pageBlockSection> 
+ 
+        </apex:pageBlock>
+     </apex:form>
+     <site:googleAnalyticsTracking />
+
+</apex:page>

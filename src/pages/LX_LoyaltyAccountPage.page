@@ -1,0 +1,17 @@
+<apex:page tabStyle="Account" sidebar="true" showheader="true">
+  <apex:form id="frm">
+      <apex:pageBlock >
+      <apex:outputText escape="false" value="{!$Label.LX_SLDBMessage1} "></apex:outputText>
+      <apex:outputlink target="_blank" value="{!$Label.LX_SLDB_Message}"><apex:outputText escape="false" value="{!$Label.LX_SLDBMessage2}"></apex:outputText></apex:outputLink>
+      <apex:outputText escape="false" value="{!$Label.LX_SLDBMessage3}"></apex:outputText>
+  </apex:pageBlock>    
+    <apex:pageBlock id="pgbl5" rendered="true">
+    <iframe src="{!$Label.LX_SLDB_AccLink}={!$CurrentPage.parameters.accountid}" scrolling="true" width="100%" height="600px" sandbox="allow-same-origin allow-forms allow-scripts"/>
+
+  
+    </apex:pageBlock>
+           <div style="display:none;visibility:hidden;">
+            <iframe src="{!$Label.LX_SLDBHome}" scrolling="false" width="100%" height="600px" sandbox="allow-same-origin allow-forms allow-scripts"/>
+            </div>
+  </apex:form>
+</apex:page>

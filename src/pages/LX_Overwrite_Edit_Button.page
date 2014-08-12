@@ -1,0 +1,15 @@
+<apex:page standardController="LX_Countries_In_Scope__c" extensions="LX_Overwrite_Edit_Button_Ext" >
+ 
+<script langauge="javascript">
+if('{!userId}'!='{!ownerId}'|| ('{!OwnerManager}'!= '' && '{!OwnerManager}'!= null && '{!userId}'!= '{!OwnerManager}')){
+    alert('Only the Opportunity Owner or Opportunity Owners Manager can create a Country In Scope');
+    window.open( '/{!oppID}','_self');
+}
+else{
+alert('hi8');
+window.open('/aAB/e?'+'{!$Label.LX_CountriesInScopeOppID}'+'='+'{!oppName}'+'&'+'{!$Label.LX_CountriesInScopeOppID}'+'_lkid='+'{!oppID}' +'&retURL=%2F'+'{!oppID}','_self' ); 
+}
+
+</script>
+
+</apex:page>

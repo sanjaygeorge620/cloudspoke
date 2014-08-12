@@ -1,0 +1,69 @@
+<!--
+Page Name : LX_EE_PrintReleasePDF
+Description : This page is written for EASY ESTIMATE PrintRelease PDF creation.
+Created By : Madhurupa Ghose Roy (mghoseroy@deloitte.com)
+Created Date : 29-9-2013
+Modification Log:
+---------------------------------------------------------------------------
+Developer             Date            Modification ID        Description
+---------------------------------------------------------------------------
+Madhurupa Ghose Roy  29-9-2013        1000                   Initial Version
+***************************************************************************-->
+
+<apex:page standardController="STAR__c" renderAs="pdf" extensions="LX_EE_PrintReleasePDFExtn" applyBodyTag="false"> 
+  <head>
+      <style>
+        .headerColumn{text-align: right;}
+      </style>
+  </head>
+  
+  <apex:image id="theImage" value="{!$Resource.LexmarkPrintRelease}" width="720" height="70"/>
+  <center><b><font size="4">{!$Label.PrintPDFHeading} {!STAR__c.LX_Customer_Name__c}</font></b></center><br/>
+  {!$Label.PPDFPara1}<br/><br/>
+  {!$Label.PPDFPara2}<br/>
+  <apex:form >
+    <apex:pageBlock ><br/>
+    
+      <apex:pageBlockTable value="{!STAR__c}" var="PSP" frame="box" align="center" columnsWidth="275px,275px" >
+        <apex:column >
+          <apex:outputText value="{!$Label.PPDFDevices}" escape="false"/>
+        </apex:column>
+        <apex:column >
+          <apex:outputText value="{0,number,###,###,##0}"><apex:param value="{!PSP.LX_Number_of_devices__c}"/></apex:outputText><br/>
+          {!STAR__c.LX_Badges_used__c}<br/>
+          {!STAR__c.LX_Document_accounting_required__c}<br/>
+          {!STAR__c.LX_Mobile_Print_Required__c}<br/>
+        </apex:column>
+      </apex:pageBlockTable><br/>
+      
+      <apex:pageBlockTable value="{!STAR__c}" var="item" frame="box" columnsWidth="275px,275px" border="2" >
+        <apex:column headerValue="Description" rendered="{!Badges!='Yes'}">
+          <apex:outputText value="{!$Label.PPDFDescription1}" escape="false"/> 
+        </apex:column>
+        <apex:column headerValue="Description" rendered="{!Badges=='Yes'}">
+          <apex:outputText value="{!$Label.PPDFDescription}" escape="false"/> 
+        </apex:column>     
+        <apex:column headerValue="Minimum Price" style="text-align:right;" headerClass="headerColumn"> 
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Licensing_and_1st_year_support_min_value__c}"/></apex:outputText><br/>
+          <apex:outputText value="{0,number,$###,###,##0}" rendered="{!Badges=='Yes'}"><apex:param value="{!item.Card_reader_hardware_min_value__c}"/></apex:outputText><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Profession_services_min_value__c}"/></apex:outputText><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Total_min_value__c}"/></apex:outputText></b><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Per_device_min_value__c}"/></apex:outputText></b><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Anuual_support_renewal_after_year1_min_v__c}"/></apex:outputText>
+        </apex:column>
+        <apex:column headerValue="Maximum Price" style="text-align:right;" headerClass="headerColumn"> 
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Licensing_and_1st_year_support_max_value__c}"/></apex:outputText><br/>
+          <apex:outputText value="{0,number,$###,###,##0}" rendered="{!Badges=='Yes'}"><apex:param value="{!item.Card_reader_hardware_max_value__c}" /></apex:outputText><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Profession_services_max_value__c}"/></apex:outputText><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Total_max_value__c}"/></apex:outputText></b><br/>
+          <b><apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Per_device_max_value__c}"/></apex:outputText></b><br/>
+          <apex:outputText value="{0,number,$###,###,##0}"><apex:param value="{!item.Anuual_support_renewal_after_year1_max_v__c}"/></apex:outputText>
+        </apex:column>
+      </apex:pageBlockTable><br/>
+      {!$Label.PPDFPara3}<br/><br/>
+      <h><b>Pricing Assumptions</b></h><br/><br/>
+      <apex:outputText value="{!$Label.PPDFPara4}" escape="false"/> 
+      <apex:outputText value="{!$Label.PPDFPara5}" escape="false"/>         
+    </apex:pageBlock>
+   </apex:form>  
+</apex:page>

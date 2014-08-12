@@ -1,0 +1,111 @@
+<apex:page tabStyle="training__tab" standardcontroller="Course__c" extensions="TrainingDisplayController" 
+showHeader="true" title="Training Course Description">
+    <apex:sectionHeader title="{!Course__c.Name}"/>
+    <div style="margin:10px;">
+      <!---List to Return to Featured Courses--->
+       <a style="text-decoration:none;font-weight:bold;" href="Javascript:history.go(-1) ">&#171; Return to Previous Page</a> 
+    </div>
+    <apex:pageMessages showDetail="false" />
+    <apex:pageBlock >
+                <apex:pageBlockSection columns="1" collapsible="false">
+                    <apex:pageBlockSection columns="2" title="Description" collapsible="false">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Course Catalog Name"/>
+                            <apex:outputField value="{!Course__c.Name}" />            
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Tuition"/>
+                            <apex:outputField value="{!Course__c.Tuition__c}" />            
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Course Type"/>
+                            <apex:outputField value="{!Course__c.Course_Type__c}" />            
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Currency"/>
+                            <apex:outputField value="{!Course__c.Currency__c}" />            
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Duration"/>
+                            <apex:outputField value="{!Course__c.Class_Duration__c}" />            
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Course has Materials"/>
+                            <apex:outputField value="{!Course__c.Course_Has_Materials__c}" />            
+                        </apex:pageBlockSectionItem>
+                        
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Short Description"/>
+                            <apex:outputField value="{!Course__c.Short_Description__c}" />            
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Course Notes"/>
+                            <apex:outputField value="{!Course__c.Notes__c}" />            
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection> 
+                    
+                    
+                    
+                    <apex:pageBlockSection columns="1" title="Topics" collapsible="false">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Description"/>
+                            <apex:outputField id="desc" value="{!Course__c.Description__c}" />            
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Topics"/>
+                            <apex:outputField value="{!Course__c.Topics__c}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Audience"/>
+                            <apex:outputField value="{!Course__c.Audience__c}" />
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection columns="2" title="Prerequisites" collapsible="false">    
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Requirement"/>
+                            <apex:outputField value="{!Course__c.Viewing_Requirement__c}" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Environment"/>
+                            <apex:outputField value="{!Course__c.Environment__c}" />
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>                 
+                 </apex:pageBlockSection>
+                 
+                 <apex:pageBlockSection title="Available Classes" collapsible="false"/>
+                     <apex:outputText style="font-weight:bold;margin:5px;" value="No Classes Available" rendered="{!ISNULL(ClassesbyCourse)}"/>
+                     <apex:pageBlockTable value="{!ClassesbyCourse}" var="c" rendered="{!NOT(ISNULL(ClassesbyCourse))}">
+                        <apex:column >
+                            <apex:outputLink style="font-weight:bold;cursor:pointer" value="{!$Page.Training_Wizard_1}">
+                                Enroll <apex:param name="id" value="{!c.id}"/>
+                            </apex:outputLink>
+                        </apex:column>
+                        <apex:column value="{!c.Class_Date_Str__c}" />
+                        <apex:column value="{!c.Open_Seats__c}"/>
+                        <apex:column value="{!c.Days_Until_Class__c}"/>
+                        <apex:column value="{!c.Training_Location__c}"/>
+                    </apex:pageBlockTable>
+                    
+                    <apex:pageBlockSection title="Course Materials" collapsible="false"/>
+                     <apex:outputText style="font-weight:bold;margin:5px;" value="No Course Materials" rendered="{!ISNULL(CourseAttachments)}"/>
+                     <apex:pageBlockTable value="{!CourseAttachments}" var="a" rendered="{!NOT(ISNULL(CourseAttachments))}">
+                        <apex:column headerValue="Action">
+                            <apex:outputLink target="_blank" style="font-weight:bold;cursor:pointer" value="{!$Site.prefix}/servlet/servlet.FileDownload">
+                                View <apex:param name="file" value="{!a.id}"/>
+                            </apex:outputLink>
+                        </apex:column>
+                        <apex:column value="{!a.name}" />
+                        <apex:column value="{!a.contentType}"/>
+                        <apex:column value="{!a.LastModifiedDate}"/>
+                    </apex:pageBlockTable>
+              </apex:pageBlock>
+               
+</apex:page>

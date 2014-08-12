@@ -1,0 +1,51 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesTrainingController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | Training Information</title>
+    </apex:define>
+    <apex:define name="javascriptcalls">
+            <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-training').addClass('active');
+            });  
+        </script>
+    </apex:define>
+    <apex:define name="body">  
+         <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Site.CurrentSiteURL}">Home</a>
+                    <a href="{!$page.training}">Training</a>
+                    <a class="current" href="#">{!ParentInfo.Parent_Training_Info_Item__r.name}</a>
+               </nav>
+            </div>
+         </div>    
+         <div class="cp_core">
+            <div class="column full-width">
+                <div class="callout traininginfo">
+                    <span class="title-bar" href="#"><span class="sprite_cpicons training">&nbsp;</span>{!ParentInfo.Parent_Training_Info_Item__r.name}</span>
+                    <div class="callout-content">
+                        <dl class="training-item">
+                            <!---<apex:outputField value="{!ParentInfo.Parent_Training_Info_Item__r.Description__c}" />--->
+                            
+                            <apex:repeat value="{!TrainingItems}" var="t">
+                                   <dt>
+                                       <apex:outputtext value="{!t.name}" rendered="{!t.Title_URL__c==''}" />
+                                       <apex:outputlink target="_blank" value="{!t.Title_URL__c}" rendered="{!t.Title_URL__c!=''}">{!t.name}</apex:outputlink>
+                                   </dt>
+                                   
+                                   <dd class="no-arrow"><apex:outputfield value="{!t.description__c}" /></dd>
+                                   <dd class="no-arrow"/>
+                                   <br />
+                                   <br />
+                            </apex:repeat>
+                        </dl>
+                    </div>
+                </div><!-- /Training Info -->
+            </div><!-- /Full Width Column -->
+            
+        </div><!-- /Cp Core -->
+         </apex:define>
+  </apex:composition>
+</apex:page>

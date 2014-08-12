@@ -1,0 +1,161 @@
+<apex:page standardcontroller="SFDC_Projects__c" extensions="InternalProjectRequestRally_Extension">
+<apex:form >
+	
+	<link href="https://codeseven.github.io/toastr/toastr.css" rel="stylesheet" type="text/css"></link>
+	
+	<apex:outputpanel id="mainOP">
+		
+		<apex:pageBlock title="User Stories">
+			
+			<apex:pageBlockButtons location="top" rendered="{!showCreateNewButton}">
+				 
+				<apex:commandButton id="cmb1" value="New User Story" action="{!newUserStoryToggle}" rendered="{!!showNewUserStory}" rerender="cmb1,cmb2,cmb3,mainOP,opRead,opCreate,errors" status="status2" />
+				<apex:commandButton id="cmb3" oncomplete="checkIt();" value="Save" action="{!performSave}" rendered="{!showNewUserStory}" reRender="cmb1,cmb2,cmb3,mainOP,opRead,opCreate,errors" status="status2" />
+				<apex:commandButton id="cmb2" value="Cancel" immediate="true" action="{!newUserStoryToggle}" rendered="{!showNewUserStory}" reRender="cmb1,cmb2,cmb3,mainOP,opRead,opCreate,errors" status="status2" />
+			
+			</apex:pageBlockButtons>
+			
+			<div style="position:relative; overflow:auto;"> 
+        
+	        <apex:outputPanel >
+	            <apex:actionStatus id="status2">
+	                <apex:facet name="start">
+	                    <div style="width: 100%; height: 100%; background-color:#fbfbfb; opacity:0.65;" class="waitingSearchDiv" id="el_loading">
+	                        <div class="waitingHolder" style="top: 45px; ">
+	                            <img src="/img/loading.gif" class="waitingImage" title="Please Wait..." />
+	                            <span class="waitingDescription">Loading...</span>
+	                        </div>
+	                    </div>
+	                </apex:facet>
+	            </apex:actionStatus>
+	        </apex:outputPanel>
+			
+			<apex:outputPanel id="opRead" rendered="{!!showNewUserStory}">
+			
+			<apex:outputPanel id="pbtSearch3" rendered="{!listSize < 1}">
+		        <table class="list" border="0" cellspacing="0" cellpadding="0">
+		        	<tbody>
+		        		<tr class="headerRow">
+		        			<th scope="col" class="noRowsHeader">
+		        				No records to display
+	        				</th>
+        				</tr>
+					</tbody>
+				</table>
+	        </apex:outputPanel>
+		        
+	        <div style="max-height:159px; overflow: auto;">
+	        
+	        	
+	        	<apex:outputPanel id="pbtSearch4" rendered="{!listSize > 0}">
+		        	<table class="list" border="0" cellspacing="0" cellpadding="0">
+		            	<tbody>
+		            	
+			            	<tr class="headerRow"> 
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="#" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Name" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="State" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Iteration" />
+			                    	
+			                    </th>
+			                    <th scope="row" class=" deemphasize">
+			                    	
+			                    	<apex:outputLabel value="Release" />
+			                    	
+			                    </th>
+			                </tr>
+		            	
+			                <apex:repeat value="{!userStories}" var="us">
+			                <!-- ListRow -->
+			                <tr class="dataRow even first" onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}" onmouseout="if (window.hiOff){hiOff(this);}" onmouseover="if (window.hiOn){hiOn(this);}">
+			                     
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usId}" />
+			                    </td>
+			                    <td class="datacell">
+			                         <!-- <apex:outputLabel value="{!us.usName}" /> -->
+			                         <apex:outputLink value="https://rally1.rallydev.com/#/{!us.usProjectId}/detail/userstory/{!us.usObjectId}" target="_blank" styleClass="actionLink">{!us.usName}</apex:outputLink>
+			                    </td>
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usStatus}" />
+			                    </td>
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usIteration}" />
+			                    </td>
+			                    <td class="datacell">
+			                         <apex:outputLabel value="{!us.usRelease}" />
+			                    </td>
+			                </tr>
+			                </apex:repeat> 
+			            </tbody>
+		        	</table>
+		        </apex:outputPanel>
+	        </div>
+			
+			</apex:outputPanel>
+			<apex:outputPanel id="opCreate" rendered="{!showNewUserStory}">
+			<div style="max-height:159px; overflow: auto;">
+				<apex:pageMessages id="errors" />
+				<apex:pageBlockSection columns="2">
+	        		<apex:pageBlockSectionItem >
+	        			<apex:outputLabel value="Project ID" />
+	        			<apex:outputLabel value="{!project.ProjectID__c}" />
+	        		</apex:pageBlockSectionItem>
+	        		<apex:pageBlockSectionItem > 
+			            <apex:outputLabel value="State" />
+	        			<apex:selectList value="{!newUSSelectedState}" size="1"> 
+			                <apex:selectOptions value="{!userStoryStates}"/>
+			            </apex:selectList>	
+	        		</apex:pageBlockSectionItem>
+	        		<apex:pageBlockSectionItem >
+	        			<apex:outputLabel value="Name" />
+	        			<apex:inputText value="{!newUSName}" />
+	        		</apex:pageBlockSectionItem>
+	        		<apex:pageBlockSectionItem >
+	        			<apex:outputLabel value="Rank" />
+	        			<apex:inputText value="{!newUSRank}" />
+	        		</apex:pageBlockSectionItem>
+	        		<apex:pageBlockSectionItem > 
+	        			<apex:outputLabel value="Description" />
+	        			<apex:inputTextArea value="{!newUSDescription}" rows="4" cols="50" richtext="false" />
+	        		</apex:pageBlockSectionItem>
+        		</apex:pageBlockSection>
+			
+			</div>
+			</apex:outputPanel>
+			</div>
+		
+		</apex:pageBlock>
+		
+	
+	
+	<script type="text/javascript">
+		function checkIt(){
+			if({!showNewUserStory==false}) {
+				toastr.success('User Story: "{!newUSNameNoti}" has been created in Rally.');
+			}
+		}
+	</script>
+	
+	</apex:outputpanel>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="https://codeseven.github.io/toastr/toastr.js"></script>
+	
+
+</apex:form>
+</apex:page>

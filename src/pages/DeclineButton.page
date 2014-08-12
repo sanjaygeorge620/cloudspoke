@@ -1,0 +1,3 @@
+<apex:page standardController="Mobile_Agreement__c" extensions="MobileAgreement_Buttons" action="{!Decline}">
+  <apex:pagemessages />
+</apex:page>

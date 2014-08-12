@@ -1,0 +1,48 @@
+<apex:page controller="Design_Controller" contentType="application/msWord" cache="false" >  <html>
+    <style> body { font-family: Arial Unicode MS; } </style>
+   <br/>
+   
+   <div > 
+      <apex:outputText escape="false" value="<b><center>Technical Designs: {!SprName}  </center></b>"/><br/>
+   </div>
+   <div > 
+      <apex:outputText escape="false" value="<b>CreatedBy: {!$User.FirstName}  </b>"/><br/>
+      <apex:outputText escape="false" value="<b>CreatedDate: {!TODAY()}  </b>"/><br/>
+   </div>
+     <div>
+     <apex:outputText escape="false" value="<b><center>No Allocated User Stories in {!SprName} </center></b>" rendered="{!if(UserStory.size ==0,true,false)}"/><br/>
+     </div>
+     
+      <apex:repeat value="{!UserStory}" var="ud">
+           <apex:repeat value="{!UserStoryDesign[ud]}" var="udes">
+           <apex:repeat value="{!UserStoryDesign2[ud]}" var="udesreq">
+           <div style="page-break-after:always;">
+                         <apex:outputText escape="false" value="<b>User Story: </b>"/>
+                         <apex:outputText escape="false" value="{!ud} {!udesreq.User_Story__c }"/>
+                         <apex:outputpanel id="AcceptanceCriteria" rendered="{!isSelectedAcceptance}">
+                         <apex:outputText escape="false" value="<BR/><B>Acceptance Criteria:</B> {!udesreq.Acceptance_Criteria__c}"/>
+                           </apex:outputpanel>
+                           <apex:outputpanel id="Design" rendered="{!if(udes.Design__r.Name == '',false,true)}">
+                             <apex:outputpanel id="Designname" rendered="{!isSelectedDesignname}">
+                              <apex:outputText escape="false" value="<BR/><B>Design Name:</B> {!udes.Design__r.Name}"/>
+                              </apex:outputPanel>
+                              <apex:outputpanel id="DesignComponents" rendered="{!isSelectedDesignComponent}">
+                              <apex:outputText escape="false" value="<BR/><B>VF Pages: </B>{!udes.Design__r.Visualforce_Pages__c}"/>
+                              <apex:outputText escape="false" value="<BR/><B>Classes: </B>{!udes.Design__r.Apex_Classes__c}"/>
+                              <apex:outputText escape="false" value="<BR/><B>Other Components: </B>{!udes.Design__r.Other_Components__c}"/>
+                               </apex:outputpanel>
+                             <apex:outputpanel id="DesignSumm" rendered="{!isSelectedDesignname}"> 
+                             <apex:outputText escape="false" value="<br/><B>Design Summary:</b> {!udes.Design__r.Design_Summary__c}"/>
+                             </apex:outputpanel>  
+                              <apex:outputpanel id="DesignDetails" rendered="{!isSelectedDesignDetails}">      
+                              <apex:outputText escape="false" value="<br/><br/><b>Design Details:</b><br/> {!udes.Design__r.Design_Details__c}"  /> 
+                               </apex:outputpanel> 
+                            </apex:outputpanel> 
+                            <apex:outputpanel id="DesignNotAvailable" rendered="{!if(udes.Design__r.Name == '',true,false)}"><br/>  
+                              <apex:outputText escape="false" value="<BR/><B>Design is not available for {!ud}</B> "/> 
+                              </apex:outputpanel>
+                    </div>
+            </apex:repeat>
+            </apex:repeat></apex:repeat>
+     </html>
+</apex:page>

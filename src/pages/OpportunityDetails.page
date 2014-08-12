@@ -1,0 +1,128 @@
+<apex:page showHeader="false" Controller="SitesOpportunityController" standardStylesheets="false"> 
+<title>{!SITE_NICKNAME} | Details</title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-opportunities').addClass('active');
+          jQuery('.opptytable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.Opportunities}">Opportunities</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Opportunity Details</a></li>
+                </ul>
+            </div> 
+            <apex:outputPanel rendered="{!!$ObjectType.Order__c.accessible || !SITE_TAB_OPPORTUNITIES}">
+                  Insufficient Privileges
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!$ObjectType.Order__c.accessible && SITE_TAB_OPPORTUNITIES}">
+            
+               
+            <div class="column full-width"> 
+                <div class="callout classroom"> 
+                    <span class="title-bar" href="#"><span class="sprite_cpicons class">&nbsp;</span>{!OpportunityDetails.Opportunity_ID__c}</span> 
+                    <div class="callout-content"> 
+                    
+                        <!-- course information --> 
+                        <div class="inner-content inner-content-title-bar"> 
+                            <span>Opportunity Details:</span> 
+                        </div> 
+                        <div class="inner-content"> 
+                            <div class="left-inner-col"> 
+                                <p class="label course-title">Opportunity Number:</p> 
+                                <p ><apex:outputfield value="{!OpportunityDetails.Opportunity_ID__c}" /></p> 
+                                <p class="label course-type">Account Name</p> 
+                                <p><apex:outputfield value="{!OpportunityDetails.Opportunity_Account_Name__c }" /></p> 
+                                <p class="label course-type">Stage</p> 
+                                <p><apex:outputfield value="{!OpportunityDetails.Opportunity_Stage__c }" /></p> 
+                                <p class="label course-type">Sector</p>                              
+                                <p><apex:outputField value="{!OpportunityDetails.Opportunity_Sector__c}" /></p>
+                                <p class="label course-type"></p>   
+                                <p class="label course-type">Host Manufacturer</p>                              
+                                <p><apex:outputField value="{!OpportunityDetails.Host_manufacturer__c}" /></p>
+                                <p class="label course-type"></p>    
+                                 <p class="label course-type">Host Application</p>                              
+                                <p><apex:outputField value="{!OpportunityDetails.Host_Application__c}" /></p>
+                                <p class="label course-type"></p> 
+                                   <p class="label course-type">Department</p>                              
+                                <p><apex:outputField value="{!OpportunityDetails.Department__c}" /></p>
+                                <p class="label course-type"></p>                             
+                              <br />
+                              <br />
+                               
+                            </div> 
+                            <div class="right-inner-col"> 
+                                <p class="label course-type">Close Date</p> 
+                                <p ><apex:outputfield value="{!OpportunityDetails.Opportunity_Close_Date__c}" /></p>  
+                                <p class="label course-type">Amount</p> 
+                                <p ><apex:outputfield value="{!OpportunityDetails.Opportunity_Amount__c }" /></p>  
+                                <p class="label course-type">Probability (%)</p> 
+                                <p><apex:outputfield value="{!OpportunityDetails.Opportunity_Probability__c}" /></p>  
+                                <p class="label course-type">Next Steps</p> 
+                                <p ><apex:outputfield value="{!OpportunityDetails.Opportunity_Next_Step__c }" /></p> 
+                                <p class="label course-type">Partner Next Steps</p> 
+                                <p><apex:outputField value="{!OpportunityDetails.Partner_Next_Steps__c}" /></p> 
+                                <br />
+                               
+                                 
+                            </div> 
+                           
+                            <apex:form >
+                               <apex:commandButton styleClass="edit-button" action="{!editOpp}"/> 
+                               </apex:form> 
+                             
+                            
+                        </div><!-- /Inner Content --> 
+                        <!-- /course information --> 
+                        
+                       
+                         
+                         
+                        <div id="scrollto-classes" class="inner-content-title-bar"> 
+                            <span>Opportunity Line Items:</span>
+                        </div> 
+                        <div class="inner-content">                              
+                            <apex:outputText rendered="{!OpportunityLineItems.size==0}" value="No Line Items Available" />
+                             <apex:outputPanel rendered="{!OpportunityLineItems.size!=0}" >
+                                <table cellpadding="0" cellspacing="0" border="0" class="display opptytable">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Created Date</th>   
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <apex:repeat value="{!OpportunityLineItems}" var="ol">
+                                              <tr>
+                                                <td class="">{!ol.Name}</td>
+                                                <td class="">{!ol.Quantity__c}</td>
+                                                <td class="">{!ol.createddate}</td>
+                                              </tr>
+                                             </apex:repeat>
+                                        </tbody>
+                                  </table> 
+                              </apex:outputPanel>
+                        </div><!-- /Inner Content -->  
+                        <!-- /available classes --> 
+                        
+                        
+                    </div><!-- /Content --> 
+                </div><!-- /Course Content --> 
+                
+            </div><!-- /Full Width Column --> 
+            
+
+            
+            </apex:outputPanel>
+
+        </div>
+        
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

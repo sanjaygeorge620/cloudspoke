@@ -1,0 +1,108 @@
+<apex:page controller="LX_LicenseContactController" sidebar="false" showHeader="false" showChat="false">
+         <script>
+                function uncheckOthers(a){
+                        if(a.checked == true){
+                        var elements = document.getElementsByTagName("input");
+                                for(i=0;i<elements.length;i++)
+                                        {
+                                            e = elements[i];
+                                            if(e.id.indexOf("checkSold") != -1){
+                                                        if(a.id != e.id){
+                                                                e.checked = false;
+                                                        }
+                                            }
+                                    }
+                                }
+                        }
+                        
+                function CloseAndRefresh(){
+                      window.opener.location.href="/{!$CurrentPage.parameters.OppId}";
+                      window.top.close();
+                    
+                  }                        
+        </script>
+
+
+  <apex:form >
+    <apex:sectionHeader title="Opportunity" subtitle="Select Opportunity License Contact" />
+     <apex:pageBlock >
+        <apex:pageMessages />
+       
+        <apex:pageBlocksection title="Search Parameters">
+        </apex:pageBlocksection>
+        
+        <apex:outputpanel title="Search Parameters">
+             <apex:outputText value="Contact Name " id="search1"/>
+             <apex:inputText value="{!input1}"/>
+             
+             <apex:commandbutton action="{!Go}" value="Go"/><br/><br/>
+             
+        </apex:outputpanel><br/><br/><br/>
+            
+       
+        
+        <apex:pageBlockSection title="Search Results" columns="1">
+        <apex:outputPanel >
+            <apex:pageBlockTable value="{!resultList}"  var="licCon">
+                <apex:column headerValue="Select">
+                    <apex:inputCheckbox value="{!licCon.selected}" onclick="uncheckOthers(this)" id="checkSold"/>
+               </apex:column>
+               <apex:column headerValue="Contact Name">
+               <apex:outputLink value="/{!licCon.licenseConObject.Contact__c}">{!licCon.licenseConObject.Contact__r.Name}</apex:outputLink>
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewAllData}" value="Contact Name {!IF(sortExpression=='Contact__r.Name',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort1">
+                     <apex:param value="Contact__r.Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column headerValue="Contact Email">
+               <apex:outputField value="{!licCon.licenseConObject.Contact__r.email}"/>
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewAllData}" value="Contact Email{!IF(sortExpression=='Contact__r.email',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort2">
+                     <apex:param value="Contact__r.email" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column headerValue="Contact Title">
+               <apex:outputField value="{!licCon.licenseConObject.Contact__r.title}"/>
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewAllData}" value="Contact Title {!IF(sortExpression=='Contact__r.title',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort3">
+                     <apex:param value="Contact__r.title" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column headerValue="Contact City">
+               <apex:outputField value="{!licCon.licenseConObject.Contact__r.City__c}"/>
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewAllData}" value="Contact City {!IF(sortExpression=='Contact__r.city__c',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort4">
+                     <apex:param value="Contact__r.city__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column headerValue="Contact State">
+               <apex:outputField value="{!licCon.licenseConObject.Contact__r.State__c}"/>
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewAllData}" value="Contact State {!IF(sortExpression=='Contact__r.State__c',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort5">
+                     <apex:param value="Contact__r.State__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column headerValue="Ship to">
+               <apex:outputField value="{!licCon.licenseConObject.LX_Ship_To__r.Name}"/>
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!viewAllData}" value="Ship To {!IF(sortExpression=='LX_Ship_To__r.Name',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort6">
+                     <apex:param value="LX_Ship_To__r.Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+            </apex:pageBlockTable>
+             </apex:outputPanel>
+        </apex:pageBlockSection>   
+              <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!updateOpp}" value="Save" oncomplete="javascript:CloseAndRefresh()"/>
+                <apex:commandButton action="{!Cancel}" value="Cancel" oncomplete="javascript:CloseAndRefresh()"/>
+        </apex:pageBlockButtons>       
+      
+     </apex:pageBlock>
+  </apex:form>
+</apex:page>

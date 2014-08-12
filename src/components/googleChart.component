@@ -1,0 +1,158 @@
+<apex:component controller="cloudWS" access="Global">
+<style>
+#chart_div_Right{ height: 300px; overflow: hidden}
+</style>
+<html>
+  <head>
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {'packages':['annotatedtimeline']});      
+      google.load("visualization", "1", {packages:["corechart"]});
+      
+      google.setOnLoadCallback(drawCharts);
+      
+      function drawCharts()
+      { 
+      drawChart1();  
+      drawChart2(); 
+      }     
+      
+      function drawChart1() 
+      {
+      
+       cloudWS.getQT(
+         function(result,event)
+         { 
+         
+         var startDT; 
+         var endDT;
+         
+         var data = new google.visualization.DataTable(); 
+               
+              data.addColumn('date', 'Date');     
+              data.addColumn('number', 'Approximate Disk Space Used(GB)');    
+              data.addColumn('string', 'title1');      
+              data.addColumn('string', 'text1');                    
+              data.addColumn('number', 'Disk Space Purchased(GB)');    
+              data.addColumn('string', 'title1');      
+              data.addColumn('string', 'text1');                         
+          
+                                     
+for(var i = 0;i<result.length; i++)
+{
+var res = result[i];
+var purchased_space;
+if(null!= res.purchased_space)
+{
+purchased_space = res.purchased_space;
+}
+else
+{
+purchased_space = 0;
+}
+var used_space = res.used_space;
+used_space2 = used_space/1024;
+used_space2 = Math.round(used_space2);
+var dateti = res.created_at
+dateti = dateti.substring(0,10);
+datefield = new Date(dateti.substring(0,4),dateti.substring(5,7)-1,dateti.substring(8,10));
+
+data.addRows([[datefield,used_space2,undefined, undefined,purchased_space*1, undefined, undefined]]);
+}   
+        
+      var annotatedtimeline = new google.visualization.AnnotatedTimeLine(
+      document.getElementById('chart_div'));
+      annotatedtimeline.draw(data, {'displayAnnotations': true, 'fill': 20, 'thickness': 2,'displayRangeSelector' : false}
+      );         
+      },{escape:true});
+      
+}
+
+      function drawChart2() 
+      {     
+         
+      var title1 = '';
+                  
+     cloudWS.getUT(
+         function(result,event)
+         {         
+              var data = new google.visualization.DataTable(); 
+               
+              data.addColumn('date', 'Date');     
+              data.addColumn('number', 'Percentage');   
+      
+         
+        for(var i = 0;i<result.length; i++)
+          { 
+          var res = result[i];
+          var dateti = res.created_at;
+          var uptime = res.uptime_mins;
+          uptime =(uptime/1440)*100;
+          uptime = Math.round(uptime*100)/100;          
+          dateti = dateti.substring(0,10);
+          datefield = new Date(dateti.substring(0,4),dateti.substring(5,7)-1,dateti.substring(8,10));
+          data.addRows([[datefield,uptime]]);
+          //alert(res.created_at);
+          }
+          
+       
+        var options = {                    
+            hAxis: {title: 'Date',titleTextStyle: {color: 'Black',italic: 'False'}},
+            vAxis: {title: 'Percentage',  titleTextStyle: {color: 'Black',italic: 'False'},viewWindowMode: 'explicit',viewWindow: {max: 100}},
+            legend:{position:'none'}
+            
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_left'));
+        chart.draw(data, options);
+         },{escape:true});
+      }
+      
+
+    </script>
+  </head>
+  <body>  
+  <H2 style="text-align:center;color:black;">Cloud Metrics</H2>
+  <H4 style="text-align:center;color:black;">Disk Space Usage Chart</H4>
+   <div id='chart_div' style='width: 800px; height: 240px; margin:0 auto; '></div>     
+  <br/>
+                             
+                        <div align="Center">
+                         <apex:outputPanel rendered="{!(days_remaining != 0)}">
+                            <p style="font-size: 16px;font-family: bold;color: black;">Estimated Days of Disk Space Remaining: {!days_remaining}</p>                             
+                         </apex:outputPanel>   
+                         
+                         <apex:outputPanel rendered="{!(days_remaining == 0)}">
+                            <p style="font-size: 16px;font-family: bold;color: black;">Estimated Days of Disk Space Remaining: {!days_string}</p>                             
+                         </apex:outputPanel>  
+                         <br/>
+                         <br/>
+                         <H4 style="text-align:center;color:black;">Primary ImageNow Service Availability</H4>
+                             <div id="chart_div_left" style='margin:0 auto;'></div>
+    
+                         
+                        </div>
+  <br/>                      
+  <apex:outputPanel rendered="true" style="align: Center;">
+        <apex:form >
+        <div align="Center">
+        <label>Server:  </label>        
+        <apex:selectList style="height:30px; width:19%;" value="{!selected_server}" multiselect="false" size="1">  
+        <apex:actionsupport event="onchange" rerender="chart" action="{!reloadIframe}"/>      
+        <apex:selectOptions value="{!servers}">                      
+        </apex:selectOptions>
+        </apex:selectList>                   
+        </div>
+        </apex:form>
+        </apex:outputPanel>
+        
+        <apex:outputPanel id="chart">
+        <apex:form >   
+        <apex:iframe src="{!iframeSource}" width="870" height="500" scrolling="false" frameborder="false" />  
+        </apex:form>
+        </apex:outputPanel>
+            
+    
+  </body>
+</html>
+</apex:component>

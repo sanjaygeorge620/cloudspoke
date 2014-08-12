@@ -1,0 +1,312 @@
+<apex:page id="DocGenrator" controller="DocGenerator_Controller"
+    standardStylesheets="false" sidebar="false" renderAs="{!renderAs}">
+
+    <style>
+H1 {
+    font-size: 16pt;
+    margin-top: 50px;
+}
+
+H2 {
+    font-size: 14pt;
+    margin-top: 30px;
+}
+
+H3 {
+    font-size: 12pt;
+    margin-top: 10px;
+}
+
+ol.toc li {
+    clear: left;
+    /*border-bottom: dashed 1px #aaa;*/
+    height: 1.05em;
+    margin-top: 2px;
+    position: relative;
+}
+
+
+
+ol.toc ol {
+    list-style: lower-roman;
+    margin: 0.5em 0 0.5em 5%;
+    padding: 0;
+    background: #fff;
+    display: block;
+    width: 95%;
+}
+
+div.functionalArea {
+    padding: 1em 0em 1em 0.5em;
+    background: #fff;
+    float: none;
+    display: block;
+    width: 90%;
+}
+
+div.functionalAreaHeader {
+    padding: 2em 0em 1em 5em;
+    background: #fff;
+    float: none;
+    display: block;
+}
+
+div.designs {
+    padding: 1em 0em 3em 5em;
+    background: #fff;
+    float: none;
+    display: block;
+    
+}
+
+div.designHeader {
+    margin-top: 30px;
+}
+.tableClass {
+    border: Solid 1px #272827;
+    width: 75%;
+}
+
+.odd {
+    border: Solid 1px #F5F5F5;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.even {
+    border: Solid 1px #F5F5F5;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    min-width: 138px;
+}
+
+.us_col1 {
+    border: Solid 1px #F5F5F5;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    width: 100px;
+}
+
+</style>
+    <apex:form id="theform">
+        <div id="wrapper"
+            style="width: 100%; padding: 0 0 0 0; border: Solid 1px #F5F5F5;">
+            <apex:outputPanel rendered="{!renderAs!='pdf'}">
+            <div id="headerSection" style="width: 100%; float: none; clear: both;">
+
+                <div id="theEditLink"
+                    style="float: left; width: 46%; padding: 1em 0em 1em 1em;">
+                    <a href="/{!rootID}">Edit</a>
+                </div>
+
+                <div id="theExportlink"
+                    style="float: left; width: 45%; padding: 1em 0em 1em 1em; text-align: right">
+                    <apex:commandLink action="{!ConvertToWordFormat}"
+                        value="Export as Pdf" id="wordDocGenCommandLink" target="_blank" />
+                </div>
+
+            </div>
+            </apex:outputPanel>
+            
+            <div id="theHeadertext"
+                style="float: left; width: 100%; text-align: center">
+                <h1>{!root.Name} - Technical Documentation</h1>
+            </div>
+
+<!-- TOC -->
+            <div id="theHeadertext"
+                style="width: 100%; clear: both; text-align: left; padding: 1em 0 1em 1em;">
+                <h2>Table of contents</h2>
+            </div>
+
+            <ol class="toc">
+                <li>{!root.Name}</li>
+                <ol class="toc">
+                    <apex:repeat value="{!documentMap[rootId]}" var="child1"
+                        rendered="{!hasChild[rootId]}">
+                        <li><span> <a href="#{!child1}">{!child1.Name}</a></span></li>
+                        <ol class="toc">
+                            <apex:repeat value="{!documentMap[child1]}" var="child2"
+                                rendered="{!hasChild[child1]}">
+                                <li><span><a href="#{!child2}">{!child2.Name}</a></span></li>
+                                <ol class="toc">
+                                    <apex:repeat value="{!documentMap[child2]}" var="child3"
+                                        rendered="{!hasChild[child2]}">
+                                        <li><span><a href="#{!child3}">{!child3.Name}</a></span></li>
+                                    </apex:repeat>
+                                </ol>
+                            </apex:repeat>
+                        </ol>
+                    </apex:repeat>
+                </ol>
+            </ol>
+
+<!-- END TOC -->
+
+<!-- ROOT FA -->
+            <div class="functionalArea">
+                <div class="functionalAreaHeader">
+                    <H1>{!root.Name}</H1>
+                    <apex:outputField value="{!root.Overview__c}" />                    
+                </div>
+                <div class="designs">
+                    <apex:outputPanel rendered="{!hasDesigns[rootId]}"><p>Designs:</p></apex:outputPanel>
+                    <apex:repeat value="{!designsByFA[rootId]}" var="design">                       
+                        <div class="designHeader"> <H3 id="{!design}" ><a href="/{!design}">{!design.Name}</a></H3></div>                   
+                        <p>{!design.Design_Summary__c}</p>                                              
+                        <apex:outputField value="{!design.Design_Details__c}" />
+                        <p>This design is related to the following user stories:</p>
+                        <apex:dataTable value="{!storiesByDesign[design.Id]}" var="story"
+                            styleClass="tableClass">
+                            <apex:column styleClass="us_col1" headerClass="even">
+                                <apex:facet name="header">Ref</apex:facet>
+                                <a href="/{!story}">{!story.Name}</a>
+                            </apex:column>
+                            <apex:column styleClass="even" headerClass="even">
+                                <apex:facet name="header">Story</apex:facet>
+                                <apex:outputText value="{!story.User_Story__c}" />
+                            </apex:column>
+                        </apex:dataTable>
+                        
+                        <apex:outputPanel rendered="{!hasAttachments[design]}">
+                         <p>This design references the following documents:</p>                                            
+                         <apex:dataTable value="{!attachmentsByDesign[design.Id]}"
+                             var="att" rowClasses="odd,even" styleClass="tableClass">
+                             <apex:column headerClass="even" styleClass="even">
+                                 <apex:facet name="header">Document</apex:facet>
+                                 <a href="/{!att}">{!att.Name}</a>
+                             </apex:column>
+                         </apex:dataTable>
+                        </apex:outputPanel>                        
+                        
+                    </apex:repeat>                  
+                </div>
+            </div>
+<!-- END ROOT FA -->            
+            
+<!-- CHILD LEVEL 1 -->
+            <apex:repeat value="{!documentMap[rootId]}" var="child1" rendered="{!hasChild[rootId]}">
+                <div class="functionalArea">
+                    <div class="functionalAreaHeader">
+                        <H2 id="{!child1}"> <a href="/{!child1}">{!child1.Name}</a></H2>
+                        <apex:outputField value="{!child1.Overview__c}" />                      
+                    </div>
+                    <div class="designs">
+                        <apex:outputPanel rendered="{!hasDesigns[child1]}"><p>Designs:</p></apex:outputPanel>
+                        <apex:repeat value="{!designsByFA[child1]}" var="design">
+                            <div class="designHeader"> <H3 id="{!design}" ><a href="/{!design}">{!design.Name}</a></H3></div>                   
+                            <p>{!design.Design_Summary__c}</p>                          
+                            <apex:outputField value="{!design.Design_Details__c}" />
+                            <p>This design is related to the following user stories:</p>
+                            <apex:dataTable value="{!storiesByDesign[design.Id]}" var="story"
+                                styleClass="tableClass">
+                                <apex:column styleClass="us_col1" headerClass="even">
+                                    <apex:facet name="header">Ref</apex:facet>
+                                    <a href="/{!story}">{!story.Name}</a>
+                                </apex:column>
+                                <apex:column styleClass="even" headerClass="even">
+                                    <apex:facet name="header">Story</apex:facet>
+                                    <apex:outputText value="{!story.User_Story__c}" />
+                                </apex:column>
+                            </apex:dataTable>
+                            
+                             <apex:outputPanel rendered="{!hasAttachments[design]}">
+                               <p>This design references the following documents:</p>                                            
+                               <apex:dataTable value="{!attachmentsByDesign[design.Id]}"
+                                   var="att" rowClasses="odd,even" styleClass="tableClass">
+                                   <apex:column headerClass="even" styleClass="even">
+                                       <apex:facet name="header">Document</apex:facet>
+                                       <a href="/{!att}">{!att.Name}</a>
+                                   </apex:column>
+                               </apex:dataTable>
+                              </apex:outputPanel>
+                            
+                        </apex:repeat>                      
+                    </div>
+<!-- CHILD LEVEL 2 -->                    
+                    <apex:repeat value="{!documentMap[child1]}" var="child2"
+                        rendered="{!hasChild[child1]}">
+                        <div class="functionalArea">
+                            <div class="functionalAreaHeader">
+                                <H3 id="{!child2}"> <a href="/{!child2}"> {!child2.Name} </a> </H3>                             
+                                <apex:outputField value="{!child2.Overview__c}" />                              
+                            </div>
+                            <div class="designs">
+                                <apex:outputPanel rendered="{!hasDesigns[child2]}"><p>Designs:</p></apex:outputPanel>
+                                <apex:repeat value="{!designsByFA[child2]}" var="design">
+                                    <div class="designHeader"> <H3 id="{!design}" ><a href="/{!design}">{!design.Name}</a></H3></div>                                   
+                                    <p>{!design.Design_Summary__c}</p>                                  
+                                    <apex:outputField value="{!design.Design_Details__c}" />
+                                    <p>This design is related to the following user stories:</p>
+                                    <apex:dataTable value="{!storiesByDesign[design.Id]}"
+                                        var="story" styleClass="tableClass">
+                                        <apex:column headerClass="even" styleClass="us_col1">
+                                            <apex:facet name="header">Ref</apex:facet>
+                                            <a href="/{!story}">{!story.Name}</a>
+                                        </apex:column>
+                                        <apex:column headerClass="even" styleClass="even">
+                                            <apex:facet name="header">Story</apex:facet>
+                                            <apex:outputText value="{!story.User_Story__c}" />
+                                        </apex:column>
+                                    </apex:dataTable>
+                                    
+                                    <apex:outputPanel rendered="{!hasAttachments[design]}">
+                                     <p>This design references the following documents:</p>                                            
+                                     <apex:dataTable value="{!attachmentsByDesign[design.Id]}"
+                                         var="att" rowClasses="odd,even" styleClass="tableClass">
+                                         <apex:column headerClass="even" styleClass="even">
+                                             <apex:facet name="header">Document</apex:facet>
+                                             <a href="/{!att}">{!att.Name}</a>
+                                         </apex:column>
+                                     </apex:dataTable>
+                                    </apex:outputPanel>                                    
+                                    
+                                    
+                                </apex:repeat>                              
+                            </div>
+<!-- CHILD LEVEL 3 -->                            
+                            <apex:repeat value="{!documentMap[child2]}" var="child3"
+                                rendered="{!hasChild[child2]}">
+                                <div class="functionalArea">
+                                    <div class="functionalAreaHeader">
+                                        <H4 id="{!child3}"><a href="/{!child3}">{!child3.Name}</a> </H4>                                                                                
+                                        <apex:outputField value="{!child3.Overview__c}" />                                                                                                                       
+                                    </div>
+                                    <div class="designs">
+                                        <apex:outputPanel rendered="{!hasDesigns[child3]}"><p>Designs:</p></apex:outputPanel>
+                                        <apex:repeat value="{!designsByFA[child3]}" var="design">
+                                            <div class="designHeader"> <H3 id="{!design}" ><a href="/{!design}">{!design.Name}</a></H3></div>
+                                            <p>{!design.Design_Summary__c}</p>
+                                            <apex:outputField value="{!design.Design_Details__c}" />
+                                            <p>This design is related to the following user stories:</p>                                            
+                                            <apex:dataTable value="{!storiesByDesign[design.Id]}"
+                                                var="story" rowClasses="odd,even" styleClass="tableClass">
+                                                <apex:column headerClass="even" styleClass="us_col1">
+                                                    <apex:facet name="header">Ref</apex:facet>
+                                                    <a href="/{!story}">{!story.Name}</a>
+                                                </apex:column>
+                                                <apex:column headerClass="even" styleClass="even">
+                                                    <apex:facet name="header">Story</apex:facet>
+                                                    <apex:outputText value="{!story.User_Story__c}" />
+                                                </apex:column>
+                                            </apex:dataTable>
+                                            
+                                            <apex:outputPanel rendered="{!hasAttachments[design]}">
+                                                <p>This design references the following documents:</p>                                            
+                                                <apex:dataTable value="{!attachmentsByDesign[design.Id]}"
+                                                    var="att" rowClasses="odd,even" styleClass="tableClass">
+                                                    <apex:column headerClass="even" styleClass="even">
+                                                        <apex:facet name="header">Document</apex:facet>
+                                                        <a href="/{!att}">{!att.Name}</a>
+                                                    </apex:column>
+                                                </apex:dataTable>
+                                            </apex:outputPanel>
+                                            
+                                        </apex:repeat>                                      
+                                    </div>
+                                </div>
+                            </apex:repeat>
+                        </div>
+                    </apex:repeat>
+                </div>
+            </apex:repeat>
+        </div>
+    </apex:form>
+</apex:page>

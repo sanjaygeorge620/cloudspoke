@@ -1,0 +1,41 @@
+<apex:component controller="SitesCaseController">
+<div class="callout cases"> 
+    <a class="title-bar" href="{!$page.cases}"><span class="sprite_cpicons cases">&nbsp;</span>{!$Label.Cases}</a> 
+    <div class="callout-content"> 
+        <dl> 
+            <dt><span class="sprite_cpicons pin">&nbsp;</span>{!$Label.Needs_Your_Attention} ({!CasesNeedsAttention.size})</dt> 
+              <apex:outputText escape="false" rendered="{!CasesNeedsAttention.size=0 || CasesNeedsAttention==null}"><dd>{!$Label.No_records}</dd></apex:outputText> 
+              <apex:repeat value="{!CasesNeedsAttention}" var="c" >
+                  <dd><apex:outputLink value="{!$Page.CaseDetails}">
+                          {!If(len(c.Subject)>30,mid(c.Subject,1,30)+'...',c.Subject)}
+                          <apex:param name="id" value="{!c.id}"/>
+                      </apex:outputLink>
+                  </dd>
+             </apex:repeat>
+            
+            
+            <br /> 
+            <dt>{!$Label.Open} ({!CasesOpen.size})</dt> 
+            <apex:outputText escape="false" rendered="{!CasesOpen.size=0 || CasesOpen==null}"><dd>{!$Label.No_records}</dd></apex:outputText> 
+            <apex:repeat value="{!CasesOpen}" var="c" >
+                  <dd><apex:outputLink value="{!$Page.CaseDetails}">
+                          {!If(len(c.Subject)>30,mid(c.Subject,1,30)+'...',c.Subject)}
+                          <apex:param name="id" value="{!c.id}"/>
+                      </apex:outputLink>
+                  </dd>
+            </apex:repeat>
+            
+            <br /> 
+            <dt>{!$Label.On_Hold} ({!CasesHold.size})</dt> 
+            <apex:outputText escape="false" rendered="{!CasesHold.size=0 || CasesHold==null}"><dd>{!$Label.No_records}</dd></apex:outputText> 
+            <apex:repeat value="{!CasesHold}" var="c" >
+                  <dd><apex:outputLink value="{!$Page.CaseDetails}">
+                          {!If(len(c.Subject)>30,mid(c.Subject,1,30)+'...',c.Subject)}
+                          <apex:param name="id" value="{!c.id}"/>
+                      </apex:outputLink>
+                  </dd>
+            </apex:repeat>
+        </dl> 
+    </div> 
+</div><!-- /Cases -->
+</apex:component>

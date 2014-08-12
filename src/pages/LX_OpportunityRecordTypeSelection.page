@@ -1,0 +1,120 @@
+<apex:page standardController="Opportunity"  Extensions="LX_OpportunityRecordTypeSelectionContrlr" >
+  <!-- Should not allow user to create Opportunity from Opportunity tab  -->
+ <script langauge="javascript">
+
+ var acctId = "{!Opportunity.accountID}";   
+        if(acctId == '' || acctId == null) {
+            alert('You can create an Opportunity either through Lead Conversion or by clicking New Opportunity from an account record.');
+            window.location = '/006/o';
+        }
+function renderSalesTypes()
+{
+    //alert('In ');
+    change_sales();
+}
+function showHelp(){
+ document.getElementById('show').style.display='block'; 
+}
+</script>
+    <apex:form >
+     
+    <apex:pageMessages />
+        <apex:SectionHeader title="Opportunity" subtitle="Record Type Selection"/>
+        <apex:actionFunction name="change_sales" id="cs" reRender="sales1" action="{!change_sales}" />
+            <apex:outputPanel id="panel">
+            <apex:pageBlock >
+             <apex:pageBlockSection columns="1">
+                   <apex:pageBlockSectionItem >
+                         <apex:Outputlabel style="font-weight:bold" >What products are you selling?</apex:Outputlabel>
+                    </apex:pageBlockSectionItem>
+              </apex:pageBlockSection>
+                <apex:pageBlockSection columns="1">
+              <!--      <apex:repeat value="{!dispWrapper}" var="a">
+                      <!-- <apex:outputLabel value="{!a.typeofProduct}"></apex:outputLabel>
+                       <apex:inputCheckbox value="{!a.selected}" />
+                       <apex:inputCheckbox value="{!a.selected}" label="{!a.typeofProduct}" onClick="renderSalesTypes();">
+                  <!--    <apex:actionSupport event="onclick"  reRender="panel" action="{!change_sales}" status="test"/> 
+                      </apex:inputCheckbox>
+                      <apex:outputLabel value="{!a.typeofProduct}" for="theCheckbox"/>
+                       <apex:inputCheckbox value="{!a.selected}" id="theCheckbox"/>-->
+                    <apex:inputCheckbox value="{!NewOpp.MPS__c}" id="MPS" label="MPS" onClick="renderSalesTypes();"/>
+                    <apex:inputCheckbox value="{!NewOpp.Software_Solutions__c}" id="Soft" label="Software Solutions" onClick="renderSalesTypes();"/>                    
+                    <apex:inputCheckbox value="{!NewOpp.Technology__c}" id="Tech" label="Technology" onClick="renderSalesTypes();"/>
+                    <apex:actionSupport event="onclick"  reRender="panel" action="{!change_sales}" status="test"/> 
+                </apex:pageBlockSection>
+                <apex:actionStatus id="test">Rerendering</apex:actionStatus>
+                <apex:outputPanel id="sales1">
+                                  <apex:pageBlockSection columns="1" id="sales" rendered="{!flag}">
+                  <apex:pageBlockSectionItem >
+                         <apex:Outputlabel style="font-weight:bold">What type of sale is it?</apex:Outputlabel>
+                    <!--   <apex:inputField value="{!NewOpp.LX_Sales_Type__c}"  label="" required="true"/> -->
+                      </apex:pageBlockSectionItem>
+                <apex:selectList id="chooseSales" size="1" value="{!selectedSalesOption}" label="Sales Type">
+                    <apex:selectOptions value="{!options}"/>
+                </apex:selectList>
+                 
+                   </apex:pageBlockSection>
+                   </apex:outputPanel>
+                    <apex:pageBlockButtons location="top">
+                          <apex:commandButton value="Continue" title="Continue" action="{!continueLogic}" />
+                           <apex:commandButton value="Cancel" title="Cancel" action="{!cancelLogic}" immediate="true"/>
+                           </apex:pageBlockButtons>
+            </apex:pageBlock>
+                           <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <apex:commandLink value="Help Text" onclick="showHelp();" style="font-weight:bold"/>
+            <br/>
+            <br/>
+            <div id="show">
+            <table border="0" class="recordTypeInfo infoTable" cellpadding="0" cellspacing="0">
+            <tr class="headerRow">
+            <th class ="recordTypeName" scope="col" width="23%">Checkbox Fields</th>
+            <th class ="recordTypeDescription" scope="col">Help Text</th>
+            </tr>
+            <tr><th class="recordTypeName" scope="row">Software Solutions</th>
+            <td class="recordTypeDescription"><b>Opportunity that includes Software and/or Professional Services.  </b><br/>May include any combination of ISS or PSW software, software supporting materials and professional services.</td>
+            </tr>
+            <tr><th class="recordTypeName" scope="row">Technology </th>
+            <td class="recordTypeDescription"><b>Opportunity that includes Hardware, Options, Supplies and or CSS.</b><br/> (CSS may include Warranty, Parts, or Break Fix Services) and any related products that require forecasting for demand planning.</td>
+            </tr>
+            <tr><th class="recordTypeName" scope="row">MPS</th>
+            <td class="recordTypeDescription"><b>Opportunity that includes any combination of hardware, ISS or PSW software and services.</b><br/> Includes a larger volume of devices with one or more services and a multi-year contract with your customer.</td>
+            </tr>
+            </table>
+            <table border="0" class="recordTypeInfo infoTable" cellpadding="0" cellspacing="0">            
+            <tr class="headerRow">          
+            <th class ="recordTypeName" scope="col" width="20%">Sales Type Picklist Value</th>
+            <th class ="recordTypeName" scope="col">Help Text</th>
+            </tr>
+            <br/>
+            <tr><th class="recordTypeName" scope="row">New Project</th>
+            <td class="recordTypeDescription"><b>Opportunity for a new customer footprint or to expand and existing footprint .</b><br/> This opportunity typically has a longer sales cycle and requires additional attention and resources. </td>
+            </tr>
+            <tr><th class="recordTypeName" scope="row">Add On</th>
+            <td class="recordTypeDescription"><b>An enhancement to an existing customers project or platform. </b><br/>This opportunity typically does not require additional attention or resources and can include supplies, CSS, maintenance, training, software and/or services. </td>
+            </tr>
+            <tr><th class="recordTypeName" scope="row">Run Rate</th>
+            <td class="recordTypeDescription"><b>Customers normal monthly ordering rate non project related. </b><br/>Does not require additional attention or resources and includes products or services the customer orders on an ongoing bases. </td>
+            </tr>
+           <tr><th class="recordTypeName" scope="row">Channel Large Bid </th>
+            <td class="recordTypeDescription"><b>Opportunity for a known end user of the Channel Partner or for an Opportunity that is not part of the normal Channel Run Rate.</b><br/> For ISS Channel Sales use only (Use for OLA Opportunities).</td>
+            </tr>
+             <tr><th class="recordTypeName" scope="row">Channel Quick Bid </th>
+            <td class="recordTypeDescription"><b>Opportunity for a known end user of the Channel Partner where the details of the product are previously known and a quick quote is required to close the deal.</b><br/>For ISS Channel Sales use only.</td>
+            </tr>
+             <tr><th class="recordTypeName" scope="row">Renewal</th>
+            <td class="recordTypeDescription"><b>MPS Opportunity to extend a currently active contract because the current one is about to expire.</b><br/>For MPS use only.</td>
+            </tr>
+            <tr><th class="recordTypeName" scope="row">Expansion</th>
+            <td class="recordTypeDescription"><b>MPS Opportunity to expand the scope of a currently active contract</b><br/>For MPS use only.</td>
+            </tr>
+            </table>
+            </div>
+
+            </apex:outputPanel>
+    </apex:form>
+</apex:page>

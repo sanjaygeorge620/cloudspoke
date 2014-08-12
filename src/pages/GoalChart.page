@@ -1,0 +1,113 @@
+<apex:page standardController="Goal__c" extensions="UpdateGoalData" action="{!displayChart}" showHeader="false" sidebar="false">
+  <apex:pageBlock >
+      <apex:pageBlockSection columns="3" collapsible="true">
+          <apex:pageBlockSection title="North America (Direct) MQL's" collapsible="false">  
+              <apex:chart height="300" width="325" animate="true" data="{!NAMqlChartData}">
+                    <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+          </apex:pageBlockSection>
+          
+          <apex:pageBlockSection title="North America (Direct) SQO's" collapsible="false">
+              <apex:chart height="300" width="325" animate="true" data="{!NASqoChartData}">
+                    <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+          </apex:pageBlockSection>
+          
+          <apex:pageBlockSection title="North America (Direct) Average Deal Size" collapsible="false">
+              <apex:chart height="300" width="325" animate="true" data="{!NAAdsChartData}">
+                    <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+          </apex:pageBlockSection>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection columns="3" collapsible="true">
+          <apex:pageBlockSection title="North America Content/Process By Sector (Direct) MQL's" collapsible="false">
+              <apex:chart height="300" width="325" animate="true" data="{!NASectorMqlChartData}">
+                    <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="North America Content/Process By Sector (Direct) SQO's" collapsible="false">
+              <apex:chart height="300" width="325" animate="true" data="{!NASectorSqoChartData}">
+                    <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="North America Content/Process By Sector (Direct) Average Deal Size" collapsible="false">
+              <apex:chart height="300" width="325" animate="true" data="{!NASectorAdsChartData}">
+                    <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                    <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                        <apex:chartLabel rotate="315"/>
+                    </apex:axis>
+                    <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                        <apex:chartTips height="20" width="40"/>
+                    </apex:barSeries>
+                </apex:chart>
+          </apex:pageBlockSection>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection columns="3" collapsible="true">
+    <apex:pageBlockSection title="Latin America Content/Process (Direct) MQL's" collapsible="false">
+        <apex:chart height="300" width="325" animate="true" data="{!LAMqlChartData}">
+            <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+            <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                <apex:chartLabel rotate="315"/>
+            </apex:axis>
+            <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                <apex:chartTips height="20" width="40"/>
+            </apex:barSeries>
+        </apex:chart>
+  </apex:pageBlockSection> 
+      
+     <apex:pageBlockSection title="Latin America Content/Process (Direct) SQO's" collapsible="false">
+          <apex:chart height="300" width="325" animate="true" data="{!LASqoChartData}">
+                <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+                <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                    <apex:chartLabel rotate="315"/>
+                </apex:axis>
+                <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                    <apex:chartTips height="20" width="40"/>
+                </apex:barSeries>
+            </apex:chart>
+      </apex:pageBlockSection>
+       
+      <apex:pageBlockSection title="Latin America Content/Process (Direct) Average Deal Size" collapsible="false">
+      <apex:chart height="300" width="325" animate="true" data="{!LAAdsChartData}">
+            <apex:axis fields="goal" type="Numeric" title="Goals" position="left" grid="true"/>
+            <apex:axis fields="areaOfInterest" type="Category" title="Business Unit" position="bottom">
+                <apex:chartLabel rotate="315"/>
+            </apex:axis>
+            <apex:barSeries orientation="vertical" axis="left" xField="areaOfInterest" yField="goal" title="Sector">
+                <apex:chartTips height="20" width="40"/>
+            </apex:barSeries>
+        </apex:chart>
+      </apex:pageBlockSection> 
+    </apex:pageBlockSection>
+  </apex:pageBlock>
+</apex:page>

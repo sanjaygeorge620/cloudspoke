@@ -1,0 +1,1 @@
+<apex:page action="{!URLFOR('/knowledge/knowledgeHome.apexp')}" tabStyle="Knowledgebase__tab"/>

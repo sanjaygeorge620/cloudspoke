@@ -1,0 +1,8 @@
+<apex:page >
+<select name="category">
+    <knowledge:categoryList categoryVar="category" categoryGroup="Product" rootCategory="All" level="-1">
+    {!category}
+        <option value="{!category.name}">{!category.label}</option>
+    </knowledge:categoryList>
+</select>
+</apex:page>

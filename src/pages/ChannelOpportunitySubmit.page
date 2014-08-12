@@ -1,0 +1,163 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="ChannelLeadOEMSubmitController"> 
+<title>{!SITE_NICKNAME} | Lead Submit</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript"> 
+                jQuery(document).ready(function() {
+                  jQuery(".toolbar-leads").addClass("active");
+                  jQuery(".accbody").hide();
+                  jQuery(".accbody.step1").slideToggle("slow");
+                  jQuery(".lastname").focus();
+                  //disable enter
+                  jQuery("#landing").keyup(function(a) {
+                    if(a.keyCode == 13) {
+                      return!1
+                    }
+                  });
+                  
+                });
+        </script> 
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                <li><a href="{!$Page.Leads}">Leads</a><span>&#187;</span></li>
+                <li><a class="current" href="#">New Opportunity</a></li>
+            </ul>
+        </div>  
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.Lead_Clone__c.accessible || !SITE_TAB_LEADS}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.Lead_Clone__c.accessible  && SITE_TAB_LEADS}">
+                     
+            
+            <div class="column full-width">
+                <apex:pageMessages id="error" />
+               
+                <apex:outputPanel rendered="{!!$ObjectType.Lead_Clone__c.createable}">
+                    <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+                </apex:outputPanel>
+            </div>    
+<!---Leads---->
+                
+            <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.Lead_Clone__c.accessible}">
+                <div class="column full-width"> <!----Full column-->
+                    <div class="callout profile">
+                        <a class="title-bar" href="#">
+                            <span class="sprite_cpicons profile">&nbsp;</span>
+                            Submit Opportunity
+                        </a>
+                        <div class="callout-content">
+                          
+
+                            <div class="inner-content">
+                                <apex:form >
+                                    <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Opportunity Information</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.Lead_Clone__c.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">Opportunity Name: <div><apex:inputField required="true" id="editopportunityName" value="{!newLead.Opportunity_Name__c}"/> </div></p>
+                                                    <p class="item user-info-title">Stage: <div><apex:inputField styleClass="lead-select" required="true" id="editstage" value="{!newLead.Stage__c}"/> </div></p>
+                                                </div>
+                                                <div class="right-inner-col">
+                                                    <p class="item user-info-title">Close Date: <div><apex:inputField required="true" id="editcloseDate" value="{!newLead.Close_Date__c}"/> </div></p>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="clear"/>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Opportunity Vitals</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.Lead_Clone__c.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                               <!--     <p class="item user-info-title">Budget: <div><apex:inputField id="editBudget" value="{!newLead.Budget__c}"/> </div></p>  -->
+                                               <!--     <p class="item user-info-title">Authority: <div><apex:inputField id="editauthority" value="{!newLead.Authority__c}"/> </div></p> -->
+                                               <!--     <p class="item user-info-title">Needs/Objectives: <div><apex:inputField id="editneed" value="{!newLead.Need_Objectives__c}"/> </div></p>  -->
+                                               <!--     <p class="item user-info-title">Timeline: <div><apex:inputField id="edittimeline" value="{!newLead.Timeline__c}"/></div></p>
+                                                    <p class="item user-info-title">Hot Buttons: <div><apex:inputField id="edithotButtons" value="{!newLead.Hot_Buttons__c}"/> </div></p> -->
+                                                    <p class="item user-info-title">Next Step: <div><apex:inputField id="editnextStep" value="{!newLead.Next_Step__c}"/> </div></p>
+                                                </div>
+                                                <div class="right-inner-col">
+                                                    <p class="item user-info-title">Order Method Confirmation<div><apex:inputField styleClass="lead-select" id="editPurchaseOrder" value="{!newLead.Order_Method_Confirmation__c}"/> </div></p>  
+                                                 <!--   <p class="item user-info-title">Decision Criteria: <div><apex:inputField id="editdecisionCriteria" value="{!newLead.Decision_Criteria__c}"/> </div></p>  -->
+                                                 <!--
+                                                   Case 00034866 
+                                                   Updated by Rahul Chitkara
+                                                   Appirio Offshore 
+                                                 -->
+                                                 <br/>
+                                                 <p class="item user-info-title">Partner's Customer Account Number<div><apex:inputField value="{!newLead.Partner_s_Customer_Account_Number__c}"/></div></p>
+                                                 <!-- End Case -->
+                                                </div>
+                                            </div>
+                                            <div class="clear"/>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    
+                                 <!--   <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Opportunity Description</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.Lead_Clone__c.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">Description: <div><apex:inputField id="editdescription" value="{!newLead.Description__c}"/> </div></p>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="clear"/>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>  -->
+                                   
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Application Information</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.Lead_Clone__c.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">Sector: <div><apex:inputField styleClass="lead-select" id="editsector" value="{!newLead.Sector__c}"/> </div></p>
+                                                    <p class="item user-info-title">Host Manufacturer: <div><apex:inputField styleClass="lead-select" id="editHostManufacturer" value="{!newLead.Host_Manufacturer__c}"/> </div></p>                                                    
+                                                    <p class="item user-info-title">Host Application: <div><apex:inputField styleClass="lead-select" id="editHostApplication" value="{!newLead.Host_Application__c}"/> </div></p>
+                                                    <p class="item user-info-title">Department: <div><apex:inputField styleClass="lead-select" id="editDepartment" value="{!newLead.Department__c}"/> </div></p>
+                                                    
+                                                </div>
+                                                <div class="right-inner-col">
+                                                    <p class="item user-info-title">    </p>
+                                                    <p class="item user-info-title">Secondary Host Manufacturer: <div><apex:inputField styleClass="lead-select" id="editsecondaryHostManufacturer" value="{!newLead.Secondary_Host_Manufacturer__c}"/> </div></p>
+                                                    <p class="item user-info-title">Secondary Host Application: <div><apex:inputField styleClass="lead-select" id="editsecondaryHostApplication" value="{!newLead.Secondary_Host_Application__c}"/> </div></p>
+                                                    <p class="item user-info-title">Server Operating System: <div><apex:inputField styleClass="lead-select" id="editserverOperatingSystem" value="{!newLead.Server_Operating_System__c}"/></div></p>
+                                                    <p class="item user-info-title">    </p>
+                                                    
+                                                </div>
+                                            </div>  <!---/CONTACT DETAILS--->
+                                            <div class="clear"/>
+                                        <apex:commandButton styleclass="submitbutton" action="{!SubmitLead}"/>  
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </apex:form>               
+                            </div>
+                        </div> 
+                    </div>          
+                </div>     
+            </apex:outputPanel>     
+         </apex:outputPanel>
+    </apex:define>
+  </apex:composition>
+</apex:page>

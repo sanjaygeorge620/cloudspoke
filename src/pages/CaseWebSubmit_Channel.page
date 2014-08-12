@@ -1,0 +1,101 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesCaseSubmitController_Channel"> 
+<title>{!SITE_NICKNAME} | Case Submit</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript"> 
+                jQuery(document).ready(function() {
+                  jQuery(".toolbar-cases").addClass("active");
+                  jQuery(".accbody").hide();
+                  jQuery(".accbody.step1").slideToggle("slow");
+                  jQuery(".environment").focus();
+                  //disable enter
+                  jQuery("#landing").keyup(function(a) {
+                    if(a.keyCode == 13) {
+                      return!1
+                    }
+                  });
+                 
+        </script> 
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                <li><a href="{!$Page.CasesChannel}">Cases</a><span>&#187;</span></li>
+                <li><a class="current" href="#">New Case</a></li>
+            </ul>
+        </div>  
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.case.accessible || !SITE_TAB_CASES_CHANNEL}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.case.accessible  && SITE_TAB_CASES_CHANNEL}">
+            <div class="column leftcol">
+                <c:Sites_Case_Widget />
+            </div><!-- /Left Col -->
+            
+            
+            <div class="column right-23 column-23">
+                <apex:pageMessages id="error" />
+
+                
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.Case.accessible || !SITE_TAB_CASES_CHANNEL}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.Case.accessible  && SITE_TAB_CASES_CHANNEL}">
+                     
+            
+            <div class="column full-width">
+                <apex:pageMessages id="error2" />
+               
+                <apex:outputPanel rendered="{!!$ObjectType.Case.createable}">
+                    <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+                </apex:outputPanel>
+            </div>    
+<!---Partner-Channel Cases---->
+                
+            <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.case.accessible}">
+                <div class="column full-width"> <!----Full column-->
+                    <div class="callout profile">
+                        <a class="title-bar" href="#">
+                            <span class="sprite_cpicons profile">&nbsp;</span>
+                            Submit Case
+                        </a>
+                        <div class="callout-content">
+                          
+
+                            <div class="inner-content">
+                                <apex:form >
+                                    <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Case Information</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.case.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">Subject: <div><apex:inputField required="true" id="editSubject" value="{!NewCase.Subject}"/> </div></p>
+                                                     <p class="item user-info-title">Description: <div><apex:inputField required="true" id="editDescription" value="{!NewCase.Description}"/> </div></p>
+                                                      <apex:commandButton styleclass="submitbutton" action="{!SubmitCase}"/>  
+                                                </div>
+                                                <div class="right-inner-col">
+                                                    
+                                                </div>
+                                           
+                                           </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </apex:form>               
+                            </div>
+                        </div> 
+                    </div>          
+                </div>     
+            </apex:outputPanel>     
+         </apex:outputPanel>
+            </div><!-- /Right Two-Thirds -->
+            
+            
+            
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

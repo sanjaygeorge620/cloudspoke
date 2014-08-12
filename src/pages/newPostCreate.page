@@ -1,0 +1,31 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:page standardController="Posting__c" extensions="PostingWizardController" >
+<apex:stylesheet value="{!$Resource.postingstylesheet}"/>
+<div class="doc">
+<apex:form id="myform">
+    <div class="catHeader">
+    <apex:outputText value="{!Posting__c.category__c}"/>
+    </div><p/>
+    <i>Your posting will expire in 30 days</i>
+    <br/>
+    <br/>
+    <br/>
+    <div class="fieldsEntry">
+        <apex:outputPanel layout="block" styleClass="fieldEntry">
+            Posting Title: <apex:inputField id="postTitle" style="width:300px;" value="{!Posting__c.title__c}"/> 
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="fieldEntry" rendered="{!renderPrice}">
+            <span style="margin-left:10px;">Price:</span> <br/><span class="normal">$</span>&nbsp;<apex:inputField id="postPrice" value="{!Posting__c.Price__c}"/>
+        </apex:outputPanel>
+        <div class="zipEntry">
+            Nearest zipcode: <br/><apex:inputField id="postZip" value="{!Posting__c.Zip_code__c}"/>
+        </div>
+    <div class="clearingBox"/>
+        <div class="fieldEntry descEntry">Posting Description:</div>
+    <apex:inputField id="postDesc" value="{!Posting__c.Description__c}"/> <p/>
+    </div>
+    <apex:commandButton id="btn" action="{!saveNew}" value="Save"/>
+    <apex:commandButton action="{!cancel}" value="Cancel"/>
+</apex:form>
+</div>
+</apex:page>

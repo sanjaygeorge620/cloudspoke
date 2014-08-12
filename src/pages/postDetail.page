@@ -1,0 +1,31 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:page standardController="Posting__c" extensions="PostingExtension"  standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.postingstylesheet}"/>
+  <div class="detail doc">
+  <apex:form >
+  <apex:outputPanel id="buttons">
+	      <apex:commandButton value="Edit" action="{!edit}" rendered="{!canEdit}"/>
+	      <apex:commandButton onclick="return confirm('Are you sure you want to delete this post?')" value="Delete" action="{!delete}" rendered="{!canEdit}"/>
+	      <apex:commandButton value="Follow this post" action="{!follow}" rendered="{!isNotFollowing}" reRender="buttons"/>
+  </apex:outputPanel>
+  </apex:form>
+  <div class="detailHeader"><apex:outputField value="{!Posting__c.title__c}"/>
+  <apex:outputPanel rendered="{!NOT(ISNULL(Posting__c.Price__c))}">&nbsp;-&nbsp; <apex:outputField value="{!Posting__c.Price__c}"/></apex:outputPanel>
+  &nbsp;<span class="detailHeaderTail">(<apex:outputField value="{!Posting__c.category__c}"/>&nbsp;-&nbsp;<apex:outputField value="{!Posting__c.Zip_code__c}"/>)</span>
+  </div>
+  <hr/>
+  <div class="b detailSubHeader">
+	 Posted:&nbsp; {!date}<br/>
+  	Reply to: &nbsp;<apex:outputLink value="/{!Posting__c.CreatedBy.id}">{!Posting__c.CreatedBy.Name}</apex:outputLink> &nbsp;(<apex:outputLink value="mailto:{!Posting__c.CreatedBy.email}">{!Posting__c.CreatedBy.email}</apex:outputLink>)
+  </div>
+  <hr/>
+	<apex:outputPanel layout="block" styleClass="description">
+<apex:outputField value="{!Posting__c.Description__c}"/>
+</apex:outputPanel>
+  <hr/>
+  <c:PostingFeed pid="{!Posting__c.id}"/>
+  </div>
+  <span style="display:none;">
+	  <apex:outputField value="{!Posting__c.createddate}"/>
+	</span>
+</apex:page>

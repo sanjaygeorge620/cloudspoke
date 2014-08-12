@@ -1,0 +1,44 @@
+<apex:page standardController="LX_Competitor_Influencer_and_Partner__c" id="page" showHeader="true" sidebar="true" extensions="LX_Partners_And_Influencer_Extension">
+<script>
+    window.onload=function(){
+        document.getElementById('page:form:pb:pbs:recId').disabled=true;
+    
+    }
+</script>
+<apex:sectionHeader title="New Partners and Influencers" subtitle="Partners and Influencers Edit" />
+<apex:form id="form">
+    <apex:pageBlock mode="edit" id="pb">   
+    <apex:pagemessages />     
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Save" action="{!save1}"/>
+            <apex:commandButton value="Save & New" action="{!saveAndNew}"/>
+            <apex:commandButton value="Cancel" action="{!Cancel}"/>            
+        </apex:pageBlockButtons>        
+        <apex:pageBlockSection title="Information" id="pbs"> 
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Customer_Account__c}"/> 
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.Competitive_Technology__c}"/> 
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Influencer_Account__c}"/>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.Competitive_Services__c}"/>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Strength__c}"/>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Software_Solutions__c}"/>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Primary__c}"/>
+        <apex:outputText > </apex:outputText>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Current_Install_Base__c}"/> 
+        <apex:outputText > </apex:outputText>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Strengths__c}"/> 
+        <apex:outputText > </apex:outputText>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.LX_Weaknesses__c}"/>
+        <apex:outputText > </apex:outputText>
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.Comments__c}"/>  
+        <apex:outputText > </apex:outputText> 
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.Competitor_Renewal_Date__c}"/>
+        <apex:outputText > </apex:outputText>
+                
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.CurrencyIsoCode}"/> 
+        <apex:outputText > </apex:outputText>    
+        <apex:inputField value="{!LX_Competitor_Influencer_and_Partner__c.RecordTypeId}" id="recId"/>
+               
+        </apex:pageBlockSection>   
+    </apex:pageBlock>
+</apex:form> 
+</apex:page>

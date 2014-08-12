@@ -1,0 +1,107 @@
+<apex:page Controller="LX_contract_SAP_extension" action="{!init}" >
+    <Apex:form >
+ <Apex:pageblock title="Special Handling Instructions"> 
+ <Apex:Pageblocksection >
+  <Apex:inputText label="Special Handling Instructions" value="{!specInst}"> </Apex:inputText>
+   </Apex:Pageblocksection>
+  </Apex:pageblock>
+ <Apex:Pageblock title="Project Details" >
+  <Apex:Pageblocksection title="Project Details" >
+ <apex:outputText label="Opportunity Number:" value="{!proj1.pse__Opportunity__r.Opportunity_Number__c}"> </apex:outputText>
+  <apex:outputfield label="PO Date/Project Start Date:" value="{!proj1.pse__Start_Date__c}"> </apex:outputfield>
+ <apex:outputfield label="Forecasted Project End Date:" value="{!proj1.pse__End_Date__c}"> </apex:outputfield>
+ <apex:outputText label="Project Name:" value="{!proj1.Name}"> </apex:outputText>
+ <apex:outputText label="Project #:" value="{!proj1.pse__Project_ID__c}"> </apex:outputText>
+ <apex:outputText label="End Customer Name:" value="{!proj1.Account_Name__c}"> </apex:outputText>
+ <apex:outputText label="End Customer Company Number:" value="{!proj1.pse__Account__r.Company_Number__c}"> </apex:outputText>
+ </Apex:pageblocksection>
+ 
+ <Apex:Pageblocksection title="Licensing Account Information Details" >
+  <apex:inputText label="Licensing Sold To" value="{!licSoldToVar}"> </apex:inputText>
+   <apex:inputText label="License Contact Name:" value="{!ShipToNameVar}"> </apex:inputText>
+    <apex:inputText label="License Contact Email:" value="{!ShipToEmailVar}"> </apex:inputText>
+     <apex:inputText label="Fax:" value="{!licConFax}"> </apex:inputText>    
+  </Apex:pageblocksection>
+  
+   <Apex:Pageblocksection title="Billing Account Information" >
+   
+   
+   <apex:outputText label="Bill To ID:" value="{!proj1.LX_Bill_To_ID__c }"> </apex:outputText>
+   <apex:outputText label="Ship To ID:" value="{!proj1.LX_Ship_To_ID__c }"> </apex:outputText>
+   <apex:outputText label="Bill To Company:" value="{!proj1.LX_Bill_To_Company__c }"> </apex:outputText>   
+   <apex:outputText label="Ship To Company:" value="{!proj1.LX_Ship_To_Company__c }"> </apex:outputText> 
+   <apex:outputText label="Bill To Address:" value="{!billToAddress }"> </apex:outputText>
+   <apex:outputText label="Ship To Address:" value="{!shipToAddress }"> </apex:outputText>
+   <apex:outputText label="Bill To City:" value="{!proj1.LX_Bill_To_City__c }"> </apex:outputText>  
+   <apex:outputText label="Ship To City:" value="{!proj1.LX_Ship_To_City__c }"> </apex:outputText>  
+   <apex:outputText label="Bill To State:" value="{!proj1.LX_Bill_To_State__c }"> </apex:outputText>
+   <apex:outputText label="Ship To State:" value="{!proj1.LX_Ship_To_State__c }"> </apex:outputText>
+   <apex:outputText label="Bill To Postal:" value="{!proj1.LX_Bill_To_Postal__c }"> </apex:outputText> 
+   <apex:outputText label="Ship To Postal:" value="{!proj1.LX_Ship_To_Postal__c }"> </apex:outputText> 
+   <apex:outputText label="Bill To Country:" value="{!proj1.LX_Bill_To_Country__c }"> </apex:outputText>
+   <apex:outputText label="Ship To Country:" value="{!proj1.LX_Ship_To_Country__c }"> </apex:outputText> 
+   <apex:outputText label="Sold To (for information only)" value="{!proj1.pse__Opportunity__r.LX_Sold_To_New__r.LX_SAP_Sold_To_ID__c}"> </apex:outputText><br/>
+     <apex:inputText label="Billing Contact Name:"  value="{!proj1.Bill_To_Name__c}"  > </apex:inputText>  <br/>
+      <apex:inputText label="Billing Contact Phone:" value="{!billConPhoneValue}"> </apex:inputText>    <br/>
+       <apex:inputText label="Billing Contact Email:" value="{!proj1.LX_Bill_To_Email_Address__c}"  > </apex:inputText>    <br/>       
+        <apex:outputText label="PO #:" value="{!proj1.PO_Number__c}"> </apex:outputText>        
+  </Apex:pageblocksection>
+  
+   <Apex:Pageblocksection title="Lexmark account information" >
+  <apex:outputText label="PM/Person Responsible:" value="{!proj1.Project_Manager_Name__c}" > </apex:outputText>
+   <apex:outputText label="AM:" value="{!proj1.pse__Account__r.owner.name}" > </apex:outputText>
+    <apex:outputText label="Industry:" value="{!proj1.pse__Practice__r.name}"> </apex:outputText>
+     <apex:outputText label="Company Code:" value="{!proj1.pse__Account__r.Company_Number__c}"> </apex:outputText>  
+      <apex:outputText label="Division:" Value="ISS">  </apex:outputText>    
+       <apex:outputText label="GEO:" value="{!proj1.pse__Account__r.LX_Geo__c}"> </apex:outputText>      
+        <apex:outputText label="Project Category:" value="{!proj2.Project_Category__c}" > </apex:outputText>  
+          <apex:outputText label="Project Class:" Value="Implementation" > </apex:outputText>    
+            <apex:outputText label="Profit Center:" value="15001"> </apex:outputText>          
+  </Apex:pageblocksection>
+  </Apex:pageblock>
+  
+  <apex:pageblock title="Customer Invoice">
+  <Apex:pageblocksection >
+   <apex:inputfield label="SMSA Start Date" value="{!proj2.SMSA_Start_Date__c}"> 
+   <apex:actionSupport action="{!Calculates}" event="onchange" rerender="calc" status="counterStatus" />
+   </apex:inputfield>
+   <apex:outputPanel id="calc">
+   <apex:outputlabel value="SMSA End Date:  " rendered="true"/> 
+   <apex:outputfield value="{!proj2.SMSA_End_Date__c}" rendered="true"> </apex:outputfield>
+    <apex:param value="{!proj2.SMSA_End_Date__c}"/>
+    </apex:outputPanel>
+   <apex:outputfield label="SMSA Contract Term" value="{!proj1.pse__Opportunity__r.BW_SMSA_Term__c}"> </apex:outputfield>
+   </Apex:pageblocksection>
+    <Apex:pageblocksection >
+    <Apex:pageblocktable value="{!opp1.opportunitylineitems}" var="opporItems">
+    <apex:column value="{!opporItems.Part_Number__c}"/>
+    <apex:column value="{!opporItems.Part_Description__c}"/>
+     <apex:column value="{!opporItems.Quantity}"/>
+      <apex:column value="{!opporItems.Price_Type__c}"/>
+       <apex:column value="{!opporItems.Product_Family__c}"/>
+       <apex:column value="{!opporItems.UnitPrice}"/>
+       <apex:column value="{!opporItems.TotalPrice }"/>
+     </Apex:pageblocktable>
+    </Apex:pageblocksection>
+  </Apex:pageblock>
+  
+   <apex:pageblock title="Resource Summary">
+    <Apex:pageblocktable value="{!lstwrap}" var="reshours">
+   
+ <apex:column headervalue="Resource" value="{!reshours.resourcename}"/>
+    <apex:column headervalue="Hours"  value="{!reshours.plannedhours}"/>
+     </Apex:pageblocktable>
+  </Apex:pageblock>
+  
+  <Apex:pageblock >
+  <apex:pageblockbuttons location="Bottom">
+   <apex:commandButton value="Save" action="{!save}" />
+   <apex:commandButton value="Cancel" action="{!cancel}"/>
+   </apex:pageblockbuttons>
+    </Apex:pageblock>
+   <script>
+     
+   </script>
+  </Apex:form>
+ 
+</apex:page>

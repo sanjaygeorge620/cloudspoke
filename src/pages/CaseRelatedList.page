@@ -1,0 +1,40 @@
+<apex:page standardController="Case" extensions="ControllerCase" tabstyle="Case" 
+			showHeader="false" sidebar="false" id="pc">
+  
+  <div id="pbSubsection">
+  <style>
+  body, td, select, input, textarea, fieldset legend, .warn .textCounter, .miniTab .currentTab, .requiredLegend, .bPageBlock .noRecords, .list td, .list th, .bPageBlock td.actionColumn .actionLink, .bWizardBlock .pbDescription, .bWizardBlock .pbTopButtons {
+   color:#333333;
+   font-size:80%;
+  }
+  </style>
+   <apex:form id="frm" >
+   	<apex:dataTable value="{!relatedCases}" var="aCase" id="compTable"
+        styleClass="list" headerClass="headerRow" rowClasses="dataRow" width="100%" rendered="{!showRows}">
+        <apex:column >
+          <apex:facet name="header" >Name</apex:facet>
+          <apex:outputLink value="/{!aCase.id}" onclick="window.parent.location.href='/{!aCase.id}';">{!aCase.casenumber}</apex:outputLink>
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Subject</apex:facet>
+          <apex:outputLink value="/{!aCase.id}" onclick="window.parent.location.href='/{!aCase.id}';">{!aCase.subject} </apex:outputLink>
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Date Opened</apex:facet>
+          <apex:outputField value="{!aCase.createdDate}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Owner</apex:facet>
+          <apex:outputField value="{!aCase.owner.name}" />
+        </apex:column>
+      </apex:dataTable>  
+        
+    </apex:form>
+   </div> 
+   <div><iframe id="resizeHack" width="0" height="0" frameborder="no"/></div>
+<!-- <script>
+  document.getElementById("resizeHack").src = "{!URLFOR($Scontrol.Resize_VF_Iframe)}" +
+                                              "&ifName=" + window.name +
+                                              "&ifHeight=" + document.body.offsetHeight;
+</script> -->
+</apex:page>

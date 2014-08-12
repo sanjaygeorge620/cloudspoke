@@ -1,0 +1,82 @@
+<!-- Visualforce Page to create new Scheduled_Job__c objects, or to edit existing ones -->
+
+<apex:page standardController="Scheduled_Job__c" extensions="JobEditController" tabstyle="Scheduled_Job__c" >   
+    
+    <apex:form >
+        
+        <apex:sectionheader title="Job Edit" subtitle="{!if(newJob,'New Job',Job.Name)}"></apex:sectionheader>
+        
+            <apex:pageBlock title="Job Edit">
+                
+                <apex:pageblockbuttons >
+                    <apex:commandbutton action="{!saveJob}" value="Save"></apex:commandbutton>                  
+                    <apex:commandbutton action="{!cancel}" value="Cancel"></apex:commandbutton>
+                </apex:pageblockbuttons>
+                
+                <apex:pageBlockSection title="Job Details">
+                    <apex:inputField value="{!Job.name}" required="true" /> 
+                    <apex:inputField value="{!Job.Active__c}"/>                    
+                </apex:pageBlockSection>         
+                
+                <!-- Autocomplete search for Schedulable Classes -->
+                <apex:pageBlockSection title="Select Apex Class">
+                   <apex:inputfield value="{!Job.Apex_Class__c}" id="SchedulableClass" style="width:275px;">
+                   		<c:autoComplete autocomplete_field="{!$Component.SchedulableClass}" />
+                   </apex:inputfield>                   
+                </apex:pageBlockSection>          
+               
+                <!-- Picklist for Run Units -->
+                <apex:actionRegion >
+                    <apex:pageBlockSection title="Job Schedule">
+                    	<apex:inputField value="{!Job.Run_Units__c}" required="true" >
+                      	  <apex:actionSupport event="onchange" reRender="frequency, days, startTime, month" />
+                        </apex:inputField>   
+               		</apex:pageBlockSection>
+               </apex:actionRegion>                
+               
+                <apex:pageBlockSection id="frequency" columns="2">
+                    
+                    <!-- Rendered only when 'Hours' is the selected Run Unit -->
+                    <apex:pageBlockSectionItem rendered="{!NOT(ISBLANK(Job.Run_Units__c)) && (Job.Run_Units__c == 'Hours')}">    
+                        <apex:outputLabel value="Run every" for="RF"/>
+                        <apex:outputPanel layout="inline" >
+                            <apex:inputField value="{!Job.Run_Frequency__c}" id="RF" style="width:40px" />  
+                            <apex:outputText value=" hours"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    
+                    <!-- Rendered only when 'Months' is the selected Run Unit -->
+                    <apex:pageBlockSectionItem rendered="{!Job.Run_Units__c == 'Months'}">    
+                        <apex:outputLabel value="On" for="DayNumber" />
+                        <apex:outputPanel layout="inline" >
+                            
+                            <apex:selectList value="{!Job.Weekday_Number__c}" size="1" label="On" id="DayNumber" style="width:75px" >
+                                <apex:selectOptions value="{!WeekdayNumber}"/>
+                             </apex:selectList>          
+                            
+                            <apex:inputField value="{!Job.NoMultiSelect_Days__c}" style="width:100px" />
+                            <apex:outputText value=" every "  />
+                            <apex:inputField value="{!Job.Run_Frequency__c}" id="Month_Frequency" style="width:30px" /> 
+                             <apex:outputText value=" month(s)."  />
+                        </apex:outputPanel>
+                	</apex:pageBlockSectionItem>  
+                    
+                </apex:pageBlockSection>
+                
+                <!-- Rendered only when 'Months' is NOT the selected Run Unit -->
+                <apex:pageblockSection id="days" >
+                     <apex:inputField label="Days" value="{!Job.MultiSelect_Days__c}" rendered="{!NOT(ISBLANK(Job.Run_Units__c)) && Job.Run_Units__c != 'Months'}" />  
+                </apex:pageblockSection>
+                 
+                 <!-- Rendered only when 'Hours' is NOT the selected Run Unit -->
+                <apex:pageblockSection id="startTime" >                               
+                	 <apex:selectList value="{!Job.Start_Time__c}" size="1" label="Start Time" rendered="{!NOT(ISBLANK(Job.Run_Units__c)) && Job.Run_Units__c != 'Hours'}" >
+                        <apex:selectOptions value="{!Hours}"/>
+                    </apex:selectList>                 
+                </apex:pageblockSection>                           
+              
+            </apex:pageBlock>
+        
+    </apex:form>
+    
+</apex:page>

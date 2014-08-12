@@ -1,0 +1,102 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesTraining_attachmentController"> 
+<title>{!SITE_NICKNAME} | eLearning Chapter: {!ViewChapter.Chapter_Number__c} for {!ViewChapter.Class__r.Course__r.name}</title> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-training').addClass('active');
+              jQuery('.trainingtable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+            });  
+        </script>
+        
+        <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Site.CurrentSiteURL}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.training}">Training</a><span>&#187;</span></li>
+                    <li><apex:outputLink title="View Course" value="{!$page.Classdetails}"><apex:param name="id" value="{!ClassDetails.id}"/> {!ClassDetails.Course__r.name}</apex:outputLink></li>
+                </ul>
+         </div>        
+         
+            <div class="cp_core">
+             <div class="column full-width"> 
+                <div class="callout classroom"> 
+                    <span class="title-bar" href="#"><span class="sprite_cpicons class">&nbsp;</span>{!ClassDetails.Course__r.Name}</span> 
+                    <div class="callout-content"> 
+                        
+                        <div class="class-details">
+                            <p class="label class-details-title">Class Details</p>
+                            <div class="left-inner-col">
+                                <p class="label class-name">Class Name:</p>
+                                <p class="item class-name"><apex:outputLink title="View Course" value="{!$page.coursedetails}"><apex:param name="id" value="{!ClassDetails.Course__r.id}"/> {!ClassDetails.Course__r.name}</apex:outputLink></p>
+                                <p class="label class-name">Section Title:</p>
+                                <p class="item class-number"><apex:outputField value="{!ViewChapter.Title__c}"/></p> 
+                            </div>
+                            
+                            <div class="right-inner-col">
+                                <p class="label class-number">Class Number:</p>
+                                <p class="item class-number"><apex:outputField value="{!ClassDetails.name}"/></p>
+                                <p class="label class-type">Class Type:</p>
+                                <p class="item class-type"><apex:outputField value="{!ClassDetails.class_type__c}"/></p>
+                                
+                                <apex:outputPanel rendered="{!ClassDetails.class_type__c!='E-Learning'}">
+                                    <p class="label class-location">Training Location:</p>
+                                    <p class="item class-location">
+                                            <apex:outputLink value="{!$page.training_location}">
+                                                <apex:outputtext value="{!ClassDetails.Training_Location__r.Name}"/>
+                                                <apex:param name="id" value="{!ClassDetails.Training_Location__c}"/>
+                                            </apex:outputLink>
+                                    </p>
+                                    <p class="label class-trainer">Trainer:</p>
+                                    <p class="item class-trainer"><apex:outputfield value="{!ClassDetails.Trainer__c}"/></p>
+                                </apex:outputPanel>   
+                            </div>
+                        </div>
+         
+         
+          
+                        
+                        <apex:outputPanel rendered="{!CourseAttachments.size!=0}">
+                          <div class="class-details">
+                              <p class="label class-videos-title">Attachments</p>
+                              <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>  
+                                            <th>Description</th>  
+                                            <th>Last Modified</th>  
+                                                                                      
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!CourseAttachments}" var="v">
+                                          <tr>
+                                                <td class="chapter-title">
+                                                    <apex:outputLink title="Download" target="_blank" value="{!URLFOR($Action.Attachment.Download, v.id)}">{!v.Name}</apex:outputLink><br />
+                                                 </td>  
+                                                 <td class="chapter-number">
+                                                 {!v.Description};
+                                                 </td>
+                                                 <td class="chapter-number">
+                                                 {!v.LastModifiedDate};
+                                                 </td>
+                                                 
+                                                 
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table> 
+                           </div>   
+                      </apex:outputPanel>
+                    </div>
+                </div> 
+             </div>   
+         </div>
+        
+        
+        
+        
+        
+        
+     </apex:define>    
+   </apex:composition>      
+</apex:page>

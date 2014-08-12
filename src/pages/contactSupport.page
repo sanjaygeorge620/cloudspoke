@@ -1,0 +1,188 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesCaseController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+     <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | Contact Support</title>
+    </apex:define>
+    <apex:define name="javascriptcalls">
+          <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-cases').addClass('active');
+              jQuery('.casetable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, "iDisplayLength": 8, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+            });  
+        </script>
+     </apex:define>
+    <apex:define name="body">  
+        <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+                 <div class="c11">
+                    <nav>
+                        <a class="home" href="{!$Site.CurrentSiteUrl}">Home</a>
+                        <a class="current" href="#">Cases</a>
+                 </nav>
+            </div>
+         </div>    
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.case.accessible || !SITE_TAB_CASES || !SITE_TAB_CONTACT}">
+            <p>{!$label.Insufficient_Privileges}</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.case.accessible && SITE_TAB_CASES && SITE_TAB_CONTACT}">
+            <apex:pageMessages />
+            <div class="column full-width">
+                <div class="callout new-case divider grid">
+                <div class="c10 m grid">
+                    <p class="big-statement">For Assistance with all Perceptive Software products, including those formerly known as Acuo, Brainware, ISYS, Nolij, Pallas Athena, Twistage, and AccessVia, please contact us using the options below.</p>
+                        <apex:form rendered="{!$ObjectType.case.createable}">
+                            <apex:outputLink styleclass="new-case" value="{!$page.CaseWebSubmit}">Submit New Case</apex:outputLink>
+                        </apex:form> 
+                </div>
+                <div class="c6">
+                    <apex:image url="{!$Resource.Perceptive_Software_Users}" width="275" height="240"/>
+                    <!--<img src ="/resource/1366043604000/CasesPerceptiveSoftwareUsers" alt="Perceptive Software Users" width="275" height="240" class="inline-image wide support"/>-->
+                </div>
+                </div><!-- /New Case Button -->
+            </div><!-- /Full Width Column -->
+            <div class="column full-width">
+            <div class="callout new-case grid">
+                    <div class="c5 m">
+                        <div class="title-bar support">
+                            Phone
+                        </div>
+                        <div class="callout-content">
+                            
+                            <b> <span style='color:orange; font-size:13.0pt;'>The Americas</span></b><br/><br/>
+                            <!--<h1 style="font-size=15.0pt; color:orange;">The Americas</h1> -->
+                            <p>
+                                <span class="fn org" itemprop="name">United States:</span><br />
+                                <h>1 888 906 3565</h>
+                            </p>
+                            <p>
+                                <span class="fn org" itemprop="name">Brazil:</span><br />
+                                <h>+55 (0) 800 047 4756</h>
+                            </p>
+                            <p>
+                                <span class="fn org" itemprop="name">Canada:</span><br />
+                                <h>+1 888 882 0480</h>
+                            </p>
+                            <p>
+                                <span class="fn org" itemprop="name">Curacao:</span><br />
+                                <h>+5999 841 6646</h>
+                            </p>
+
+                            <p>
+                                <span class="fn org" itemprop="name">Mexico:</span><br />
+                                <h>+52 (0) 1 800 083 4928</h>
+                            </p> <br/>
+                            <b> <span style='color:orange; font-size:13.0pt;'>Europe, Middle East and Africa</span></b><br/><br/>
+                            <!--<h1 style="color:orange;">Europe, Middle East and Africa</h1>-->
+                            <p>
+                                <span class="fn org" itemprop="name">Belgium:</span><br />
+                                <h>+32 800 81357</h>
+                            </p> 
+                            <p>
+                                <span class="fn org" itemprop="name">Finland:</span><br />
+                                <h>+358 (0) 800 774101</h>
+                            </p>                           
+                            <p>
+                                <span class="fn org" itemprop="name">France:</span><br />
+                                <h>+33 (0) 805 540 839</h>
+                            </p>
+                            
+                            <p>
+                                <span class="fn org" itemprop="name">Germany:</span><br />
+                                <h>+49 (0) 800 101 1743</h>
+                            </p>
+                             <p>
+                                <span class="fn org" itemprop="name">Italy:</span><br />
+                                <h>+39 800 917 997</h>
+                            </p>
+                             <p>
+                                <span class="fn org" itemprop="name">Netherlands:</span><br />
+                                <h>+31 (0) 800 404 0004</h>
+                            </p>
+                             <p>
+                                <span class="fn org" itemprop="name">South Africa:</span><br />
+                                <h>+27 (0) 11 807 3025</h>
+                            </p>
+                             <p>
+                                <span class="fn org" itemprop="name">Spain:</span><br />
+                                <h>+34 800 900 505</h>
+                            </p>
+                             <p>
+                                <span class="fn org" itemprop="name">United Kingdom:</span><br />
+                                <h>+44 (0) 800-028-1904</h>
+                            </p><br/>
+                            <b> <span style='color:orange; font-size:13.0pt;'>Asia Pacific</span></b><br/><br/>
+                            <!--<h1 style="color:orange;">Asia Pacific</h1>-->
+                            <p>
+                                <span class="fn org" itemprop="name">Australia:</span><br />
+                                <h>+61 (1) 800 607 991</h>
+                            </p><br/>
+                            <b> <span style='color:orange; font-size:13.0pt;'>International</span></b><br/><br/>
+                            <!--<h1 style="color:orange;">International</h1>-->
+                            <p>
+                                <!--<span class="fn org" itemprop="name">International:</span><br />-->
+                                <h >+1 913 422 7525 option 2</h>
+                            </p>                   
+                        </div>
+                    </div>
+                    <div class="c5 m">
+                        <div class="title-bar support">
+                            Chat
+                        </div>
+                        <div class="callout-content">
+                        
+                            <!-- START Activa Live Chat Button/Link Code: Place this code into your HTML wherever you want this button/link to appear -->
+                            <script type="text/javascript">/*managed services*/
+                                var __ALC_Deployment = 10580; /* ONE DEPLOYMENT */
+                                if ( typeof(__ALC_Badges) == 'undefined' ) { __ALC_Badges = new Array();}
+                                /* MANAGED SERVICES */ __ALC_Badges.push({'id':'16435', 'available':'id_of_online_element', 'unavailable':'id_of_offline_element', 'department':'12182'});
+                                /* SUPPORT          */ __ALC_Badges.push({'id':'16438', 'available':'id_of_online_element', 'unavailable':'id_of_offline_element', 'department':'12186'});
+                                /* VNA              */ __ALC_Badges.push({'id':'16978', 'available':'id_of_online_element', 'unavailable':'id_of_offline_element', 'department':'12465'});
+                            </script>
+                            <!-- END Activa Live Chat Button/Link Code -->
+                            <!--------------------------------------------------------------->
+                            
+                            <apex:outputPanel rendered="{!SITE_ACCOUNT.ID =='001i000000Kz6sd' || SITE_ACCOUNT.ID =='001i000000Kz6sdAAB' || SITE_ACCOUNT.ID =='001i000000Kz6LD' || SITE_ACCOUNT.ID =='001i000000Kz6LDAAZ'}">
+                                <!-- GSS VNA -->
+                                <li><strong>Chat with VNA Global Support Services</strong></li>
+                                <li><a class="chat-now-btn" onClick="_alc.startChat(16978);" href="javascript://chat">Chat Now</a></li>
+                            </apex:outputPanel>
+                            
+                            <apex:outputPanel >
+                                <!-- GSS -->
+                                <li><strong>Chat with Global Support Services</strong></li>
+                                <li><a class="chat-now-btn" onClick="_alc.startChat(16438);" href="javascript://chat">Chat Now</a></li>
+                            </apex:outputPanel>    
+                            
+                            <apex:outputPanel >
+                                <!-- CLOUD -->
+                                <li><strong>Chat with Cloud Services</strong><br /><span>(Remote Administration customers only)</span></li>
+                                <li><a class="chat-now-btn" onClick="_alc.startChat(16435);" href="javascript://chat">Chat Now</a></li>
+                            </apex:outputPanel>                        
+                        </div>
+                    </div>
+                    <div class="c5">
+                        <div class="title-bar support">
+                            E-mail
+                        </div>
+                        <div class="callout-content">
+                            <p>
+                                <span class="fn org" itemprop="name">Worldwide:</span><br />
+                                <a class="email" itemprop="email" href="mailto:support@perceptivesoftware.com">support@perceptivesoftware.com</a>
+                            </p>
+                            <p>
+                                <span class="fn org" itemprop="name">South Africa:</span><br />
+                                <a class="email" itemprop="email" href="mailto:africa.support@perceptivesoftware.com">africa.support@perceptivesoftware.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <script type="text/javascript" src="https://depot.liveagentforsalesforce.com/app/js/lt.js"> </script>
+        </apex:outputPanel><!-- /Cp Core -->
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

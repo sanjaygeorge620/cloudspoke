@@ -1,0 +1,43 @@
+<!--Copied from Salesforce URL: http://wiki.developerforce.com/index.php/Visualforce_CaseHistoryTimeline
+    Modified by Michael Fitzgerald on 10/30/2009.
+-->
+ 
+<apex:page controller="CaseHistoryCon" tabStyle="Case" sidebar="true">
+    <apex:form >
+        
+        <!---HEADER WITH BUTTONS-->
+        <apex:sectionHeader title="Case History" subtitle="Case Number: {!case.casenumber}">
+        Displaying all recorded comments, events, tasks, and email messages.
+        </apex:sectionHeader>
+        
+        <!---DETAIL-->
+        <apex:pageBlock id="thePageBlock">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Back to Case : {!case.casenumber}" action="{!backToCase}"/>
+                <apex:commandButton value="{!IF(hidePrivate, 'Show ', 'Hide ')}Private" action="{!togglePrivate}" rerender="thePageBlock" status="status"/>
+                <apex:commandButton value="View{!IF(fullComments, ' Summary', ' Detail')}" action="{!toggleComments}" rerender="thePageBlock" status="status"/> 
+                <apex:actionStatus id="status" startText="requesting..."/>
+            </apex:pageBlockButtons>
+            
+             <apex:pageBlockTable value="{!histories}" var="h" >
+                <apex:column width="110" headerValue="Date"  value="{!h.historyDate}"/>
+                <apex:column width="25" headerValue="Public">
+                    <apex:image value="{!URLFOR($Resource.CaseTimeLineResource, IF(h.ispublic, 'true.gif','false.gif'))}"/>
+                </apex:column>
+                <apex:column width="110" headerValue="Name"  value="{!h.actorname}"/>
+                <apex:column width="25" headerValue="Type">
+                    <apex:outputlink title="Click to view more detailed information about the {!h.historyType}" target="_parent" style="font-weight:bold;" value="/{!h.oid}">{!h.historyType}</apex:outputlink>
+                </apex:column>
+                <apex:column width="800" value="{!h.det}" headerValue="Description" />
+             </apex:pageBlockTable>
+             
+         <!---FOOTER WITH BUTTONS-->    
+           <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Back to Case : {!case.casenumber}" action="{!backToCase}"/>
+                <apex:commandButton value="{!IF(hidePrivate, 'Show ', 'Hide ')}Private" action="{!togglePrivate}" rerender="thePageBlock" status="status"/>
+                <apex:commandButton value="View{!IF(fullComments, ' Summary', ' Detail')}" action="{!toggleComments}" rerender="thePageBlock" status="status"/> 
+                <apex:actionStatus id="status" startText="requesting..."/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

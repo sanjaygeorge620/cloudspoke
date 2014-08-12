@@ -1,0 +1,184 @@
+<!-- 
+/*
+ * ©Lexmark Front Office 2013, all rights reserved
+ * 
+ * Created Date : 06/20/2013
+ *
+ * Author : Kapil Reddy Sama.
+ * 
+ * Description : Page for displaying Account and related Opportunity, Enrollment details.
+ *  
+ *  
+ */
+-->
+
+<apex:page standardController="Account" tabStyle="Account" sidebar="true" extensions="LX_AccountDetailsExtension" readOnly="True">
+<script type="text/javascript">
+    function OpenMail(owneremail,accountName,baseURL,accountId)
+    { 
+    location.href = "mailto:"+owneremail+"?subject=Account Inquiry: " +accountName+'&body='+'Link to Account in Salesforce: '+baseURL+'/'+accountId;
+    return false;
+    }    
+</script>
+  <apex:form > 
+  <!--Account Detail-->
+  <apex:outputPanel id="AccDetail">
+  <apex:outputPanel rendered="{!!if(oppPaginationList.size >0 || enrollmentPaginationList.size > 0,true,false)}">
+  <apex:sectionHeader title="Account"  subtitle="{!accountDisplay.Name}" rendered="{!!if(oppPaginationList != null && oppPaginationList.size >0 ,true,false)}"/> 
+  <apex:pageBlock title="Account Detail" tabStyle="Account">
+      <apex:pageBlockSection >
+          <apex:outputField value="{!accountDisplay.Name}"/>
+          <apex:outputField value="{!accountDisplay.BillingCity}"/>
+          <apex:outputField value="{!accountDisplay.Owner.Name}" label="Account Owner"/>
+          <apex:outputField value="{!accountDisplay.BillingState}"/>   
+          <!--Nithin: Replaced NameLocal with Alias__c-->       
+          <apex:outPutField value="{!accountDisplay.Alias__c}"/>
+          <apex:outputField value="{!accountDisplay.BillingCountry}"/>
+          <apex:outputField value="{!accountDisplay.Global_Account__c}"/>
+          <apex:outputField value="{!accountDisplay.type}"  />  
+          <apex:outputField value="{!accountDisplay.Global_Account_Owner__r.Name}"  label="Global Account Owner"/> 
+          <apex:outputField value="{!accountDisplay.Party_Role__c}"/>          
+          <apex:outputField value="{!accountDisplay.Number_Open_Opportunities__c}"/>   
+          <apex:outputField value="{!accountDisplay.Party_Type__c}"/>
+       </apex:pageBlockSection>
+       <apex:pageBlockSection title="Partner Details"  rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"> 
+          <apex:outputField value="{!accountDisplay.Partner_ISS_Local_Grade__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>     
+          <apex:outputField value="{!accountDisplay.Primary_ISS_Internal_Segment__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>  
+          <apex:outputField value="{!accountDisplay.Partner_ISS_Global_Grade__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>  
+          <apex:outputField value="{!accountDisplay.MPS_Capable_Partner__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>  
+          <apex:outputText >&nbsp;</apex:outputText>
+          <apex:outputText ></apex:outputText>
+          <apex:outputText ></apex:outputText>
+          <apex:outputField value="{!accountDisplay.ISS_Coverage_Model__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.Primary_Sector_Focus__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.ISS_Coverage_Method__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.Secondary_Sector_Focus__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.Coverage_Status__c}" rendered="{!if(accountDisplay.Type == 'Partner',true,false)}"/>
+       </apex:pageBlockSection> 
+       <apex:pageBlockSection title="Customer Details"  rendered="{!if(accountDisplay.Type == 'Customer',true,false)}">  
+          <apex:outputField value="{!accountDisplay.Rating}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.TR_Status__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>   
+          <apex:outputField value="{!accountDisplay.Country_Account_Rating__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.Local_Priority__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.footprint__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.MPS_Qualification__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/> 
+          <apex:outputText > </apex:outputText>
+           <apex:outputField value="{!accountDisplay.ISS_Coverage_Model__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/> 
+          <apex:outputField value="{!accountDisplay.LX_Sales_Team_Assigned__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.ISS_Coverage_Method__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.Lexmark_Sub_Vertical__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>
+          <apex:outputField value="{!accountDisplay.Coverage_Status__c}" rendered="{!if(accountDisplay.Type == 'Customer',true,false)}"/>         
+       </apex:pageBlockSection> 
+       <div style="text-align: Center;">
+       <!--<input type="button" name="Contact Account Owner" value="Email Account Owner" onclick="return OpenMail('{!accountDisplay.Owner.email}','{!accountDisplay.Name}','{!baseURl}','{!accountDisplay.Id}');"  />  --> 
+       </div>         
+  </apex:pageBlock>  
+  
+  <apex:outputPanel id="Opps">
+  <apex:pageBlock tabStyle="Opportunity" title="Opportunities" rendered="{!if(oppList.size >0 && setcon.resultSize == 0,true,false)}" > 
+  <apex:pageBlockTable value="{!oppList}" var="a" rows="{!size}" > 
+   <apex:column value="{!a.Name}" />
+   <apex:column value="{!a.Owner.Name}"  headerValue="Opportunity Owner"/>
+   <apex:column value="{!a.StageName}" />
+   <apex:column value="{!a.LX_Product_Type__c}" />
+   <apex:column value="{!a.LX_Sales_Type__c}" />
+   <apex:column value="{!a.type}" />    
+   <apex:column value="{!a.Amount}" />    
+   <apex:column value="{!a.Primary_Partner__r.Name}" headerValue="Primary Billing Partner"/>
+   <apex:column value="{!a.LX_Program_Enrollment__r.Name}" headerValue="Program Enrollment"/>       
+  </apex:pageBlockTable>
+  <apex:outputPanel >
+  <apex:commandLink action="{!showMore}"  reRender="Opps" rendered="{!if(size < oppList.size && setcon.resultSize == 0,true,false)}"> Show  5 More >>  </apex:commandLink>
+  <apex:outputText rendered="{!if(size < oppList.size && setcon.resultSize == 0,true,false)}" > &nbsp;| &nbsp; </apex:outputText>
+  <apex:commandLink action="{!showPagination}"  reRender="Opps,Oppspagination,AccDetail" rendered="{!if(size < oppList.size,true,false)}"> Go To List ({!oppList.size}) >></apex:commandLink>
+  </apex:outputPanel>
+  </apex:pageBlock>
+  </apex:outputPanel> 
+  
+  <apex:outputPanel id="enrollments">
+  <apex:pageBlock tabStyle="LX_Program_Enrollment__c" title="Program Enrollments" rendered="{!if(accountDisplay.type == 'Partner' && enrollments.size >0  ,true,false)}" >
+  <apex:pageBlockTable value="{!enrollments}" var="a" rows="{!pageSize}"> 
+  <apex:column value="{!a.Master_Program__r.Name}" >
+  </apex:column>
+  <apex:column value="{!a.LX_Enrollment_End_Date__c}" />
+  <apex:column value="{!a.LX_Enrollment_Status__c}" />     
+  </apex:pageBlockTable>
+  <apex:outputPanel >
+  <apex:commandLink action="{!showMore1}"  reRender="enrollments" rendered="{!if(pageSize< enrollments.size && setcon1.resultSize == 0,true,false)}"> Show {!pageSize} More >>  </apex:commandLink>
+  <apex:outputText rendered="{!if(pageSize< enrollments.size && setcon1.resultSize == 0,true,false)}" > &nbsp;| &nbsp; </apex:outputText>
+  <apex:commandLink action="{!showEnrollmentPagination}"  reRender="Opps,Oppspagination,enrollmentspagination,AccDetail" rendered="{!if(pageSize < enrollments.size,true,false)}"> Go To List ({!enrollments.size}) >></apex:commandLink>
+  </apex:outputPanel>
+  </apex:pageBlock>
+  </apex:outputPanel>  
+  </apex:outputPanel>
+  </apex:outputPanel>
+  
+  
+  <!--Pagination-->
+  <apex:outputPanel id="Oppspagination">
+  <apex:outputPanel rendered="{!if(oppPaginationList != null && oppPaginationList.size >0 ,true,false)}">
+  <apex:sectionHeader title="Opportunities"  subtitle="{!accountDisplay.Name}" rendered= "{!if(oppPaginationList != null && oppPaginationList.size >0 ,true,false)}"/> 
+  <apex:pageBlock tabStyle="Opportunity" title="Opportunities" rendered="{!if(oppPaginationList.size >0 ,true,false)}" > 
+  <apex:pageBlockTable value="{!oppPaginationList}" var="a" > 
+   <apex:column value="{!a.Name}" />
+   <apex:column value="{!a.Owner.Name}"  headerValue="Opportunity Owner"/>
+   <apex:column value="{!a.StageName}" />
+   <apex:column value="{!a.LX_Product_Type__c}" />
+   <apex:column value="{!a.LX_Sales_Type__c}" />
+   <apex:column value="{!a.type}" />    
+   <apex:column value="{!a.Amount}" />    
+   <apex:column value="{!a.Primary_Partner__r.Name}" headerValue="Primary Billing Partner"/>
+   <apex:column value="{!a.LX_Program_Enrollment__r.Name}" headerValue="Program Enrollment"/>    
+  </apex:pageBlockTable>
+  <apex:outputPanel layout="block" styleClass="pSearchShowMore" id="otpNav" rendered="{!if(setCon.HasNext || setCon.HasPrevious,true,false)}">            
+    <apex:image url="/img/search_prevarrow_disabled.gif" styleClass="prevArrow" rendered="{!NOT(setCon.HasPrevious)}"/>
+    <apex:image url="/img/search_prevarrow.gif" title="Previous Page" styleClass="prevArrow" rendered="{!setCon.HasPrevious}"/>
+    <apex:commandLink action="{!Previous}" title="Previous Page" value="Previous Page" rendered="{!setCon.HasPrevious}" reRender="Oppspagination" />
+    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(setCon.HasPrevious)}">Previous Page</apex:outputPanel>         
+    &nbsp;({!IF(setCon.PageNumber == 1,1,((setCon.PageNumber -1) * setCon.PageSize)+1)}-{!IF(setCon.resultSize < setCon.PageSize,setCon.resultSize,setCon.PageNumber * setCon.pageSize)})&nbsp;
+    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(setCon.HasNext)}">Next Page</apex:outputPanel>         
+    <apex:commandLink title="Next Page" value="Next Page" rendered="{!setCon.HasNext}" action="{!Next}" reRender="Oppspagination" />&nbsp;
+    <apex:image url="/img/search_nextarrow.gif" title="Next Page" styleClass="nextArrow" rendered="{!setCon.HasNext}"/>
+    <apex:image url="/img/search_nextarrow_disabled.gif" rendered="{!NOT(setCon.HasNext)}"/>          
+  </apex:outputPanel>  
+  <div style="text-align:center;">
+  <apex:pageBlockButtons location="bottom">
+  <apex:commandButton action="{!cancel1}" value="Cancel" />
+  </apex:pageBlockButtons>
+  </div>
+  </apex:pageBlock>
+  </apex:outputPanel>
+  </apex:outputPanel>
+  
+  
+  <apex:outputPanel id="enrollmentspagination">
+  <apex:outputPanel rendered="{!if(enrollmentPaginationList.size >0 ,true,false)}">
+  <apex:sectionHeader title="Enrollments"  subtitle="{!accountDisplay.Name}" rendered= "{!if(enrollmentPaginationList.size >0 ,true,false)}"/> 
+  <apex:pageBlock tabStyle="Opportunity" title="Enrollments" rendered="{!if(enrollmentPaginationList.size >0 ,true,false)}" > 
+  <apex:pageBlockTable value="{!enrollmentPaginationList}" var="a" > 
+   <apex:column value="{!a.Master_Program__r.Name}" >
+  </apex:column>
+  <apex:column value="{!a.LX_Enrollment_End_Date__c}" />
+  <apex:column value="{!a.LX_Enrollment_Status__c}" />      
+  </apex:pageBlockTable>
+  <apex:outputPanel layout="block" styleClass="pSearchShowMore" id="otpNav" rendered="{!if(setCon1.HasNext || setCon1.HasPrevious,true,false)}">            
+    <apex:image url="/img/search_prevarrow_disabled.gif" styleClass="prevArrow" rendered="{!NOT(setCon1.HasPrevious)}"/>
+    <apex:image url="/img/search_prevarrow.gif" title="Previous Page" styleClass="prevArrow" rendered="{!setCon1.HasPrevious}"/>
+    <apex:commandLink action="{!Previous1}" title="Previous Page" value="Previous Page" rendered="{!setCon1.HasPrevious}" reRender="enrollmentspagination" />
+    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(setCon1.HasPrevious)}">Previous Page</apex:outputPanel>         
+    &nbsp;({!IF(setCon1.PageNumber == 1,1,((setCon1.PageNumber -1) * setCon1.PageSize)+1)}-{!IF(setCon1.resultSize < setCon1.PageSize,setCon1.resultSize,setCon1.PageNumber * setCon1.pageSize)})&nbsp;
+    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(setCon1.HasNext)}">Next Page</apex:outputPanel>         
+    <apex:commandLink title="Next Page" value="Next Page" rendered="{!setCon1.HasNext}" action="{!Next}" reRender="enrollmentspagination" />&nbsp;
+    <apex:image url="/img/search_nextarrow.gif" title="Next Page" styleClass="nextArrow" rendered="{!setCon1.HasNext}"/>
+    <apex:image url="/img/search_nextarrow_disabled.gif" rendered="{!NOT(setCon1.HasNext)}"/>          
+  </apex:outputPanel>
+  <div style="text-align:center;">
+  <apex:pageBlockButtons location="bottom">
+  <apex:commandButton action="{!cancel1}" value="Cancel" />
+  </apex:pageBlockButtons>
+  </div>
+  </apex:pageBlock>
+  </apex:outputPanel>
+  </apex:outputPanel> 
+    </apex:form>
+</apex:page>

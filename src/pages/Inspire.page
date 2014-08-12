@@ -1,0 +1,71 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <apex:stylesheet value="{!URLFOR($Resource.Perceptive_Sites, 'css/inspire.css')}"/>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-home').addClass('active');
+              jQuery('#inspirekey').scrollFollow();
+              Shadowbox.init();
+            });
+        </script>
+        
+        <div class="cp_core">
+            <apex:pageMessages />
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                    <li><a class="current" href="{!$page.Inspire}">Inspire {!PresentationYear}</a></li>
+                </ul>
+            </div> 
+            <div class="column full-width">
+                <div class="callout inspire">
+                    <span class="title-bar" href="#"><span class="sprite_cpicons imagenow">&nbsp;</span>Inspire {!PresentationYear} Breakout Presentations</span>
+                    <div class="callout-content">
+                            <table style="width:100%;">
+                                <tr>
+                                <td style="vertical-align: top;">
+                                    <table id="inspirekey">
+                                        <tbody>
+                                            <apex:repeat value="{!InspireTracks}" var="t">
+                                                <tr><td class="{!LOWER(SUBSTITUTE(t,' ','-'))}"><a href="#a_{!LOWER(SUBSTITUTE(t,' ','-'))}">{!t}</a></td></tr>
+                                            </apex:repeat>
+                                        </tbody>
+                                    </table> 
+                                </td>
+                                <td style="vertical-align: top;">
+                                  <table id="inspirepresentation">
+                                        <tbody>
+                                            <tr>
+                                                    <th>Presentation</th>
+                                                    <th>Perceptive Software Presenter(s)</th>
+                                                    <th>Focus</th>
+                                                 <!--   <th>Difficulty</th>  -->
+                                            </tr>
+                                            <apex:repeat value="{!InspirePresentations}" var="i">
+                                                <tr>
+                                                  <!--  <td class="{!LOWER(SUBSTITUTE(i.Track__c,' ','-'))}"><a name="a_{!LOWER(SUBSTITUTE(i.Track__c,' ','-'))}" /><a rel="shadowbox;width=900;height=550;player=iframe" href="{!i.URL__c}">{!i.Presentation__c}</a></td>   -->
+                                                        <td class="{!LOWER(SUBSTITUTE(i.Track__c,' ','-'))}"><a name="a_{!LOWER(SUBSTITUTE(i.Track__c,' ','-'))}" /><a href="{!i.URL__c}" target="_blank">{!i.Presentation__c}</a></td> 
+                                                    <td><apex:outputText escape="false" value="{!i.Presenter__c}"/></td>
+                                                    <td>{!i.Track__c}</td>
+                                                 <!--   <td>a_{!LOWER(SUBSTITUTE(i.Track__c,' ',''))}</td>   -->
+                                                </tr>
+                                            </apex:repeat>  
+                                        </tbody>    
+                                  </table>
+                                </td>
+                             </tr>
+                           </table>
+
+
+                    </div>
+
+                </div><!-- /inspire-->
+
+            </div><!-- /Full Width Column -->   
+               
+               
+        </div>        
+    </apex:define>
+  </apex:composition>
+</apex:page>

@@ -1,0 +1,14 @@
+<apex:component controller="GetExternalPage">
+   <apex:attribute type="string" assignTo="{!pageurl}" name="pageurl" required="true" description="Url of page to get"/>
+   
+   <apex:outputPanel rendered="{!len(PortalPage)>0}">
+        <apex:outputText escape="false" value="{!PortalPage}" />
+   </apex:outputPanel>
+   
+   <apex:outputPanel rendered="{!len(PortalPage)=0}">
+        <dl>
+            <dd class="no-arrow"><a href="http://www.perceptivesoftware.com/customer-portal/news-list.psi">more news</a></dd>
+        </dl>
+   </apex:outputPanel> 
+   
+</apex:component>

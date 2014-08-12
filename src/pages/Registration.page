@@ -1,0 +1,110 @@
+<apex:page controller="ControllerRegistration" tabstyle="ELearning_Registration__c" id="pg" >
+<script language="javascript" >
+  
+  function fncView(Id){
+    if(document.getElementById('pg:frm:selectedClassId')){
+      document.getElementById('pg:frm:selectedClassId').value = Id;
+    }
+          return true;
+    
+  }
+</script>
+<apex:form id="frm">
+  <style>
+  body, td, select, input, textarea, fieldset legend, .warn .textCounter, .miniTab .currentTab, .requiredLegend, .bPageBlock .noRecords, .list td, .list th, .bPageBlock td.actionColumn .actionLink, .bWizardBlock .pbDescription, .bWizardBlock .pbTopButtons {
+   color:#333333;
+  }
+  </style>
+
+    <apex:pageblock id="pb" title="My Registrations">
+
+
+        <div id="pbSubsection">
+      
+        <apex:dataTable value="{!allRegistrations}" var="reg" id="regTable"
+            styleClass="list" headerClass="headerRow" rowClasses="dataRow" width="100%" rendered="{!showMyRegistrationRows}">
+            <apex:column >
+              <apex:facet name="header" >Name</apex:facet>
+              <apex:outputLink value="/{!reg.Id}" onclick="window.parent.location.href='/{!reg.id}';">{!reg.name}</apex:outputLink>
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Course Name</apex:facet>
+              <apex:outputField value="{!reg.Course_Name__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Type</apex:facet>
+              <apex:outputField value="{!reg.Class__r.Class_Type__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Class Date</apex:facet>
+              <apex:outputField value="{!reg.Class__r.Class_Date__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Status</apex:facet>
+              <apex:outputField value="{!reg.Registration_Status__c}" />
+            </apex:column>
+            
+          </apex:dataTable> 
+        </div>      
+    </apex:pageblock>
+    <apex:pageblock id="pbClasses" title="My Enrolled Classes">
+
+
+        <div id="pbSubsection">
+      
+        <apex:dataTable value="{!availableClasses}" var="aClass" id="classTable"
+            styleClass="list" headerClass="headerRow" rowClasses="dataRow" width="100%">
+            <apex:column >
+              <apex:facet name="header" >Name</apex:facet>
+              <apex:outputLink value="/{!aClass.id}" onclick="window.parent.location.href='/{!aClass.id}';">{!aClass.name}</apex:outputLink>
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Course Name</apex:facet>
+              <apex:outputField value="{!aClass.Course__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Course Type</apex:facet>
+              <apex:outputField value="{!aClass.Class_Type__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Class Date</apex:facet>
+              <apex:outputField value="{!aClass.Class_Date__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Open Seats</apex:facet>
+              <apex:outputField value="{!aClass.Open_Seats__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Class Capacity</apex:facet>
+              <apex:outputField value="{!aClass.Class_Capacity__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Days Until Class</apex:facet>
+              <apex:outputField value="{!aClass.Days_Until_Class__c}" />
+            </apex:column>
+            <apex:column >
+              <apex:facet name="header" >Training Location</apex:facet>
+              <apex:outputLink value="/{!aClass.Training_Location__c}" onclick="window.parent.location.href='/{!aClass.Training_Location__c}';">{!aClass.Training_Location__r.Name} </apex:outputLink>
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header">View Chapters</apex:facet>
+                <apex:commandLink Id="lnkViewChapter" value="View" action="{!ViewChapter}" onclick="return fncView('{!aClass.Id}')"></apex:commandLink>
+            </apex:column>
+             
+          </apex:dataTable>           
+          
+           
+        </div>
+    </apex:pageblock> 
+    <apex:inputHidden id="selectedClassId" value="{!selectedClassId}"></apex:inputHidden>
+       
+</apex:form>
+
+   <div><iframe id="resizeHack" width="0" height="0" frameborder="no"/></div>
+<!--<script>
+  document.getElementById("resizeHack").src = "{!URLFOR($Scontrol.Resize_VF_Iframe)}" +
+                                              "&ifName=" + window.name +
+                                              "&ifHeight=" + document.body.offsetHeight;
+</script>-->
+
+</apex:page>

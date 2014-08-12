@@ -1,0 +1,311 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesTrainingController"> 
+<title>{!SITE_NICKNAME} | Training</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-training').addClass('active');
+              jQuery('.trainingtable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+              jQuery('.tab-container').tabs({ cookie: { expires: null} });
+            });  
+        </script>
+         <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Site.CurrentSiteURL}">Home</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Training</a></li>
+                </ul>
+         </div>            
+         <div class="cp_core">
+            <apex:pageMessages />
+            <div class="full-row">
+            
+                <div class="column two-thirds left-32">
+                    <div class="callout training">
+                        <span class="title-bar" href="#"><span class="sprite_cpicons training">&nbsp;</span>Training</span>
+                        <div class="callout-content">
+                            <apex:repeat value="{!TopWidget}" var="w">
+ <p><apex:outputtext escape="false" value="{!w.Description__c}" /></p>
+                            </apex:repeat>
+                        </div>
+                    </div><!-- /Training Intro -->
+                </div><!-- /Left two-thirds -->
+                
+                <div class="column rightcol">
+                    <div class="video">
+                        <apex:repeat value="{!VideoWidget}" var="w">
+                            <a title="Perceptive Software Training" rel="shadowbox;width=840;height=526" target="_blank" href="{!w.Description__c}">
+                                <apex:image value="{!URLFOR($Resource.Perceptive_Sites, 'images/video-training02.png')}"/>
+                            </a>
+                        </apex:repeat>
+                        
+                    </div><!-- /Video Intro -->
+                </div><!-- /Right one-third -->
+                
+            </div><!-- /Primary Row -->
+            
+            <div class="full-row">                
+                <div class="column leftcol">
+                    <div class="callout classroom">
+                        <a name="myregistrations" class="title-bar" href="{!$Page.training_classroom_Partner}"><span class="sprite_cpicons class">&nbsp;</span>Classroom</a>
+                        <div class="callout-content">
+                            <apex:repeat value="{!LeftWidget}" var="w">
+                                <p align = "left" class="widget"><apex:outputtext escape="false" value="{!w.Description__c}" /></p>
+                            </apex:repeat>
+                            <a class="class-button classroom" href="{!$Page.training_classroom_Partner}">View Current Courses</a>
+                        </div>
+                    </div><!-- /Classroom Box -->
+                </div><!-- /Left Column -->
+                
+                <div class="column middlecol">
+                    <div class="callout liveonline">
+                        <a class="title-bar" href="{!$Page.training_liveonline_Partner}"><span class="sprite_cpicons live">&nbsp;</span>LiveOnline</a>
+                        <div class="callout-content">
+                            <apex:repeat value="{!MiddleWidget}" var="w">
+                                                     <p align="left" class="widget"><apex:outputtext escape="false" value="{!w.Description__c}" /></p>
+                            </apex:repeat>
+                            <a class="class-button live" href="{!$Page.training_liveonline_Partner}">View Current Courses</a>
+                        </div>
+                    </div><!-- /LiveOnline -->
+                </div><!-- /Middle Column -->
+                
+                <div class="column rightcol">
+                    <div class="callout elearning">
+                        <a class="title-bar" href="{!$Page.training_elearning_Partner}"><span class="sprite_cpicons elearn">&nbsp;</span>eLearning</a>
+                        <div class="callout-content">
+                            <apex:repeat value="{!RightWidget}" var="w">
+                                <p align = "left" class="widget"><apex:outputtext escape="false" value="{!w.Description__c}" /></p>
+                            </apex:repeat>
+                            <a class="class-button elearn" href="{!$Page.training_elearning_Partner}">View Current Courses</a>
+                        </div>
+                    </div><!-- /eLearning -->
+                </div><!-- /Right Column -->
+                
+            </div><!-- /Secondary Row -->
+            
+            <apex:outputPanel layout="block" styleClass="column full-width" rendered="{!IsLoggedIn}"><!-- Classes -->
+                <div class="callout my-reg">
+                    <span class="title-bar" href="#"><span class="sprite_cpicons my-reg">&nbsp;</span>My Classes</span>
+                    <div class="callout-content">
+                          <div class="callout courses">
+                            <div id="tabs-classes" class="tab-container">
+                                <ul>
+                                    <li><a href="#tabs-c" class="tab tab-classroom">Classroom</a></li>
+                                    <li><a href="#tabs-l" class="tab tab-liveonline">LiveOnline</a></li>
+                                    <li><a href="#tabs-e" class="tab tab-elearning">eLearning</a></li>
+                                    <li><a href="#tabs-h" class="tab tab-registrations">Enrollment History</a></li>
+                                </ul><!-- /eLearning Course Tabs -->
+                                <div id="tabs-c" class="tab-content tab-content-1a">
+                                    <!--Classroom-->
+                                    <apex:outputText rendered="{!MyClassRoomClasses.size==0}"><span class="no-records">No Classes</span></apex:outputText>
+                                    <apex:outputPanel rendered="{!MyClassRoomClasses.size!=0}">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Class Name</th>
+                                                    <th>Class Type</th>
+                                                    <th>Class Date</th>
+                                                    <th>Days Until</th>
+                                                    <th>Location</th>
+                                                    <th>Open Seats</th>
+                                                    <th>Capacity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <apex:repeat value="{!MyClassRoomClasses}" var="c">
+                                                  <tr>
+                                                        <td class="course-name">
+                                                            <apex:outputLink value="{!$page.classdetails_Partner}">
+                                                                    {!c.Course__r.name}&nbsp;({!c.name})
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                            </apex:outputLink>
+                                                        </td>
+                                                        <td class="course-type">{!c.Class_Type__c}</td>
+                                                        <td class="class-date">
+                                                            <apex:outputText value="{0,date, MM/dd/yyyy}">
+                                                                 <apex:param value="{!c.class_date__c}" />
+                                                             </apex:outputText>
+                                                        </td>
+                                                        <td class="class-daysuntil">{!c.Days_Until_Class__c}</td>
+                                                        <td class="class-location">
+                                                            <apex:outputLink value="{!$page.training_location_Partner}">
+                                                                {!c.Training_Location__r.name}
+                                                                <apex:param name="id" value="{!c.Training_Location__r.id}" />
+                                                            </apex:outputLink>
+                                                        </td>
+                                                        <td class="class-openseats">{!c.Open_Seats__c}</td>
+                                                        <td class="class-capacity">{!c.Class_Capacity__c}</td>          
+                                                  </tr>
+                                                 </apex:repeat>
+                                            </tbody>
+                                      </table> 
+                                   </apex:outputPanel> <!-- /Classes -->
+                                </div><!-- /Core Tab -->
+                                <div id="tabs-l" class="tab-content tab-content-2a">
+                                    <!---LiveOnline-->
+                                    <apex:outputText rendered="{!MyLiveOnlineClasses.size==0}"><span class="no-records">No Classes</span></apex:outputText>
+                                    <apex:outputPanel rendered="{!MyLiveOnlineClasses.size!=0}">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Class Name</th>
+                                                    <th>Class Type</th>
+                                                    <th>Class Date</th>
+                                                    <th>Days Until</th>
+                                                    <th>Location</th>
+                                                    <th>Open Seats</th>
+                                                    <th>Capacity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <apex:repeat value="{!MyLiveOnlineClasses}" var="c">
+                                                  <tr>
+                                                        <td class="course-name">
+                                                            <apex:outputLink value="{!$page.classdetails_Partner}">
+                                                                    {!c.Course__r.name}&nbsp;({!c.name})
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                            </apex:outputLink>
+                                                        </td>
+                                                        <td class="course-type">{!c.Class_Type__c}</td>
+                                                        <td class="class-date">
+                                                            <apex:outputText value="{0,date, MM/dd/yyyy}">
+                                                                 <apex:param value="{!c.class_date__c}" />
+                                                             </apex:outputText>
+                                                        </td>
+                                                        <td class="class-daysuntil">{!c.Days_Until_Class__c}</td>
+                                                        <td class="class-location">
+                                                            <apex:outputLink value="{!$page.training_location_Partner}">
+                                                                {!c.Training_Location__r.name}
+                                                                <apex:param name="id" value="{!c.Training_Location__r.id}" />
+                                                            </apex:outputLink>
+                                                        </td>
+                                                        <td class="class-openseats">{!c.Open_Seats__c}</td>
+                                                        <td class="class-capacity">{!c.Class_Capacity__c}</td>          
+                                                  </tr>
+                                                 </apex:repeat>
+                                            </tbody>
+                                      </table> 
+                                   </apex:outputPanel> <!-- /Classes -->
+                                </div><!-- /Release Tab Content -->
+                                <div id="tabs-e"  class="tab-content tab-content-3a">
+                                    <!---Elearning-->
+                                    <apex:outputText rendered="{!MyeLearningClasses.size==0}"><span class="no-records">No Classes</span></apex:outputText>
+                                    <apex:outputPanel rendered="{!MyeLearningClasses.size!=0}">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Class Name</th>
+                                                    <th>Class Type</th>
+                                                    
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 <apex:repeat value="{!MyeLearningClasses}" var="c">
+                                                  <tr>
+                                                        <td class="course-name">
+                                                            <apex:outputLink value="{!$page.classdetails_Partner}">
+                                                                    {!c.Course__r.name}&nbsp;({!c.name})
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                            </apex:outputLink>
+                                                        </td>
+                                                        <td class="course-type">{!c.Class_Type__c}</td>
+                                                        
+                                                        
+                                                  </tr>
+                                                 </apex:repeat>
+                                            </tbody>
+                                      </table> 
+                                   </apex:outputPanel> <!-- /Classes -->
+                                </div><!-- / Content -->
+                            
+                            
+                                <div id="tabs-h"  class="tab-content tab-content-4a">
+                                    <apex:outputText rendered="{!MyRegistrations.size==0}"><span class="no-records">No Registrations</span></apex:outputText>
+                                        <apex:outputPanel rendered="{!MyRegistrations.size!=0}">
+                                          <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Registration</th>
+                                                        <th>Status</th>
+                                                        
+                                                        <th>Class Name</th>
+                                                        <th>Class Type</th>
+                                                        <th>Created Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!MyRegistrations}" var="c">
+                                                      <tr>
+                                                            <td class="registration-id">
+                                                                <apex:outputLink value="{!$page.registrationdetails_Partner}">
+                                                                    {!c.name}
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                                </apex:outputLink>
+                                                            </td>
+                                                            <td class="registration-status">{!c.Registration_Status__c}</td>
+                                                            
+                                                            <td class="course-name">{!c.Course_Name__c}</td>
+                                                            <td class="course-type">{!c.Class__r.Class_Type__c}</td>
+                                                            <td class="class-date">
+                                                                <apex:outputText value="{0,date, MM/dd/yyyy}">
+                                                                     <apex:param value="{!c.createddate}" />
+                                                                 </apex:outputText>
+                                                            </td>
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table> 
+                                          </apex:outputPanel>
+                                </div><!-- /tabs-history-->
+                           </div><!-- /tabs-classes-->     
+                        </div>
+                    </div>
+                </div>    
+            </apex:outputPanel>
+            
+            <div class="column full-width"> <!---links--->
+                <div class="callout links">
+                    <span class="title-bar" href="#"><span class="sprite_cpicons training">&nbsp;</span>Related Links</span>
+                    <div class="callout-content">
+                        <ul class="col col-1">
+                            <li class="heading">Programs for Training</li>
+                            <apex:repeat value="{!TrainingPrograms}" var="t">
+                                <li>
+                                    <apex:outputLink title="{!t.description__c}" value="{!$page.training_info_Partner}">{!t.Name}
+                                        <apex:param name="id" value="{!t.id}"/>
+                                    </apex:outputLink>
+                                </li>
+                            </apex:repeat>
+                        </ul>
+                        <ul class="col col-2">
+                            <li class="heading">Additional Product Education Services</li>
+                            <apex:repeat value="{!TrainingServices}" var="t">
+                                <li>
+                                    <apex:outputLink title="{!t.description__c}" value="{!$page.training_info_Partner}">{!t.Name}
+                                        <apex:param name="id" value="{!t.id}"/>
+                                    </apex:outputLink>
+                                </li>
+                            </apex:repeat>
+                        </ul>
+                        <ul class="col col-3">
+                            <li class="heading">Other Links</li>
+                                <apex:repeat value="{!OtherLinks}" var="t">
+                                    <li>
+                                        <apex:outputLink title="{!t.description__c}" value="{!$page.training_info_Partner}">{!t.Name}
+                                            <apex:param name="id" value="{!t.id}"/>
+                                        </apex:outputLink>
+                                    </li>
+                                </apex:repeat>
+                            <li class="heading">Contact the Product Training Team</li>
+                                <li><a href="mailto:training@perceptivesoftware.com">training@perceptivesoftware.com</a></li>
+                        </ul>
+                    </div>
+                </div><!-- /links -->
+            </div><!-- /Full Width Column -->
+            
+        </div><!-- /Cp Core -->   
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

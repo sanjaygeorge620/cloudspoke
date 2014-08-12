@@ -1,0 +1,177 @@
+<apex:page showHeader="false" Controller="ChannelLeadController" standardStylesheets="false"> 
+<title>{!SITE_NICKNAME} | Details</title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-lead').addClass('active');
+          jQuery('.leadtable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Leads</a></li>
+                </ul>
+            </div> 
+            <apex:outputPanel rendered="{!!$ObjectType.Lead_Clone__c.accessible || !SITE_TAB_LEADS}">
+                  Insufficient Privileges
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!$ObjectType.Lead_Clone__c.accessible  && SITE_TAB_LEADS}">
+                
+            <apex:pageMessages />
+            <div class="column leftcol">
+                <div class="callout new-lead">
+                    <apex:form rendered="{!$ObjectType.Lead_Clone__c.createable}">
+                        <!--<apex:outputLink rendered="{!SITE_ACCOUNT.Type != 'Internal'}" styleclass="new-lead" value="{!$page.ChannelOpportunitySubmit}">Submit New Opportunity</apex:outputLink>-->
+                        <!--<apex:outputLink rendered="{!SITE_ACCOUNT.Type != 'Partner-OEM'}" styleclass="new-lead" value="{!$page.ChannelLeadWebSubmit}">Submit New Lead</apex:outputLink>-->
+                        <apex:commandLink styleClass="new-lead" value="Submit New Lead" action="{!RedirectNewLead}"/>
+                    </apex:form>
+                   
+                    
+                </div><!-- /New lead Button -->
+            </div><!-- /Left Column -->
+            
+            <div class="column right-23">
+                <div class="callout lead">
+                    
+                  <!-------------------Pending Leads ------------------------>  
+                    <!-- Closed Won -->
+                    <span class="title-bar lead">     Pending Leads
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Leads_Pending.size==0}" value="No leads to display" />
+                            <apex:outputPanel rendered="{!Leads_Pending.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display leadtable">
+                                    <thead>
+                                        <tr>
+                                            <th>Company</th>
+                                            <th>Name</th>
+                                            <th>Title</th>
+                                            <th>Lead Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Leads_Pending}" var="l">
+                                          <tr>  
+                                                <td class="lead-company">{!l.company__c}</td>
+                                                <td class="lead-id">
+                                                    <apex:outputLink value="{!$page.channelleaddetails}" styleClass="results-lead-id">{!l.Name__c}
+                                                        <apex:param name="id" value="{!l.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="lead-title">{!l.title__c}</td>
+                                                <td class="lead-Leadtype">{!l.Lead_Type__c}</td>                                                
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+                    <!-- /Lead -->
+                    <!--------------------Approved Leads------------------------------------->
+            
+                <!-- Closed Won -->
+                    <span class="title-bar lead">Approved Leads
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Leads_Approved.size==0}" value="No leads to display" />
+                            <apex:outputPanel rendered="{!Leads_Approved.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display leadtable">
+                                    <thead>
+                                        <tr>
+                                            <th>Company</th>
+                                            <th>Name</th>
+                                            <th>Title</th>
+                                            <th>Lead Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Leads_Approved}" var="l">
+                                          <tr>  
+                                                <td class="lead-company">{!l.company__c}</td>
+                                                <td class="lead-id">
+                                                    <apex:outputLink value="{!$page.channelleaddetails}" styleClass="results-lead-id">{!l.Name__c}
+                                                        <apex:param name="id" value="{!l.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="lead-title">{!l.title__c}</td>
+                                                <td class="lead-Leadtype">{!l.Lead_Type__c}</td>                                                
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+            
+            
+            <!--------------------------------------------------------->
+            
+             <!--------------------Denied Leads------------------------------------->
+            
+                <!-- Closed Won -->
+                    <span class="title-bar lead">Denied Leads
+                        <span class="returned-results">
+                        </span>
+                    </span>
+                        <!-- /Title Bar -->
+                    <div class="callout-content cases-content">
+                        <div class="case-results">
+                            <apex:outputText styleclass="no-records" rendered="{!Leads_Denied.size==0}" value="No leads to display" />
+                            <apex:outputPanel rendered="{!Leads_Denied.size!=0}">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display leadtable">
+                                    <thead>
+                                        <tr>
+                                            <th>Company</th>
+                                            <th>Name</th>
+                                            <th>Title</th>
+                                            <th>Lead Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <apex:repeat value="{!Leads_Denied}" var="l">
+                                          <tr>  
+                                                <td class="lead-company">{!l.company__c}</td>
+                                                <td class="lead-id">
+                                                    <apex:outputLink value="{!$page.channelleaddetails}" styleClass="results-lead-id">{!l.Name__c}
+                                                        <apex:param name="id" value="{!l.id}"/>
+                                                     </apex:outputLink>
+                                                </td>
+                                                <td class="lead-title">{!l.title__c}</td>
+                                                <td class="lead-Leadtype">{!l.Lead_Type__c}</td>                                                
+                                          </tr>
+                                         </apex:repeat>
+                                    </tbody>
+                              </table>
+                           </apex:outputPanel>           
+                        </div><!-- /Oppty Results  -->
+                    </div>
+            
+            
+            <!--------------------------------------------------------->
+                    
+                    
+                                
+                    
+                    
+                </div><!-- /Leads-->
+            </div><!-- /Right Two-Thirds -->
+            
+        </apex:outputPanel><!-- /Cp Core -->
+           
+        </div>
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

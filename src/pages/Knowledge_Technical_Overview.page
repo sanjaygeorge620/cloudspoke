@@ -1,0 +1,380 @@
+<apex:page standardController="Technical_Overview__kav" showHeader="false" sidebar="false" extensions="SitesKnowledgeExtension">
+    <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+        <apex:define name="title"> 
+            <title>{!SITE_NICKNAME+' | '+ $label.Knowledgebase +': '+TechnicalOverview.Title}</title>
+        </apex:define>
+        <apex:define name="javascriptcalls">
+            <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery('.toolbar-knowledgebase').addClass('active');
+            });  
+            </script>
+        </apex:define>        
+        <apex:define name="body"> 
+            <style type="text/css">
+                em { font-family: 'verdana';font-style: italic; }
+                .internalNotes{color:red;font-weight:bold;font-size: 14px;line-height: 1.25em;}   
+                .column .callout .callout-content .toc-section ul li {list-style:circle;}
+                .column .callout .callout-content .toc-section ul li,
+                .column .callout .callout-content .toc-section ul li a,
+                .column .callout .callout-content .toc-section ul li a:hover,
+                .column .callout .callout-content .toc-section ul li a:visited{color:#222;font:normal 14px verdana,geneva,sans-serif;}
+                .column .callout .callout-content .toc-section,
+                .kb-normalize span, 
+                .kb-normalize p{line-height: 1.41}
+                .kb-normalize table {word-wrap:break-word;table-layout: fixed;}
+                .kb-normalize td{margin:5px;padding:5px;vertical-align:text-top;}
+            </style>
+            
+            <div class="banner grid full-width breadcrumb">
+                <div class="c5 m"> </div>
+                <div class="c11">
+                    <nav>
+                        <a class="home" href="{!$page.home}">{!$label.Home}</a>
+                        <a class="current" href="{!if($CurrentPage.parameters.retURL!='', $site.Prefix+$CurrentPage.parameters.retURL, $page.Knowledge)}">{!$label.Knowledgebase}</a>
+                        <a href="#">{!TechnicalOverview.Title}</a>
+                    </nav>
+                </div>
+            </div>   
+            
+            <!-- Who is this user -->
+                <apex:variable var="internal" value="{!ispickval($user.usertype,'Standard')}"/>
+                <apex:variable var="customer" value="{!ispickval($user.usertype,'PowerCustomerSuccess')}"/>
+                <apex:variable var="partner" value="{!ispickval($user.usertype,'PowerPartner')}"/>
+                <apex:variable var="pkb" value="{!ispickval($user.usertype,'Guest')}"/>
+            <!-- /Who is this user -->
+            
+            <div class="cp_core">
+                <div class="column full-width"> 
+                    <div class="callout article"> 
+                        <a class="title-bar" target="_self" href="{!if($CurrentPage.parameters.retURL!='', $site.Prefix+$CurrentPage.parameters.retURL, $page.Knowledge)}"><span class="sprite_cpicons knowledge">&nbsp;</span>{!$label.Knowledgebase}</a> 
+                        <div class="callout-content"> 
+                            <!-- article information --> 
+                            <div class="inner-content-title-bar"> 
+                                <span><apex:outputtext value="{!TechnicalOverview.Title}" /></span> 
+                                <span class="small-buttons"> 
+                                    <!---<a class="sprite_cpicons email" href="#" title="Email this Article.">Bookmark</a>--->
+                                    <a class="sprite_cpicons print" href="#" onclick="window.print(); return false;" title="Print this article.">{!$label.Print}</a> 
+                                </span> 
+                            </div> 
+                            <div class="article-details">
+                                {!$label.Article_Num}: {!TechnicalOverview.ArticleNumber}<br />
+                                {!$label.Last_Published_Date}:&nbsp;<apex:outputField value="{!TechnicalOverview.LastModifiedDate}" />
+                                <br /><br />
+                            </div>     
+                            <dl>
+                                <div class="content-inner accbody">
+                                    
+                                    <apex:outputpanel styleclass="toc-section" rendered="{!TechnicalOverview.Show_Table_of_contents__c}"> 
+                                        <h2>{!$label.Table_of_Contents}</h2> 
+                                        <ul class="toc">
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section1__c)
+                                            }">
+                                                <li><a href="#Section_1">{!TechnicalOverview.Title1_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section2__c)
+                                            }">
+                                                <li><a href="#Section_2">{!TechnicalOverview.Title2_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section3__c)
+                                            }">
+                                                <li><a href="#Section_3">{!TechnicalOverview.Title3_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section4__c)
+                                            }">
+                                                <li><a href="#Section_4">{!TechnicalOverview.Title4_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section5__c)
+                                            }">
+                                                <li><a href="#Section_5">{!TechnicalOverview.Title5_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section6__c)
+                                            }">
+                                                <li><a href="#Section_6">{!TechnicalOverview.Title6_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section7__c)
+                                            }">
+                                                <li><a href="#Section_7">{!TechnicalOverview.Title7_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section8__c)
+                                            }">
+                                                <li><a href="#Section_8">{!TechnicalOverview.Title8_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section9__c)
+                                            }">
+                                                <li><a href="#Section_9">{!TechnicalOverview.Title9_Section__c}</a></li> 
+                                            </apex:outputPanel> 
+                                            
+                                            <apex:outputPanel rendered="{!(
+                                            (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Internal App')  &&  internal) || 
+                                            (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Customer')  &&  customer) ||
+                                            (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                            (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Partner')   &&  partner)
+                                            ) &&  !isBlank(TechnicalOverview.Section10__c)
+                                            }">
+                                                <li><a href="#Section_10">{!TechnicalOverview.Title10_Section__c}</a></li>  
+                                            </apex:outputPanel>  
+                                        </ul>
+                                    </apex:outputPanel> 
+                                    
+                                </div>
+                                
+                                <!--- SECTION --->
+                                <a name="Section_1"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility1_Section__c,'Partner')   &&  partner)
+                                )&&   !isBlank(TechnicalOverview.Section1__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title1_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section1__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_2"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility2_Section__c,'Partner')   &&  partner)
+                                )&&   !isBlank(TechnicalOverview.Section2__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title2_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section2__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_3"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility3_Section__c,'Partner')   &&  partner)
+                                )&&   !isBlank(TechnicalOverview.Section3__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title3_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section3__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                
+                                <!--- SECTION --->
+                                <a name="Section_4"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility4_Section__c,'Partner')   &&  partner)
+                                )&&   !isBlank(TechnicalOverview.Section4__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title4_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section4__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_5"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility5_Section__c,'Partner')   &&  partner)
+                                ) &&  !isBlank(TechnicalOverview.Section5__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title5_Section__c}" /></h2>                 
+                                    <br/>
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section5__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_6"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility6_Section__c,'Partner')   &&  partner)
+                                ) &&  !isBlank(TechnicalOverview.Section6__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title6_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section6__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_7"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility7_Section__c,'Partner')   &&  partner)
+                                ) &&  !isBlank(TechnicalOverview.Section7__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title7_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section7__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_8"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility8_Section__c,'Partner')   &&  partner)
+                                ) &&  !isBlank(TechnicalOverview.Section8__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title8_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section8__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_9"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility9_Section__c,'Partner')   &&  partner)
+                                ) &&  !isBlank(TechnicalOverview.Section9__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title9_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section9__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                                <!--- SECTION --->
+                                <a name="Section_10"></a> 
+                                <apex:outputPanel rendered="{!(
+                                (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Internal App')  &&  internal) || 
+                                (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Customer')  &&  customer) ||
+                                (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Public Knowledge Base') &&  pkb) ||
+                                (CONTAINS(TechnicalOverview.Visibility10_Section__c,'Partner')   &&  partner)
+                                ) &&  !isBlank(TechnicalOverview.Section10__c)
+                                }">
+                                    <h2><apex:outputtext value="{!TechnicalOverview.Title10_Section__c}" /></h2>                 
+                                    <div class="kbcontent">
+                                        <apex:outputText escape="false" styleClass="kb-normalize"  value="{!TechnicalOverview.Section10__c}" />
+                                    </div>
+                                </apex:outputPanel> 
+                                <!--- /SECTION --->
+                                
+                            </dl>
+                            
+                            <div class="clear"/>
+                            <apex:outputPanel layout="block" id="feeback" styleClass="kb-feedback">
+                                <apex:outputtext rendered="{!!ShowFeedback}">{!$label.Feedback_Thanks}</apex:outputtext> 
+                                <apex:outputPanel rendered="{!showfeedback}">
+                                    <apex:form >    
+                                        <apex:outputPanel layout="block" styleClass="kb-questionone">
+                                            <label>{!$label.Looking_For_Topic}</label>
+                                            <apex:actionRegion >
+                                                <apex:selectRadio id="looking_for" value="{!Feedback.Looking_for__c}">
+                                                    <apex:selectOption itemValue="true" itemLabel="{!$Label.Yes}"/>
+                                                    <apex:selectOption itemValue="false" itemLabel="{!$Label.No}"/>
+                                                    <apex:actionSupport event="onclick" rerender="questiontwo"/>
+                                                </apex:selectRadio>
+                                            </apex:actionRegion>
+                                        </apex:outputPanel>  
+                                        <apex:outputPanel id="questiontwo" >
+                                            <apex:outputPanel layout="block" styleClass="kb-questiontwo" rendered="{!Feedback.Looking_for__c='true'}">
+                                                <label>{!$label.Issue_Resolved}</label>
+                                                <apex:selectRadio id="resolve_issue" value="{!Feedback.Resolve_Issue__c}">
+                                                    <apex:selectOption itemValue="True" itemLabel="{!$Label.Yes}"/>
+                                                    <apex:selectOption itemValue="False" itemLabel="{!$Label.No}"/>
+                                                </apex:selectRadio>
+                                            </apex:outputPanel>      
+                                        </apex:outputPanel>
+                                        <apex:outputPanel layout="block" styleClass="kb-submit">     
+                                            <apex:outputLabel value="{!$Label.Comments}:" for="comment"/>
+                                            <apex:inputTextarea id="comment" value="{!Feedback.Comment__c}" />
+                                            <br />
+                                            <apex:commandButton value=" " styleClass="submitbutton" action="{!SubmitFeedback}" reRender="feeback"/> 
+                                        </apex:outputPanel>        
+                                    </apex:form>
+                                </apex:outputPanel>   
+                            </apex:outputPanel>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            
+            
+        </apex:define>
+    </apex:composition>      
+</apex:page>

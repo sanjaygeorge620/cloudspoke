@@ -1,0 +1,13 @@
+<apex:page standardController="SFDC_Projects__c">
+<style type="text/css">
+body
+{
+background-color:rgb(243,243,236);
+}
+</style>
+<body>
+{!SFDC_Projects__c.Business_Owner_Updated_User__c},&nbsp; <apex:outputText > </apex:outputText>  <apex:outputField value="{!SFDC_Projects__c.Business_Approval_Time_Field__c}"/> 
+
+</body>
+
+</apex:page>

@@ -1,0 +1,56 @@
+<!-- 
+ * ©Lexmark Front Office 2013, all rights reserved
+ * 
+ * Created Date : 07/08/2013
+ *
+ * Author : Kapil Reddy Sama.
+ * 
+ * Description : Custom Account Team Members adding page.
+ -->
+
+<apex:page extensions="LX_Audit_Trail_Extension" standardController="Account" action="{!addTeamMembers}">
+<apex:sectionHeader title="New Account Team Members" subtitle="{!Account.Name}"/>
+  <apex:form >  
+  <apex:pageBlock id="pb">
+     <apex:pageBlockButtons location="Top">
+        <apex:commandButton action="{!insertTeamMembers}" value="Save" rerender="pb"/>
+        <apex:commandButton action="{!Cancel}" value="Cancel"/>          
+     </apex:pageBlockButtons>          
+     <apex:pageMessages />
+            
+        <apex:pageBlockTable value="{!newMemberList}" var="a">            
+            <apex:column headerValue="Team Member" >
+            <apex:inputField value="{!a.Audit.LX_New_Modified_By__c}" id="mem"/>
+            </apex:column>
+            
+            <apex:column headerValue="Account Access">            
+            <apex:selectList id="accts" value="{!a.AccountAccessLevel}" size="1" title="Account Access">
+            <apex:selectOptions value="{!AccountAccessLevels}"></apex:selectOptions>
+            </apex:selectList><br/>        
+            </apex:column>
+            
+        <!--    <apex:column headerValue="Contact Access"> 
+            <apex:selectList id="cons" value="{!a.ContactAccessLevel}" size="1" title="Contact Access">
+            <apex:selectOptions value="{!ContactAccessLevels}"></apex:selectOptions>
+            </apex:selectList><br/>
+            </apex:column>    -->
+            
+            <apex:column headerValue="Opportunity Access"> 
+            <apex:selectList id="opps" value="{!a.OpportunityAccessLevel}" size="1" title="Opportunity Access">
+            <apex:selectOptions value="{!OpportunityAccessLevels}"></apex:selectOptions>
+            </apex:selectList><br/>
+            </apex:column>
+            
+            <apex:column headerValue="Case Access">
+            <apex:selectList id="cases" value="{!a.CaseAccessLevel}" size="1" title="Case Access">
+            <apex:selectOptions value="{!CaseAccessLevels}"></apex:selectOptions>
+            </apex:selectList><br/>
+            </apex:column>
+            
+            <apex:column headerValue="Team Role"  >
+            <apex:inputField value="{!a.member.TeamMemberRole}"  />
+            </apex:column>            
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

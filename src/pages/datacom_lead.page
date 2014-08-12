@@ -1,0 +1,330 @@
+<apex:page controller="datacom_lead" docType="html-5.0" >
+    <style>
+        .sfactiveTab{background-color:#fff;
+                       background-image:none;
+                    }
+        .sfinactiveTab{background-color:#EEE;
+                       background-image:none;
+                       font-weight:bold;
+                    }
+        .green-dot{width: 12px; 
+                   height: 11px; 
+                   background: url(/projRes/datacloud/gen/datacloud.listview.Jigsaw/C14B8E50B279DD44256D96FDA544BE05.cache.png) no-repeat -270px -72px;
+                   }
+    </style>
+    <apex:form >
+        <apex:sectionHeader title="{!$ObjectType.Lead.labelPlural}" subtitle="New {!$ObjectType.Lead.label}" />
+        <apex:pageMessages id="error" />
+            <apex:pageBlock tabStyle="lead">
+                
+                <apex:pageBlockButtons location="both" >
+                    <apex:actionStatus id="spinner" ><apex:facet name="start"><image alt="working..." src="{!URLFOR($Resource.spinner)}" /></apex:facet></apex:actionStatus>
+                    <apex:commandButton timeout="100000" action="{!Search}" status="spinner" value="Search" reRender="error, tableBlock"/>
+                    <apex:commandButton action="{!Skip}" immediate="false" value="Skip"/>
+                    <apex:commandButton action="{!Cancel}" immediate="true" value="Cancel" />
+                </apex:pageBlockButtons>
+
+                <apex:pageBlockSection columns="2" collapsible="false">
+
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.Company.label}"/>
+                        <apex:inputfield required="false" value="{!l.Company}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.firstname.label}"/>
+                        <apex:inputfield value="{!l.firstname}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.City.label}"/>
+                        <apex:inputfield required="false" value="{!l.City}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.lastname.label}"/>
+                        <apex:inputfield required="false" value="{!l.lastname}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                     <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.State.label}"/>
+                        <apex:inputfield required="false" value="{!l.State}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.Email.label}"/>
+                        <apex:inputfield value="{!l.email}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.PostalCode.label}"/>
+                        <apex:inputfield required="false" value="{!l.PostalCode}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem rendered="false" >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.Phone.label}"/>
+                        <apex:inputfield required="false" value="{!l.phone}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem rendered="true" >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.Location_Type__c.label}"/>
+                        <apex:inputfield value="{!l.Location_Type__c}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.Country.label}"/>
+                        <apex:inputfield required="false" value="{!l.Physical_Country__c}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem rendered="false" >
+                        <apex:outputlabel value="{!$ObjectType.Lead.fields.CompanyDunsNumber.label}"/>
+                        <apex:inputfield value="{!l.CompanyDunsNumber}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputlabel value="{!$ObjectType.Recordtype.label}"/>
+                        <apex:inputfield value="{!l.recordtypeid}"/>
+                    </apex:pageBlockSectionItem>
+                    
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            
+            <apex:tabPanel activeTabClass="sfactiveTab" inactiveTabClass="sfinactiveTab" switchType="client" selectedTab="accountTab" id="tableBlock">
+                <apex:tab label="{!$ObjectType.Account.labelPlural}" name="accountTab" id="accountTab">
+                    <apex:outputPanel id="tableAccount">
+                        <apex:pageBlock tabStyle="Account">
+                            <apex:sectionHeader title="Salesforce.com" subtitle="Matching {!$ObjectType.Account.labelPlural}" />
+                            <apex:pageBlockSection columns="1" title="Matching {!$ObjectType.Account.labelPlural} (Total Returned: {!if(Accounts.size==PARAM_QUERY_SIZE, TEXT(PARAM_QUERY_SIZE) + '+', Accounts.size)})" >    
+                                <apex:pageMessage rendered="{!Accounts.size>=PARAM_QUERY_SIZE}" summary="{!$Label.Results_are_greater_than_Max}" severity="info" strength="3" />
+                                <apex:pageBlockTable value="{!Accounts}" var="r" rows="{!PARAM_DEFAULT_PAGE_SIZE_ACCOUNT}" >
+                                    <apex:facet name="header">
+                                        <apex:outputPanel rendered="{!Accounts.size>0}">
+                                            <apex:commandButton value="Submit" action="{!sendEmail2AccountOwner_Account}"/>
+                                        </apex:outputPanel>
+                                    </apex:facet>    
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            Add me to the <br /> Account Team.
+                                        </apex:facet>
+                                        <apex:inputCheckbox styleClass="account_accountteam" value="{!r.AccountTeam}"/>
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.Name.label}" >
+                                        <apex:outputLink target="_blank" value="{!URLFOR($Action.Account.View, r.obj.id)}"> 
+                                            <apex:outputText value="{!r.Obj.name}" />
+                                        </apex:outputLink>
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.BillingAddress.label}" >
+                                        <apex:outputText value="{!r.Obj.BillingStreet}" /><br />
+                                        <apex:outputText value="{!r.Obj.BillingCity}" />&nbsp;
+                                        <apex:outputText value="{!r.Obj.BillingState}" />&nbsp;
+                                        <apex:outputText value="{!r.Obj.BillingPostalCode}" /><br />
+                                        <apex:outputText value="{!r.Obj.BillingCountry}" />
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.TR_Status__c.label}" value="{!r.Obj.TR_Status__c}"/>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.Recordtypeid.label}" value="{!r.Obj.Recordtype.Name}"/>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.Party_Role__c.label}" value="{!r.Obj.Party_Role__c}"/>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.Party_Type__c.label}" value="{!r.Obj.Party_Type__c}"/>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.Ownerid.label}" value="{!r.Obj.Ownerid}"/>
+                                    <apex:facet name="footer">
+                                        <apex:outputPanel >
+                                            <apex:outputText rendered="{!Accounts.size==0}" >No records to display.</apex:outputText>
+                                            <apex:commandlink status="account_spinner" rerender="error, tableAccount" rendered="{!Accounts.size>PARAM_DEFAULT_PAGE_SIZE_ACCOUNT}" action="{!viewMore}" value="View more" >
+                                                <apex:param assignTo="{!PARAM_DEFAULT_PAGE_SIZE_ACCOUNT}" value="{!Accounts.size}" />                                            
+                                            </apex:commandlink>
+                                            <apex:actionStatus id="account_spinner" ><apex:facet name="start"><image alt="working..." src="{!URLFOR($Resource.spinner)}" /></apex:facet></apex:actionStatus>
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                        </apex:pageBlock>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel id="tableDATACLOUDCOMPANY">
+                        <apex:pageBlock tabStyle="Account">
+                            <apex:sectionHeader title="Data.com" subtitle="Matching {!$ObjectType.DatacloudCompany.labelPlural}" />
+                            <apex:pageBlockSection columns="1" title="Matching {!$ObjectType.DatacloudCompany.labelPlural} (Total Returned: {!if(DatacloudCompanies.size==PARAM_QUERY_SIZE, TEXT(PARAM_QUERY_SIZE) + '+', DatacloudCompanies.size)})" >    
+                                <apex:pageMessage rendered="{!DatacloudCompanies.size>=PARAM_QUERY_SIZE}" summary="{!$Label.Results_are_greater_than_Max}" severity="info" strength="3" />
+                                <apex:pageBlockTable value="{!DatacloudCompanies}" var="r" rows="{!PARAM_DEFAULT_PAGE_SIZE_DATACLOUDCOMPANY}" >
+                                    <apex:column headerValue="" >
+                                        <apex:commandLink action="{!purchaseCompany}" >
+                                            <apex:image rendered="false"  value="/projRes/datacloud/gen/datacloud.listview.Jigsaw/clear.cache.gif" styleclass="gwt-Image ownedIcon x-component green-dot" title="Record already in Salesforce" />
+                                            <apex:outputText > Select</apex:outputText>
+                                            <apex:param name="selectedCompanyid" assignTo="{!selectedCompanyid}" value="{!r.Companyid}" />                                            
+                                        </apex:commandLink>
+                                    </apex:column>
+                                    <apex:column rendered="false" headerValue="{!$ObjectType.DatacloudCompany.fields.CompanyID.label}" value="{!r.CompanyID}" />
+                                    <apex:column headerValue="{!$ObjectType.DatacloudCompany.fields.Name.label}" value="{!r.name}" />
+                                    <apex:column headerValue="{!$ObjectType.DatacloudCompany.fields.Street.label}" >
+                                        <apex:outputText value="{!r.Street}" /><br />
+                                        <apex:outputText value="{!r.City}" />&nbsp;
+                                        <apex:outputText value="{!r.State}" />&nbsp;
+                                        <apex:outputText value="{!r.Zip}" /><br />
+                                        <apex:outputText value="{!r.Country}" />
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.DatacloudCompany.fields.DunsNumber.label}" value="{!r.DunsNumber}" />
+                                    <apex:facet name="footer">
+                                        <apex:outputPanel >
+                                            <apex:outputText rendered="{!DatacloudCompanies.size==0}" >No records to display.</apex:outputText>
+                                            <apex:commandlink status="datacloudcompany_spinner" rerender="error, tableDATACLOUDCOMPANY" rendered="{!DatacloudCompanies.size>PARAM_DEFAULT_PAGE_SIZE_DATACLOUDCOMPANY}" action="{!viewMore}" value="View more" >
+                                                <apex:param assignTo="{!PARAM_DEFAULT_PAGE_SIZE_DATACLOUDCOMPANY}" value="{!DatacloudCompanies.size}" />                                            
+                                            </apex:commandlink>
+                                            <apex:actionStatus id="datacloudcompany_spinner" ><apex:facet name="start"><image alt="working..." src="{!URLFOR($Resource.spinner)}" /></apex:facet></apex:actionStatus>
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                        </apex:pageBlock>
+                    </apex:outputPanel>
+                    
+                </apex:tab>
+                
+                <apex:tab label="{!$ObjectType.Contact.labelPlural}" name="contactTab" id="contactTab">
+                    <apex:outputPanel id="tableContact">
+                        <apex:pageBlock tabStyle="Contact" >
+                            <apex:sectionHeader title="Salesforce.com" subtitle="Matching {!$ObjectType.Contact.labelPlural}" />
+                            <apex:pageBlockSection columns="1" title="Matching {!$ObjectType.Contact.labelPlural} (Total Returned: {!if(Contacts.size==PARAM_QUERY_SIZE, TEXT(PARAM_QUERY_SIZE) + '+', Contacts.size)})" >    
+                                <apex:pageMessage rendered="{!Contacts.size>=PARAM_QUERY_SIZE}" summary="{!$Label.Results_are_greater_than_Max}" severity="info" strength="3" />
+                                <apex:pageBlockTable value="{!Contacts}" var="r" rows="{!PARAM_DEFAULT_PAGE_SIZE_CONTACT}" >
+                                     <apex:facet name="header">
+                                        <apex:outputPanel rendered="{!Contacts.size>0}">
+                                            <apex:commandButton value="Submit" action="{!sendEmail2AccountOwner_Contact}"/>
+                                        </apex:outputPanel>
+                                    </apex:facet> 
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            Add me to the <br /> Account Team.
+                                        </apex:facet>
+                                        <apex:inputCheckbox styleClass="contact_accountteam" value="{!r.AccountTeam}"/>
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.Contact.fields.Name.label}" >
+                                        <apex:outputLink target="_blank" value="{!URLFOR($Action.Contact.View, r.obj.id)}"> 
+                                            <apex:outputText value="{!r.Obj.name}" />
+                                        </apex:outputLink>
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.Contact.fields.Email.label}" value="{!r.Obj.Email}"/>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.Name.label}" value="{!r.Obj.Account.Name}"/>
+                                    <apex:column headerValue="{!$ObjectType.Contact.fields.MailingAddress.label}" >
+                                        <apex:outputText value="{!r.Obj.MailingStreet}" /><br />
+                                        <apex:outputText value="{!r.Obj.MailingCity}" />&nbsp;
+                                        <apex:outputText value="{!r.Obj.MailingState}" />&nbsp;
+                                        <apex:outputText value="{!r.Obj.MailingPostalCode}" /><br />
+                                        <apex:outputText value="{!r.Obj.MailingCountry}" />
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.Account.fields.Ownerid.label}" value="{!r.Obj.Account.Ownerid}"/>
+                                    <apex:facet name="footer">
+                                        <apex:outputPanel >
+                                            <apex:outputText rendered="{!Contacts.size==0}" >No records to display.</apex:outputText>
+                                            <apex:commandlink status="contact_spinner" rerender="error, tableContact" rendered="{!Contacts.size>PARAM_DEFAULT_PAGE_SIZE_CONTACT}" action="{!viewMore}" value="View more" >
+                                                <apex:param assignTo="{!PARAM_DEFAULT_PAGE_SIZE_CONTACT}" value="{!Contacts.size}" />
+                                            </apex:commandlink>
+                                            <apex:actionStatus id="contact_spinner" ><apex:facet name="start"><image alt="working..." src="{!URLFOR($Resource.spinner)}" /></apex:facet></apex:actionStatus>
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                        </apex:pageBlock>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel id="tableDATACLOUDCONTACT">
+                        <apex:pageBlock tabStyle="Contact">
+                            <apex:sectionHeader title="Data.com" subtitle="Matching {!$ObjectType.DatacloudContact.labelPlural}" />
+                            <apex:pageBlockSection columns="1" title="Matching {!$ObjectType.DatacloudContact.labelPlural} (Total Returned: {!if(DataCloudContacts.size==PARAM_QUERY_SIZE, TEXT(PARAM_QUERY_SIZE) + '+', DataCloudContacts.size)})" >    
+                                <apex:pageMessage rendered="{!DataCloudContacts.size>=PARAM_QUERY_SIZE}" summary="{!$Label.Results_are_greater_than_Max}" severity="info" strength="3" />                                
+                                <apex:pageBlockTable value="{!DataCloudContacts}" var="r" rows="{!PARAM_DEFAULT_PAGE_SIZE_DATACLOUDCONTACT}" >
+                                    <apex:column headerValue="" >
+                                        <apex:commandLink status="ddc_contactpurchase_spinner" action="{!purchaseContact}" >
+                                            <apex:image rendered="false"  value="/projRes/datacloud/gen/datacloud.listview.Jigsaw/clear.cache.gif" styleclass="gwt-Image ownedIcon x-component green-dot" title="Record already in Salesforce" />
+                                            <apex:outputText > Select</apex:outputText>
+                                            <apex:param name="selectedContactid" assignTo="{!selectedContactid}" value="{!r.Contactid}" />                                            
+                                        </apex:commandLink>
+                                    </apex:column>
+                                    <apex:column rendered="false" headerValue="{!$ObjectType.Datacloudcontact.fields.ContactID.label}" value="{!r.ContactID}" />
+                                    <apex:column headerValue="{!$ObjectType.Datacloudcontact.fields.firstName.label}" value="{!r.firstname}" />
+                                    <apex:column headerValue="{!$ObjectType.Datacloudcontact.fields.lastName.label}" value="{!r.lastname}" />
+                                    <apex:column headerValue="{!$ObjectType.Datacloudcontact.fields.email.label}" value="{!r.email}" />
+                                    <apex:column headerValue="{!$ObjectType.Datacloudcontact.fields.Street.label}" >
+                                        <apex:outputText value="{!r.Street}" /><br />
+                                        <apex:outputText value="{!r.City}" />&nbsp;
+                                        <apex:outputText value="{!r.State}" />&nbsp;
+                                        <apex:outputText value="{!r.Zip}" /><br />
+                                        <apex:outputText value="{!r.Country}" />
+                                    </apex:column>
+                                    <apex:facet name="footer">
+                                        <apex:outputPanel >
+                                            <apex:outputText rendered="{!DataCloudContacts.size==0}" >No records to display.</apex:outputText>
+                                            <apex:commandlink status="datacloudcontact_spinner" rerender="error, tableDATACLOUDCONTACT" rendered="{!DataCloudContacts.size>PARAM_DEFAULT_PAGE_SIZE_DATACLOUDCONTACT}" action="{!viewMore}" value="View more" >
+                                                <apex:param assignTo="{!PARAM_DEFAULT_PAGE_SIZE_DATACLOUDCONTACT}" value="{!DataCloudContacts.size}" />                                            
+                                            </apex:commandlink>
+                                            <apex:actionStatus id="datacloudcontact_spinner" ><apex:facet name="start"><image alt="working..." src="{!URLFOR($Resource.spinner)}" /></apex:facet></apex:actionStatus>
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                          </apex:pageBlock>  
+                      </apex:outputPanel>
+                </apex:tab>
+                
+                <apex:tab label="{!$ObjectType.Lead.labelPlural}"    name="leadTab"    id="leadTab">
+                    <apex:outputPanel id="tableLead"> 
+                        <apex:pageBlock tabStyle="lead" id="leadBlock" >
+                            <apex:sectionHeader title="Salesforce.com" subtitle="Matching {!$ObjectType.Lead.labelPlural}" />
+                             <apex:pageBlockSection columns="1" title="Matching {!$ObjectType.Lead.labelPlural} (Total Returned: {!if(Leads.size==PARAM_QUERY_SIZE, TEXT(PARAM_QUERY_SIZE) + '+', Leads.size)})" >    
+                                <apex:pageMessage rendered="{!Leads.size>=PARAM_QUERY_SIZE}" summary="{!$Label.Results_are_greater_than_Max}" severity="info" strength="3" />                                
+                                <apex:pageBlockTable value="{!Leads}" var="r" rows="{!PARAM_DEFAULT_PAGE_SIZE_LEAD}" >  
+                                    <apex:column headerValue="" >
+                                        <apex:outputLink target="_blank" value="{!URLFOR($Action.Lead.View, r.id)}"> 
+                                            View
+                                        </apex:outputLink>
+                                    </apex:column>  
+                                    <apex:column headerValue="{!$ObjectType.Lead.fields.Name.label}" >
+                                        <apex:outputLink target="_blank" value="{!URLFOR($Action.Lead.View, r.id)}"> 
+                                            <apex:outputText value="{!r.name}" />
+                                        </apex:outputLink>
+                                    </apex:column>  
+                                    <apex:column headerValue="{!$ObjectType.Lead.fields.Email.label}" value="{!r.Email}"/>
+                                    <apex:column headerValue="{!$ObjectType.Lead.fields.Title.label}" value="{!r.Title}"/>
+                                    <apex:column headerValue="{!$ObjectType.Lead.fields.Company.label}" value="{!r.Company}"/>
+                                    <apex:column headerValue="{!$ObjectType.Lead.fields.Address.label}" >
+                                        <apex:outputText value="{!r.Street}" /><br />
+                                        <apex:outputText value="{!r.City}" />&nbsp;
+                                        <apex:outputText value="{!r.State}" />&nbsp;
+                                        <apex:outputText value="{!r.PostalCode}" /><br />
+                                        <apex:outputText value="{!r.Country}" />
+                                    </apex:column>
+                                    <apex:column headerValue="{!$ObjectType.Lead.fields.Ownerid.label}" value="{!r.Ownerid}"/>
+                                    <apex:facet name="footer">
+                                        <apex:outputPanel >
+                                            <apex:outputText rendered="{!Leads.size==0}" >No records to display.</apex:outputText>
+                                            <apex:commandlink status="lead_spinner" rerender="error, tableLead" rendered="{!Leads.size>PARAM_DEFAULT_PAGE_SIZE_LEAD}" action="{!viewMore}" value="View more" >
+                                                <apex:param assignTo="{!PARAM_DEFAULT_PAGE_SIZE_LEAD}" value="{!Leads.size}" />
+                                            </apex:commandlink>
+                                            <apex:actionStatus id="lead_spinner" ><apex:facet name="start"><image alt="working..." src="{!URLFOR($Resource.spinner)}" /></apex:facet></apex:actionStatus>
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                        </apex:pageBlock>
+                    </apex:outputPanel>
+                </apex:tab>
+            </apex:tabPanel>
+
+    </apex:form>
+          
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+         var j$ = jQuery.noConflict();
+         j$(document.body).on("click", ".contact_accountteam", function() {
+                j$('.contact_accountteam').not(this).prop("checked", false);
+         })
+         j$(document.body).on("click", ".account_accountteam", function() {
+                j$('.account_accountteam').not(this).prop("checked", false);
+         })
+         j$(document.body).on("click", ".datacloudcontact_accountteam", function() {
+                j$('.datacloudcontact_accountteam').not(this).prop("checked", false);
+         })
+         j$(document.body).on("click", ".datacloudcompany_accountteam", function() {
+                j$('.datacloudcompany_accountteam').not(this).prop("checked", false);
+         })
+    </script>    
+</apex:page>

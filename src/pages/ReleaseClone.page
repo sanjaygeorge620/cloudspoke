@@ -1,0 +1,53 @@
+<apex:page standardController="ProductRelease__c" extensions="ControllerRelease" id="pc">
+    <apex:form id="frm" >
+      
+        <apex:pageBlock title="Product Releases" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!cloneRelease}" value="Clone"/>
+                <apex:commandButton action="{!back}" value="Cancel"/>
+
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Product Release Details" columns="2">
+                 <apex:outputField value="{!ProductRelease__c.Brand__r.name}"/>
+                <apex:outputField value="{!ProductRelease__c.Release__c}"/>
+            </apex:pageBlockSection> 
+            <br/>
+            <apex:pageBlockSection title="New Release Details" columns="3">
+                <apex:inputField value="{!ProductRelease__c.New_Major__c}"/>
+                <apex:inputField value="{!ProductRelease__c.New_Minor__c}"/>
+                <apex:inputField value="{!ProductRelease__c.New_Increment__c}"/>
+            </apex:pageBlockSection> 
+            
+              <!--  
+            <apex:pageBlockSection title="Product Releases Found" id="FoundSection">
+            
+			<apex:dataTable value="{!allReleases}" var="release" id="foundTable"
+				styleClass="list" width="100%" >
+				<apex:column >
+					<apex:facet name="header">Name</apex:facet>
+					<apex:outputLink value="/{!release.id}"> 
+					{!release.name} 
+					</apex:outputLink>
+				</apex:column>
+				<apex:column >
+					<apex:facet name="header">Brand</apex:facet>
+					<apex:outputField value="{!release.Brand__c}" />
+				</apex:column>
+				<apex:column >
+					<apex:facet name="header">Release</apex:facet>
+					<apex:outputField value="{!release.Release__c}" />
+				</apex:column>
+				<apex:column >
+					<apex:facet name="header">Product</apex:facet>
+					<apex:outputField value="{!release.Product__c}" />
+				</apex:column>
+			</apex:dataTable>
+			
+			</apex:pageBlockSection>
+		-->	
+		</apex:pageBlock>
+         
+        
+       
+    </apex:form>
+    </apex:page>

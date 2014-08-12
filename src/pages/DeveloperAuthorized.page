@@ -1,0 +1,85 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController" title="{!SITE_NICKNAME}+' | Home'"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+     <apex:define name="title"> 
+       <title>{!SITE_NICKNAME} | Home</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+       <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-home').addClass('active');
+              jQuery('html').addClass("salesforce-sites"); 
+            });  
+        </script>
+     </apex:define>
+    <apex:define name="body">  
+         <div class="cp_core">
+            <apex:pageMessages />
+            <div class="two-thirds left-32">
+                <div class="column-23">
+                    <div class="callout kbsearch">
+                        <a class="title-bar" href="#"><span class="sprite_cpicons knowledge">&nbsp;</span>Knowledgebase Search</a>
+                        <div class="callout-content kb-content">
+                            <apex:form >
+                                <apex:inputText styleclass="kbsearch" value="{!SEARCH_TEXT}" onfocus="if (this.value == 'Start searching here.') { this.value=''; }" onblur="if (this.value == '') { this.value='Start searching here.'; }"/>
+                                <apex:commandButton styleclass="kbsubmit" action="{!doKBSearch}" />
+                            </apex:form>    
+                        </div>
+                        <div class="callout-content">
+                            <dl class="left-third">
+                                <apex:repeat value="{!WidgetKnowledgeSpotlight}" var="w">
+                                    <apex:outputText escape="false" value="{!w.Description_text__c}" />
+                                </apex:repeat>
+                            </dl>
+                           <dl class="right-twothirds"> 
+                                <dt>Most Recent</dt> 
+                                <knowledge:articleList articleVar="article"
+                                    categories="Product:All"
+                                    sortBy="lastUpdated"
+                                    pageSize="5">
+                                    <dd>
+                                        <a target="_blank" href="{!URLFOR($Action.KnowledgeArticle.View, article.id)}">{!If(len(article.title)>42,mid(article.title,1,42)+'...',article.title)}</a>
+                                        <apex:outputText styleClass="dates" value="{0,date,MM/dd/yyyy}">
+                                            <apex:param value="{!article.LastPublishedDate}" />
+                                        </apex:outputText>
+                                    </dd>
+                                </knowledge:articleList>
+                       </dl>
+                        </div>
+                    </div><!-- /KB Search -->
+                </div><!-- /Two-Thirds Column Left-32-->
+                
+                <div class="column leftcol">
+                   <div class="callout resources"> 
+                                <span class="title-bar" href="#"><span class="sprite_cpicons resources">&nbsp;</span>Resources</span> 
+                                <div class="callout-content"> 
+                                    <apex:repeat value="{!WidgetResources}" var="w">
+                                        <apex:outputText escape="false" value="{!w.Description_text__c}" />
+                                    </apex:repeat>
+                                </div> 
+                            </div><!-- /resources--> 
+                </div><!-- /Left Column -->
+                
+                <div class="column middlecol">
+                    <div class="callout amazon"> 
+                                <span class="title-bar" href="#"><span class="sprite_cpicons amazon">&nbsp;</span>Developer Environment</span> 
+                                <div class="callout-content"> 
+                                    <apex:repeat value="{!WidgetAmazon}" var="w">
+                                        <apex:outputText escape="false" value="{!w.Description_text__c}" />
+                                    </apex:repeat>
+                                </div> 
+                            </div><!-- /amazon --> 
+                </div><!-- /Middle Column -->
+            </div>
+            <div class="column rightcol">
+                <apex:outputText escape="false" value="{!SITE_OUTAGE_HTML}" rendered="{!SITE_OUTAGE}" />
+                <c:Sites_Case_Widget />
+            </div><!-- /Right Column -->
+            
+        </div>
+        <!-- Customer Portal: UnAuth Content -->
+      
+        
+      
+    </apex:define>
+  </apex:composition>
+</apex:page>

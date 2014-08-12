@@ -1,0 +1,146 @@
+<apex:page Controller="RMAController" extensions="LX_CustomSoldtoLookupRMA" tabstyle="LX_RMA__c">
+ <apex:pagemessages />
+    <apex:sectionHeader title="{!$ObjectType.LX_RMA__c.label} Edit" subtitle="{!recordRMA.name}"/>
+    <apex:form >
+    
+    <apex:pageBlock title="{!$ObjectType.LX_RMA__c.label} Edit" mode="maindetail">
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!Edit}" value="Edit" rendered="{!OR(AND(EditStatus,(NOT(recordRMA.LX_RMA_Submitted__c))),(Profilecheck))}"/>
+                 <apex:commandButton action="{!Submit}" value="Submit" rendered="{!AND(EditStatus,(NOT(recordRMA.LX_RMA_Submitted__c)))}"/>
+            <apex:commandButton action="{!Delete_rec}" value="Delete" rendered="{!OR((AND(deleteStatus,NOT(recordRMA.LX_RMA_Submitted__c))),(Profilecheck))}"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection showHeader="true" title="General Information" columns="2">
+            <apex:outputField value="{!recordRMA.Name}"/>
+            <apex:outputField value="{!recordRMA.LX_Case__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Contact__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Legacy_RMA__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Account__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Demo__c}"/>
+            <apex:outputField value="{!recordRMA.LX_SAP_Sales_Order__c}"/>        
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="Order Information" columns="2">
+            <apex:outputField value="{!recordRMA.LX_Sold_To_ID__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:outputField value="{!recordRMA.LX_Sold_To_New__c}">
+            </apex:outputField>
+            <apex:pageBlockSectionItem />
+            <apex:outputField value="{!recordRMA.LX_Bill_To_ID__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_To_ID__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_Company__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_to_Company__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_Name__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_To_Name__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_Address__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_To_Address__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_City__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_To_City__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_State_Province__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_To_State_Province__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_Postal_Code__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_To_Postal_Code__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_Country__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Ship_To_Country__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Bill_To_Email_Address__c}"/>
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="Return Information" columns="2">
+            <apex:outputField value="{!recordRMA.LX_Vendor_RMA_Number__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Sales_Return__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Reason_for_Return__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Obsolete__c}"/>
+            <apex:outputField value="{!recordRMA.LX_Return_Type__c}" />
+            <apex:outputField value="{!recordRMA.LX_Scrapped_by_Pacsgear__c}" />
+            <apex:pageBlockSectionItem />
+            <apex:outputField value="{!recordRMA.LX_Scrapped_by_Customer__c}" />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="System Information" columns="2">
+         <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Created By" />
+            <apex:outputPanel >
+                <apex:outputLink id="createdBy"
+                    onblur="LookupHoverDetail.getHover('{!$Component.createdBy}').hide();"
+                    onfocus="LookupHoverDetail.getHover('{!$Component.createdBy}', '/{!createdById}/m?retURL={!URLENCODE($CurrentPage.Url)}&isAjaxRequest=1').show();"
+                    onmouseout="LookupHoverDetail.getHover('{!$Component.createdBy}').hide();"
+                    onmouseover="LookupSHoverDetail.getHover('{!$Component.createdBy}', '/{!createdById}/m?retURL={!URLENCODE($CurrentPage.Url)}&isAjaxRequest=1').show();"                      
+                 value="{!URLFOR('/' + createdById)}">{!createdByName},</apex:outputLink>&nbsp;
+                <apex:outputText value="{!convertedCreatedDate}" />                                                                        
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Last Modified By" />
+            <apex:outputPanel >
+                <apex:outputLink id="lastModifiedBy"
+                    onblur="LookupHoverDetail.getHover('{!$Component.lastModifiedBy}').hide();"
+                    onfocus="LookupHoverDetail.getHover('{!$Component.lastModifiedBy}', '/{!lastModifiedById}/m?retURL={!URLENCODE($CurrentPage.Url)}&isAjaxRequest=1').show();"
+                    onmouseout="LookupHoverDetail.getHover('{!$Component.lastModifiedBy}').hide();"
+                    onmouseover="LookupHoverDetail.getHover('{!$Component.lastModifiedBy}', '/{!lastModifiedById}/m?retURL={!URLENCODE($CurrentPage.Url)}&isAjaxRequest=1').show();"                      
+                 value="{!URLFOR('/' + lastModifiedById)}">{!lastModifiedByName},</apex:outputLink>&nbsp;
+                <apex:outputText value="{!convertedLastModifiedDate}" />                                                                         
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:pageBlock title="Returning Items Section" mode="edit"  tabStyle="Serial_Number__c" helpTitle="Serial Number Sales Orders Help" helpUrl="javascript:OpenPopupFocusEscapePounds(%27https://help.salesforce.com/apex/htdoor?loc=help&target=co_relatedlist.htm&section=CustomObjects&language=en_US&release=184.20.12&instance=CS16%27, %27Help%27, 1024, 768, %27width=1024,height=768,resizable=yes,toolbar=yes,status=yes,scrollbars=yes,menubar=yes,directories=no,location=yes,dependant=no%27, false, false);" >
+    <apex:outputpanel id="RMAformNoitems"  rendered="{!renderWrap}">
+            <br></br>
+                <p>No Serial Number line items to display.</p>
+                </apex:outputpanel><br></br>
+                <apex:outputpanel id="RMAform"  rendered="{!NOT(renderWrap)}">
+   <apex:pageBlockSection title="Filter" columns="2"   >
+                    
+        <apex:panelGrid columns="6" id="filterpanel" style="width:100%">
+             <apex:outputText value="Serial Number" id="search1"/>
+             <apex:inputText value="{!input11}"/>  
+             <apex:outputText value="Part Name" id="search2"/>
+             <apex:inputText value="{!input12}"/><apex:pageblocksectionitem /> <apex:pageblocksectionitem /> 
+            <apex:outputText value="Part Number" id="search3"/>
+             <apex:inputText value="{!input13}"/>
+            <apex:pageblocksectionitem /> 
+            <apex:commandLink action="{!clearFilters}" value="Clear Filters" id="theClearFilter" rerender="RMAform,filterpanel" /> 
+             <apex:pageblocksectionitem />  <apex:commandbutton action="{!search}" value="Search" rerender="RMAform" /></apex:panelGrid>   
+             
+            </apex:pageBlockSection> 
+            
+          
+      
+            <apex:pageBlocksection title="Serial Number Line Items" columns="1">
+             </apex:pageblocksection> 
+              <apex:outputpanel id="RMAformNoite2ms"  rendered="{!NOT(renderTable)}">
+            <br></br>
+                <p>No Serial Number line items to display.</p>
+                </apex:outputpanel><br></br>
+             <apex:outputPanel id="lineItemResults" rendered="{!renderTable}">
+             <apex:pageblockTable value="{!listSerialNumberLineItemWrap}" var="lineitem"   >
+          <apex:column width="5%">
+          <apex:facet name="header">Selected</apex:facet>
+          <c:OutputCheckbox value="true" rendered="true"/>
+          </apex:column>
+            <apex:column width="20%"> 
+            <apex:facet name="header">Serial Number</apex:facet>
+            <apex:outputLink value="/{!lineitem.serialnumberlineItem.id}" target="_blank">{!lineitem.serialnumberlineItem.Serial_Number__c}</apex:outputLink>        
+              </apex:column> 
+           
+            <apex:column width="20%"> 
+            <apex:facet name="header">Part Number</apex:facet>
+                <apex:outputfield value="{!lineitem.serialnumberlineItem.Part_Number__c}"/> 
+            </apex:column>
+            
+            <apex:column width="30%"> 
+            <apex:facet name="header">Part Name</apex:facet>
+                <apex:outputfield value="{!lineitem.serialnumberlineItem.Part_Name__c}"/> 
+            </apex:column>
+            
+            <apex:column width="10%"> 
+            <apex:facet name="header">Status</apex:facet>
+                <apex:outputfield value="{!lineitem.serialnumberlineItem.Item_Status__c}"/> 
+            </apex:column>
+
+            </apex:pageblockTable>
+            </apex:outputPanel>
+            </apex:outputpanel>
+                        </apex:pageBlock>
+    
+    
+    </apex:form>
+</apex:page>

@@ -1,0 +1,41 @@
+<apex:page controller="testJobSchedulerController">
+    <!-- <apex:dataTable value="{!jobs}" var="job" id="theTable" rowClasses="odd,even">
+
+		<apex:facet name="caption">table caption</apex:facet>	
+        
+        <apex:column>
+
+		    <apex:facet name="header">Id</apex:facet>		
+
+			<apex:outputText value="{!job.Id}"/>
+
+		</apex:column>
+		<apex:column>
+
+		    <apex:facet name="header">Name</apex:facet>		
+
+			<apex:outputText value="{!job.CronJobDetail.name}"/>
+
+		</apex:column>
+
+		<apex:column>
+
+			<apex:facet name="header">Job Type</apex:facet>		
+
+			<apex:outputText value="{!job.CronJobDetail.JobType}"/>
+
+		</apex:column>
+
+	</apex:dataTable> -->
+    <apex:pageBlock title="Scheduled Jobs">
+
+        <apex:pageBlockTable value="{!jobs}" var="job">
+			<apex:column value="{!job.CronJobDetail.name}"/> 
+            <apex:column value="{!job.CronJobDetail.JobType}" />
+			 <apex:column value="{!job.State}"/> 
+             <apex:column value="{!job.PreviousFireTime}"/> 
+             <apex:column value="{!job.NextFireTime}"/>              
+        </apex:pageBlockTable> 
+
+    </apex:pageBlock> 
+</apex:page>

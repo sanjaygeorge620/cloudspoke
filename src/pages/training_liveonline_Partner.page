@@ -1,0 +1,62 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesTrainingController"> 
+ <apex:define name="javascriptcalls">
+    <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-training').addClass('active');
+              jQuery('.trainingtable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+            });  
+        </script>
+   </apex:define>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+   <apex:define name="title">
+       <title>{!SITE_NICKNAME} | Training LiveOnline Courses</title>
+   </apex:define>
+  
+    <apex:define name="body">  
+         <div class="banner grid full-width breadcrumb">
+             <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Site.CurrentSiteURL}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.training_Partner}">Training</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">LiveOnline</a></li>
+                </ul>
+         </div>
+         </div>    
+         <div class="cp_core">
+            <div class="column full-width">
+                <div class="callout liveonline">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons live">&nbsp;</span>LiveOnline Courses</a>
+                    <div class="callout-content">
+                        <table cellpadding="0" cellspacing="0" border="0" class="display trainingtable">
+                            <thead>
+                                <tr>                                    
+                                    <th>Course Name</th>
+                                    <th>Description</th>
+                                    <th>Class Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 <apex:repeat value="{!CourseseLiveOnline}" var="c">
+                                  <tr>
+                                            <td class="course-name">
+                                            <apex:outputLink value="{!$page.coursedetails_Partner}">
+                                                {!c.name}
+                                                <apex:param name="id" value="{!c.ID}"/>
+                                            </apex:outputLink>
+                                        </td>
+                                        <td class="course-shortdesc">{!c.Short_Description__c}</td>
+                                        <td class="class-duration">{!c.Class_Duration__c}</td>
+                                  </tr>
+                                 </apex:repeat>
+                            </tbody>
+                      </table> 
+                    </div>
+                </div><!-- /LiveOnline Training -->
+            </div><!-- /Full Width Column -->
+            
+            
+            
+        </div><!-- /Cp Core -->
+         </apex:define>
+  </apex:composition>
+</apex:page>

@@ -1,0 +1,72 @@
+<apex:page controller="SitesControllerInternal" standardStylesheets="true" showHeader="false" sidebar="false" cache="{!SITE_CACHED}" expires="{!SITE_CACHE_MAX_AGE}" >
+<html>
+    <head>
+        
+        <meta content="{!SITE_META_DESCRIPTION}" name="description" />
+        <meta content="{!SITE_META_KEYWORD}" name="keywords" />
+        
+        <!--css-->
+         <apex:stylesheet id="sfdc_css" value="{!URLFOR($Resource.Perceptive_Sites_CSS, 'css/perceptive.css')}" />
+       
+        <!--scripts-->
+         <apex:includeScript id="jquery_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/jquery.min.js')}" />
+         <apex:includeScript id="jqueryui_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/jquery-ui.min.js')}" />
+         <apex:includeScript id="jqueryplugins_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/jquery.plugins.js')}" />
+         <apex:includeScript id="shadowbox_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/shadowbox.js')}" />
+         <apex:includeScript id="psi_js" value="{!URLFOR($Resource.Perceptive_Sites, 'scripts/cp.js')}" />
+         <script type="text/javascript">
+             jQuery(document).ready(function(){
+                 //View alert
+                  jQuery('.message.alert').click(function() { // bind click event to class
+                          jQuery('.alert_msg').slideToggle('slow');
+                       return false;
+                    });
+             })
+         </script>
+    </head>
+    <body id="landing">     
+        <div id="frame">
+            
+            <div class="portalheader">
+                    <apex:outputPanel rendered="{!isLoggedin}" id="toolbar">
+                                <!-- Customer Portal: Toolbar -->
+                                <ul class="toolbar"> 
+                                   
+                                </ul>   
+                     </apex:outputPanel>
+            </div>
+                        
+            <div id="core">
+                   <div class="alert_msg" style="display:none;">
+                    <h3>{!SITE_ALERT_TITLE}</h3>
+                    <p><apex:outputText value="{!SITE_ALERT_FULL}" escape="false"></apex:outputText></p>
+                   </div>
+                   
+                   <apex:insert name="body"/>
+            </div> 
+            
+        </div>      
+        
+        <script type="text/javascript"> 
+                 var _gaq = _gaq || []; 
+                _gaq.push(['t1._setAccount', 'UA-9714790-3']); 
+                _gaq.push(['t1._trackPageview']); 
+                
+                _gaq.push(['t2._setAccount', 'UA-18274388-1']); 
+                _gaq.push(['t2._setDomainName', 'none']); 
+                _gaq.push(['t2._setAllowLinker', true]); 
+                _gaq.push(['t2._setAllowHash', false]); 
+                _gaq.push(['t2._trackPageview']); 
+          
+          (function() { 
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; 
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); 
+          })(); 
+          
+        </script> 
+        
+    </body>    
+</html>    
+<site:previewAsAdmin />  
+</apex:page>

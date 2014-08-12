@@ -1,0 +1,10 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:page standardController="Posting__c" extensions="PostingWizardController" >
+<apex:stylesheet value="{!$Resource.postingstylesheet}"/>
+<div class="newPostCat doc">
+	<div class="catHeader">What type of posting is this?</div>
+	<apex:dataList value="{!categoryValues}" var="i">
+	      <a href="/apex/newPostCreate?&cat={!i.value}"><apex:outputText value="{!i.label}"/></a>
+	</apex:dataList>
+</div>
+</apex:page>

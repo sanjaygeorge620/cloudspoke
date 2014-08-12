@@ -1,0 +1,10 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:page controller="PostingListController" tabStyle="Posting__c"   standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.postingstylesheet}"/>
+<div class="doc">
+<div class="catHeader" layout="block">My Posts</div>
+<div class="listWrapper">
+		<c:PostingList cat="true" postings="{!myPostings}" doRender="{!areThereMyPostings}" msg="You have not posted anything yet."/>
+		</div>
+		</div>
+</apex:page>

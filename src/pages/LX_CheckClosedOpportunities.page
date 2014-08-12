@@ -1,0 +1,20 @@
+<apex:page standardController="Opportunity" >
+ 
+ <script>
+     
+     var stageNamesToCheck = "{!$Label.LX_stageNames}".toLowerCase().split(',');      
+     var profileNamesToCheck = "{!$Label.LX_profilesToCheck}".toLowerCase().split(',');
+     var stageName = "{!Opportunity.stageName}".toLowerCase();    
+     var opportunityId  = "{!Opportunity.id}";  
+     var profileName = "{!$Profile.Name}".toLowerCase();     
+     
+     if(stageNamesToCheck.indexOf(stageName) != -1  &&  profileNamesToCheck.indexOf(profileName) == -1 ){         
+         alert("{!$Label.LX_ClosedOpptyAlert}");
+         window.location = '/'+opportunityId +'?retURL=%2F'+opportunityId+"{!$Label.LX_noOverride}";             
+     }
+     else{
+         window.location = '/'+opportunityId+'/e?retURL=%2F'+opportunityId+"{!$Label.LX_noOverride}";
+     }
+ </script>
+  
+</apex:page>

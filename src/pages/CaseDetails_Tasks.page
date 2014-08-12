@@ -1,0 +1,67 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesCaseController"> 
+<title>{!SITE_NICKNAME} | Case Activity for {!ActivityCase.casenumber} </title>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-cases').addClass('active');
+        });
+    </script>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body"> 
+        <div class="cp_core">
+            <apex:pageMessages />
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$Page.Cases}">Cases</a><span>&#187;</span></li>
+                    <li><apex:outputLink value="{!$page.CaseDetails}" styleclass="current">
+                            Case: {!ActivityCase.casenumber}
+                            <apex:param name="id" value="{!ActivityCase.id}"/>
+                        </apex:outputLink>
+                     </li>
+                    
+                </ul>
+            </div> 
+            <div class="column full-width">
+                <div class="callout task">
+                    <span class="title-bar" href="#"><span class="sprite_cpicons tasks">&nbsp;</span>Activity for Case: {!ActivityCase.casenumber}</span>
+                    <div class="callout-content">
+                            <apex:outputPanel rendered="{!!$ObjectType.task.accessible}">
+                                Insufficient Privileges
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!$ObjectType.task.accessible}">
+                                 <dl>                
+                                     <dt>Case Details</dt>
+                                     <dd class="no-arrow">
+                                         <apex:outputLink value="{!$page.CaseDetails}" styleclass="current">
+                                            Case: {!ActivityCase.casenumber}
+                                            <apex:param name="id" value="{!ActivityCase.id}"/>
+                                         </apex:outputLink>
+                                     </dd>
+                                     <dd class="no-arrow">Case Subject:&nbsp; <apex:outputField value="{!ActivityCase.Subject}"/></dd>
+                                     <dd class="no-arrow">Contact:&nbsp; <apex:outputField value="{!ActivityCase.Contact.name}"/></dd>
+                                     <dd class="no-arrow">Created Date:&nbsp; <apex:outputfield value="{!ActivityCase.CreatedDate}"/></dd>
+                                     <dd class="no-arrow">Closed Date:&nbsp; <apex:outputfield value="{!ActivityCase.closeddate}" /></dd>
+                                 <br />    
+                                     <dt>Activity Details</dt>
+                                     
+                                     <dd class="no-arrow">Activity Subject:&nbsp; <apex:outputField value="{!CaseActivity.Subject}"/></dd>
+                                     <dd class="no-arrow">Created By:&nbsp; <apex:outputField value="{!CaseActivity.CreatedBy.name}"/></dd>
+                                     <dd class="no-arrow">Created Date:&nbsp; <apex:outputfield value="{!CaseActivity.CreatedDate}" /></dd>
+                                     <dd class="no-arrow">Completed:&nbsp; <apex:outputfield value="{!CaseActivity.isclosed}" /></dd>
+                                 <br />
+                                     <dt>Description</dt>
+                                     <dd class="no-arrow"><apex:outputField value="{!CaseActivity.Description}"/><br /></dd>
+                                 </dl>
+                                
+                            </apex:outputPanel>
+                            
+                    </div>
+
+                </div><!-- /task-->
+
+            </div><!-- /Full Width Column -->
+            
+        </div>    
+    </apex:define>    
+  </apex:composition>   
+</apex:page>

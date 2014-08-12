@@ -1,0 +1,66 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:page controller="PostingHomeController" tabStyle="Posting__c"  standardStylesheets="true">
+    <apex:stylesheet value="{!$Resource.postingstylesheet}"/>
+    <apex:outputPanel layout="block" styleClass="everything doc">
+  <apex:form >
+  <apex:messages />
+  
+  <apex:actionFunction name="choose" action="{!choose}"/>
+
+  <apex:inputHidden id="catInput" value="{!category}"/>
+  <div class="homeHeader">
+    <div class="forceHeader leftcol">Bulletin Board</div>
+      <div class="searchHeader">
+      Find posts near: &nbsp;<apex:inputtext size="6" value="{!zip}"/>&nbsp;<span class="leaveBlank">(enter a zip code or leave this blank to search anywhere)</span>
+      </div>
+      <div class="clearingBox"/>
+  </div>
+  <div class="threecolumnlayout">
+      <div class="leftcol">
+          <div class="catHeader">Categories</div>
+          <apex:dataList value="{!categoryValues}" var="i" styleClass="categories">
+              <a href="javascript:setCat('{!i.value}')" ><apex:outputText value="{!i.label}"/></a>
+          </apex:dataList>
+    </div>
+     
+     <div class="rightcol">
+        <div class="postLink">
+            Search for<br/>
+            <apex:inputText size="20" id="searchterm" value="{!searchTerm}"/> 
+            <apex:commandButton onclick="return validateSearchTerm()" value="Search" action="{!doSearch}"/>
+      
+        </div>
+        <script>
+            function validateSearchTerm() {
+            var v = document.getElementById('{!$Component.searchterm}').value;
+            return v.length > 1;
+            }
+        
+        </script>
+        
+        <div class="postLink">
+            <a href="newPostCategory">Post to classifieds</a><br/>
+        </div>
+        <div class="postLink">
+            <a href="myPosts">My Posts</a><br/>
+        </div>
+        
+     </div>
+     <div class="centercol">
+      <div class="latest">
+          <div class="catHeader" layout="block">Most Recent Posts</div>
+        <c:PostingList postings="{!newestPostings}" doRender="true" msg="There are no posts yet." cat="true"/>
+      </div>
+    </div>  
+</div>
+<div class="clearingBox"/>
+  
+  <script>
+    function setCat(c) {
+        document.getElementById('{!$Component.catInput}').value = c;
+        choose();
+    }
+</script>
+  </apex:form>
+  </apex:outputPanel>
+</apex:page>

@@ -1,0 +1,61 @@
+<apex:page showHeader="false"  controller="LX_Enrollment_ProgramsController" sidebar="false" >
+<body onload="if(this.bodyOnLoad)bodyOnLoad();" onbeforeunload="if(this.bodyOnBeforeUnload){var s=bodyOnBeforeUnload();if(s)return s;}" onunload="if(this.bodyOnUnload)bodyOnUnload();" onfocus="if(this.bodyOnFocus)bodyOnFocus();" class="hasMotif lookupTab  LookupSearchFrame  brandNoBgrImg" marginwidth="0" marginheight="0">
+<!-- Main Body Starts Here -->
+<apex:form >
+    <div class="lookup"><div class="bPageTitle">
+    <div class="ptBody secondaryPalette"><div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" />
+    <h1>Lookup</h1></div></div></div><div class="pBody"><label for="lksrch">Search</label>
+    <apex:inputText id="txtSearch" value="{!searchString}" />
+    <apex:commandButton id="btnGo" value="Go!" action="{!Search}" rerender="searchResults"></apex:commandButton>
+    </div>
+    </div>
+    <apex:pageBlock title="Accounts"  id="searchResults" >
+        <apex:outputLabel rendered="{!ISNULL(results)}" >No records found due to one of the following:
+            <ul>
+                <li>There are no records of this type</li><li>You don't have permission to see any of the records</li>
+                <li>Records do not fit the filter criteria set by your administrator</li>
+            </ul>
+        </apex:outputLabel>
+        <apex:outputLabel rendered="{!AND(ISNULL(results),bPartnerPage == 'true')}"><h2>Account Filter:</h2>
+            <ul>
+            <!--<li>Party Type :<b> {!ObjPartner.LX_Party_Type__c}</b></li>
+            <li>ISS Capability Segment : <b>{!ObjPartner.ISS_Capability_Segment__c}</b></li>
+            <li>Account GEO:<b>{!ObjPartner.LX_GEO__c}</b></li>
+            <li>Region : <b>{!ObjPartner.LX_Region__c}</b></li>-->
+			<li>Account Record Type : <b>Location Partner</b></li>
+            <li>Country : <b>{!ObjPartner.LX_Country__c}</b></li>
+            <!--<li>ISS Coverage Method : <b>{!ObjPartner.LX_ISS_Coverage_Method__c}</b></li>
+            <li>Level Minimum MPS Capability Score :<b> {!ObjPartner.LX_Program_Enrolled__r.Minimum_MPS_Capability_Score__c}</b></li>
+            <li>Level Minimum Solution Capability Score :<b>{!ObjPartner.LX_Program_Enrolled__r.Minimum_Solutions_Capability_Score__c}</b></li>-->
+            </ul>
+        </apex:outputLabel>
+        <!-- <apex:outputLabel rendered="{!AND(ISNULL(results),bPartnerPage == 'true')}"><h2>Account Filter:</h2>
+        <ul>
+        <li>Party Type : <b>Partner</b></li>
+        <li>Coverage Status : <b>Active</b></li>
+        <li>Country :<b>{!ObjPartner.LX_Country__c}</b></li>
+        </ul>
+        </apex:outputLabel> -->
+        <apex:pageBlockTable var="local" rendered="{!NOT(ISNULL(results))}"  id="tblResults"  value="{!results}">
+            <apex:column >
+            <apex:facet name="header">
+            <apex:outputPanel >Name</apex:outputPanel>
+            </apex:facet>
+            <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!local.Id}','{!local.Name}', false)" rendered="{!NOT(ISNULL(local.Id))}">{!local.Name}</apex:outputLink> 
+            </apex:column>
+            <apex:column value="{!local.BillingCountry}"></apex:column>
+            <apex:column value="{!local.LXK_Region__c}"></apex:column>          
+            <apex:column value="{!local.LX_Geo__c}"/>
+            <apex:column value="{!local.Party_Type__c}"></apex:column> 
+            <apex:column value="{!local.Partner_MPS_Capability_Score__c}"></apex:column> 
+            <apex:column value="{!local.Partner_ISS_Solutions_Capability_Score__c}"></apex:column> 
+            <apex:column value="{!local.ISS_Coverage_Method__c}"></apex:column>
+            <apex:column value="{!local.Party_Role__c}"></apex:column> 
+            <apex:column value="{!local.Industry}"></apex:column>    
+            <apex:column value="{!local.Partner_ISS_Capability_Segment__c  }"></apex:column>        
+            <apex:column headerValue="Owner Name" title="Owner Name" value="{!local.Owner.Name}"></apex:column>
+        </apex:pageBlockTable>
+    </apex:PageBlock>
+</apex:form>
+</body>
+</apex:page>

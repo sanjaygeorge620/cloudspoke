@@ -1,0 +1,90 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesServerController"> 
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-account').addClass('active');
+            });
+        </script>
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                <li><apex:outputLink value="{!$page.Account}">Account<apex:param name="tab" value="servers"/></apex:outputLink><span>&#187;</span></li>
+                <li><a class="current" href="#">Server: {!Server.Machine_Name__c}</a></li>
+            </ul>
+        </div>  
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.server__c.updateable || SITE_CONTACT.Contact_Role__c!='ImageNow Admin'}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges. (ImageNow Admins Only)</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" id="Server" rendered="{!$ObjectType.server__c.updateable && SITE_CONTACT.Contact_Role__c=='ImageNow Admin'}">
+            <div class="column full-width"> <!----Full column-->
+                    <div class="callout server"><!----server-->
+                         <a class="title-bar" href="#">
+                             <span class="sprite_cpicons server">&nbsp;</span>
+                             Server Details
+                         </a>
+                             
+                         <div class="callout-content">
+                         <p><apex:pageMessages />
+                         </p>
+                         <apex:form >
+                                  <div class="inner-content inner-content-title-bar">
+                                        <span>ImageNow Details</span>
+                                  </div>
+                                  <div class="inner-content">
+                                    <div class="left-inner-col">
+                                        <p class="item server-info-title">Server Type: <span><apex:outputField id="servertype" value="{!Server.server_type__c}"/> </span></p>
+                                        <br />
+                                        <p class="item server-info-title">Machine Name: <div><apex:inputField id="machinename" value="{!Server.machine_name__c}"/> </div></p>
+                                        <p class="item server-info-title">Release: 
+                                            
+                                            <div>
+                                                    <apex:selectlist size="1" value="{!Server.Release__c }">
+                                                         <apex:selectoptions value="{!Release}"/>     
+                                                   </apex:selectlist>
+                                            </div>
+                                            
+                                        </p>
+                                        <p class="item server-info-title">Processor: <div><apex:inputField id="Processor__c" value="{!Server.Processor__c}"/> </div></p>
+                                        <p class="item server-info-title">Client Access<div><apex:inputField id="Client_Access__c" value="{!Server.Client_Access__c}"/> </div></p>
+                                    </div>
+                                    <div class="right-inner-col">
+                                        <p class="item server-info-title">Platform: <div><apex:inputField id="Platform__c" value="{!Server.Platform__c}"/> </div></p>
+                                        <p class="item server-info-title">Platform Version: <div><apex:inputField id="Platform_Version__c" value="{!Server.Platform_Version__c}"/> </div></p>
+                                        <br />
+                                        <p class="item server-info-title">Database: <div><apex:inputField id="Database__c" value="{!Server.Database__c}"/> </div></p>
+                                        <p class="item server-info-title">Database Version: <div><apex:inputField id="Database_Version__c" value="{!Server.Database_Version__c}"/> </div></p>
+                                        <br />
+                                        <p class="item server-info-title">Virtual Machine: <div><apex:inputField id="Virtual_Machine__c" value="{!Server.Virtual_Machine__c}"/> </div></p>
+                                        <p class="item server-info-title">Virtual Machine Type: <div><apex:inputField id="Virtual_Machine_Type__c" value="{!Server.Virtual_Machine_Type__c}"/> </div></p>
+                                        <br />
+                                        <p class="item server-info-title">Web App Server: <div><apex:inputField id="Web_App_Server__c" value="{!Server.Web_App_Server__c}"/> </div></p>
+                                        <p class="item server-info-title">Web App Server Version: <div><apex:inputField id="Web_App_Server_Version__c" value="{!Server.Web_App_Server_Version__c}"/> </div></p>                                               
+                                    </div>
+                                    
+                                  </div>
+                                  <div class="inner-content inner-content-title-bar">
+                                        <span>Last Verified</span>
+                                  </div>
+                                  <div class="inner-content">
+                                      <div class="left-inner-col">
+                                            <!---<p class="item server-info-title">Verified by: <span><apex:outputtext id="Verified_by_Customer__r" value="{!Server.Verified_by_Customer__r.name}"/> </span></p>--->
+                                            <p class="item server-info-title">Date: <span><apex:outputfield id="Date_Verified_by_Customer__c" value="{!Server.Date_Verified_by_Customer__c}"/> </span></p>
+                                       </div>
+                                       <div class="right-inner-col">
+                                            
+                                       </div>
+                                   </div>  
+                                   <br />  
+                                   <apex:commandButton styleClass="savebutton" id="edit" value=" " action="{!updateServer}"/>
+                                   
+                              </apex:form>
+                             </div><!---/callout-content-->
+                    </div><!----/server-->
+            </div>
+        </apex:outputPanel>
+    </apex:define>
+  </apex:composition>
+</apex:page>

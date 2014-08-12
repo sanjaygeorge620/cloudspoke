@@ -1,0 +1,90 @@
+<!--             
+VF Page : LX_AddDistributor
+Description : VF Page for adding Quick Bid Distributor Information. As per User Story US4166
+Created By : Sanjay Chaudhary (sanchaudhary@deloitte.com)
+Created Date : 24-July-2014
+Modification Log:
+-----------------------------a--------------------------------------------
+Developer           Date            Modification ID        Description
+-------------------------------------------------------------------------
+Sanjay Chaudhary   24-July-2014           1000               Initial Version
+*************************************************************************/
+-->
+<apex:page standardController="Account" extensions="LX_AddDistributor" sidebar="true" showHeader="false" id="mainPageId" docType="html-5.0">
+<c:ActionStatusLoading />
+    <apex:form id="filterForm" rendered="{!filterFormRendered}">
+    <apex:outputPanel id="searchOutputPanel">
+        <apex:pageBlock id="filterPageBlock" rendered="{!filterPageBlockRendered}">
+            <apex:pageBlockSection title="Distributor Search" id="filterSection" columns="4">
+                <apex:pageblockSectionItem >
+                    <apex:outputLabel value="City" style="font-weight:bold;text-align:right;color:#4a4a56;" for="City"><apex:inputtext value="{!cityFilter}" id="countryInput"/></apex:outputLabel>
+                </apex:pageblockSectionItem>                
+            </apex:pageBlockSection> 
+            <apex:pageBlockButtons location="bottom" >
+            <apex:commandButton action="{!getDynamicDistributorFilter}" value="Search" id="searchButton" rerender="mainFormOutputTable" status="waitingStatusLoad"/>   
+           <apex:commandButton action="{!cancelLogic}" immediate="true" value="Cancel" status="waitingStatusLoad" /> 
+           </apex:pageBlockButtons>          
+        </apex:pageBlock> 
+        </apex:outputPanel>       
+<!--    </apex:form>  -->
+   
+   <apex:outputPanel id="selectedDistributorOutputPanel">
+<!--   <apex:form id="currentSelectionForm" title="Distributor Already Selected" rendered="{!currentSelectionRender}"> -->
+       <apex:pageBlock title="Distributor Already Selected" id="selectedDistributorPageBlock" rendered="{!outputPanelSelectedDistributor}">
+           <apex:pageMessages id="selectedDistributorErrorPanel" />
+               <apex:pageblockTable var="savedDistributor" value="{!savedDistributorWrapperList}" id="selectedDistributorResultTable" columns="7">
+                    <apex:column value="{!savedDistributor.AccountName}" headerValue="Account Name"/>  
+                    <apex:column value="{!savedDistributor.AccountStreet}" headerValue="Account Street"/>  
+                    <apex:column value="{!savedDistributor.AccountCity}" headerValue="Account City"/>
+                    <apex:column value="{!savedDistributor.AccountState}" headerValue="Account State"/>
+                    <apex:column value="{!savedDistributor.AccountPostalCode}" headerValue="Account Postal Code"/>
+                    <apex:column value="{!savedDistributor.AccountCountry}" headerValue="Account Country"/> 
+                    <apex:column headerValue="Delete">
+                            <apex:commandLink id="DeleteDistributor" action="{!inlineDeleteLogic}" rerender="selectedDistributorOutputPanel,searchOutputPanel,mainFormOutputTable" value="Delete" title="Delete" status="waitingStatusLoad"/>
+                    </apex:column>                
+               </apex:pageblockTable>       
+       </apex:pageBlock> 
+<!--       </apex:form>  -->  
+   </apex:outputPanel>
+   
+   <apex:outputPanel id="OnsubmitQuckBidselectedDistributorOutputPanel">
+       <apex:pageBlock title="Selected Distributor" id="OnsubmitQuckBidselectedDistributorPageBlock" rendered="{!OnsubmitQuckBidopPnlSelectedDistributor}">
+           <apex:pageMessages id="OnsubmitQuckBidselectedDistributorErrorPanel" />
+               <apex:pageblockTable var="OnsubmitQuckBidsavedDistributor" value="{!savedDistributorWrapperList}" id="selectedDistributorResultTable" columns="7">
+                    <apex:column value="{!OnsubmitQuckBidsavedDistributor.AccountName}" headerValue="Account Name"/>  
+                    <apex:column value="{!OnsubmitQuckBidsavedDistributor.AccountStreet}" headerValue="Account Street"/>  
+                    <apex:column value="{!OnsubmitQuckBidsavedDistributor.AccountCity}" headerValue="Account City"/>
+                    <apex:column value="{!OnsubmitQuckBidsavedDistributor.AccountState}" headerValue="Account State"/>
+                    <apex:column value="{!OnsubmitQuckBidsavedDistributor.AccountPostalCode}" headerValue="Account Postal Code"/>
+                    <apex:column value="{!OnsubmitQuckBidsavedDistributor.AccountCountry}" headerValue="Account Country"/> 
+               </apex:pageblockTable>
+               <apex:pageBlockButtons location="both" >
+           <apex:commandButton action="{!cancelLogic}" immediate="true" value="Cancel" status="waitingStatusLoad" /> 
+           </apex:pageBlockButtons>         
+       </apex:pageBlock> 
+   </apex:outputPanel>
+     
+   <apex:outputPanel id="mainFormOutputTable">
+<!--       <apex:form id="mainForm" title="Distributor List" rendered="{!mainFormRender}">-->
+           <apex:pageBlock id="pageBlockMain" rendered="{!mainPageBlockRender}">
+           <apex:pagemessages id="SelectedDistributorErrorPanel"/>
+               <div align="center"><apex:commandButton action="{!saveLogic}" value="Save" id="savePage" status="waitingStatusLoad"/></div>
+               <apex:pageblockSection title="Distributors List" id="distributorList" columns="1">
+                   <apex:pageblockTable id="distributorTable" var="distributor" value="{!accountWrapperList}" columns="7">
+                       <apex:column headerValue="Checkbox">
+                           <apex:inputCheckbox value="{!distributor.selected}" id="checkDone" required="false">
+                           </apex:inputCheckbox>
+                       </apex:column>
+                       <apex:column value="{!distributor.AccountName}" headerValue="Account Name"/>  
+                       <apex:column value="{!distributor.AccountStreet}" headerValue="Account Street"/>  
+                       <apex:column value="{!distributor.AccountCity}" headerValue="Account City"/>
+                       <apex:column value="{!distributor.AccountState}" headerValue="Account State"/>
+                       <apex:column value="{!distributor.AccountPostalCode}" headerValue="Account Postal Code"/>
+                       <apex:column value="{!distributor.AccountCountry}" headerValue="Account Country"/>            
+                   </apex:pageblockTable>  
+               </apex:pageblockSection>
+           </apex:pageBlock>
+<!--       </apex:form>   -->
+   </apex:outputPanel>
+</apex:form>    
+</apex:page>

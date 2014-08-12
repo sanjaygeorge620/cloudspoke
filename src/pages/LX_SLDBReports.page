@@ -1,0 +1,50 @@
+<apex:page controller="LX_SLDBReportControlr" tabStyle="SLDB_Reports__tab">
+  <apex:form id="frm">
+  <apex:pageBlock >
+      <apex:outputText escape="false" value="{!$Label.LX_SLDBMessage1} "></apex:outputText>
+      <apex:outputlink target="_blank" value="{!$Label.LX_SLDB_Message}"><apex:outputText escape="false" value="{!$Label.LX_SLDBMessage2}"></apex:outputText></apex:outputLink>
+      <apex:outputText escape="false" value="{!$Label.LX_SLDBMessage3}"></apex:outputText>
+  </apex:pageBlock>    
+
+  
+    <apex:pageBlock title="SLDB Reports" id="pgbl1" rendered="{!rList}">
+      <apex:commandLink value="Management Dashboard" action="{!Dashbrd}" reRender="frm"/><br/><br/>
+      <apex:commandLink value="Loyalty Summary" action="{!LoySumm}" reRender="frm"/><br/><br/>
+      <apex:commandLink value="Loyalty Information" action="{!LoyInfo}" reRender="frm"/><br/><br/>
+      <apex:commandLink value="Gap Analysis" action="{!GapAnaly}" reRender="frm"/><br/><br/>
+    </apex:pageBlock>
+    <apex:pageBlock id="pgbl2" rendered="{!DB}">
+    <!--<apex:iframe src="{!$Label.LX_SLDB_iframe_1}" scrolling="true"/>-->
+    <iframe src="{!$Label.LX_SLDB_iframe_1}" scrolling="true" width="100%" height="600px" sandbox="allow-same-origin allow-forms allow-scripts"/>
+    <apex:pageBlockButtons location="bottom">
+    <apex:commandButton value="Back" action="{!Back}" reRender="frm"/>
+    </apex:pageBlockButtons>
+    </apex:pageBlock>
+    <apex:pageBlock id="pgbl3" rendered="{!LS}">
+    <!--<apex:iframe src="{!$Label.LX_SLDB_iframe_2}" scrolling="true"/>-->
+    <iframe src="{!$Label.LX_SLDB_iframe_2}" scrolling="true" width="100%" height="600px" sandbox="allow-same-origin allow-forms allow-scripts"/>
+    <apex:pageBlockButtons location="bottom">
+    <apex:commandButton value="Back" action="{!Back}" reRender="frm"/>
+    </apex:pageBlockButtons>
+    </apex:pageBlock>
+    <apex:pageBlock id="pgbl4" rendered="{!LI}">
+    <!--<apex:iframe src="{!$Label.LX_SLDB_iframe_3}" scrolling="true"/>-->
+    <iframe src="{!$Label.LX_SLDB_iframe_3}" scrolling="true" width="100%" height="600px" sandbox="allow-same-origin allow-forms allow-scripts"/>
+    <apex:pageBlockButtons location="bottom">
+    <apex:commandButton value="Back" action="{!Back}" reRender="frm"/>
+    </apex:pageBlockButtons>
+    </apex:pageBlock>
+    <apex:pageBlock id="pgbl5" rendered="{!GA}">
+    <!--<apex:iframe src="{!$Label.LX_SLDB_iframe_4}" scrolling="true"/>-->
+    <iframe src="{!$Label.LX_SLDB_iframe_4}" scrolling="true" width="100%" height="600px" sandbox="allow-same-origin allow-forms allow-scripts"/>
+    
+    <apex:pageBlockButtons location="bottom">
+    <apex:commandButton value="Back" action="{!Back}" reRender="frm"/>
+    </apex:pageBlockButtons>
+    </apex:pageBlock>
+   <div style="display:none;visibility:hidden;">
+        <iframe src="{!$Label.LX_SLDBHome}" scrolling="false" width="100%" height="600px" sandbox="allow-same-origin allow-forms allow-scripts"/>
+   </div>
+    
+  </apex:form>
+</apex:page>

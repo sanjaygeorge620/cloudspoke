@@ -1,0 +1,205 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="MyProfilePageController"> 
+
+
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | {!$Label.My_Profile}</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+          <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-home').addClass('active');
+            });  
+          </script>
+      </apex:define>
+    <apex:define name="body">  
+         <style>
+             div.dcBoxes{margin:10px 5px;}
+             div.dcBox{height:45px;width:50%;float:left;}
+             div.dcBoxes1{margin:10px 10px;}
+             div.dcBox1{height:15px;width:100%;float:left;margin-top:5px;font-size: 12px;font-weight: bold;
+             letter-spacing: 0.03em;font-family: Arial, Helvetica, sans-serif;color:#333399;font-style: normal;}
+             input[type="checkbox"] {height: 15px;width: 15px;display:initial;}
+         </style>
+         
+             <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">{!$Label.Home}</a>
+                        <a class="current" href="#">{!$Label.site.my_profile}</a>
+                </nav>
+            </div>
+         </div>    
+              <div class="cp_core">
+          <apex:form >
+              <apex:pageMessages />
+              <div class="column full-width"> <!----Full column-->
+                      <div class="callout profile">
+                             <a class="title-bar" href="#">
+                                 <span class="sprite_cpicons profile">&nbsp;</span>
+                                 {!$Label.site.my_profile}
+                             </a>
+                             <div class="callout-content">
+                                  <apex:outputPanel layout="block" styleClass="title-buttons" id="title-buttons">
+                                       <apex:commandButton rendered="{!isEdit}" styleClass="save-button" id="save" value="{!$Label.site.save}" action="{!save}" rerender="userDetail,title-buttons"/>
+                                       <apex:commandButton rendered="{!isEdit}" styleClass="cancel-button" id="cancel" value="{!$Label.site.cancel}" action="{!cancel}" rerender="userDetail,title-buttons" immediate="true"/>
+                        
+                                       <apex:commandButton rendered="{!!isEdit}" styleClass="edit-button" id="edit" value="{!$Label.site.edit}" action="{!edit}" rerender="userDetail,title-buttons"/>
+                                       <apex:commandButton rendered="{!!isEdit}" styleClass="changepassword-button" id="changePassword" value="{!$Label.site.change_password}" action="{!changePassword}"/>
+                                       
+                                  </apex:outputPanel>
+                                  <div class="inner-content inner-content-title-bar">
+                                        <span>{!$Label.site.user_information}</span>
+                                  </div>
+                                  <apex:outputPanel id="userDetail">
+                                      <apex:outputPanel rendered="{!isEdit}">
+                                                <div class="inner-content">
+                                                    <div class="left-inner-col">
+                                                        <p class="item user-info-title">{!$Label.Username}: <span><apex:inputField id="editusername" value="{!user.username}"/></span></p>
+                                                        <p class="item user-info-title">{!$Label.Community_Nickname} <span><apex:inputField id="editcommunityNickname" value="{!user.communityNickname}"/> </span></p>
+                                                    </div>
+                                                    <div class="right-inner-col">
+                                                        <p class="item user-info-title">{!$Label.Time_Zone}: <span><apex:inputField id="edittimezone" value="{!user.timezonesidkey}"/> </span></p>
+                                                        <p class="item user-info-title">Business Hours :</p>
+                                                        <p class="item user-info-title">&nbsp;&nbsp;From:&nbsp;<span><apex:inputField id="editBusinesshours" value="{!user.From__c}"/> </span> </p>
+                                                        <p class="item user-info-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To:&nbsp;<span><apex:inputField id="editBusinesshours1" value="{!user.To__c}"/> </span></p>
+                                                        <p class="item user-info-title">Locale: <span><apex:inputField id="editlocale" value="{!user.localesidkey}"/> </span></p>
+                                                        <apex:inputField rendered="false" id="editlanguage" value="{!user.languagelocalekey}"/> 
+                                                    </div>
+                                                </div>
+                                                <div class="inner-content inner-content-title-bar">
+                                                    <span>{!$Label.site.contact_information}</span>
+                                                </div>
+                                                <div class="inner-content">
+                                                    <div class="left-inner-col">
+                                                        <p class="item user-info-title">{!$Label.First_Name}: <div><apex:inputField id="editfirstName" value="{!user.firstName}"/> </div></p>
+                                                        <p class="item user-info-title">{!$Label.Last_Name}: <div><apex:inputField id="editlastName" value="{!user.lastName}"/> </div></p>
+                                                        <p class="item user-info-title">{!$Label.Title}: <div><apex:inputField id="edittitle" value="{!user.title}"/> </div></p>
+                                                        <p class="item user-info-title">{!$Label.Email}: <div><apex:inputField id="editemail" value="{!user.email}"/> </div></p>
+                                                        <p class="item user-info-title">{!$Label.Phone}: <div><apex:inputField id="editphone" value="{!user.phone}"/></div></p>
+                                                        <p class="item user-info-title">{!$Label.Extension}: <div><apex:inputField id="editextension" value="{!user.extension}"/> </div></p>
+                                                        <p class="item user-info-title">{!$Label.Fax}: <div><apex:inputField id="editfax" value="{!user.fax}"/></div></p>
+                                                        <p class="item user-info-title">{!$Label.Cell}: <div><apex:inputField id="editmobile" value="{!user.mobilephone}"/></div></p>
+                                                    </div>
+                                                    <div class="right-inner-col">
+                                                        <p class="item user-info-title">{!$Label.Street}: <div><apex:inputField id="editstreet" value="{!user.street}"/> </div></p>
+                                                        <p class="item user-info-title">{!$Label.City}: <div><apex:inputField id="editcity" value="{!user.city}"/> </div></p>
+                                                        <p class="item user-info-title">{!$Label.State_Province}: <div><apex:inputField id="editstate" value="{!user.state}"/></div></p>
+                                                        <p class="item user-info-title">{!$Label.Zip_Postal_Code}: <div><apex:inputField id="editpostalcode" value="{!user.postalcode}"/></div></p>
+                                                        <p class="item user-info-title">{!$Label.Country}: <div><apex:inputField id="editcountry" value="{!user.country}"/></div></p>
+                                                        
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="inner-content inner-content-title-bar">
+                            <span>Personlization Preferences</span></div>
+                            
+                            <br></br>
+                            
+                             <apex:pageBlock >
+                             <span style="color: #BDBDBD;">Your Customer Portal content is customized according to these selected products</span>
+                             <div class="dcBoxes">
+                                <apex:repeat value="{!PFlst}" var="wrap"   >
+                                    <div class="dcBox">
+                                        <apex:inputCheckbox value="{!wrap.isChecked}"  />
+                                        <label>{!wrap.PfamilyName}</label> 
+                                    </div>
+                                </apex:repeat>
+                            </div>
+                           
+                             <div class="dcBoxes">
+                                <apex:repeat value="{!PFlst1}" var="wrap"  rendered="{!withOutRecDisplay}" >
+                                    <div class="dcBox">
+                                        <apex:inputCheckbox value="{!wrap.isChecked}"  />
+                                        <label>{!wrap.PfamilyName}</label> 
+                                    </div>
+                                </apex:repeat>
+                            </div>
+                             </apex:pageBlock>
+                               
+                                       </apex:outputPanel>
+                                       
+                                       
+                                       <apex:outputPanel rendered="{!!isEdit}">
+                                                <div class="inner-content">
+                                                    <div class="left-inner-col">
+                                                        <p class="item user-info-title">{!$Label.Username}: <span><apex:outputField id="detailusername" value="{!user.username}"/></span></p>
+                                                        <p class="item user-info-title">{!$Label.Community_Nickname}: <span><apex:outputField id="detailcommunityNickname" value="{!user.communityNickname}"/>  </span></p>
+                                                    </div>
+                                                    <div class="right-inner-col">
+                                                        <p class="item user-info-title">{!$Label.Time_Zone}: <span><apex:outputField id="detailtimezone" value="{!user.timezonesidkey}"/>  </span></p>
+                                                         <p class="item user-info-title">{!$Label.Business_Hours}: </p>
+                                                         <p class="item user-info-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From: <span> <apex:outputField id="detailBusinesshours" value="{!user.From__c}"/> </span>&nbsp;To:&nbsp;<span><apex:outputField id="detailBusinesshours1" value="{!user.To__c}"/> </span></p>
+                                                        <p class="item user-info-title">Locale: <span><apex:outputField id="detaillocale" value="{!user.localesidkey}"/> </span></p>
+                                                        <apex:outputField rendered="false" id="detaillanguage" value="{!user.languagelocalekey}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="inner-content inner-content-title-bar">
+                                                    <span>{!$Label.site.contact_information}</span>
+                                                </div>
+                                                <div class="inner-content">
+                                                    <div class="left-inner-col">
+                                                        <p class="item user-info-title">{!$Label.First_Name}: <span><apex:outputField id="detailfirstName" value="{!user.firstName}"/> </span></p>
+                                                        <p class="item user-info-title">{!$Label.Last_Name}: <span><apex:outputField id="detaillastName" value="{!user.lastName}"/> </span></p>
+                                                        <p class="item user-info-title">{!$Label.Title}: <span><apex:outputField id="detailtitle" value="{!user.title}"/>  </span></p>
+                                                        <p class="item user-info-title">{!$Label.Email}: <span><apex:outputField id="detailemail" value="{!user.email}"/></span></p>
+                                                        <p class="item user-info-title">{!$Label.Phone}: <span><apex:outputField id="detailphone" value="{!user.phone}"/></span></p>
+                                                        <p class="item user-info-title">{!$Label.Extension}: <span><apex:outputField id="detailextension" value="{!user.extension}"/> </span></p>
+                                                        <p class="item user-info-title">{!$Label.Fax}: <span><apex:outputField id="detailfax" value="{!user.fax}"/></span></p>
+                                                        <p class="item user-info-title">{!$Label.Cell}: <span><apex:outputField id="detailmobile" value="{!user.mobilephone}"/></span></p>
+                                                    </div>
+                                                    <div class="right-inner-col">
+                                                        <p class="item user-info-title">{!$Label.Street}: <span><apex:outputField id="detailstreet" value="{!user.street}"/> </span></p>
+                                                        <p class="item user-info-title">{!$Label.City}: <span><apex:outputField id="detailcity" value="{!user.city}"/> </span></p>
+                                                        <p class="item user-info-title">{!$Label.State_Province}: <span><apex:outputField id="detailstate" value="{!user.state}"/></span></p>
+                                                        <p class="item user-info-title">{!$Label.Zip_Postal_Code}: <span><apex:outputField id="detailpostalcode" value="{!user.postalcode}"/></span></p>
+                                                        <p class="item user-info-title">{!$Label.Country}: <span><apex:outputField id="detailcountry" value="{!user.country}"/></span></p>
+                                                    </div>
+                                                    
+                                                </div>
+                                    <div class="inner-content inner-content-title-bar">
+                                    <span>Personlization Preferences</span></div>   
+                                    
+                                    <br></br>
+                                    
+                                    <apex:pageBlock >
+                                      <span style="color: #BDBDBD;">Your Customer Portal content is customized according to these selected products</span>
+                                       <div class="dcBoxes1" >
+                                                    <!---        <apex:repeat value="{!PFlst}" var="wrap"   >
+                                                    <div class="dcBox">
+                                                    <apex:inputCheckbox value="{!wrap.isChecked}"  disabled="true" />
+                                                    <label>{!wrap.PfamilyName}</label>
+                                                    </div>
+                                                    </apex:repeat>  ----->
+                                            <apex:repeat value="{!ProductCategories}" var="dc1" >
+                                                <div class="dcBox1"> <li >  <apex:outputText >{!dc1}</apex:outputText></li> </div>          
+                                            </apex:repeat>
+                                        </div>
+                                      
+                             <!----           <div class="dcBoxes">
+                                            <apex:repeat value="{!PFlst1}" var="wrap"  rendered="{!withOutRecDisplay}" >
+                                                <div class="dcBox">
+                                                    <apex:inputCheckbox value="{!wrap.isChecked}" disabled="true"  />
+                                                    <label>{!wrap.PfamilyName}</label> 
+                                                     
+                                                </div>
+                                            </apex:repeat>
+                                        </div> ---->
+                                    </apex:pageBlock>
+                                    </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    
+                                    </div><!---/callout-content-->
+                                    </div><!---/callout-profile-->
+                                    
+                                    </div> <!---/column full-width-->
+                                    
+                 
+         </apex:form>
+                 
+        </div>
+    </apex:define>
+  </apex:composition>
+
+</apex:page>

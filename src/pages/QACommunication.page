@@ -1,0 +1,4 @@
+<apex:page standardController="QA_Communication__c">
+    <apex:pageMessages escape="false"/>
+    <apex:detail />
+</apex:page>

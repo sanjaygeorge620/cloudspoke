@@ -1,0 +1,11 @@
+<apex:page controller="SitesHomeController" action="{!RefFlexURL}">
+<apex:composition template="{!SITE_TEMPLATE_PRIMARY}">
+        <apex:define name="javascript">
+              //change icons
+              //jQuery('.sprite_cpicons.secondary').removeClass('alert');
+              //jQuery('.sprite_cpicons.secondary').addClass('  ');
+        </apex:define>      
+                
+
+  </apex:composition>
+</apex:page>

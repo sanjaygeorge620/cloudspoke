@@ -1,0 +1,246 @@
+<!-- 
+/*
+ * ©Lexmark Front Office 2013, all rights reserved
+ * 
+ * Created Date : 06/20/2013
+ *
+ * Author : Kapil Reddy Sama.
+ * 
+ * Description : Page for searching all the Customer and Partneer Accounts.
+ *  
+@Nithin: Formatted labels
+ *  
+ */
+-->
+<apex:page controller="LX_AcctAndContactSearch" standardStylesheets="true" readOnly="true"  tabStyle="Asset">
+
+
+<apex:form >
+    <apex:sectionHeader title="Universal Account Search"/>
+    <div >
+    <apex:inputText value="{!searchText}"  style="" />            
+    <apex:commandButton action="{!search}" value="Search"  status="refresh" reRender="Accts,errormsg" />   <br/>             
+    </div>
+     
+     <apex:outputPanel id="errormsg">
+     <apex:actionStatus startText="Searching... " id="refresh"  /><br/>     
+     <apex:pageMessage severity="warning" strength="2" rendered="{!error}"  >  
+         <apex:messages styleClass="error" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px;margin-left: 0px;" />
+     </apex:pageMessage>   
+     </apex:outputPanel>
+     
+     <apex:outputPanel id="Accts" >         
+         <!-- Account pagination with filters -->
+         <apex:pageBlock id="AccSearchResult2" rendered="{!IF(((Accounts != null && Accounts.size > 0 && showAccts == true && error == false) || applyAcctFilter == true),true,false)}"  >     
+            <apex:pageBlockSection title="Accounts" columns="1"  >
+            <apex:commandLink value="Show Filters" action="{!showAccFilters}" rendered="{!hideAccFilters}" reRender="Accts,Conts" style="font-size:.85em;font-weight: normal;color:#015ba7;"/>
+            <apex:commandLink value="Hide Filters" action="{!showAccFilters}" rendered="{!!hideAccFilters}" reRender="Accts,Conts" style="font-size:.85em;font-weight: normal;color:#015ba7;"/>
+            <apex:outputPanel id="apply">
+             <apex:outputPanel rendered="{!showAccFilters}" id="filters">
+                <apex:outPutPanel >
+                <table width="100%">
+                <tr>
+                 <td ><apex:outputLabel for="accName">Account Name</apex:outputLabel>
+                 <apex:inputText value="{!accForFilters.Name}" id="accName"/> </td>
+                 <!--Nithin: Replaced NameLocal with Alias-->   
+                 <td ><apex:outputLabel for="AccountAlias">Alias</apex:outputLabel>
+                 <apex:inputText value="{!accForFilters.Alias__c}" id="AccountAlias"/></td>
+                 
+                 <td ><apex:outputLabel for="accountOwner">Account Owner</apex:outputLabel>
+                 <apex:inputText value="{!accOwner}" id="accountOwner"/></td>
+                 
+                <td> <apex:outputLabel for="biilingCountry">Billing Country</apex:outputLabel>
+                 <apex:inputText value="{!accForFilters.billingCountry}" id="biilingCountry"/></td> 
+                 <td ><apex:commandButton action="{!applyAccFilters}" value="Apply Filters" reRender="acctsResults,apply" status="filteraccts" rendered="{!if(showMoreAccFilters == true, false,true)}"/>   
+                 </td>
+                 </tr>                 
+                 </table>                 
+                </apex:outPutPanel>
+                
+                <apex:outPutPanel id="moreFilters">
+                <apex:outPutPanel rendered="{!if(showMoreAccFilters == true, true,false)}">&nbsp;
+                <table width="100%">
+                 <tr>
+                 <td  >
+                 <apex:outputLabel for="TRstatus">TR Status</apex:outputLabel>
+                 <apex:selectList id="TRstatus" value="{!accForFilters.TR_Status__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!TrStatus}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.TR_Status__c}" id="TRstatus"/>--></td>
+                 <td  >
+                 <apex:outputLabel for="ISScoveragestatus">ISS Coverage Status</apex:outputLabel>
+                 <apex:selectList id="ISScoveragestatus" value="{!accForFilters.Coverage_Status__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!CoverageStatus}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.Coverage_Status__c}" id="ISScoveragestatus"/>--></td>
+                 <td  >
+                 <apex:outputLabel for="ISScoveragemodel">ISS Coverage Model</apex:outputLabel>
+                 <apex:selectList id="ISScoveragemodel" value="{!accForFilters.ISS_Coverage_Model__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!MPSCapablePartners}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.ISS_Coverage_Model__c}" id="ISScoveragemodel"/>--></td>
+                 <td  >
+                 <apex:outputLabel for="ISScoveragemethod">ISS Coverage Method</apex:outputLabel>
+                 <apex:selectList id="ISScoveragemethod" value="{!accForFilters.ISS_Coverage_Method__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!CoverageModels}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.ISS_Coverage_Method__c}" id="ISScoveragemethod"/>--></td></tr>
+                 <tr>
+                 <td  >
+                 <apex:outputLabel for="ISSlocalpriority">ISS Local Priority</apex:outputLabel>
+                 <apex:selectList id="ISSlocalpriority" value="{!accForFilters.Local_Priority__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!LocalPriorities}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.Local_Priority__c}" id="ISSlocalpriority"/>--></td>
+                 <td  >
+                 <apex:outputLabel for="MPSqualification">MPS Qualification</apex:outputLabel>
+                 <apex:selectList id="MPSqualification" value="{!accForFilters.MPS_Qualification__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!MPSQualifications}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.MPS_Qualification__c}" id="MPSqualification"/>--></td>
+                 <td  >
+                 <apex:outputLabel for="PSWlicensefootprint">PSW License Footprint</apex:outputLabel>                
+                 <apex:inputtext value="{!accForFilters.footprint__c}" id="PSWlicensefootprint"/></td>
+                 <td  >
+                 <apex:outputLabel for="Partytype">Party Type</apex:outputLabel>
+                 <apex:selectList id="Partytype" value="{!accForFilters.Party_Type__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!partyTypes}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.Party_Type__c}" id="Partytype"/>--></td></tr>
+                 <tr>
+                 <td  >
+                 <apex:outputLabel for="Countryaccountrating">Country Account Rating</apex:outputLabel>              
+                 <apex:inputtext value="{!accForFilters.Country_Account_Rating__c}" id="Countryaccountrating"/></td>
+                 <td  >                 
+                 <apex:outputLabel for="Lexmarkvertical">Lexmark Vertical</apex:outputLabel>
+                 <apex:selectList id="Lexmarkvertical" value="{!accForFilters.LX_Sales_Team_Assigned__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!Verticals}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.LX_Sales_Team_Assigned__c}" id="Lexmarkvertical"/>--></td>
+                 <td  >
+                 <apex:outputLabel for="PrimaryISSinternalsegment">Primary ISS Internal Segment</apex:outputLabel>
+                 <apex:selectList id="PrimaryISSinternalsegment" value="{!accForFilters.Primary_ISS_Internal_Segment__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!PrimaryISSInternalSegments}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.Primary_ISS_Internal_Segment__c}" id="PrimaryISSinternalsegment"/>--></td>
+                 <td  >                
+                 <apex:outputLabel for="MPScapablepartner">MPS Capable Partner</apex:outputLabel>
+                 <apex:selectList id="MPScapablepartner" value="{!accForFilters.MPS_Capable_Partner__c}" size="1" title="Manager">
+                 <apex:selectOptions value="{!MPSCapablePartners}"></apex:selectOptions>
+                 </apex:selectList>
+                 <!--<apex:inputtext value="{!accForFilters.MPS_Capable_Partner__c}" id="MPScapablepartner"/> --></td>
+                 </tr>
+                </table> 
+                </apex:outPutPanel>
+                </apex:outPutPanel>  
+                <apex:commandLink value="Show More Filter" rendered="{!if(showMoreAccFilters == false, true,false)}" action="{!showMoreFilters}" reRender="moreFilters,filters" style="font-size:.85em;font-weight: normal;color:#015ba7;"/>                                                
+                <apex:commandButton action="{!applyAccFilters}" value="Apply Filters" reRender="acctsResults,apply" status="filteraccts" rendered="{!if(showMoreAccFilters == true, true,false)}"/>   
+                <!-- <apex:commandButton action="{!applyAccFilters}" value="Apply Filters" reRender="acctsResults,apply" status="filteraccts"/>   --> 
+            </apex:outputPanel> 
+                        
+            <apex:outputPanel id="acctsResults">
+            <apex:outputPanel style="margin-left:50%">
+            <apex:actionStatus startText="Searching... " id="filteraccts"/>
+            <apex:actionStatus startText="Sorting... " id="SortAccts"/>
+            <apex:actionStatus startText="Loading... " id="LoadAccts"/> 
+            </apex:outputPanel>
+            <br/>
+                <apex:pageBlockTable value="{!Accounts}" var="a" rows="{!size}" rendered="{!IF((Accounts != null && Accounts.size > 0),true,false)}">                  
+                    <apex:column headerValue="Name" >
+                        <apex:outputLink value="/apex/LX_accountDetails?id={!a.Id}" >{!a.Name}</apex:outputLink>
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="Name{!IF(sortExpression=='Name',IF(sortDirection='ASC','▼','▲'),'')}"  reRender="Accts" status="SortAccts">
+                        <apex:param value="Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <!--Nithin: Replaced NameLocal with Alias__c--> 
+                    <apex:column headerValue="Alias" value="{!a.Alias__c}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="Alias{!IF(sortExpression=='Alias__c',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="Alias__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="Owner Name" value="{!a.Owner.name}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="Owner Name{!IF(sortExpression=='Owner.Name',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="Owner.Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="Billing Country" value="{!a.billingcountry}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="Billing Country{!IF(sortExpression=='billingcountry',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="billingcountry" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="TR Status" value="{!a.TR_Status__c}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="TR Status{!IF(sortExpression=='TR_Status__c',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="TR_Status__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="ISS Local Priority" value="{!a.Local_Priority__c}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="ISS Local Priority{!IF(sortExpression=='Local_Priority__c',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="Local_Priority__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="MPS Qualification" value="{!a.MPS_Qualification__c}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="MPS Qualification{!IF(sortExpression=='MPS_Qualification__c',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="MPS_Qualification__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="PSW License Footprint" value="{!a.footprint__c}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="PSW License Footprint{!IF(sortExpression=='footprint__c',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="footprint__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="Party Type" value="{!a.Party_Type__c}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="Party Type{!IF(sortExpression=='Party_Type__c',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="Party_Type__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+                    <apex:column headerValue="SMSA Status" value="{!a.SMA_Status__c}"> 
+                        <apex:facet name="header">   
+                        <apex:commandLink action="{!showAccPagination}" value="SMSA Status{!IF(sortExpression=='SMA_Status__c',IF(sortDirection='ASC','▼','▲'),'')}" reRender="Accts" status="SortAccts">
+                        <apex:param value="SMA_Status__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                        </apex:commandLink>
+                        </apex:facet> 
+                    </apex:column>
+
+                </apex:pageBlockTable>  <br/>              
+                <apex:commandLink value="Show More" action="{!showMoreAccts}" rendered="{!!showMoreAccts && setCon.resultSize >10}" reRender="Accts" status="filteraccts" style="font-size:.85em;font-weight: normal;color:#015ba7;"/>               
+                
+                <apex:outputPanel layout="block" styleClass="pSearchShowMore" id="otpNav" rendered="{!if(Accounts != null && Accounts.size > 0 && isPagination== true,true,false)}">            
+                    <apex:image url="/img/search_prevarrow_disabled.gif" styleClass="prevArrow" rendered="{!NOT(setCon.HasPrevious)}"/>
+                    <apex:image url="/img/search_prevarrow.gif" title="Previous Page" styleClass="prevArrow" rendered="{!setCon.HasPrevious}"/>
+                    <apex:commandLink action="{!Previous}" title="Previous Page" value="Previous Page" rendered="{!setCon.HasPrevious}" reRender="Accts" status="LoadAccts"/>
+                    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(setCon.HasPrevious)}">Previous Page</apex:outputPanel>         
+                    &nbsp;({!IF(setCon.PageNumber == 1,1,((setCon.PageNumber -1) * setCon.PageSize)+1)}-{!IF(setCon.resultSize < setCon.PageSize,setCon.resultSize,setCon.PageNumber * setCon.pageSize)})&nbsp;
+                    <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(setCon.HasNext)}">Next Page</apex:outputPanel>         
+                    <apex:commandLink title="Next Page" value="Next Page" rendered="{!setCon.HasNext}" action="{!Next}" reRender="Accts" status="LoadAccts"/>&nbsp;
+                    <apex:image url="/img/search_nextarrow.gif" title="Next Page" styleClass="nextArrow" rendered="{!setCon.HasNext}"/>
+                    <apex:image url="/img/search_nextarrow_disabled.gif" rendered="{!NOT(setCon.HasNext)}"/>          
+                </apex:outputPanel>
+                <apex:outputText rendered="{!!IF((Accounts != null && Accounts.size > 0),true,false)}"> No matches found based on the criteria.
+                </apex:outputText>
+              </apex:outputPanel>
+              </apex:outPutPanel>  
+        </apex:pageBlockSection>  
+                 
+     </apex:pageBlock>
+    </apex:outputPanel>    
+    
+</apex:form> 
+</apex:page>

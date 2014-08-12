@@ -1,0 +1,196 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <title>{!SITE_NICKNAME+' | Knowledgebase: Managing the ImageNow enterprise for optimal performance and stability'}</title>
+        
+        <script type="text/javascript"> 
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-knowledgebase').addClass('active');
+              jQuery(function() {
+                   jQuery('.index').click( function() {
+                         jQuery.scrollTo( jQuery(this).attr('href'), 1000);
+                   });
+                });  
+            });  
+        </script> 
+        
+        <div class="cp_core">
+            <apex:pageMessages />
+            <div class="breadcrumb">
+                <ul>
+                    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                    <li><a href="{!$page.Knowledgebase}">Knowledgebase</a><span>&#187;</span></li>
+                    <li><a class="current" href="#">Managing the ImageNow enterprise for optimal performance and stability</a></li>
+                </ul>
+            </div> 
+            <div class="column full-width">
+                <div class="callout spotlight">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons knowledge">&nbsp;</span>Managing the ImageNow enterprise for optimal performance and stability</a>
+                    <div class="callout-content">
+                        <div class="spotlight-index"> 
+                                <a class="index" href="#section-1" title="Click to scroll to section">Introduction </a> 
+                                <a class="index" href="#section-2" title="Click to scroll to section">Server Architecture Overview </a> 
+                                <a class="index" href="#section-3" title="Click to scroll to section">ImageNow Lifecycle </a> 
+                                <a class="index" href="#section-4" title="Click to scroll to section">Performance and Stability best practices </a> 
+                        </div> 
+                        <div class="spotlight-title" id="section-1">Introduction</div> 
+                        <div class="spotlight-summary"> 
+                             This page provides an overview of ImageNow administration best practices for ensuring optimal performance and stability for the ImageNow product suite. While the complete list of best practices is targeted to enterprise-wide deployments, they can be adopted in smaller deployments to ensure peak performance. 
+                        </div>  
+                                        
+                        <div class="spotlight-title" id="section-2">Server Architecture Overview </div> 
+                        <div class="spotlight-summary"> 
+                                When reviewing performance and stability for ImageNow, it is helpful to take a look at the architecture supporting the application. 
+                        </div>
+                        
+                        
+                        
+                        <img style="WIDTH: 864px; HEIGHT: 533px"  SRC= "{!URLFOR($Resource.Perceptive_Sites, 'images/performance.jpg')}" alt="Server Architecture Overview" />
+                        <br />
+                        <br />
+                         <p>The ImageNow Server computer is responsible for responding to end user requests and notifications. The core process, inserver, is responsible for handling user requests from the clients (ImageNow Client, WebNow, and Interact for MS Office). Additional core processes, such as Batch Agent, Workflow Agent, and Retention Agent, handle supporting tasks in the background. These agents process resource-intensive tasks, which removes the long-running tasks from the user threads.</p>
+                         <br />
+                         <p>The extended server agents, such as Content Server and Recogition Agent, can be installed on a remote server computer to free up system resources for the inserver process and the other core server agents. Utilizing a remote agent computer can keep the ImageNow application server hardware focused on the user requests while isolating resource-intensive task processing.  The additional remote agent computer can be a virtual machine, which allows for adding or removing additional resources as business needs change.</p>
+                         <br />
+                         <p>ImageNow Server components that can be run remotely to the ImageNow Server computer: </p>
+                         <br />
+                         <dl> 
+                             <dd>Business Intelligence</dd>
+                             <dd>Content Server (inserverFT) – 6.6 and higher</dd>
+                             <dd>Conversion Module (INMAC) </dd>
+                             <dd>Direct Print</dd>
+                             <dd>File Processing Agent (inserverFP)</dd>
+                             <dd>Forms Server</dd>
+                             <dd>Mail Agent (inserverMail)</dd>
+                             <dd>Output Agent (inserverOutput)</dd>
+                             <dd>Recognition Agent (inserverRec)</dd>
+                             <dd>Message Agent (inserverMA)</dd>
+                             <dd>User Replication Agent (inserverUR)</dd>
+                             <dd>WebNow Server</dd>
+                           </dl>
+                         <br />
+                            ImageNow Server agents that cannot be run remotely to ImageNow Server computer:
+                            <dl> 
+                                <dd>Alarm Agent (inserverAlarm)</dd>
+                                <dd>Batch Agent (inserverBatch)</dd>
+                                <dd>External Messaging Agent (inserverEM)</dd>
+                                <dd>File System Agent (inserverFS)</dd>
+                                <dd>Job Agent (inserverJob)</dd>
+                                <dd>Message Queueing Agent (inserverMQ)</dd>
+                                <dd>Monitor Agent (inserverMonitor)</dd>
+                                <dd>Notification Agent (inserverNotification)</dd>
+                                <dd>OSM Agent (inserverOSM)</dd>
+                                <dd>Retention Agent (inserverRetention)</dd>
+                                <dd>Task Agent (inserverTask)</dd>
+                                <dd>Workflow Agent (inserverWorkflow)</dd>
+                             </dl>
+                             <br />
+                             
+                             
+                             
+                             
+                             <div class="spotlight-title" id="section-3">ImageNow LifeCycle</div> 
+                              <div class="spotlight-summary"> 
+                                
+                                    1)<b>Implementation </b> Performance and stability best practices begin during the initial implementation. A Perceptive Software Consultant will configure ImageNow for optimal performance, as well as provide knowledge transfer to the ImageNow administrator and DBA on best practices.
+                                    <br />
+                                    2) Initiate a preventative maintenance program.  This should include: 
+                                    <p style="margin-left : 2em;">
+                                        <br />    a) A database maintenance plan. 
+                                        <br />    b) Checks in the <a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014464?popup=true">Stability checklist for the ImageNow environment.</a> 
+                                    </p>
+                                    <br />
+                                        3) Performing a <b><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000011192?popup=true">baseline</a></b> measurement quantifies the performance of ImageNow in normal conditions. The numbers derived from the baseline can then     be used as a comparison when isolating slow performance issues. The baseline should be updated after:
+                                    <p style="margin-left : 2em;">
+                                        <br />    a)  An upgrade
+                                        <br />    b)  The addition of another department or business process
+                                        <br />    c)  The completion of a large back-scanning project 
+                                    </p>
+                                    <br />
+                                    4) A <a href="https://www.perceptivesoftware.com/services/professional-services/environment-consulting.psi">health check </a> is a strategic,   global audit of your business processes and ImageNow architecture provided by Perceptive Software Professional Services. We review your current ImageNow solution(s) and make recommendations for improvements based on industry best practices. Additionally, a technical architect will measure current performance and make recommendations on configurations, maintenance, and architecture to ensure your ImageNow environment delivers the best performance based on your organization’s business needs. Health checks are recommended:<br />
+                                    <p style="margin-left : 2em;">
+                                        <br />    a)  As part of an upgrade
+                                        <br />    b)  After a major system change. For example:
+                                        <p style="margin-left : 4em;">
+                                            <br />    i)  The addition of a large department.
+                                            <br />    ii) A large addition of documents, either from a back-scanning project or from a conversion from another ECM system. 
+                                        </p>
+                                        <p style="margin-left : 2em;">
+                                            <br />    c)  If not initiated by one of the events above, then at the following regular intervals:
+                                            <p style="margin-left : 4em;">
+                                                <br />    i)   Every 9-12 months for an enteprise deployment 
+                                                <br />    ii)  Every 18-24 months for a medium deployment 
+                                                <br />    iii) Every 24-36 months for a small deployment
+                                            </p>
+                                        </p>
+                                        <br />    5) <b> Upgrades</b> Perceptive Software recommends upgrading whenever your ImageNow version falls more than 2   releases behind to take advantage of new functionality and the latest performance enhancements to the   software.
+                                   </p>     
+                                </div>
+                                <!---test--->      
+                                <div class="spotlight-title" id="section-4">Performance and Stability best practices</div> 
+                                    <div class="spotlight-summary"> 
+                                    </div> 
+                                <dl> 
+                                    <dt>ImageNow and WebNow Clients</dt> 
+                                        <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00010034?popup=true" target="_blank">Best practices for scanning performance using CaptureNow </a></dd> 
+                                        <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00008031?popup=true" target="_blank">Best practices for searching and using views within ImageNow</a></dd> 
+                                        <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00010065?popup=true" target="_blank">Client-side Java memory configuration for optimizing WebNow</a></dd> 
+                                </dl> 
+                                <br /> 
+                                <dl> 
+                                    <dt>ImageNow Application Server</dt> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014495?popup=true" target="_blank">Workflow Agent best practices</a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014508?popup=true" target="_blank">Configuring ImageNow process threads for optimal performance</a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000011192?popup=true" target="_blank">Baselining ImageNow performance</a></dd> 
+                                    <dd><a href="https://www.perceptivesoftware.com/PDFs/other/BestPractices/6.6/BestPractices_Import_Agent_Throughput_6.6.pdf" target="_blank">Import Agent Throughput Performance Best Practices</a></dd> 
+                                    <dd><a href="https://www.perceptivesoftware.com/PDFs/other/BestPractices/6.6/BestPractices_Rec_Agent_Throughput_6.6.pdf" target="_blank">Recognition Agent Throughput Performance Best Practices</a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00010017?popup=true" target="_blank">The effect of real-time antivirus software on ImageNow Server performance</a></dd> 
+                                </dl> 
+                                <br />  
+                                <dl> 
+                                    <dt>Storage</dt> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000001677?popup=true" target="_blank">Managing disk space for the ImageNow Server </a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00010070?popup=true" target="_blank">OSM tree rotation</a></dd>
+                                </dl>
+                                <br />  
+                                <dl>      
+                                    <dt>WebNow Server</dt> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00010066?popup=true" target="_blank">Configuring Tomcat 6.0 on Windows for optimal WebNow performance</a></dd> 
+                                </dl> 
+                                <br />                      
+                                <dl>       
+                                    <dt>Database</dt> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014511?popup=true" target="_blank">Performance tuning the INOW6 database on Microsoft SQL Server</a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014584?popup=true" target="_blank">Performance tuning the INOW6 database on Oracle</a></dd>
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000011355?popup=true" target="_blank">The impact of each database maintenance task on ImageNow performance</a></dd> 
+                                </dl> 
+                                <br />
+                                <dl> 
+                                    <dt>Network</dt> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00010056?popup=true" target="_blank">Optimizing ImageNow and WebNow for WAN environments </a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014539?popup=true" target="_blank">Network counters</a></dd> 
+                                </dl> 
+                                <br />                                                   
+                                <dl> 
+                                    <dt>Troubleshooting Performance</dt> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00010064?popup=true" target="_blank">Common causes of slow performance </a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000009753?popup=true" target="_blank">Approach to troubleshooting slow performance</a></dd>
+                                </dl> 
+                                <br />  
+                                <dl>                                               
+                                    <dt>Stability</dt> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014464?popup=true" target="_blank">Stability checklist for the ImageNow environment </a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000011362?popup=true" target="_blank">The impact of Windows Data Execution Prevention on ImageNow stability</a></dd> 
+                                    <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014514?popup=true" target="_blank">The effect of the auto-negotiate option on a NIC card on ImageNow stability</a></dd> 
+                                    <dd>The Windows Server TCP Chimney Offload feature can result in <a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00004409?popup=true" target="_blank">networking errors for ImageNow Server on Windows connecting to the INOW6 database.</a></dd> 
+                                </dl> 
+                                <br /> 
+                         
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+   </apex:define>                 
+  </apex:composition> 
+</apex:page>

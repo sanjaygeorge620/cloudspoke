@@ -1,0 +1,41 @@
+<apex:page standardController="LX_Program_Enrollment__c" id="newProgramEnrollment">
+ 
+<apex:sectionHeader title="Program Enrollment Edit"  rendered="{!Not(ISNULL(LX_Program_Enrollment__c.name))}" subtitle="{!LX_Program_Enrollment__c.name}"/> 
+<apex:sectionHeader title="Program Enrollment Edit"  rendered="{!(ISNULL(LX_Program_Enrollment__c.name))}" subtitle="New Program Enrollment"/> 
+
+<apex:form id="myForm">
+<apex:pageMessages ></apex:pageMessages>
+<apex:pageBlock title="Program Enrollment Edit" mode="edit" id="pageblock1"> 
+ <apex:pageBlockButtons location="top"> 
+ <apex:commandButton value="Save" action="{!save}"/> 
+<apex:commandButton value="Cancel" action="{!cancel}"/> </apex:pageBlockButtons> 
+<apex:pageBlockButtons location="bottom"> <apex:commandButton value="Save" action="{!save}"/> 
+
+<apex:commandButton value="Cancel" action="{!cancel}"/> </apex:pageBlockButtons> 
+ <apex:pageBlockSection title="Information"  columns="2" id="pageblocksection1">
+
+ <apex:inputField id="LX_LocalProgram" value="{!LX_Program_Enrollment__c.Master_Program__c}" required="true"/> 
+ <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Status__c}" required="false"/> 
+ 
+ <apex:inputField id="LX_Account" value="{!LX_Program_Enrollment__c.LX_Account__c}" required="true"/>  
+ <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Proposed_Date__c}" required="false"/> 
+
+  <apex:inputField value="{!LX_Program_Enrollment__c.LX_Certified_Date__c}" required="false"/> 
+ <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Signed_Date__c}" required="false"/> 
+
+  <apex:inputField value="{!LX_Program_Enrollment__c.Additional_Comments__c}" required="false"/> 
+ <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Effective_Date__c}" required="false"/> 
+
+  <apex:inputField value="{!LX_Program_Enrollment__c.Approval_Status__c}" required="false"/> 
+ <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_End_Date__c}" required="false"/>
+<apex:inputField value="{!LX_Program_Enrollment__c.RecordTypeID}" id="recId" /> 
+<apex:inputField value="{!LX_Program_Enrollment__c.LX_Apply_to_All_Reseller_Locations__c}" />
+<apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+
+</apex:pageBlockSection> 
+</apex:pageBlock> 
+
+
+</apex:form> 
+
+</apex:page>

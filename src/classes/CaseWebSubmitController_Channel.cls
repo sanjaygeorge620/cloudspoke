@@ -1,0 +1,1 @@
+public class CaseWebSubmitController_Channel {}

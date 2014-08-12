@@ -1,0 +1,3 @@
+<apex:page standardController="LX_RMA__c" extensions="LX_RMA_Extension" action="{!viewPage}">
+
+</apex:page>

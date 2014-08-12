@@ -1,0 +1,92 @@
+<apex:page standardController="Course__c" extensions="ControllerCourses" tabstyle="Course__c" 
+            showHeader="false" sidebar="false" id="pc">
+
+   <apex:form id="frm" >
+  
+  <div id="pbSubsection">
+  <style>
+  body, td, select, input, textarea, fieldset legend, .warn .textCounter, .miniTab .currentTab, .requiredLegend, .bPageBlock .noRecords, .list td, .list th, .bPageBlock td.actionColumn .actionLink, .bWizardBlock .pbDescription, .bWizardBlock .pbTopButtons {
+   color:#333333;
+   font-size:80%;
+  }  
+  </style>
+    <apex:dataTable value="{!availablePortalClasses}" var="aClass" id="compTable"
+        styleClass="list" headerClass="headerRow" rowClasses="dataRow" width="100%" rendered="{!showRows && (Course__c.Course_Type__c == 'Classroom')}">
+        <apex:column >
+          <apex:facet name="header" >Class Id</apex:facet>
+          <apex:outputLink value="/{!aClass.id}" onclick="window.parent.location.href='/{!aClass.id}';">{!aClass.name}</apex:outputLink>
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Class Name</apex:facet>
+          <apex:outputField value="{!aClass.Course__r.Name}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Class Date</apex:facet>
+          <apex:outputField value="{!aClass.Class_Date_Str__c}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Open Seats</apex:facet>
+          <apex:outputField value="{!aClass.Open_Seats__c}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Days Until Class</apex:facet>
+          <apex:outputField value="{!aClass.Days_Until_Class__c}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Training Location</apex:facet>
+          <apex:outputLink value="/{!aClass.Training_Location__c}" onclick="window.parent.location.href='/{!aClass.Training_Location__c}';">{!aClass.Training_Location__r.Name} </apex:outputLink>
+        </apex:column>
+      </apex:dataTable>  
+    
+    
+    <apex:dataTable value="{!availablePortalClasses}" var="aClass" id="compTableLiveOnline"
+        styleClass="list" headerClass="headerRow" rowClasses="dataRow" width="100%" rendered="{!showRows && (Course__c.Course_Type__c == 'Live Online')}">
+        <apex:column >
+          <apex:facet name="header" >Class Id</apex:facet>
+          <apex:outputLink value="/{!aClass.id}" onclick="window.parent.location.href='/{!aClass.id}';">{!aClass.name}</apex:outputLink>
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Class Name</apex:facet>
+          <apex:outputField value="{!aClass.Course__r.Name}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Class Date</apex:facet>
+          <apex:outputField value="{!aClass.Class_Date_Str__c}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Open Seats</apex:facet>
+          <apex:outputField value="{!aClass.Open_Seats__c}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Days Until Class</apex:facet>
+          <apex:outputField value="{!aClass.Days_Until_Class__c}" />
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Training Location</apex:facet>
+          <apex:outputLink value="/{!aClass.Training_Location__c}" onclick="window.parent.location.href='/{!aClass.Training_Location__c}';">{!aClass.Training_Location__r.Name} </apex:outputLink>
+        </apex:column>
+      </apex:dataTable>     
+      
+      
+      <apex:dataTable value="{!availablePortalClasses}" var="aClass" id="eLearningTable"
+        styleClass="list" headerClass="headerRow" rowClasses="dataRow" width="100%" rendered="{!showRows && (Course__c.Course_Type__c == 'E-Learning')}">
+        <apex:column >
+          <apex:facet name="header" >Name</apex:facet>
+          <apex:outputLink value="/{!aClass.id}" onclick="window.parent.location.href='/{!aClass.id}';">{!aClass.name}</apex:outputLink>
+        </apex:column>
+        <apex:column >
+          <apex:facet name="header" >Class Name</apex:facet>
+          <apex:outputField value="{!aClass.Course__r.Name}" />
+        </apex:column>
+      </apex:dataTable>  
+
+   </div> 
+    </apex:form>
+
+   <div><iframe id="resizeHack" width="0" height="0" frameborder="no"/></div>
+<!-- <script>
+  document.getElementById("resizeHack").src = "{!URLFOR($Scontrol.Resize_VF_Iframe)}" +
+                                              "&ifName=" + window.name +
+                                              "&ifHeight=" + document.body.offsetHeight;
+</script> -->
+</apex:page>

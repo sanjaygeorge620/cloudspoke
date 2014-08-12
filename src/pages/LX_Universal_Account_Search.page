@@ -1,0 +1,36 @@
+<!-- 
+/*
+ * ©Lexmark Front Office 2013, all rights reserved
+ * 
+ * Created Date : 07/17/2013
+ *
+ * Author : Kapil Reddy Sama.
+ * 
+ * Description : Home page for searching all the Customer and Partneer Accounts.
+ *
+ *  
+ */
+-->
+
+<apex:page showHeader="false" sidebar="false" controller="LX_AcctAndContactSearch" standardStylesheets="true">
+  <style>
+    body{
+    background: #cfeef8;
+    }
+</style>
+<script>
+function search(seltext){
+    var text = document.getElementById(seltext).value;
+    url= '/apex/LX_Global_Search?searchText='+encodeURIComponent(text);
+    window.top.location.href = url;        
+}
+        
+</script>
+<apex:form id="form" >
+    <div>
+    <apex:inputText value="{!searchtext}" id="sText"  required="true"/> <br/>
+    <apex:commandButton value="Search" onclick="search('{!$Component.sText}')" />    
+    </div>
+</apex:form>
+
+</apex:page>

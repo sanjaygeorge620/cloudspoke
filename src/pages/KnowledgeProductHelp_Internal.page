@@ -1,0 +1,39 @@
+<apex:page standardController="ProductHelp__kav" showHeader="false" sidebar="false">
+<html>
+<head>
+    <title>Knowledgebase | {!ProductHelp__kav.Title}</title>
+    <apex:stylesheet id="kb_article" value="{!URLFOR($Resource.WebContent, 'css/knowledge.css')}"/>  
+    <style>
+        html, body{height: 100%;}
+        div.core{height:100%}
+    </style>
+</head>    
+<body>    
+    <!---Variable: KB Article URL---><apex:variable var="ArticleURL" id="ArticleURL" value="/_ui/core/email/author/EmailAuthor?rtype=003&p6=Knowledgebase : {!JSENCODE(ProductHelp__kav.title)}&p7=I found this article to assist you.     https://perceptivesoftware.secure.force.com/?Starturl=/articles/ProductHelp/{!ProductHelp__kav.UrlName}"/>
+    <!---Variable: Field Visibility---><apex:variable var="isVisible" id="isVisible" value="{!Ispickval($Profile.UserType,'Standard')}"/>
+    
+    <div id="header">
+        <div id="logo">
+            <p id="logoimg" />
+            <p id="loginnav">
+                <apex:outputPanel rendered="{!isVisible && ProductHelp__kav.IsVisibleInCsp}" >
+                   <apex:outputLink title="Send Article Link" value="JavaScript:void(0);" onclick="window.open('{!ArticleURL}')">Send Link</apex:outputLink>
+                   &nbsp;|&nbsp;
+               </apex:outputPanel>  
+               <apex:outputLink title="Close Window" onclick="parent.window.close();">Close</apex:outputLink>
+            </p>
+        </div>
+    </div>
+    
+    <div id="greenline" />
+    
+    <div class="core">
+        <!---Frames --->
+        <apex:iframe width="100%" height="100%" src="{!SUBSTITUTE(ProductHelp__kav.HelpURL__c,'http:','https:')}" scrolling="yes" />    
+    </div>
+    
+    <!---Analytics --->
+    <apex:include pageName="CustomerPortalAnalytics"/>
+</body>     
+</html>    
+</apex:page>

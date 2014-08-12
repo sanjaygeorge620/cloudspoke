@@ -1,0 +1,56 @@
+<apex:page controller="createAcuoInstallations" >
+<apex:form id="main">
+<apex:pageBlock id="pb">
+     <apex:pageBlockButtons >     
+        <apex:commandbutton value="Back" action="{!Back}" rendered="{!IF(editmode,false,true)}" />
+        <apex:commandbutton value="Edit" action="{!Edit}" rendered="{!(IF(editmode,false,true)&&($ObjectType.Server_Asset_Association__c.Updateable))}" rerender="pb"/> 
+        <apex:commandbutton value="Cancel" action="{!Cancel}" rendered="{!editMode}" rerender="pb"/> 
+        <apex:commandbutton value="Add"  action="{!Add}"  rendered="{!editMode}" rerender="pb1"/>
+        <apex:commandbutton value="Save" action="{!Save}" rendered="{!editMode}"/>   
+    </apex:pageBlockButtons>
+
+      <apex:pageblock id="pb1">
+      <apex:outputPanel rendered="{!if(((assetList.size != null && assetList.size > 0) || (servList.size != null && servList.size > 0) ||(mapping.size != null && mapping.size > 0) ||(assetitmList.size != null && assetitmList.size > 0)), false, true)}">
+          No data to display.
+      </apex:outputPanel>
+
+      <apex:outputPanel rendered="{!if(editMode , true , false)}">
+     <apex:repeat value="{!lstInner}" var="e1" id="therepeat">
+                <apex:panelGrid columns="3">
+                
+                <apex:panelGrid headerClass="Name">
+                    <apex:facet name="header">Del</apex:facet>
+                    <apex:commandButton value="X" action="{!Del}" rerender="pb1" rendered="{!IF(lstInner.size > 1,true,false)}">
+                        <apex:param name="rowToBeDeleted" value="{!e1.recCount}" assignTo="{!selectedRowIndex}"></apex:param>
+                    </apex:commandButton>
+                </apex:panelGrid>   
+                
+                <apex:panelGrid title="SPD" >
+                   <apex:facet name="header">Asset Item Name</apex:facet>
+                   <apex:selectlist required="false" size="1" id="Asset_Item" value="{!e1.servast.Asset_Item__c}"> 
+                   <apex:selectoptions value="{!astitmOptions}"/> 
+                                                     </apex:selectlist>
+                </apex:panelGrid> 
+                
+                <apex:panelGrid >
+                    <apex:facet name="header">Server</apex:facet>
+                    <apex:selectlist required="false" size="1" id="Server" value="{!e1.servast.Server__c}"> 
+                   <apex:selectoptions value="{!serverOptions}"/> 
+                                                     </apex:selectlist>
+                </apex:panelGrid>               
+               
+            </apex:panelgrid>
+        </apex:repeat>
+      </apex:outputPanel>
+      <apex:outputPanel rendered="{!if((!editMode && mapping.size > 0), True , False)}">
+      <apex:pageBlockTable value="{!mapping}" var="assItem">
+              <apex:column headerValue="Asset Item Name"><a href="/{!assItem.Asset_Item__c}" target="_blank">{!assItem.Asset_Item__r.name}</a></apex:column>
+              <apex:column headerValue="Server Name"><a href="/{!assItem.Server__c}" target="_blank">{!assItem.Server__r.Server_Name__c}</a></apex:column>              
+              
+          </apex:pageBlockTable>
+      </apex:outputPanel>      
+      
+    </apex:pageBlock> 
+  </apex:pageBlock>
+     </apex:form>
+</apex:page>

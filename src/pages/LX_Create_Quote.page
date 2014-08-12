@@ -1,0 +1,5 @@
+<apex:page standardController="Opportunity">
+  
+  <h1>Quote Creation Page</h1>
+  
+</apex:page>

@@ -1,0 +1,102 @@
+<apex:page docType="html-5.0" showHeader="false"
+    standardStylesheets="false" sidebar="false" 
+    cache="true" expires="600" controller="mobileTrackerController">
+    <html>
+        <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title> Update User Story</title>
+            <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+            
+            <apex:includeScript value="{!URLFOR($Resource.JQM, 'jqm/jquery.min.js')}" />
+            <apex:includeScript value="{!URLFOR($Resource.JQM, 'jqm/jquery.mobile-1.1.1.min.js')}" /> 
+            
+            <script type="text/javascript">
+                var arrayDevelopmentStages      = [];
+                var currentStageIndex           = 0;
+                var UserStoryId                 = '';
+                 
+                $('div:jqmData(role="page")').live('pagebeforecreate',function(){
+                    var strReq = '{!UserStroyId}';
+                    var currentStage = "";
+                    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.mobileTrackerController.getUserStoryInfo}',strReq,function(result, event) {
+                    if (event.status) {
+                        document.getElementById('UserStoryName').innerHTML  = result.Name;
+                        document.getElementById('UserStroyStage').innerHTML = result.Development_Stage__c;
+                        document.getElementById('UserStroyDesc').innerHTML  = result.User_Story__c;
+                        UserStoryId                                         = result.Id;
+                        currentStage = result.Development_Stage__c;
+                        /********************************************************/
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.mobileTrackerController.getNextAvailableStatus}',currentStage,function(result, event) {
+                            if (event.status) {
+                                arrayDevelopmentStages = result;
+                                for (var i = 0; i < result.length; i++) {
+                                    if(result[i] == currentStage){
+                                        // variable to be used to update stage function 
+                                        currentStageIndex = i;
+                                        if(i-1 <= 0 ){
+                                            $('#btndwn').closest('.ui-btn').hide();
+                                        }else{
+                                            $('#btndwnText').text('Move to ' + result[i-1]);
+                                        }
+                                        if(i+1 >= result.length ){
+                                            $('#btnUp').closest('.ui-btn').hide();
+                                        }else{
+                                            $('#btnUpText').text('Move to ' + result[i+1]);
+                                        }
+                                    }   
+                                }
+                            }}, {escape : true}
+                            );
+                    }}, {escape : true}
+                    );
+                });
+                
+            </script>
+            <script type="text/javascript">
+                // Move the status up/down 
+                function updateDevelopmentStage(direction){
+                    var strMoveTo;
+                    if(direction == 'up'){
+                        strMoveTo = arrayDevelopmentStages[currentStageIndex+1];
+                    }else{
+                        strMoveTo = arrayDevelopmentStages[currentStageIndex-1];
+                    }
+                    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.mobileTrackerController.updateDevelopment}',strMoveTo,UserStoryId,function(result, event) {
+                        if (event.status) {
+                            if(result = 'true'){
+                                document.getElementById('UserStroyStage').innerHTML = strMoveTo;
+                                location.reload(true);
+                            } 
+                        }}, {escape : true}
+                        );
+                }
+            </script>
+            
+         </head>
+         <body>
+            <div data-role="page" id="ContentPage" data-title="Update User Story">
+                <div data-role="content" style="padding: 15px">
+                    <div data-role="collapsible-set" data-theme="b" data-content-theme="d">
+                        <div data-role="collapsible" data-collapsed="">
+                            <h3>
+                                User Story - <span id="UserStoryName"></span>
+                            </h3>
+                            <span id="UserStroyDesc"></span>
+                        </div>
+                    </div>
+                    <h4>Currently</h4>
+                    <h2>
+                        <span id="UserStroyStage"></span>
+                    </h2>
+                    <a data-role="button" data-transition="fade" data-theme="b" href="#"  id="btnUp" onclick="updateDevelopmentStage('up');"> 
+                        <span id="btnUpText"></span>
+                    </a> 
+                    <a data-role="button" data-transition="fade" data-theme="b" href="#"  id="btndwn" onclick="updateDevelopmentStage('dwn');"> 
+                        <span id="btndwnText"></span>
+                    </a>
+                </div>
+            </div>
+        </body>
+    </html>
+</apex:page>

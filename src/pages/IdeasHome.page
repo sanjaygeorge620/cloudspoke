@@ -1,0 +1,2 @@
+<!---12/18/09--->
+<apex:page action="{!URLFOR('/ideas/ideaList.apexp')}"/>

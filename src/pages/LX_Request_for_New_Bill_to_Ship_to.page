@@ -1,0 +1,29 @@
+<apex:page controller="LX_BillShipController">
+ <apex:form >
+ <apex:sectionHeader title="This page is not yet completed!"/>
+  <apex:outputPanel rendered="{!billsection}">
+    <apex:pageBlock >
+     <apex:pageBlockSection Title="Select an Account and Contact for Bill to">
+       <apex:inputField value="{!Opp.Bill_To__c}"/>
+       <apex:inputField value="{!opp.AccountID}" required="true"/>
+     </apex:pageBlockSection>
+     <apex:pageBlockButtons location="Bottom">
+     <apex:commandButton action="{!createCase}" value="Send request to create Bill To"/>
+     </apex:pageBlockButtons>
+    </apex:pageBlock>
+  </apex:outputPanel>
+  <apex:outputPanel rendered="{!sellsection}">
+    <apex:pageBlock >
+     <apex:pageBlockSection Title="Select an Account and Contact for Bill to">
+        <apex:inputText id="soldtoID">  
+          <apex:outputText value="Sold To ID"/>
+        </apex:inputText>
+       <apex:inputField value="{!opp.AccountID}" required="true"/>
+     </apex:pageBlockSection>
+     <apex:pageBlockButtons location="Bottom">
+     <apex:commandButton action="{!createCase}" value="Send request to create Ship To"/>
+     </apex:pageBlockButtons>
+    </apex:pageBlock>
+  </apex:outputPanel>
+ </apex:form>
+</apex:page>

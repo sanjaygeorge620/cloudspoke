@@ -1,0 +1,8 @@
+<apex:page Controller="TrainingDisplayController" title="Training Featured Courses" tabStyle="training__tab">
+<body>
+    <apex:sectionHeader title="Perceptive Software Training Courses"/>
+    <c:Training_Featured_Courses coursetype="Classroom" />
+    <c:Training_Featured_Courses coursetype="Live Online" />
+    <c:Training_Featured_Courses coursetype="E-Learning" />
+</body>
+</apex:page>

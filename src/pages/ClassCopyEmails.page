@@ -1,0 +1,17 @@
+<apex:page standardController="Class__c" extensions="ControllerClasses" showHeader="false" sidebar="false">
+<html> 
+<head> 
+<script type="text/javascript"> 
+function init() { 
+
+window.location = "mailto:training@imagenow.com?bcc={!emails}";
+window.close(); 
+} 
+</script> 
+</head> 
+<body onload="init()"> 
+<p>&nbsp;</p> 
+</body> 
+</html> 
+
+</apex:page>

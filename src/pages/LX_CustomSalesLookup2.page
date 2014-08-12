@@ -1,0 +1,56 @@
+<apex:page controller="LX_CustonSoldtoLookupController2" sidebar="false" showHeader="false" showChat="false"> 
+  <apex:form >
+      <apex:pageBlock >
+       <apex:outputpanel >
+         <apex:outputText value="Search " id="search"/>
+         <apex:inputText value="{!search}"/>
+         <apex:commandbutton action="{!Go}" value="Go"/>
+       </apex:outputpanel><br/><br/>
+        <apex:pageBlockTable value="{!resultList}" columns="5" var="soldto">
+        <apex:column >
+          <apex:inputCheckbox value="{!soldto.selected}"/>
+        </apex:column>
+        <apex:column value="{!soldto.soldToObject.Name}">
+         <apex:facet name="header">   
+           <apex:commandLink action="{!viewSoldToData}" value="Name" id="cmdSort1">
+             <apex:param value="name" name="column" assignTo="{!sortExpression}" ></apex:param>
+           </apex:commandLink>
+          </apex:facet>
+         </apex:column>
+        
+        <apex:column value="{!soldto.soldToObject.LX_Sold_To__r.Name}">
+         <apex:facet name="header">   
+           <apex:commandLink action="{!viewSoldToData}" value="SAP Name{!IF(sortExpression=='LX_Sold_To__r.Name',IF(sortDirection='ASC','',''),'')}" id="cmdSort2">
+             <apex:param value="LX_Sold_To__r.Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+           </apex:commandLink>
+          </apex:facet>
+         </apex:column>
+         
+         <apex:column value="{!soldto.soldToObject.LX_Sold_To__r.LX_Payment_Terms__c}">
+         <apex:facet name="header">   
+           <apex:commandLink action="{!viewSoldToData}" value="Payment Terms{!IF(sortExpression=='LX_Sold_To__r.LX_Payment_Terms__c',IF(sortDirection='ASC','',''),'')}" id="cmdSort3">
+             <apex:param value="LX_Sold_To__r.LX_Payment_Terms__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+           </apex:commandLink>
+          </apex:facet>
+         </apex:column>
+         
+         <apex:column value="{!soldto.soldToObject.LX_Sold_To__r.LX_Currency__c}">
+         <apex:facet name="header">   
+           <apex:commandLink action="{!viewSoldToData}" value="Currency{!IF(sortExpression=='LX_Sold_To__r.LX_Currency__c',IF(sortDirection='ASC','',''),'')}" id="cmdSort4">
+             <apex:param value="LX_Sold_To__r.LX_Currency__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+           </apex:commandLink>
+          </apex:facet>
+         </apex:column>
+         
+         <apex:column value="{!soldto.soldToObject.LX_Sales_Org1__c}">
+         <apex:facet name="header">   
+           <apex:commandLink action="{!viewSoldToData}" value="Sales Organisation{!IF(sortExpression=='LX_Sales_Org1__c',IF(sortDirection='ASC','',''),'')}" id="cmdSort5">
+             <apex:param value="LX_Sales_Org1__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+           </apex:commandLink>
+          </apex:facet>
+         </apex:column>
+        
+        </apex:pageBlockTable>     
+     </apex:pageBlock>
+  </apex:form>
+</apex:page>

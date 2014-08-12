@@ -1,0 +1,52 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesGenericController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+   <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | Answers</title>
+    </apex:define>
+    <apex:define name="javascriptcalls">
+     <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-answers').addClass('active');
+              scaletowindow('#itarget',1000,300);
+            }); 
+            jQuery(window).resize(function() {
+              scaletowindow('#itarget',1000,300);
+            }); 
+        </script>   
+    </apex:define>
+    <apex:define name="body">  
+        <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">Home</a>
+                    <a class="current" href="#">Answers</a>
+             </nav>
+            </div>
+         </div>   
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.question.accessible || !SITE_TAB_ANSWERS}">
+            <p>{!$label.Insufficient_Privileges}</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.question.accessible && SITE_TAB_ANSWERS}">
+            <apex:pageMessages />
+            <div class="column full-width">
+                <div class="callout answers">
+                    <span class="title-bar" href="#"><span class="sprite_cpicons qa">&nbsp;</span>Answers</span>
+                    <div class="callout-content">
+                            <apex:outputPanel layout="block" rendered="{!SITE_TAB_ANSWERS}">
+                                <iframe frameborder="0" height="1000" id="itarget" name="itarget" scrolling="auto" src="{!$Site.Prefix}/answers/answersHome.apexp" title="Content" width="907px" style="overflow-x: hidden;"></iframe>
+                            </apex:outputPanel>
+                            
+                            <apex:outputPanel layout="block" rendered="{!!SITE_TAB_ANSWERS}">
+                                    <h3>Insufficient Privileges</h3>
+                            </apex:outputPanel>
+                    </div>
+
+                </div><!-- /answers -->
+
+            </div><!-- /Full Width Column -->
+        </apex:outputPanel>    
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

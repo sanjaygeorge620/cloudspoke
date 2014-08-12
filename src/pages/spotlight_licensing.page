@@ -1,0 +1,112 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController"> 
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="title"> 
+        <title>{!SITE_NICKNAME+' | Knowledgebase: Scanning Overview'}</title>
+    </apex:define>
+    <apex:define name="javascriptcalls">
+            <script type="text/javascript">
+           jQuery(document).ready(function() {
+              jQuery('.toolbar-knowledgebase').addClass('active');
+              jQuery(function() {
+                   jQuery('.index').click( function() {
+                         jQuery.scrollTo( jQuery(this).attr('href'), 1000);
+                   });
+                });  
+            });   
+        </script>
+    </apex:define>
+    <apex:define name="body">        
+         <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Site.CurrentSiteURL}">Home</a>
+                    <a href="{!$page.Knowledge}">Knowledgebase</a>
+                    <a class="current" href="#">Licensing ImageNow Overview</a>
+               </nav>
+            </div>
+         </div>    
+        <div class="cp_core">
+            <apex:pageMessages /> 
+            <div class="column full-width" >
+                <div class="callout spotlight">
+                    <a class="title-bar" href="#"><span class="sprite_cpicons cases-view">&nbsp;</span>Licensing ImageNow Overview</a>
+                    <div class="callout-content">
+                        <div class="spotlight-index">
+                            <a class="index" title="Click to scroll to section" href="#section-1">Licensing ImageNow </a>
+                            <a class="index" title="Click to scroll to section" href="#section-2">Licensing Types</a>
+                        </div>
+                        <div id="section-1" class="spotlight-title">Licensing ImageNow</div>
+                        <div class="spotlight-summary">
+                            Every computer running the ImageNow Server must have an ImageNow Server license. The license is associated with the server computer by encoded hardware information about the computer. This computer information is stored in a hardware fingerprint file. 
+                            <br /><br />ImageNow licenses are generated using the hardware fingerprint and are keyed off the server License Group ID (LGID).  When new licenses are added, the new licenses use the same LGID. If the server hardware changes only the server license needs to be replaced. 
+                            <br /><br />ImageNow licenses are available in Live, Failover and Test for use in your various server environments and control access to its components. 
+                            <br /><br />Virtual environments can be licensed, but not paravirtualized environments. The hardware fingerprint utility cannot read the BIOS in a paravirtualized environment.
+
+                        </div>
+                          
+                        
+                        <div id="section-2" class="spotlight-title">Licensing Types</div>
+                        <div class="spotlight-summary">
+                                <b>Concurrent licenses</b> are used when the number of simultaneous users accessing the program is limited to the number of licenses in the license agreement. 
+                                <br /><br /><b>Combo licenses</b> are a form of concurrent licenses that are shared between ImageNow Client and WebNow. The allocation is controlled by a configuration file. For instance, if you have 25 combo licenses, you can allocate 15 to ImageNow Client, and 10 to WebNow, or vice versa. 
+                                <br /><br /><b>Per seat licenses</b> are based on the number of computers on which you install the software.  This node-locked license is locked to a computer by specific information about the computer. 
+                                <br /><br /><b>Transaction package</b> licensing limits volume for a specific period and are based on counting the number of transactions within ImageNow and decrementing this number over a period of time. This is primarily for Message Agent licensing.
+                                <br /><br /><b>Feature licensing</b> makes functionality available in ImageNow and are set at the server level, making it available for all users.
+                        </div>          
+                        <dl>
+                             <dd><a href="https://docs.perceptivesoftware.com/robohelp/robo/server/Version_66_PROD/projects/66_ProdDocMaster/mergedProjects/66_inowadmin/CaptureNow/Scanner_Information/About_scanner_tokens.htm" target="_blank">About scanner tokens</a></dd>
+                             <dd><a href="https://docs.perceptivesoftware.com/robohelp/robo/server/Version_66_PROD/projects/66_ProdDocMaster/mergedProjects/66_inowadmin/Licensing/about_licensing_capturenow.htm" target="_blank">About licensing CaptureNow</a></dd>
+                             <dd><a href="https://docs.perceptivesoftware.com/robohelp/robo/server/Version_66_PROD/projects/66_ProdDocMaster/mergedProjects/66_inowadmin/Licensing/what_is_demonstration_mode.htm" target="_blank">What is demonstration mode?</a></dd>
+                             <dd><a href="https://docs.perceptivesoftware.com/robohelp/robo/server/Version_66_PROD/projects/66_ProdDocMaster/mergedProjects/66_inowadmin/Licensing/about_licensing_in_failover_environments.htm" target="_blank">About licensing in failover environments</a></dd>
+                             <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000014448?popup=true" target="_blank">Scanner Driver and License FAQ</a></dd>
+                             <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00001482?popup=true" target="_blank">CaptureNow license enables barcode recognition</a></dd>
+
+                        </dl>
+                        <br />
+                        <dl>
+                            <dt>Licensing process</dt>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00003942?popup=true" target="_blank">How to generate a license hardware fingerprint</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000015194?popup=true" target="_blank">Submitting a license request</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-000015196?popup=true" target="_blank">Downloading licenses</a></dd>
+                            
+                        </dl>
+                        <br />
+                        <dl>
+                            <dt>License management</dt>
+                            <dd><a href="https://docs.perceptivesoftware.com/robohelp/robo/server/Version_66_PROD/projects/66_ProdDocMaster/mergedProjects/66_inowadmin/Licensing/install_imagenow_licenses.htm" target="_blank">Install ImageNow licenses</a></dd>
+                            <dd><a href="https://docs.perceptivesoftware.com/robohelp/robo/server/Version_66_PROD/projects/66_ProdDocMaster/mergedProjects/66_inowadmin/Licensing/check_license_status.htm" target="_blank">Check license status</a></dd>
+                            <dd><a href="https://docs.perceptivesoftware.com/robohelp/robo/server/Version_66_PROD/projects/66_ProdDocMaster/mergedProjects/66_inowadmin/Licensing/generate_overdraft_licensing_report.htm" target="_blank">Generate overdraft licensing report</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00003885?popup=true" target="_blank">How to find out what licenses are installed for ImageNow</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000011324?popup=true" target="_blank">How to identify which computers are using a CaptureNow license token</a></dd>
+                            
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00000319?popup=true" target="_blank">How to remove ImageNow license tokens using INTool</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00004371?popup=true" target="_blank">How to replace per seat licenses with concurrent licenses</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00000437?popup=true" target="_blank">‘Cannot upload license… Server not found’ error when uploading licenses</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00004255?popup=true" target="_blank"> “A valid server license must be present” error when uploading failover licenses</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-000014441?popup=true" target="_blank">"The uploaded license is type..." when uploading a new license</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00006079?popup=true" target="_blank">"Token does not match" in log files, unable to connect to ImageNow Server</a></dd>
+                        </dl>
+                        <br />
+                        <dl>
+                            <dt>Combo licensing</dt>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00003752?popup=true" target="_blank">How to configure combo licenses in ImageNow</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Articles/Article-00000257?popup=true" target="_blank">License count is reached within WebNow and/or the ImageNow Client</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00000203?popup=true" target="_blank"> 'No License Available' error occurs when accessing WebNow 6</a></dd>
+                        </dl>
+                        <br />
+                        <dl>
+                            <dt>Common license errors</dt>
+                             <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00000765?popup=true" target="_blank">'Hardware does not match fingerprint...' error appears in the inserver.log file</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00000341?popup=true" target="_blank">ImageNow services stop responding and log files show message 'Error occurred while connecting to the ImageNow Server'</a></dd>
+                            <dd><a href="{!$site.prefix}/articles/Support_Troubleshooting/Article-00000087?popup=true" target="_blank">'Unable to Log administrator In. Unable to logon. There is no valid server license.' error when trying to log into ImageNow client.</a></dd>
+                        </dl>
+                     </div>      
+                           
+                    
+                </div>
+            </div>
+        </div>
+   </apex:define>                 
+  </apex:composition> 
+</apex:page>

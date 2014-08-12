@@ -1,0 +1,11 @@
+<apex:component controller="QualificationApprovalHistoryController" access="global">
+    <apex:attribute name="QualificationId" assignTo="{!QualificationId}" type="String" description="Id of the Qualification"/>  
+    <br/><br/>
+    <apex:repeat value="{!approvalSteps}" var="step">
+        <b>Date - </b> <apex:outputField value="{!step.SystemModstamp}"/><br/>
+        <b>Status - </b><apex:outputField value="{!step.StepStatus}"/><br/>
+        <b>Assigned To - </b><apex:outputField value="{!step.OriginalActorId}"/><br/>
+        <b>Actual Approver - </b><apex:outputField value="{!step.ActorID}"/><br/>
+        <b>Comments - </b><apex:outputField value="{!step.Comments}"/><br/>
+    </apex:repeat>
+</apex:component>

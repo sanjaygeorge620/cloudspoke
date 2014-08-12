@@ -1,0 +1,103 @@
+<apex:page standardController="Support_Articles__kav" showHeader="false" sidebar="false" standardStylesheets="true" title="Knowledgebase | {!Support_Articles__kav.Title}">
+<html>
+    <!---Variable: KB Article URL---><apex:variable var="ArticleURL" id="ArticleURL" value="/_ui/core/email/author/EmailAuthor?rtype=003&p6=Knowledgebase : {!JSENCODE(Support_Articles__kav.title)}&p7=I found this article to assist you.     https://perceptivesoftware.secure.force.com/?Starturl=/articles/Support_Articles/{!Support_Articles__kav.UrlName}"/>
+    <!---Variable: Field Visibility---><apex:variable var="isVisible" id="isVisible" value="{!Ispickval($Profile.UserType,'Standard')}"/>
+<head>
+    <title>Knowledgebase | {!Support_Articles__kav.Title}</title>
+    <apex:include pageName="CustomerPortalAnalytics"/>
+    <apex:stylesheet id="kb_article" value="{!URLFOR($Resource.WebContent, 'css/knowledge.css')}"/>    
+</head>
+<body>
+    <div id="header">
+        <div id="logo">
+            <p id="logoimg" />
+            <p id="loginnav">
+                <apex:outputLink title="Print Screen" onclick="window.print()">Print</apex:outputLink>
+                   &nbsp;|&nbsp;
+                <apex:outputPanel rendered="{!isVisible && Support_Articles__kav.IsVisibleInCsp}" >
+                   <apex:outputLink title="Send Article Link" value="JavaScript:void(0);" onclick="window.open('{!ArticleURL}')">Send Link</apex:outputLink>
+                   &nbsp;|&nbsp;
+               </apex:outputPanel>  
+               <apex:outputLink title="Close Window" onclick="window.close();">Close</apex:outputLink>
+            </p>
+        </div>
+    </div>
+    <div id="greenline" />
+    <div id="container">
+        <div id="docdetails">
+             <ul>
+                     <apex:outputPanel rendered="{!isVisible}" >
+                         <li>
+                             <apex:outputLabel styleClass="labelkey" value="Author: "/>
+                             <apex:outputField styleClass="labelfield" value="{!Support_Articles__kav.OwnerId}"/>
+                         </li>
+                     </apex:outputPanel>
+                     <li>
+                         <apex:outputLabel styleClass="labelkey" value="Document ID: "/>
+                         <apex:outputField styleClass="labelfield" value="{!Support_Articles__kav.ArticleID__c}"/>
+                     </li>
+                 
+                     <apex:outputPanel rendered="{!isVisible}" >
+                         <li>    
+                             <apex:outputLabel styleClass="labelkey" value="First Published: "/>
+                             <apex:outputField styleClass="labelfield" value="{!Support_Articles__kav.FirstPublishedDate}"/>
+                         </li>
+                     </apex:outputPanel>    
+                     <li>                
+                         <apex:outputLabel styleClass="labelkey" value="Last Modified: "/>
+                         <apex:outputField styleClass="labelfield"  value="{!Support_Articles__kav.LastModifiedDate}"/>
+                     </li>
+
+                     <apex:outputPanel rendered="{!isVisible}" >
+                          <li>
+                             <apex:outputLabel styleClass="labelkey" value="Last Published: "/>
+                             <apex:outputField styleClass="labelfield" value="{!Support_Articles__kav.LastPublishedDate}"/>
+                          </li>   
+                          <li>   
+                             <apex:outputLabel styleClass="labelkey" value="Channels: "/>
+                             <apex:outputtext styleClass="labelfield" value="{!if(Support_Articles__kav.IsVisibleInApp,'Internal; ','')+if(Support_Articles__kav.IsVisibleInCsp,'Customer Portal; ','')+if(Support_Articles__kav.IsVisibleInPrm,'Partner Portal; ','')}"/>
+                          </li>       
+                          <li class="warno">   
+                              <apex:outputtext rendered="{!NOT(Support_Articles__kav.IsVisibleInCsp)}" value="Internal Only"/>
+                           </li>     
+                     </apex:outputPanel>
+                     
+              </ul>     
+         </div>
+         
+         <div id="contenttitle">{!Support_Articles__kav.Title}</div>
+         <div id="contentdetails">
+                <apex:outputPanel rendered="{!!ISBLANK(Support_Articles__kav.Article__c)}">
+                    <h3 class="kbheader"><apex:outputText value="{!if(ISBLANK(Support_Articles__kav.Resolution__c),'Support Article','Issue')}" /></h3>
+                    <div class="kbcontent">
+                        <apex:outputText styleClass="kb-normalize" escape="false" value="{!Support_Articles__kav.Article__c}" />
+                    </div>
+                </apex:outputPanel>
+                
+                <apex:outputPanel rendered="{!!ISBLANK(Support_Articles__kav.Resolution__c)}">
+                    <h3 class="kbheader">Resolution</h3>
+                    <div class="kbcontent">
+                        <apex:outputText styleClass="kb-normalize" escape="false"  value="{!Support_Articles__kav.Resolution__c}" />
+                    </div>  
+                </apex:outputPanel>
+           
+                <apex:outputPanel rendered="{!isVisible}" >
+                    <h3 class="kbheaderred">Internal Notes</h3>
+                    <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false" value="{!Support_Articles__kav.Internal_Note__c}" /></div>
+                    <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false" value="{!Support_Articles__kav.Advanced__c}" /></div>
+                </apex:outputPanel>   
+         </div>
+    
+        <hr />
+        <c:PortalFeedback RefURL="/articles/Support_Articles/{!Support_Articles__kav.UrlName}" 
+                          RefType="Knowledgebase" 
+                          RefID="{!Support_Articles__kav.ID}" 
+                          RefTitle="{!Support_Articles__kav.Title}" />        
+    </div>
+    
+    <div id="footer">
+        <p> &#169;1993-2010 Perceptive Software, Inc. | <a href="http://www.perceptivesoftware.com/legal" rel="nofollow">Legal Terms and Privacy Policy</a></p>
+    </div>
+</body>
+</html>
+</apex:page>

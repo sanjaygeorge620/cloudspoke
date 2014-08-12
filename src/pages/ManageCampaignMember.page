@@ -1,0 +1,26 @@
+<apex:page controller="lx_CampaignMembers_OptOut">
+    <apex:form >
+             <apex:pageblock title="Campaign Members">
+                  <apex:pageBlockButtons >
+                    <apex:commandButton value="Approve" 
+                       action="{!ApproveMembers}"/>
+                       <apex:commandButton value="Reject" 
+                       action="{!RejectMembers}"/>
+                 </apex:pageBlockButtons>
+
+                <apex:pageBlockTable value="{!m_lstCampaignMembers}" var="record">
+                       <apex:column headerValue="Action">
+                           <apex:inputCheckbox value="{!record.m_isSelected}"/>
+                       </apex:column> 
+                       <apex:Column headerValue="Name" value="{!record.m_FirstName}"/>
+                       <apex:Column headerValue="Title" value="{!record.m_Title}"/>
+                       <apex:Column headerValue="Account" value="{!record.m_Account}"/>
+                       <apex:Column headerValue="Account Owner" value="{!record.m_AccountOwner}"/>
+                       <apex:Column headerValue="SW AEX Owner" value="{!record.m_SWAexOwnerName}"/>
+                       
+                       <apex:Column value="{!record.m_CampaignMember.Status}"/>
+                </apex:pageBlockTable>
+                
+          </apex:pageblock>
+    </apex:form> 
+</apex:page>

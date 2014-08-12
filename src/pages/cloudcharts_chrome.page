@@ -1,0 +1,72 @@
+<apex:page standardStylesheets="false" sidebar="false" showHeader="false" controller="cloudWS">
+<style>
+#chart_div_left { width: 700px;height: 300px;float: center}
+#chart_div_Right{ height: 300px; overflow: hidden}
+</style>
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+     google.load("visualization", "1", {packages:["annotatedtimeline"]});   
+     
+      google.setOnLoadCallback(drawChart);
+      function drawChart() 
+      {
+      drawChart2();
+      }
+
+      function drawChart2() 
+      {
+      var servname = '{!server_toRender}';
+      var title1 = 'Uptime Chart for Server'+' '+servname;
+                
+      Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.cloudWS.getlstats}',
+            servname, 
+         function(result,event)
+         {
+                  
+         var data = new google.visualization.DataTable(); 
+               
+              data.addColumn('datetime', 'Date');     
+              data.addColumn('number', 'INCount');    
+              data.addColumn('string', 'title1');      
+              data.addColumn('string', 'text1');                    
+              data.addColumn('number', 'WNCount');    
+              data.addColumn('string', 'title1');      
+              data.addColumn('string', 'text1');   
+              data.addColumn('number', 'TotCount');    
+              data.addColumn('string', 'title1');      
+              data.addColumn('string', 'text1');
+         
+         
+          for(var i = 0;i<result.length; i++)
+          { 
+          var res = result[i];
+          var INC = res.imagenow_count;
+          var WNC = res.webnow_count;
+          var TotCount = INC+WNC;
+          var dateti = res.created_at;
+          dateti = dateti.substring(0,10);
+          var datefield = new Date((res.created_at).substring(0,4),(res.created_at).substring(5,7)-1,(res.created_at).substring(8,10),(res.created_at).substring(11,13),(res.created_at).substring(14,16),(res.created_at).substring(17,19));
+       //   alert((res.created_at).substring(0,4)+'-'+(res.created_at).substring(5,7)+'-'+(res.created_at).substring(8,10)+'-'+(res.created_at).substring(11,13)+'-'+(res.created_at).substring(14,16)+'-'+(res.created_at).substring(17,19));
+       //   alert((res.created_at).substring(0,20));
+       //   alert(datefield);
+            data.addRows([[datefield,INC,undefined, undefined,WNC, undefined, undefined,TotCount, undefined, undefined]]);
+          }
+          var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div_Right'));
+          chart.draw(data, {displayAnnotations: true,'colors': ['blue', 'red', 'Orange'],'fill': 30});         
+         },{escape:true});
+      }
+      
+    </script>
+  </head>
+  
+  <body>
+     <H4 style="text-align:Center;color:black;">License Usage Chart</H4>
+     <div id='chart_div_Right' style='width: 800px; height: 240px; margin:0 auto;'>     
+     </div>
+     <p style="font-size: 12px;text-align: center;"><i>Use the scroll bar to increase or decrease the time period range being viewed.</i></p>
+      </body>
+</html>
+</apex:page>

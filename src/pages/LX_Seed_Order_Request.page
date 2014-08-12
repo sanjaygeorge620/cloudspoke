@@ -1,0 +1,2 @@
+<apex:page Standardcontroller="LX_Seed_Order_Request__c" action="{!dispObj}"  extensions="Newcontroller"  tabStyle="Account">
+</apex:page>

@@ -1,0 +1,414 @@
+<apex:page controller="NewOrderSummary" showHeader="false" sidebar="false" standardStylesheets="false">
+<head>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+        .container {
+            width: 640px;
+        }
+        .section {
+            overflow: auto;
+        }
+        .head {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .left {
+            float: left;
+        }
+        .left-align {
+            text-align: left;
+        }
+        .right {
+            float: right;
+        }
+        .right-align {
+            text-align: right;
+        }
+        .break {
+            clear: both;
+        }
+        .sectionhead {
+            width: 100%;
+            background-color: #C0C0C0;
+            margin-top: 12px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .sectionsecondaryhead {
+            font-weight: normal;
+            font-size: 10px;
+        }
+        .full {
+            width: 100%;
+        }
+        .item {
+            padding-left: 16px;
+        }
+        .sectionsubhead {
+            padding-left: 8px;
+            font-weight: bold;
+        }
+        .ul {
+            text-decoration: underline;
+        }
+        .em {
+            font-style: italic;
+        }
+        .indented {
+            padding-left: 20px;
+        }
+        .indented-more {
+            padding-left: 40px;
+        }
+        .price {
+            text-align: right;
+        }
+        .quantity {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        .border td, .border th {
+            border: 1px solid #C0C0C0;
+            padding: 0 6px;
+        }
+    </style>
+</head>
+<body>
+<apex:pageblock >
+<div class="container">
+  <div class="section">
+    <div class="left head">
+        NEW ORDER SUMMARY DETAIL
+    </div>
+    <div class="right">
+        <apex:outputText value="Printed Date: {0,date,M/d/yyyy}">
+            <apex:param value="{!NOW()}" />
+        </apex:outputText>
+    </div>
+  </div>
+  <div class="break"/>
+    
+  <div class="sectionhead">
+        ACCOUNT INFORMATION:
+  </div>
+  <div class="sectionsubhead">
+      {!opportunity.account.name}
+  </div>
+  
+  <table class="full item">
+    <tr>
+        <td width="20%" class="indented">
+            Opportunity: 
+        </td>
+        <td width="80%" colspan="3">
+            {!opportunity.name}
+        </td>
+    </tr>
+    <tr>
+        <td class="indented">
+            Contacts:
+        </td>
+        <td class="ul">
+            Name
+        </td>        
+        <td class="ul">
+            Email
+        </td>
+    </tr>
+   
+    <tr>
+        <td class="indented-more">
+            Bill To:
+        </td>
+        <td>
+            {!opportunity.Bill_To_Name__c}
+        </td>       
+        <td>
+            {!opportunity.LX_Bill_To_Email_Address__c}
+        </td>
+    </tr>
+    <tr>
+        <td class="indented-more">
+            Ship To:
+        </td>
+        <td>
+            {!opportunity.Ship_To_Name__c    }
+        </td>
+        
+        <td>
+           
+        </td>
+    </tr>
+    
+
+  <tr>
+        <td class="indented">
+            Sector &mdash; Type:
+        </td>
+        <td colspan="3">
+            {!opportunity.sector__c} &mdash; {!opportunity.type}        
+        </td>
+  </tr>
+  </table>
+  
+  <div class="sectionhead">
+    SALES TEAM
+    <span class="sectionsecondaryhead">
+        (AEX &bull; ISR &bull; Manager):
+    </span>
+  </div>
+  <div class="indented">
+    {!contacts.AEXName} &bull; {!contacts.ISRName} &bull; {!contacts.ManagerName}
+  </div>
+  
+  <div class="sectionhead">
+    ORDER INFORMATION:
+  </div>
+  
+  <table class="full item">
+    <tr>
+        <td class="indented" width="25%">
+            Close Date:
+        </td>
+        <td width="85%">
+            <apex:outputText value="{0,date,M/d/yyyy}">
+                <apex:param value="{!opportunity.CloseDate}" />
+            </apex:outputText>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <strong>Total Amount:</strong>
+        </td>
+        <td>
+            <strong>
+                {!opportunity.currencyIsoCode} &nbsp; 
+                <apex:outputText value="{0,number}">
+                    <apex:param value="{!opportunity.amount}" />
+                </apex:outputText>
+            </strong>
+        </td>
+    </tr>
+      <tr>
+        <td class="indented">
+            Concession Amount:
+        </td>
+        <td>
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!concessionForm.Total_Amount_Difference__c}" />
+            </apex:outputText>
+            ({!concessionForm.Total_Amount_Percent__c}%)
+        </td>
+    </tr>
+    </table>
+    <table>
+        <tr>
+        <td class="indented">
+            Revenue(One-Time)
+        </td>
+        <td>        </td>
+    </tr>
+    </table>
+    <div class="indented-more">
+    <table  class="full border">
+    <tr>
+        <td width="30%">
+            License:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_License__c}" />
+            </apex:outputText>
+            ({!concessionForm.License_Amount_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.License_Conc_Comment__c}
+        </td>
+    </tr>
+     <tr>
+        <td>
+            Prof Srvcs:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_Professional_Services__c}" />
+            </apex:outputText>
+            ({!concessionForm.Prof_Srvcs_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Prof_Srvcs_Concession_Comment__c}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Database Services:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.Book_Database_Services__c}" />
+            </apex:outputText>
+            ({!concessionForm.Database_Srvc__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Prof_Srvcs_Concession_Comment__c}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Managed Services:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_Managed_Services__c}" />
+            </apex:outputText>
+            ({!concessionForm.Mngd_Srvc_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Mngd_Srvc_Concession_Comment__c}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Platform Services:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_Platform_Services__c}" />
+            </apex:outputText>
+            ({!concessionForm.Platform_Srvc_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Platform_Srvc_Concession_Comment__c}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            3rd Party:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_Third_Party__c}" />
+            </apex:outputText>
+            ({!concessionForm.X3rd_Party_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.X3rd_Party_Concession_Comment__c}
+        </td>
+    </tr>    
+    <tr>
+        <td>
+            Training:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_Training__c}" />
+            </apex:outputText>
+            ({!concessionForm.Training_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Training_Concession_Comment__c}
+        </td>
+    </tr>    
+    
+    </table>
+    </div>
+    <table>
+    <tr>
+        <td class="indented">
+            Revenue (Recurring)
+        </td>
+        <td></td>
+    </tr>
+    </table>
+    <div class="indented-more">
+    <table  class="full border">
+    <tr>
+        <td width="30%">
+            Subscription:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_Subscription__c}" />
+            </apex:outputText>
+            ({!concessionForm.Subscription_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Subscription_Concession_Comment__c}
+        </td>
+    </tr> 
+    <tr>
+        <td>
+            Platform:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_Platform__c}" />
+            </apex:outputText>
+            ({!concessionForm.Platform_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Platform_Concession_Comment__c}
+        </td>
+    </tr> 
+    <tr>
+        <td>
+            SMSA:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!opportunity.BPQ_SMSA__c}" />
+            </apex:outputText>
+            ({!concessionForm.SMSA_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.SMSA_Concession_Comment__c}
+        </td>
+    </tr>          
+    <tr>
+        <td>
+            Remote Admin:
+            {!opportunity.currencyIsoCode} &nbsp;
+            <apex:outputText value="{0,number}">
+                <apex:param value="{!concessionForm.Remote_Admin_Difference__c}" />
+            </apex:outputText>
+            ({!concessionForm.Remote_Admin_Percent__c}%)
+        </td>
+        <td>
+            <span class="em ul">Comments</span>: {!concessionForm.Remote_Admin_Concession_Comment__c}
+        </td>
+    </tr>    
+    </table>
+    </div>
+    <table class="full">
+    <tr>
+        <td>
+             <strong>Tax Exempt:</strong>
+            <strong><apex:outputText value="{!opportunity.Tax_Exempt__c}"/></strong> 
+        </td>
+        <td>
+            <strong>Partner Referral Fee:</strong>
+            <strong><apex:outputText value="{!opportunity.Partner_Referral_Fee_Applicable__c}"/></strong>
+        </td>
+    </tr>  
+     <tr>
+        <td colspan="2">
+            <strong>Special Notes:</strong>
+            <div class="indented">
+                <apex:outputText value="{!opportunity.Special_Notes__c}"/>
+            </div>
+        </td>
+    </tr>   
+    </table>
+
+
+       <div class="sectionhead">
+        LINE ITEM DETAIL:
+       </div>
+       <apex:pageblocktable value="{!lineItems}" var="lineitms" styleClass="full border">
+           <apex:column headerClass="ul left-align" value="{!lineitms.PricebookEntry.Name}" headerValue="Item Title" />
+           <apex:column headerClass="ul right-align" value="{!lineitms.UnitPrice}" styleClass="price" headerValue="Sales Price" />
+           <apex:column headerClass="ul" styleClass="quantity" headerValue="Quantity">
+                <apex:outputLabel value="{!ROUND(lineitms.Quantity, 0)}" />
+           </apex:column>
+           <apex:column headerClass="ul right-align" value="{!lineitms.TotalPrice}" styleClass="price" headerValue="Total Sales Price"/>
+       </apex:pageblocktable>
+</div>
+</apex:pageblock>
+</body>
+</apex:page>

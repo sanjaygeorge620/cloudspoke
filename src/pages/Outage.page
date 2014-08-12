@@ -1,0 +1,210 @@
+<apex:page showheader="false">
+
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 salesforce-sites" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 salesforce-sites" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 salesforce-sites" lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="no-js ie9 salesforce-sites" lang="en"> <![endif]-->
+<!--[if !IE]><!--> <html class="salesforce-sites" lang="en"> <!--<![endif]-->
+<head>
+    <link type="image/x-icon" href="http://www.perceptivesoftware.com/favicon.ico" rel="icon" />
+    <link type="image/x-icon" href="http://www.perceptivesoftware.com/favicon.ico" rel="shortcut icon" />
+    <meta content="Perceptive Software develops ImageNow document imaging, document management and workflow (ECM) solutions used in healthcare, higher education, insurance, government and more." name="description" />
+    <title>Perceptive Software | ImageNow | Customer Portal | Customer Support</title>
+    <script src="//az322532.vo.msecnd.net/script/modernizr.2.61.js" type="text/javascript">        //empty</script>
+          <link href="http://www.qa.perceptivesoftware.com/includes/css/ps3.css" rel="stylesheet" />
+        <link href="http://www.qa.perceptivesoftware.com/includes/css/ps3-salesforce.css" rel="stylesheet" />
+</head>
+<body id="landing">
+    <div id="frame" class="frame">
+     <header>
+          <div class="row-brand">
+
+            <div class="brand hide-text"><a href="/">Perceptive Software</a></div>
+            <nav class="controlbar">             
+               <a href="//www.qa.perceptivesoftware.com/contact">Contact Us</a>
+               <a href="//www.qa.perceptivesoftware.com/careers">Careers</a><a href="//login.qa.perceptivesoftware.com">Log In</a> 
+               <a href="http://www.perceptivesoftware.com" id="country-trigger"><span class="icon country us">US</span></a>
+            </nav>
+            <div class="country-selector hide-completely" id="country-selector">
+                <ul class="links-list links-icon">
+                    <li><a href="http://www.perceptivesoftware.co.uk"><span class="icon country gb">GB</span><span class="label">United Kingdom</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.nl"><span class="icon country nl">NL</span><span class="label">Netherlands</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.es"><span class="icon country es">ES</span><span class="label">Spain</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.fr"><span class="icon country fr">FR</span><span class="label">France</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.de"><span class="icon country de">DE</span><span class="label">Germany</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.it"><span class="icon country it">IT</span><span class="label">Italy</span></a></li>
+                    <li><a href="http://www.perceptivesoftware.br.com"><span class="icon country br">BR</span><span class="label">Brazil</span></a></li>
+                </ul>
+            </div>
+          </div>
+          <div class="toggle-nav links-pictogram"><a class="button touch-ui pictogram-down">Show Menu</a></div>
+          <div class="row-nav">
+            <nav class="primary-nav">
+              <ul class="primary-nav-level1" id="main-nav">
+              <li><a href="//www.qa.perceptivesoftware.com/products"> Products</a></li>
+              <li class="dropdown-trigger">
+              <a class="test dropdown-menu" href="//www.qa.perceptivesoftware.com/solutions">Solutions</a>
+              <div class="dropdown solutions grid"><div class="c8 m">
+              <h2>Departments</h2><ul class="links-list primary-nav-level2">
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/back-office/accounting-financials">Accounting &amp; Finance</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/back-office/human-resources">Human Resources</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/back-office/contract-management">Contract Management</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/back-office/legal-document">Legal</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/back-office/payroll-management">Payroll</a></li>
+              </ul><ul class="links-list primary-nav-level2"><li><a href="//www.qa.perceptivesoftware.com/solutions/compliance">Regulatory Compliance</a>
+              </li></ul></div><div class="c8"><h2>Industries</h2><ul class="links-list primary-nav-level2">
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/financial-services/financial-services-industry">Financial Services</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/healthcare/healthcare-industry">Healthcare</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/higher-education/imagenow-higher-education">Higher Education</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/k-12-education/imagenow-k12-schools">K-12 Education</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/insurance/insurance-industry">Insurance</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/manufacturing-distribution/manufacturing-distribution-industry">Manufacturing</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/retail/retail-industry">Retail</a></li><li><a href="/solutions/industry/federal-government/imagenow-federal">Federal Government</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/state-government">State Government</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/solutions/industry/energy-water-utilities/imagenow-energy-water">Energy &amp; Water Utilities</a></li>
+              </ul></div></div></li><li><a href="//www.qa.perceptivesoftware.com/services"> Services</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/partners"> Partners</a></li>
+              <li><a href="//www.qa.perceptivesoftware.com/case-studies"> Case Studies</a></li>
+              <li class="active-section"><a>Customer Portal</a></li></ul>
+            </nav>
+            <form action="http://www.qa.perceptivesoftware.com/search" class="search" method="Post">
+              <input autosave="unique" class="field" name="IW_FIELD_WEB_STYLE" results="5" type="search" /> 
+              <input class="inputSelector" name="IW_DATABASE" type="hidden" value="Perceptivesoftware.com (QA)" />
+              <input class="search-button" type="submit" value="Search" />
+            </form>
+          </div>
+        </header>
+        <!-- MAINTENANCE STARTS HERE -->
+        
+               
+            <div class="main" role="main"> 
+            <div class="content grid"> 
+            <div class="c4 m"></div>
+            <div class="c10">
+                    <h1><MainHeading>Temporarily Down for Maintenance</MainHeading></h1> 
+                        <p>We are performing scheduled maintenance. We should be back online shortly. </p> 
+                        <h4>Phone</h4>
+                        <ul>
+                            <li><b>Worldwide:</b> +1 800 941 7460 ext 2</li>
+                            <li><b>United Kingdom (Local Access):</b> +44 (0) 800 141 2022</li>
+                            <li><b>South Africa (Local Access):</b> +27 (0) 11 807 3025</li><br />
+                        </ul>   
+                        <h4>Email</h4>
+                        <ul>    
+                            <li><b>Worldwide:</b> <a href="mailto:support@perceptivesoftware.com">support@perceptivesoftware.com</a></li>
+                            <li><b>Africa:</b> <a href="mailto:africasupport@perceptivesoftware.com">africasupport@perceptivesoftware.com</a></li>
+                                
+                        </ul>
+                        </div>
+                        </div>
+                    </div> 
+                    </div>
+<footer>
+      <div class="frame">
+        <div class="grid">
+          <div class="c5 m">
+            <ul class="social">
+              <li><a class="icon tw" href="//twitter.com/perceptivesw">Follow Us on Twitter</a></li>
+              <li><a class="icon fb" href="//www.facebook.com/perceptivesw">Like Us on Facebook</a></li>
+              <li><a class="icon li" href="//www.linkedin.com/company/perceptive-software">Join Us on LinkedIn</a></li>
+              <li><a class="icon yt" href="//www.youtube.com/user/perceptivesoftware">Watch Us on YouTube</a></li>
+              <li><a class="icon in" href="http://www.incontextmag.com/">Read Us on InContext</a></li>
+            </ul>
+          </div>
+          <div class="c5 m form-wrap-footer">
+            <div class="thankyou standard">
+              <h2>Thank You</h2>
+              <div class="message">
+                <p>Thank you for your interest in Perceptive Software. You will occasionally receive timely articles and informative content you can use to help move your business forward.</p>
+              </div>
+            </div>
+            <form action="//www.qa.perceptivesoftware.com/forms/submit" class="form color-none form-ajax labels-top" id="ContactUs-US-ShortForm" method="POST" name="ContactUs-US-ShortForm" novalidate="novalidate">
+              <input name="footer" type="hidden" value="footer" />
+              <input name="elqFormName" type="hidden" value="ContactUs-US-ShortForm" />
+              <input name="elqSiteID" type="hidden" value="1411 " />
+              <fieldset>
+                <legend>Want to learn more? Contact us!</legend>
+                <p class="text">
+                  <label for="footer-fname">First Name</label>
+                  <input class="required" id="footer-fname" name="firstname" type="text" />
+                </p>
+                <p class="text">
+                  <label for="footer-lname">Last Name</label>
+                  <input class="required" id="footer-lname" name="lastname" type="text" />
+                </p>
+                <p class="text">
+                  <label for="footer-email">Email Address</label>
+                  <input class="required email" id="footer-email" name="email" type="text" />
+                </p>
+                <p class="text">
+                  <label for="footer-org">Organization</label>
+                  <input class="required" id="footer-org" name="company" type="text" />
+                </p>
+                <p class="textarea short">
+                  <label for="footer-message">Your Message</label>
+                  <textarea id="footer-message" name="comments">optional</textarea>
+                </p>
+                <ol class="radio-checkbox">
+                  <li>
+                    <input id="footer-newsletter-subscribe" name="Subscription" type="checkbox" />
+                    <label for="footer-newsletter-subscribe">Subscribe to our newsletter</label>
+                  </li>
+                </ol>
+                <p class="action">
+                  <input class="button major" type="submit" value="Send Inquiry" />
+                </p>
+              </fieldset>
+            </form>
+          </div>
+          <div class="c6">
+            <div>
+              <script src="//www.qa.perceptivesoftware.com/scripts/salesforce-live-chat-button.js" type="text/javascript">//empty</script>
+              <div id="launchChat"><div id="__ALC_BADGE_ONLINE9027355296" style="display: none;">
+              <a class="button chat chat-active" href="javascript://chat" onclick="_alc.startChat(16436); return false;">
+              <span class="icon">//empty</span><i>Chat Now With Our Team</i></a></div><div id="__ALC_BADGE_OFFLINE9027355296">
+              <a class="button chat" href="javascript://chat" onclick="_alc.startChat(16436); return false;"><span class="icon">//empty</span>
+              <i>Leave a Message</i></a></div></div>
+              
+            </div>
+            <div class="c8 m">
+              <h3>Community</h3>
+              <ul class="linklist">
+            <li><a href="http://community.perceptivesoftware.com/">Blog and Forums</a></li>
+                <li><a href="http://community.perceptivesoftware.com/user_groups/default.aspx?snl=Regional%20User%20Groups&amp;#38;sid=3">Regional User Groups</a></li>
+                <li><a href="http://www.incontextmag.com/">InContext Magazine</a></li>
+                <li><a href="http://inspire.perceptivesoftware.com/">Inspire User Conference</a></li>
+              </ul>
+            </div>
+            <div class="c8">
+              <h3>Company</h3>
+              <ul class="linklist">
+                <li><a href="//www.qa.perceptivesoftware.com/company/about/index">About Perceptive Software</a></li>
+                <li><a href="//www.qa.perceptivesoftware.com/company/careers/index">Careers</a></li>
+                <li><a href="//www.qa.perceptivesoftware.com/company/news/index">Newsroom</a></li>
+                <li><a href="//www.qa.perceptivesoftware.com/company/contact-us/index">Contact Us</a></li>
+                <li><a href="//www.qa.perceptivesoftware.com/company/webinars-events/index">Webinars and Events</a></li>
+              </ul>
+            </div>
+          </div>
+         </div>
+         <div class="copyright">
+          <p>&copy; 2012 Perceptive Software All rights reserved. <a href="//www.qa.perceptivesoftware.com/sitemap/index">Site Map</a> | <a href="//www.qa.perceptivesoftware.com/company/terms-of-use">Terms of Use</a> | <a href="//www.qa.perceptivesoftware.com/company/legal">Privacy Statement</a> | <a href="//www.qa.perceptivesoftware.com/company/purchase-terms">Purchase Terms</a></p>
+         </div>
+      </div>
+      <script src="//www.qa.perceptivesoftware.com/scripts/salesforce-live-chat-deploy.js" type="text/javascript">//empty</script><script src="http://depot.liveagentforsalesforce.com/app/js/lt.js" type="text/javascript"></script><script src="http://depot.liveagentforsalesforce.com/app/deployment.php?id=10583&amp;#38;ptid=10583-1128bfac2-1fe7-459f-b1a4-8585a7797d80&amp;#38;stid=16f9729bc-7724-49ee-a1f5-15dab5702e17&amp;#38;oref=Direct&amp;#38;chat=null&amp;#38;r=0.2977080084170328&amp;#38;d[]=12181&amp;#38;b[]=16436" type="text/javascript"></script>
+    
+      
+    </footer>
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript">//empty</script>
+         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/validate-1-9-0/jquery.validate.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/script/jquery.youtube-2.1.0.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/salesforce-scripts/jquery.plugins.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/salesforce-scripts/shadowbox.js" type="text/javascript">//empty</script>
+         <script src="//az322532.vo.msecnd.net/salesforce-scripts/shadowbox.js" type="text/javascript">//empty</script>
+
+         <script src="http://www.qa.perceptivesoftware.com/scripts/general.js" type="text/javascript">//empty</script>
+
+</body>
+</html>
+</apex:page>

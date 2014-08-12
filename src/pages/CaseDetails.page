@@ -1,0 +1,301 @@
+<apex:page showHeader="false" standardController="case" standardStylesheets="false" extensions="SitesCaseController"> 
+   <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+     <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | {!$Label.Case} {!case.CaseNumber}</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+      <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-cases').addClass('active');
+          
+          var caseattachments = jQuery('.attachmentstable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+          var caseactivities = jQuery('.activitytable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+          var casecomment = jQuery('.casecommentsTable').dataTable( {aaSorting: [], "bFilter": false, "bLengthChange": false, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+          
+          
+          
+          //Submit Comment
+          jQuery('.form-comment, .form-attachment').hide()  
+          
+          //Comment
+          jQuery('.form-click-comment').click(function() { // bind click event to link
+                jQuery('.form-comment').slideToggle('slow');
+                return false;
+            });
+          
+          //attachment  
+          jQuery('.form-click-attachment').click(function() { // bind click event to link
+                jQuery('.form-attachment').slideToggle('slow');
+                return false;
+            });  
+        });
+    </script>
+     </apex:define>    
+    <apex:define name="body"> 
+            <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">{!$Label.Home}</a>
+                    <a href="{!$Page.Cases}">{!$Label.Cases}</a>
+                    <a class="current" href="#">{!case.CaseNumber}</a>
+               </nav>
+            </div>
+         </div>   
+        <div class="cp_core">
+            <apex:outputPanel rendered="{!$ObjectType.case.accessible}">
+              <div class="column leftcol">
+                <div class="callout new-case">
+                    <apex:form rendered="{!$ObjectType.case.createable}">
+                        <!---Case Web Submit--->
+                        <apex:outputLink styleclass="new-case" value="{!$page.CaseWebSubmit}">{!$Label.Submit_New_Case}</apex:outputLink>
+                    </apex:form> 
+                </div><!-- /New Case Button -->
+                <c:Sites_Case_Widget />
+                <c:Sites_Contact_Widget rendered="{!SITE_TAB_CONTACT}" />
+            </div><!-- /Left Col -->
+            
+            <div class="column right-23">
+                <div class="callout cases">
+                    <div class="title-bar">
+                        <span class="sprite_cpicons cases-view">&nbsp;</span>{!$Label.Case_ID}: 
+                        <span class="case-id"><apex:outputText value="{!case.CaseNumber}"/></span>
+                    </div><!-- /Cases Title Bar -->
+                    <apex:pageMessages />
+                    <div class="callout-content cases-content cases-content-inner">
+                        <div class="inner-content">
+                            <div class="left-inner-col">
+                                <p class="label case-info-title">{!$Label.Case_Information}:</p>
+                                <p class="item case-info-title">{!$Label.Case_Number}: <span><apex:outputText value="{!case.CaseNumber}"/></span></p>
+                            </div>
+                            <div class="right-inner-col">
+                                <p class="label case-info-title">{!$Label.Contact_Information}:</p>
+                                <p class="label case-contact">{!$Label.Contact_Name}:</p>
+                                <p class="item case-contact"><apex:outputText value="{!case.Contact.Name}"/></p>
+                                <p class="label case-contact-email">{!$Label.Contact_Email}:</p>
+                                <a class="item case-contact-email" href="mailto:{!case.Contact.Email}"><apex:outputText value="{!case.Contact.Email}"/></a>
+                                <p class="label case-contact-phone">{!$Label.Contact_Phone}</p>
+                                <p class="item case-contact-phone"><apex:outputText value="{!case.Contact.Phone}"/></p>
+                            </div>
+                        </div><!-- /Case Info &amp; Contact Info -->
+                        
+                        <!-- description information -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Description_Information}:</span>
+                        </div>
+                        <div class="inner-content">
+                            <div class="inner-description">
+                                <p><strong>{!$Label.Subject}:</strong></p>
+                                <p><strong><apex:outputField value="{!case.Subject}"/></strong></p>
+                            </div>
+                            <div class="inner-description">
+                                <p><strong>{!$Label.Description}:</strong></p>
+                                <p><apex:outputField value="{!case.Description}"/></p>
+                            </div>
+                            <div class="inner-description">
+                                <p><strong>{!$Label.Final_Outcome}:</strong></p>
+                                <p><apex:outputField value="{!case.Final_Outcome__c}"/></p>
+                            
+                            </div>
+                        </div><!-- /Inner Content -->
+                        <!-- /description information -->
+                        
+                        <!-- Product information -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Product_Information}:</span>
+                        </div>
+                        <div class="inner-content">
+                            <p class="label product-title">{!$Label.Product_Name}: <span class="item product-title"><apex:outputText value="{!case.ProductName__c}"/></span></p>
+                        </div>
+                        
+                        <!-- Server information -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Server_Information}:</span>
+                        </div>
+                        <div class="inner-content">
+                            <p class="label product-title">{!$Label.Server}: <span class="item product-title"><apex:outputText value="{!case.server__r.release_text__c+' '+case.server__r.machine_name__c}"/></span></p>
+                        </div>
+                        
+                        <!-- Additional Information -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Additional_Information}:</span>
+                        </div>
+                        <div class="inner-content">
+                            <div class="left-inner-col">
+                                <p class="label status-title">{!$Label.Status}: <span class="item status-title"><apex:outputText value="{!case.Status}"/></span></p>
+                                <p class="label status-impact">{!$Label.Impact}: <span class="item status-impact"><apex:outputText value="{!case.Impact__c}"/></span></p>
+                            </div>
+                            <div class="right-inner-col">
+                                <p class="label date-title-open">{!$Label.Date_Time_Opened}: <span class="item date-title"><apex:outputfield value="{!case.createddate}"/></span></p>
+                                <p class="label date-title-closed">{!$Label.Date_Time_Closed}: <span class="item date-title"><apex:outputfield value="{!case.closeddate}"/></span></p>
+                            </div>
+                        </div>
+                        <!-- Related Cases -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span></span>
+                        </div>
+                        <div class="inner-content">
+                            <apex:outputLink value="{!$page.Knowledge}" styleClass="sprite_fields kb-button">
+                                {!$Label.Search_Knowledgebase}
+                                <apex:param name="s" value="{!case.Subject}"/>
+                                                              
+                                <apex:param name="rel" value="{!if(case.server__r.release_text__c!='' && !BEGINS(case.server__r.release_text__c,'5'),'X'+SUBSTITUTE(MID(case.server__r.release_text__c,1,3),'.','_'),'')}"/>
+                                <apex:param name="reltitle" value="{!if(case.server__r.release_text__c!='' && !BEGINS(case.server__r.release_text__c,'5'),MID(case.server__r.release_text__c,1,3),'')}"/>
+                            </apex:outputLink>
+                        </div>
+                        <!-- Articles -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Knowledgebase_Articles}: <a href="#"></a></span>
+                        </div>
+                        <div class="inner-content">
+                            <apex:outputText rendered="{!CaseArticles.size==0}" value="No Articles" />
+                            <apex:outputPanel rendered="{!CaseArticles.size!=0}" >
+                                <table cellpadding="0" cellspacing="0" border="0" class="display casetable">
+                                        <thead>
+                                            <tr>
+                                                <th>{!$Label.Title}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <apex:repeat value="{!CaseArticles}" var="c">
+                                              <tr>
+                                                    <td class="kb-title">
+                                                        <apex:outputLink target="_blank" value="{!MID(c.KnowledgeArticleId,1,15)}">{!c.title}</apex:outputLink>
+                                                    </td>
+                                              </tr>
+                                             </apex:repeat>
+                                        </tbody>
+                                  </table>
+                               </apex:outputpanel>
+                        </div>
+                        <!-- Activity History -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Activity_History}: <a href="#"></a></span>
+                        </div>
+                        <div class="inner-content">
+                            <apex:outputText rendered="{!CaseActivityHistory.size==0}" value="No Public Activities" />
+                            <apex:outputPanel rendered="{!CaseActivityHistory.size!=0}" >
+                                <table cellpadding="0" cellspacing="0" border="0" class="display activitytable">
+                                        <thead>
+                                            <tr>
+                                                <th>{!$Label.Subject}</th>
+                                                <th>{!$Label.Created_By}</th>
+                                                <th>{!$Label.Date}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <apex:repeat value="{!CaseActivityHistory}" var="c">
+                                              <tr>
+                                                    <td class="task-subject">
+                                                        <apex:outputLink value="{!$page.CaseDetails_Tasks}">
+                                                            {!c.Subject}
+                                                            <apex:param name="id" value="{!c.id}"/>
+                                                        </apex:outputLink>
+                                                    </td>
+                                                    <td class="task-createdby"><apex:outputField value="{!c.CreatedBy.name}"/> </td>
+                                                    <td class="task-date">
+                                                        <apex:outputfield value="{!c.createddate}"/>
+                                                    </td>
+                                                    
+                                              </tr>
+                                             </apex:repeat>
+                                        </tbody>
+                                  </table>
+                               </apex:outputpanel>
+                        </div>
+                        <!-- Case Comments -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Case_Comments}: <apex:outputLink styleclass="form-click-comment" rendered="{!!case.isclosed}">{!$Label.Add_Comment}</apex:outputLink></span>
+                        </div>
+
+                        <apex:outputPanel layout="block" styleClass="inner-content" id="commentdetail">
+                            <apex:form >
+                               <div class="form-comment"> 
+                                <apex:outputLabel value="Add a Comment" for="commentbody"/>
+                                <apex:inputTextarea value="{!CaseComment.commentbody}" id="commentbody"/>
+                                <apex:commandButton value="Submit" action="{!SubmitComment}" styleClass="submitbutton"/>
+                               </div> 
+                            </apex:form>   
+                             
+                            <apex:outputText rendered="{!CaseComments.size==0}" value="No Comments" />
+                            <apex:outputPanel rendered="{!CaseComments.size!=0}" >
+                                <table cellpadding="0" cellspacing="0" border="0" class="display casecommentsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>{!$Label.Comment}</th>
+                                                <th>{!$Label.Created_By}</th>
+                                                <th>{!$Label.Date}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <apex:repeat value="{!CaseComments}" var="c">
+                                              <tr>
+                                                    <td class="comment-body"><apex:outputField value="{!c.CommentBody}"/></td>
+                                                    <td class="comment-createdby">{!c.CreatedBy.name}</td>
+                                                    <td class="comment-date">
+                                                        <apex:outputfield value="{!c.createddate}"/>
+                                                    </td>
+                                              </tr>
+                                             </apex:repeat>
+                                        </tbody>
+                                  </table>
+                               </apex:outputpanel>
+                        </apex:outputPanel>
+                        <!-- Attachments -->
+                        <div class="inner-content inner-content-title-bar">
+                            <span>{!$Label.Attachments}: <apex:outputLink styleclass="form-click-attachment" rendered="{!!case.isclosed}">{!$Label.Attach_File}</apex:outputLink></span>
+                        </div>
+                        <div class="inner-content">
+                            <apex:form >
+                                 <div class="form-attachment">
+                                      <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file" styleclass="none"/>
+                                      <br />
+                                      <apex:outputLabel value="Description" for="description"/>
+                                      <apex:inputTextarea value="{!attachment.description}" id="description"/>
+                                      <br />
+                                    <apex:commandButton value="Submit" action="{!uploadAttachment}" styleClass="submitbutton"/>
+                                 </div>   
+                            </apex:form> 
+                            
+                            <apex:outputText rendered="{!CaseAttachments.size==0}" value="No Attachments" />
+                            <apex:outputPanel rendered="{!CaseAttachments.size!=0}" >
+                                <table cellpadding="0" cellspacing="0" border="0" class="display attachmentsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>{!$Label.Title}</th>
+                                                <th>{!$Label.Description}</th>
+                                                <th>{!$Label.Type}</th>
+                                                <th>{!$Label.Last_Modified_Date}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <apex:repeat value="{!CaseAttachments}" var="c">
+                                              <tr>
+                                                    <td class="attach-view"><a target="_blank" href="{!URLFOR($Action.Attachment.Download,c.id)}">{!$Label.View}</a></td>
+                                                    <td class="attach-name">{!c.Name}</td>
+                                                    <td class="attach-desc">{!c.Description}</td>
+                                                    <td class="attach-type">{!c.ContentType}</td>
+                                                    <td class="attach-date">
+                                                        <apex:outputfield value="{!c.createddate}"/>
+                                                    </td>
+                                              </tr>
+                                             </apex:repeat>
+                                        </tbody>
+                                  </table>
+                               </apex:outputpanel>
+                        </div>
+                        
+                    </div><!-- /Case content -->
+                        
+                </div><!-- /Cases -->
+            </div><!-- /Right Two-Thirds -->
+            
+            </apex:outputPanel>
+            <apex:outputPanel rendered="({!$ObjectType.case.accessible})"><p>{!$Label.No_Records}</p></apex:outputPanel>
+
+        </div>
+    </apex:define>
+  </apex:composition>  
+
+</apex:page>

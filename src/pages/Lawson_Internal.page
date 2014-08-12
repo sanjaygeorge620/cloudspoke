@@ -1,0 +1,79 @@
+<!-- This Page has internal links for LearnMode Strategies Page under Learning Business Applications for Lawson  -->
+<!-- Created by Pemmanni on October 25th 2011 -->
+<apex:page controller="SitesControllerInternal">
+<title>Lawson</title>
+    <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+    jQuery('.toolbar-documentation').addClass('active');
+    scaletowindow('#itarget',900,300);});
+    jQuery(window).resize(function() {
+    scaletowindow('#itarget',900,300);});
+    </script>
+    <div class="breadcrumb">
+    <ul>
+    <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+    <li><a class="current" href="{!$page.Lawson_Internal}">Lawson</a></li>
+    </ul>   
+    </div>    
+    <div class="cp_core">
+    <apex:pageMessages />
+    <div class="column full-width" >
+    <div class="callout spotlight">    
+    <div class="callout-content"><br/>
+    <div><H1 align="center">LearnMode with Lawson</h1></div><br /><hr /><br />
+    <div class="callout-content">
+    <p>Lawson, an ERP (enterprise resource planning) system integrates with ImageNow in business processes such as Human Resources and Accounts Payable among others.</p><br />
+    <p>This page describes the different approaches to learning a Lawson form. For purposes of this page and the related articles, the word “form” refers to a screen in Lawson, rather than an ImageNow eForm. Once a Lawson form is successfully learned, it can be used to drive searching within ImageNow using a <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwr&popup=true">view action filter.</a></p><br /><br/>
+    <p><b>Note: </b> To learn a Lawson form, you will need the global privilege to Manage Application Plans within ImageNow. </p><br/><br/>
+    <h2><font color= "FF9933">Lawson Portal (non-shifting values)</font></h2><br/>
+    <ul>
+    <li><h3>Internet Explorer (IE) LearnMode method</h3></li><br />
+    <p>If there is a “hard anchor” point on a form, one that does not move and is consistent across all logins, use the dictionary data element definition of the IE method to capture data values. For details, refer to the <a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SJO&popup=true">Define a dictionary data element using Internet Explorer</a> topic in Product Documentation.</p>
+    </ul><br />
+    <h2><font color= "FF9933">Lawson Portal (shifting values condition exists)</font></h2><br />
+    One challenge to learning Lawson Portal is that the values may shift within the application layer depending on a user’s role, even though the values appear in the same location on the form. To account for the shifting values, the following approaches are presented in order of effectiveness.<br/><br/>
+    <ul>
+    <li><h3>Custom HTML tags</h3></li><br/>
+    If the HTML locations shift on the Lawson form, consider <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNq9&popup=true">embedding hidden HTML tags</a>. Using anchored hidden HTML tags can be a quick approach for learning a form.<br /><br />
+    <li><h3>Scripting with Internet Explorer LearnMode functions</h3></li><br/>
+    On occasion, scripting is a necessary strategy to capture shifting data values when the use of hidden HTML tags is not an option. A VBScript can be designed to specifically locate and retrieve data from an IE element table. The article <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNZD&popup=true">Using IE LearnMode VBScript functions</a> contains instructions for using a script to capture shifting data values.<br /><br />
+    <li><h3>AppGetData function with AccExplorer</h3></li><br/>
+    If IE LearnMode VBScript functions are not an option, then AccExplorer can be used to create a VBScript with the AppGetData function to locate needed values. Refer to the <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwc&popup=true"> Learning a business application with shifting values using the AppGetData function</a> article in Knowledgebase for more information.<br /><br />
+    <li><h3>Viewpoint </h3></li><br/>
+    The Viewpoint method can be used to learn a Lawson form with either Internet Explorer or Mozilla Firefox web browsers. Viewpoint is a good option under the f
+    lowing conditions: <br/><br/>
+    <ol>
+    <li>The linking information can be seen on the form without scrolling.</li> 
+    <li>Windows display settings are consistent, since Viewpoint is dependent on window mapping coordinates. </li> 
+    <li>For browser-delivered applications, the locations of browser toolbars are standardized. With toolbars standardized, this method can successfully obtain needed data values for linking.</li> <br/> 
+    </ol>
+    Refer to <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwI&popup=true">Tips for learning a browser-delivered application using the Viewpoint method </a> in Knowledgebase.<br /><br />
+    <li><H3>HyperLearn</H3></li><br/>
+    Lastly, if the Lawson form cannot be learned with the previous options HyperLearn can be employed. Refer to <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNoX&popup=true">HyperLearn Overview</a> in Knowledgebase for tips when using HyperLearn.  <br/><br/>
+    </ul>         
+    <H2><font color= "FF9933">Business Sectors using Lawson: </font></H2><br />
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNyd&popup=true"><h3>Learning HR forms in Lawson Portal</h3></a><br/>
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNyJ&popup=true"><h3>Learning AP forms in Lawson Portal</h3></a><br /><br /><br />
+    <H2><font color= "FF9933">Lawson LID</font></H2><br />
+    The HyperLearn method of LearnMode is the recommended way to learn Lawson LID forms. Refer to <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNoX&popup=true">HyperLearn Overview </a> in Knowledgebase for tips when using HyperLearn. In some instances, there may be a need to <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNp6&popup=true">remove unwanted spaces when linking</a>, the need to <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNow&popup=true">convert uppercase to lowercase letters</a> or to <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNpp&popup=true">replace apostrophes with commas in a name field</a> to successfully complete the linking process using HyperLearn.  <br /><br />
+    For details on learning Lawson LID forms, see <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNw8&popup=true"><font color= "FF9933" >Learning Lawson LID</font></a>.<br /><br /><br />
+    <div class="column rightcolumn">  
+    <div class="callout fd">
+    <a class="title-bar" href="#"><span class="sprite_cpicons fd">&nbsp;</span><font color= "FF9933">Related Topics</font></a>
+    <div class="callout-content"><br />
+    <a href="{!$page.LearnMode_Strategies_FCL}"><h3>LearnMode Strategies</h3></a><br/>
+    <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNpB&popup=true"><h3>Using HyperLearn Debug</H3></a><br/>
+    <a href="https://c.na5.visual.force.com/apex/KnowledgeProductDocuments_Internal?id=kA2700000004CRC&popup=true"><h3>Integrate ImageNow with Lawson</h3></a>
+    </div>                        
+    </div>                        
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </apex:define>
+  </apex:composition>
+</apex:page>

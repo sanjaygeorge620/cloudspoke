@@ -1,0 +1,41 @@
+<apex:page controller="popupwindow" sidebar="false" showHeader="false"  >
+        <apex:form >
+            <apex:outputPanel id="tstpopup" styleClass="block-level">
+            
+                <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                
+                    <apex:outputPanel styleClass="custPopup " layout="block" rendered="{!displayPopUp}">   
+                    
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                    <!---    <apex:stylesheet id="sfdc_p" value="https://localhost/Sites/Perceptive_Sites_CSS/personalization.css" /> ---->
+                    <apex:stylesheet id="sfdc_popup3css" value="{!URLFOR($Resource.Perceptive_Sites_CSS,"personalization.css")}" /> 
+                    <style>
+                    input[type="checkbox"] {height: 15px;width: 25px;display:initial;}
+                    </style>
+                    <div class="divTable3"><span class="close-btn"><a href="#" class="close">X</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>Personalization Setup</div>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="divTable1">You can customize your Customer Portal experience by contorlling the products for which you see content.Please select the desired products below.</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> 
+                                    <div>
+                                        <apex:repeat value="{!PFlst}" var="wrap" rows="" >
+                                            <div class="box-level"><apex:inputCheckbox value="{!wrap.isChecked}"  /><label>{!wrap.PfamilyName}</label></div>        
+                                        </apex:repeat>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="divTable2" style="float:left">You may change these selections at any time via the My Profile link on the Portal toolbar.</div>
+                                    <apex:commandButton value="Apply" styleClass="css_button" action="{!submit}"  />
+                                </td>
+                            </tr>
+                        </table>  
+                    </apex:outputPanel> 
+            </apex:outputPanel>
+        </apex:form>
+</apex:page>

@@ -1,0 +1,56 @@
+<!-- Author: Steve Weiss - stevekweiss@gmail.com -->
+<apex:component controller="PostingFeedController" allowDML="true">
+<apex:attribute name="pid" description="Posting ID"
+        type="String" required="true" assignTo="{!pid}"/>
+
+  <!-- take our feeds and loop through them to display -->    
+  <apex:outputPanel id="feedComponent">
+  <apex:form >
+  
+  
+  		<apex:actionFunction name="postComment" action="{!postComment}" rerender="feedComponent"/>
+  		<apex:inputHidden id="fpid" value="{!fpid}"/>
+  		<apex:inputHidden id="commentbody" value="{!commentbody}"/>
+  		<script>
+  	function addComment(postId, comment) {
+  		document.getElementById('{!$component.fpid}').value = postId;
+  		document.getElementById('{!$component.commentbody}').value = comment;
+  		postComment();
+  	}
+  </script>
+	  <apex:outputPanel layout="block" styleClass="wallpostEntryDiv">
+		  Ask a question or post a message:&nbsp;<apex:inputText value="{!wallpost}" id="post" maxlength="100" size="70" />
+	      <apex:commandButton rerender="feedComponent" value="Submit" action="{!addAFeedPost}" rerender="feedComponent"/>
+	  </apex:outputPanel>
+
+<apex:dataList styleClass="theFeed" value="{!myfeed}" var="f">
+       <apex:variable var="uid" value="{!f.feed.FeedPost.CreatedById}" />
+       <!-- display the posts -->
+          
+           <div class="feedPostBody">
+           <apex:outputLink value="/{!f.feed.CreatedBy.id}"><apex:outputText value="{!f.feed.CreatedBy.Name}"/></apex:outputLink>:  
+               <apex:outputText value=" {!f.feed.FeedPost.Body}" id="feedbody"/>
+               <br/> 
+               <span class="date"><apex:outputText value="{!f.localtime}"/></span>
+               <apex:outputPanel styleClass="commentLink" rendered="{!NOT(f.hasComments)}"><a onclick="document.getElementById('{!$Component.commentEntry}').setAttribute('class','enterComment');this.style.display='none';">Comment</a>
+               </apex:outputPanel>
+             
+           </div>
+           <div>
+           <!-- Display comments -->
+           <apex:dataList styleClass="commentDiv" value="{!f.comments}" var="c">
+                <apex:outputLink value="/{!c.comment.CreatedBy.id}"><apex:outputText value="{!c.comment.CreatedBy.Name}" id="cfname"/></apex:outputLink>:  
+	                        <apex:outputText value=" {!c.comment.CommentBody}" id="comment-repeat"/>
+	                        <br/> 
+               				<span class="date"><apex:outputText value="{!c.localtime}"/></span>
+	        </apex:dataList>               
+            <apex:outputPanel id="commentEntry" layout="block" styleClass="enterComment {!f.commentClass}">
+           	<apex:inputText size="70" id="postComment"/><apex:commandButton value="Comment" rerender="feedComponent" onclick="addComment('{!f.feed.id}', document.getElementById('{!$Component.postComment}').value);return false;"/>
+           </apex:outputPanel>
+           </div>
+            
+       
+</apex:dataList>
+	  </apex:form>
+</apex:outputPanel>
+</apex:component>

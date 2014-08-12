@@ -1,0 +1,73 @@
+<apex:page standardController="BigMachines__Quote__c" extensions="quoteshare_controller"> 
+  <apex:form id="form">    
+    <apex:actionFunction action="{!Deletesharing}" name="Deleteqsharing" reRender="full">
+        <apex:param name="SelectedTeamMeberId" value="" assignTo="{!SelecteduserId}"/>
+    </apex:actionFunction> 
+    
+    <apex:actionFunction action="{!Editsharing}" name="Editqsharing" reRender="full">
+        <apex:param name="SelectedTeamMeberId" value="" assignTo="{!SelecteduserIdforedit}"/>
+    </apex:actionFunction> 
+    
+  <apex:outputPanel id="full">
+  <apex:pageBlock title="Sharing for Quote {!BigMachines__Quote__c.name}" rendered="{!IF($ObjectType.BigMachines__Quote__c.accessible && !editmode,True,False)}"> 
+        <apex:pageBlockButtons location="Top">
+        <apex:commandButton action="{!back}" status="spinner1" value="Back"  />
+        <apex:commandButton action="{!syncwithBugMachines}" status="spinner1" rerender="full" value="Sync Sharing with DealDesk"  />
+        <apex:commandButton action="{!addNew}" value="Add"  status="spinner1" rerender="full"/>
+        <apex:actionStatus id="spinner1">
+        <apex:facet name="start"><img alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /></apex:facet>                
+        </apex:actionStatus>
+        </apex:pageBlockButtons> 
+    <apex:outputText rendered="{!if(qshMembers != null && qshMembers.size >0 ,false,true)}"> No Team Members</apex:outputText>
+    <apex:outputPanel id="displayqshare" rendered="{!if(qshMembers != null && qshMembers.size >0,true,false)}">
+  <apex:pageMessages />
+     <apex:pageBlockTable id="pbtable" value="{!mainList}" var="a" columnsWidth="10%,40%,20%,20%,20%" rows="{!noOfRows}">           
+     {!BigMachines__Quote__c.Forwarded_String__c}
+                <apex:column headerValue="Action" rendered="{!hasDeleteAccess}">                       
+                <a href="javascript:if (window.confirm('Are you sure you want to change the quote access?')) Editqsharing('{!a.qShare.id}');" style="font-weight:bold">Edit</a>&nbsp;|&nbsp;
+                <a href="javascript:if (window.confirm('Are you sure?')) Deleteqsharing('{!a.qShare.id}');" style="font-weight:bold">Del</a>
+                </apex:column>
+                <apex:column value="{!a.qShare.UserOrGroupId}" headerValue="Name" onclick="window.open('/'+'{!a.qShare.UserOrGroupId}','_parent'); return false;"/>
+                <apex:column value="{!a.qShare.AccessLevel}" headerValue="Quote Access"/>
+        <!--    <apex:column value="{!a.DDAccess}" headerValue="Access to Dead Desk"/>       
+                <apex:column value="{!a.DDSynced}" headerValue="Synced with Dead Desk"/>         -->
+           <apex:column headerValue="Access to Dead Desk">
+           <apex:inputCheckbox value="{!a.DDAccess}" disabled="true"/>
+           </apex:column>
+           <apex:column headerValue="Synced with Dead Desk">
+           <apex:inputCheckbox value="{!a.DDSynced}" disabled="true"/>
+           </apex:column>                
+            </apex:pageBlockTable>
+            <apex:commandLink action="{!showMore}" rendered="{!if(qshMembers!= null && qshMembers.size > noOfRows && noOfRows != 1000,true,false )}" > Show More >>  </apex:commandLink>   
+         </apex:outputPanel>
+         </apex:pageBlock>
+
+
+  <apex:pageBlock title="Add New Sharing for Quote {!BigMachines__Quote__c.name}" rendered="{!IF($ObjectType.BigMachines__Quote__c.accessible && editmode,True,False)}" > 
+  <apex:pageBlockButtons location="Top">
+  <apex:commandButton action="{!cancelEdit}" value="Cancel" rerender="full" status="spinner"/>  
+  <apex:commandButton action="{!addMore}" value="Add More" rerender="full,EditSharing" rendered="{!addmorelimit}" status="spinner"/> 
+  <apex:commandButton action="{!save}" value="Save" rerender="full,EditSharing" status="spinner"/> 
+  <apex:actionStatus id="spinner">
+  <apex:facet name="start">
+  <img alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" />
+  </apex:facet>
+  </apex:actionStatus>
+  </apex:pageBlockButtons>
+  <apex:outputPanel id="EditSharing">        
+  <apex:pageMessages id="pberr"/>
+  <apex:pageBlockTable value="{!newsharing}" var="a">            
+  <apex:column headerValue="User" >
+            <apex:inputField value="{!a.audit.LX_Team_Member__c}" id="mem"/>
+            </apex:column>  
+            <apex:column headerValue="Quote Access"> 
+            <apex:selectList id="quotes" value="{!a.quoteAccessLevel}" size="1" title="Quote Access" disabled="true">
+            <apex:selectOptions value="{!QuoteAccessLevels}" ></apex:selectOptions>
+            </apex:selectList><br/>
+            </apex:column>
+  </apex:pageBlockTable>
+  </apex:outputPanel>  
+  </apex:pageBlock>  
+</apex:outputPanel>
+</apex:form>
+</apex:page>

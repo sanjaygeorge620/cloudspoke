@@ -1,0 +1,56 @@
+<apex:page title="Customer Portal | Upgrade Center">
+<html>
+<head> 
+    <title>Customer Portal | Upgrade Center</title> 
+    <link type="text/css" media="screen" rel="stylesheet" href="{!URLFOR($Resource.PortalUpgradeCenter, '/css/shadowbox.css')}" />    
+    <script type="text/javascript" src="{!URLFOR($Resource.PortalUpgradeCenter, '/js/shadowbox.js')}" />
+        <script type="text/javascript">
+        Shadowbox.init({});
+        function openParentShadowbox(el,mov){ 
+            Shadowbox.open({
+                content:    mov,
+                player:     "qt",
+                title:      el.title,
+                height:     564,
+                width:     900
+                
+            }); 
+        } 
+    </script>
+    <style type="text/css" >
+        #uc_container p{margin-bottom:8px;}
+        #uc_container ul{margin:13px 0px;padding-left:0px;}   
+        #uc_container .uc_emphasis{color:red;}
+    </style>
+</head> 
+<body>
+    <apex:sectionHeader title="Perceptive Software" subtitle="Upgrade Center" />
+      <apex:pageblock >
+          <apex:pageblocksection columns="1" >
+             <div id="uc_container">
+               <p>Welcome to the Upgrade Center. You can find information about upgrading your system to a more current version of ImageNow by clicking the plus sign to the left of the ImageNow versions shown below.</p>
+               <p>Once selected click the different tabs including:</p>
+               <ul>
+                    <li><b>Screencasts</b> Watch video clips on the enhancements within ImageNow.</li>
+                    <li><b>Release Documentation</b>  Read documentation about the specific version including Readme files, What's New, Technical Specifications and Release Notes.</li>
+                    <li><b>Update/Upgrade</b> View your options for upgrading your system.</li>
+               </ul>
+               <p>
+                    <b>Note: <span class="uc_emphasis">Before</span> proceeding with an update/upgrade</b>, locate the current ImageNow database version by visiting the <a target="_blank" title="Click to view article" href="{!$site.prefix}/articles/Support_Articles/Article-00000293?popup=true&srPos=2&srKp=kA0">How to determine necessary script(s) to run when performing an upgrade of your ImageNow system</a> article in the Knowledgebase. 
+                    Failure to run the correct incremental database upgrade scripts in the proper order during an upgrade process can negatively impact your ImageNow database.  
+                    To determine the correct script(s) and the necessary execution sequence, read the <b>Updating ImageNow Server</b> section of the Upgrade Readme document.
+               </p>
+               <p>
+                    <b>Note:</b> When running the upgrade script for an MS SQL dbms, do not log into MS SQL as INUSER. Instead, log into MS SQL with a user account that has the database owner (dbo) role to ensure that the upgrade script applies the updates to the dbo schema, rather than the INUSER schema. Failure to do so can impact Business Insight functionality.
+               </p>
+
+             </div>       
+          </apex:pageblocksection>  
+    
+          <apex:pageBlockSection columns="1"  title="Upgrade Center" showHeader="false" collapsible="false">
+              <apex:iframe scrolling="true" height="700px" src="{!URLFOR($Resource.PortalUpgradeCenter, 'upgradecenter.html')}" />
+          </apex:pageBlockSection>
+    </apex:pageblock>
+</body>
+</html>
+</apex:page>

@@ -1,0 +1,75 @@
+<apex:page standardController="LX_Partner_Program__c" extensions="LX_Offer_RelatedList_Extension" sidebar="true">
+  <apex:form id="theform" >
+     <script>
+        function DeleteFunction(id1)
+        {
+        if('{!LX_Partner_Program__c.Program_Status__c}'=='Activ')
+        {
+            alert('Active Programs can\'t delete Offers!');
+           
+        }
+        else{
+        var r=confirm('Are you sure?');
+        if (r==true)
+          {
+            DeleteOffer(id1);
+          }
+        }
+        }
+       </script>
+        <apex:actionFunction action="{!DeleteOffer}" name="DeleteOffer" reRender="theform" oncomplete="window.open('/{!LX_Partner_Program__c.Id}','_top');">
+                  <apex:param name="OffID" value="OffID" assignTo="{!SelectedOfferingId}"/>  
+        </apex:actionFunction> 
+       <apex:pageBlock tabStyle="LX_Partner_Program__c" helpTitle="Program Offers Help" helpUrl="javascript:openPopupFocusEscapePounds(%27https://help.salesforce.com/apex/htdoor?loc=help&target=co_relatedlist.htm&section=CustomObjects&language=en_US&release=184.20.12&instance=CS16%27, %27Help%27, 1024, 768, %27width=1024,height=768,resizable=yes,toolbar=yes,status=yes,scrollbars=yes,menubar=yes,directories=no,location=yes,dependant=no%27, false, false);" >
+      
+       <apex:pageBlockButtons location="top">
+       <!--Amit updated the below (removed if(status !='Active')) to ensure users are able to add offer to Active Programs-->
+       <apex:commandButton value="Add Offer" rendered="{!bShowButton}" onclick="var status ='{!LX_Partner_Program__c.Program_Status__c}'; 
+if(status !=''){ 
+
+window.open('/apex/LX_Program_offers?ProgramID={!LX_Partner_Program__c.Id}&returl={!LX_Partner_Program__c.Id}','_parent'); 
+
+}else{ 
+
+alert('Offers cannot be added to active Programs!'); 
+}
+"/>
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection columns="1" >
+        <apex:variable var="rowIndex" value="{!1}"/>
+      
+       <apex:pageblockTable value="{!OfferingList}" var="Off" id="OfferingTabID" rows="{!RowSize}"  >
+                                <apex:column headerValue="#"> {!rowIndex}
+                    <apex:variable value="{!rowIndex + 1}" var="rowIndex"/>     <apex:outputText value=""/>                  
+                    </apex:column>
+           
+               <apex:column headerValue="Action">
+                      <apex:outputLink target="_parent" value="/{!Off.id}/e?retURL={!LX_Partner_Program__c.Id}" id="theLink">Edit</apex:outputLink>&nbsp;| &nbsp;
+                    <apex:outputLink value="javascript:;" target="_parent" onclick="DeleteFunction('{!Off.id}');">Del</apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="Offer Number">
+                      <apex:outputText value="{!Off.Name}"/>
+                </apex:column>
+                <apex:column headerValue="Offer">
+                    <apex:outputLink target="_parent" value="/{!Off.LX_Offer__r.id}" id="theLink1">{!Off.LX_Offer__r.name}</apex:outputLink>
+                 </apex:column>
+                <apex:column headerValue="Start Date">
+                      <apex:outputField value="{!Off.LX_Start_Date__c}"/>                      
+                  </apex:column>                  
+                  <apex:column headerValue="End Date">
+                      <apex:outputField value="{!Off.LX_End_Date__c}" />
+                  </apex:column>
+                  
+                  <apex:column headerValue="Offer Status">
+                      <apex:outputText value="{!Off.LX_Offer_Status__c}"/>
+                  </apex:column>
+                  
+                  <apex:column headerValue="Record Type">
+                      <apex:outputText value="{!Off.Recordtype.Name}"/>
+                  </apex:column>
+            </apex:pageblockTable>
+         <apex:outputLink title="Show More (Viewing 5 out of {!OfferingList.size})" value="Show More(Viewing 5 out of {!OfferingList.size})" onclick="window.open('/apex/LX_Offers_RelatedList?id={!PP.id}&rowsize={!OfferingList.size}&hideshowall=true','_parent');"  rendered="{!linkshowall}">Show All</apex:outputLink>
+       </apex:pageBlockSection>
+    </apex:pageBlock>
+   </apex:form>
+</apex:page>

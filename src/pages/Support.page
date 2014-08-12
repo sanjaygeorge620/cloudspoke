@@ -1,0 +1,38 @@
+<apex:page title="{!SiteNickName+' | Developer Resources'}" tabStyle="Resource__tab" controller="SiteUtilController">
+<title>{!SiteNickName+' | Developer Resources'}</title>
+<apex:sectionHeader title="Perceptive Software" subtitle="Resources"/>
+      <apex:pageBlock >
+          <apex:pageBlockSection title="General Info" columns="1" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Mailing Address</apex:outputLabel>
+                    <apex:outputText escape="false">
+                        Perceptive Software LLC<br />
+                        22701 W. 68th Terrace<BR />
+                        Shawnee, KS 66226
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>      
+          </apex:pageBlockSection>
+          
+          <apex:pageblockSection title="Email" columns="1" collapsible="false">
+              <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Worldwide</apex:outputLabel>
+                        <apex:outputlink value="mailto:devnetwork@perceptivesoftware.com">devnetwork@perceptivesoftware.com</apex:outputlink>
+              </apex:pageBlockSectionItem> 
+          </apex:pageblockSection>    
+          
+          <apex:pageblockSection title="Phone" columns="1" collapsible="false">
+              <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Worldwide</apex:outputLabel>
+                        <apex:outputtext >+1 800 914 2419</apex:outputtext>
+              </apex:pageBlockSectionItem> 
+          </apex:pageblockSection> 
+             
+          <apex:pageblockSection title="Development Environments" columns="1" collapsible="false">
+              <apex:pageBlockSectionItem >
+                        <apex:outputLabel >Perceptive Labs</apex:outputLabel>
+                        <apex:outputlink target="_blank" value="/servlet/servlet.FileDownload?file=015e0000000AKvD">Overview</apex:outputlink>
+              </apex:pageBlockSectionItem> 
+          </apex:pageblockSection> 
+      </apex:pageBlock>
+
+</apex:page>

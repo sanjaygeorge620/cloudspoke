@@ -1,0 +1,19 @@
+<apex:page controller="contributeImageNowController" >
+
+  <apex:sectionHeader title="Contribute To ImageNow" />
+
+  <apex:form >
+
+    <apex:pageBlock title="Contribute To ImageNow">
+
+      <apex:pageBlockButtons location="bottom">
+
+        <apex:commandButton action="{!contribute}" value="Contribute"/>
+
+      </apex:pageBlockButtons>
+
+    </apex:pageBlock>
+
+  </apex:form>
+
+</apex:page>

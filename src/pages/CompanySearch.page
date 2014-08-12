@@ -1,0 +1,90 @@
+<apex:page controller="SearchController" sidebar="true">
+
+<apex:pageBlock title="Company Search" id="input" tabStyle="Account" >
+    <apex:form >
+    <apex:pageBlockSection columns="2"> 
+        <apex:inputText label="Company Name" value="{!inputCompanyName}" size="15" />
+        <!--  TODO Decide to keep or not - not a filterable field
+        <apex:inputText label="Company Website" value="{!inputWebsite}" />
+         -->
+        <apex:inputText label="City" value="{!inputCity}" size="15" />
+        <apex:inputText label="Postal Code" value="{!inputPostalCode}" size="10" />
+        <apex:inputText label="Country" value="{!inputCountry}" size="10" />
+        
+        <!--  TODO Decide to keep or not - not a filterable field
+        <apex:inputText label="Area Code (Phone)" value="{!inputAreaCode}" />
+        -->
+    </apex:pageBlockSection> <!-- TODO Maybe 'No Results? Show Error Message Area' checkbox -->
+    
+    <apex:pageBlockSection columns="4" id="buttonPanel">
+        <apex:commandButton value="1. Search!" action="{!searchComp}" />
+        <apex:commandButton value="2. Purchase Details" action="{!purchaseAccountDetails}" rerender="buttonPanel" />
+        <apex:commandButton value="3. Create Account" action="{!CreateAccount}" />
+        <apex:outputText value="{!purchaseFlowOutput}" />
+    </apex:pageBlockSection>
+    </apex:form>
+    
+    <apex:form >
+    <apex:pageBlockSection title="New Account" columns="1">
+        <apex:detail subject="{!newA}" inlineEdit="true" relatedList="false" />
+    </apex:pageBlockSection>
+    </apex:form>
+</apex:pageBlock>
+
+<apex:form >
+<apex:pageBlock title="Results" id="results" rendered="{!haveResults}" >
+    <apex:pageBlockSection columns="1"> 
+        <apex:pageBlockTable id="resultsTable" value="{!currentPage}" var="ritem">
+            <apex:column headerValue="Select">
+                <apex:inputCheckBox value="{!currentPage[ritem].Selected}" disabled="{!currentPage[ritem].HasLink}" /> <!-- rendered="{!currentPage[ritem].renderBox}" /> -->
+                <apex:actionSupport event="onclick" action="{!returnToPage}" rerender="results" />
+            </apex:column>
+            <apex:column headerValue="Existing"><!-- TODO put existing account link here -->
+                <apex:outputText value="{!currentPage[ritem].Link}" escape="false" />
+            </apex:column>
+            <apex:column headerValue="SYM">
+                <apex:outputText value="{!currentPage[ritem].TickerSymbol}" />
+            </apex:column>
+            <apex:column headerValue="Company Name">
+                <apex:outputText value="{!currentPage[ritem].Name}" />
+            </apex:column>
+            
+            <apex:column headerValue="ID">
+                <apex:outputText value="{!currentPage[ritem].Id}" />
+            </apex:column>
+            
+             <apex:column headerValue="City">
+                <apex:outputText value="{!currentPage[ritem].City}" />
+            </apex:column>
+            <apex:column headerValue="Country">
+                <apex:outputText value="{!currentPage[ritem].Country}" />
+            </apex:column>
+            <apex:column headerValue="Phone">
+                <apex:outputText value="{!currentPage[ritem].Phone}" />
+            </apex:column>
+            <apex:column headerValue="Industry">
+                <apex:outputText value="{!currentPage[ritem].Industry}" />
+            </apex:column>
+            <apex:column headerValue="Site">
+                <apex:outputText value="{!currentPage[ritem].Site}" />
+            </apex:column>
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+
+<apex:pageBlock title="Create Account" id="account" tabStyle="Account" >
+    <apex:pageBlockSection columns="1"> 
+        <apex:outputText label="Query:" value="{!query}" />
+        <apex:outputText label="Msg:" value="{!errorMsg}" />
+    </apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:pageBlock title="Error Message" id="error" rendered="{!isError}" >
+    <apex:pageBlockSection columns="1"> 
+        <apex:outputText label="Query:" value="{!query}" />
+        <apex:outputText label="Msg:" value="{!errorMsg}" />
+    </apex:pageBlockSection>
+</apex:pageBlock>
+
+</apex:page>

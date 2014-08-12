@@ -1,0 +1,9 @@
+<apex:page standardController="Lead" rendered="{!(Lead.RecordSubmittedForApproval__c = true)}">
+<!--&&  Lead.LX_ISS_Coverage_Model__c = 'Channel' && (Lead.LX_ISS_Coverage_Method__c = 'Face To Face' || Lead.LX_ISS_Coverage_Method__c = 'Telesales' || Lead.LX_ISS_Coverage_Method__c = 'Uncovered') && (Lead.LX_Coverage_Status__c = 'Active' || Lead.LX_Coverage_Status__c = 'Inactive') && (Lead.Status = 'Open' || Lead.Status = 'Prospecting'))-->
+    <script type="text/javascript">
+        {
+            window.alert("This record has been submitted for approval.");
+        }
+    
+    </script> 
+</apex:page>

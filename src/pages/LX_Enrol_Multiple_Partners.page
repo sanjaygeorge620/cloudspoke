@@ -1,0 +1,94 @@
+<apex:page standardController="LX_Program_Enrollment__c" extensions="LX_Enrol_Multiple_Partners">
+    <script type="text/javascript">
+        var ProgramId = "{!ProgramId }";   
+        if(ProgramId == '' || ProgramId == null) {
+            alert('Create program enrolments from a Partner Program. ');
+            window.location = '/home/home.jsp' ;
+        }            
+        window.onload=function(){
+            
+            document.getElementById('j_id0:frm:pb:pageblocksection1:recId').disabled=true;
+        }
+        function checkAll(cb,cbid)
+        {
+            var inputElem = document.getElementsByTagName("input");                    
+            for(var i=0; i<inputElem.length; i++)
+            {            
+                 if(inputElem[i].id.indexOf(cbid)!=-1){                                       
+                    inputElem[i].checked = cb.checked;
+                }
+            }
+        }
+    </script>
+    <apex:form id="frm" >
+    <apex:pageMessages />
+        <apex:pageBlock title="Enroll Multiple Partners" id="pb" >        
+            <apex:pageBlockSection title="Information"  columns="2" id="pageblocksection1" >
+                <apex:inputField id="LX_LocalProgram" value="{!LX_Program_Enrollment__c.Master_Program__c}" required="true"/> 
+                <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Status__c}" required="false"/> 
+                <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Proposed_Date__c}" required="false"/>
+                <apex:inputField value="{!LX_Program_Enrollment__c.LX_Certified_Date__c}" required="false"/> 
+                <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Signed_Date__c}" required="false"/>
+                <apex:inputField value="{!LX_Program_Enrollment__c.Additional_Comments__c}" required="false"/> 
+                <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_Effective_Date__c}" required="false"/>
+                <apex:inputField value="{!LX_Program_Enrollment__c.Approval_Status__c}" required="false"/> 
+                <apex:inputField value="{!LX_Program_Enrollment__c.LX_Enrollment_End_Date__c}" required="false"/>
+                <apex:inputField value="{!LX_Program_Enrollment__c.RecordTypeID}" id="recId" /> 
+                <apex:inputField value="{!LX_Program_Enrollment__c.LX_Apply_to_All_Reseller_Locations__c}" />      
+            </apex:pageBlockSection> 
+ 
+                            
+            <apex:pageBlockSection title="Eligible Partners" columns="1" id="pbs2">
+            
+            <b>Total matches found: {!matchingAccountsSize}</b> 
+            
+
+            
+                <apex:pageBlockTable value="{!partnerAccountsList}"  var="a" id="pbt" rendered="{!IF(partnerAccountsList != null && partnerAccountsList.size >0,true,false)}">
+<!-- // SC:06/05/2014 : Updated field layout as per US3662  -->                   
+                     <apex:column >
+                     <apex:facet name="header">#</apex:facet>
+                      <apex:outputText value="{!a.counter}." />
+                     </apex:column>
+                     
+                    <apex:column >
+                        <apex:facet name="header">
+                        <apex:inputCheckbox onclick="checkAll(this,'checkedone')"/>
+                        </apex:facet>
+                        <apex:inputCheckbox value="{!a.chk}" id="checkedone"/>
+                     </apex:column>
+
+                    <apex:column value="{!a.acc.Name}" ></apex:column>
+                    <apex:column value="{!a.acc.Company_Number__c}" ></apex:column>
+                     
+                     <apex:column >
+                     <apex:facet name="header">Sold To Number</apex:facet>
+                      <apex:outputText value="{!a.SoldTo}" />
+                     </apex:column>                     
+                    
+                    <apex:column value="{!a.acc.MDM_Account_Number__c}" ></apex:column>
+                    <apex:column value="{!a.acc.Party_Type__c}" ></apex:column>
+                    
+                    <apex:column value="{!a.acc.Coverage_Status__c}" ></apex:column>
+                    
+                     <apex:column >
+                     <apex:facet name="header">Account Owner</apex:facet>
+                      <apex:outputText value="{!a.acc.Owner.Name}" />
+                     </apex:column> 
+                                        
+                      <apex:column >
+                     <apex:facet name="header">Capability Segment</apex:facet>
+                      <apex:outputText value="{!a.acc.Partner_ISS_Capability_Segment__c}" />
+                     </apex:column>
+                             
+                </apex:pageBlockTable>
+                <apex:outputText rendered="{!IF(partnerAccountsList == null || partnerAccountsList.size =0,true,false)}" > No Eligible Partners</apex:outputText>
+            </apex:pageBlockSection>             
+            
+            <apex:pageBlockButtons rendered="{!IF(partnerAccountsList != null && partnerAccountsList.size >0,true,false)}"> 
+                <apex:commandButton value="Create Enrollments" action="{!enrolMultiplePartners}"/> 
+                <apex:commandButton value="Cancel" action="{!cancel}"/>             
+            </apex:pageBlockButtons> 
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

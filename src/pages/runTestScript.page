@@ -1,0 +1,70 @@
+<apex:page standardcontroller="Test__c" extensions="runTestScriptExtension">
+<script type="text/javascript" src="{!URLFOR($Resource.MaxLength)}"></script>
+
+<apex:form >
+<apex:pageBlock mode="Edit">
+<apex:pageBlockButtons ><apex:commandButton action="{!save}" value="Save All"/></apex:pageBlockButtons>
+<apex:PageBlockSection title="Test Details" columns="2">
+<apex:PageBlockSectionItem >
+<apex:outputLabel value="Test Id" for="TestName"/>
+<apex:outputField value="{!Test__c.Name}" id="TestName"/>
+</apex:PageBlockSectionItem>
+<apex:pageblocksectionItem ><apex:outputLabel value="Test Phase"/>
+<apex:outputField value="{!Test__c.Test_Phase__c}" id="testPhase"/>
+</apex:pageblocksectionItem>
+<apex:pageblocksectionItem >
+<apex:outputField value="{!Test__c.Test_Manager__c}" id="testManager" rendered="false"/>
+</apex:pageblocksectionItem>
+<apex:PageBlockSectionItem ><apex:outputLabel value="Description"/>
+<apex:outputField value="{!Test__c.Description__c}"/></apex:PageBlockSectionItem>
+<apex:PageBlockSectionItem > <apex:outputLabel value="Introduction"/>
+<apex:outputField value="{!Test__c.Introduction__c}"/></apex:PageBlockSectionItem>
+<apex:PageBlockSectionItem ><apex:outputLabel value="Expected Results"/>
+<apex:outputField value="{!Test__c.Expected_Results__c}"/></apex:PageBlockSectionItem>
+</apex:pageblockSection>
+<apex:pageblockSection columns="1">
+<apex:PageBlockSectionItem ><apex:outputLabel value="Test Description"/>
+<apex:outputfield value="{!Test__c.Test_Description_and_Steps__c}"/>
+</apex:PageBlockSectionItem>
+<apex:PageBlockSectionItem ><apex:outputLabel value="Overall test outcome"/>
+<apex:inputField value="{!Test__c.Test_Outcome__c}"/></apex:PageBlockSectionItem>
+<apex:PageBlockSectionItem ><apex:outputLabel value="Overall test Comments"/>
+<apex:inputtextarea value="{!Test__c.Overall_Test_Comments__c}" cols="100" rows="5" />
+</apex:PageBlockSectionItem>
+</apex:PageBlockSection>
+</apex:pageBlock>
+<apex:pageblock >
+<apex:pageblockSection columns="1" title="New Bugs" id="bugblock" collapsible="true">
+<apex:pageblocktable value="{!bugs}" var="b" columns="7" id="tablebugs" rendered="{!isnewBugs}">
+<apex:column value="{!b.Script_Number__c}"/>
+<apex:column value="{!b.Test_Phase__c}"/>
+<apex:column value="{!b.Status__c}"/>
+<apex:column headerValue="Impact"><apex:inputField value="{!b.BusinessImpact__c}"/></apex:column>
+<apex:column headerValue="Priority"><apex:inputField value="{!b.Priority__c}"/></apex:column>
+<apex:column headerValue="Summary"><apex:inputField value="{!b.Problem__c}"/></apex:column>
+<apex:column headerValue="Description"><apex:inputtextarea cols="40" rows="5" value="{!b.Problem_Description__c}"/></apex:column>
+
+</apex:pageblocktable>
+</apex:pageblockSection>
+<apex:pageblockSection columns="1" title="Test Steps" collapsible="true">
+<apex:pageBlockTable value="{!TestSp}" var="step" columns="7">
+<apex:column value="{!step.name}"/>
+<apex:column value="{!step.Action__c}"/>
+<apex:column value="{!step.Expected_Results__c}"/>
+<apex:column value="{!step.Tips__c}"/>
+<apex:column headerValue="Test Outcome"><apex:inputField value="{!step.Outcome__c}"/></apex:column>
+<apex:column headerValue="Comments"><apex:inputTextarea cols="40" rows="5" value="{!step.Comments__c}" onKeyDown="textCounter(document.getElementById(this.form.name),5);" onKeyUp="textCounter(document.getElementById(this.form.name),5);"/></apex:column>
+<apex:column headerValue="Add a Bug"><apex:commandButton action="{!addBug}" value="Add Bug" reRender="bugblock">
+<apex:param name="testId" value="{!step.id}"/>
+<apex:param name="testName" value="{!step.name}"/>
+<apex:param name="req" value="{!step.Detailed_Requirement__c}"/>
+</apex:commandButton>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageblockSection>
+
+
+
+</apex:pageBlock>
+</apex:form>
+</apex:page>

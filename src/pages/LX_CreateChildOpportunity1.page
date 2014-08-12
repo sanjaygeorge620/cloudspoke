@@ -1,0 +1,60 @@
+<apex:page standardcontroller="Opportunity" extensions="LX_ChildOpportunity1" >
+
+    <apex:form >
+      <apex:pageMessages />
+        <apex:pageBlock title="Countries">
+               
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Continue" title="Continue" action="{!continueLogic}" rendered="{!ChildWrap.size>0}"/>
+                <apex:commandButton value="Cancel" title="Cancel" action="{!cancelLogic}"/>
+            </apex:pageBlockButtons>
+            
+        
+            <!--apex:pageBlockSection Columns="1" -->
+                    <!--<apex:inputfield value="{!opp.MPS_Country__c}" />-->
+                    <!--apex:pageBlockSectionItem -->
+                <!--    <table width="100%">
+                        <tr><td align="right">
+                            <b><apex:outputLabel value="Countries In Scope"/></b>
+                        </td><td align="left">
+                            <apex:selectList multiselect="true" size="4" value="{!childOppCountries}"  style="width: 200px">
+                                <apex:selectOptions value="{!MasterOppSelCountries}"/>
+                            </apex:selectList>
+                        </td></tr>
+                    </table>-->
+                    <!--/apex:pageBlockSectionItem-->
+            <!--/apex:pageBlockSection-->
+            
+            <apex:pageBlockTable value="{!ChildWrap}" var="country">
+             <apex:column headerValue="Check">
+                     
+                   <apex:inputCheckbox value="{!country.check}"/>
+             </apex:column>
+             <apex:column headerValue="Country">
+                   <apex:outputField value="{!country.DispCountries.LX_Country__c}"/>
+             </apex:column>
+             <apex:column headerValue="Currency">
+                   <apex:outputField value="{!country.DispCountries.CurrencyIsoCode}"/>
+             </apex:column>
+             <apex:column headerValue="Exchange Rate">
+                   <apex:outputField value="{!country.DispCountries.LX_Exchange_Rate__c}"/>
+             </apex:column>
+              <apex:column headerValue="Opportunity Account">
+                   <apex:inputField value="{!country.DispCountries.LX_Account_hidden__c}"/>
+             </apex:column>
+             <apex:column headerValue="Opportunity Owner">
+                   <apex:inputField value="{!country.DispCountries.LX_user_hidden__c}"  />
+             </apex:column>
+            </apex:pageBlockTable>
+            
+        </apex:pageBlock>
+        <apex:pageBlock title="Already Existing Child Opportunities" rendered="{!AlreadyCreatedFlag}">
+        <apex:pageblockTable value="{!ChildAlreadyCreated}" var="Child">
+        <apex:column headerValue="Child Opportunity">
+                  <!-- <apex:outputField value="{!Child.Name}"/>-->
+                   <apex:outputLink value="/{!Child['Id']}" title="{!Child.Name}">{!Child.Name}</apex:outputLink>
+             </apex:column>
+        </apex:pageblockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,117 @@
+<!--  jQuery auto complete search for JobEdit visualforce page  -->
+
+<apex:component controller="autoCompleteController">	
+	
+  <!-- JQuery Files -->  
+  <apex:includeScript value="{!URLFOR($Resource.ScheduledJobsTable, 'js/jquery-1.7.1.min.js')}" />
+  <apex:includeScript value="{!URLFOR($Resource.ScheduledJobsTable, 'js/jquery-ui-1.8.18.custom.min.js')}" />
+  <apex:stylesheet value="{!URLFOR($Resource.ScheduledJobsTable,'css/smoothness/jquery-ui-1.8.18.custom.css')}"/> 
+
+  <!-- Attributes Required For Component --> 
+  <apex:attribute name="additionalfield" description="Any additional fields you'd like to search and include in the display." type="String" required="false"/> 
+  <apex:attribute name="autocomplete_field" description="The ID for the Autocomplete List field." type="String" required="true"/>  
+
+  <style>
+	<!--Loading Icon Gif -->
+      .ui-autocomplete-loading {background: white url({!$Resource.loadingIcon}) right center no-repeat;} 
+  </style>  
+
+  <script type="text/javascript">
+    // this makes a reference to the main jQuery function. Removes any confilt between jQuery and other javascript librairies. 
+    // $ is the defailt global object name for jQuery.
+    var j$ = jQuery.noConflict();
+
+    // .ready fires after fully loading the DOM, but before all assests are done loading
+    j$(document).ready(function()
+    {        
+        var classesReturned;
+
+        var queryTerm;
+
+        j$(esc('{!autocomplete_field}')).autocomplete({
+
+            minLength: 1,
+
+            source: function(request, callBack) {
+
+                        queryTerm = request.term;
+
+                        autoCompleteController.queryApexClasses(request.term, "{!additionalfield}", function(result, event){
+
+                            if(event.type == 'exception') {
+
+                                  alert(event.message);
+                            } 
+
+                            else {
+
+                                 classesReturned = result;
+                                 callBack(classesReturned);
+                            }
+                        });
+                   },
+
+            focus: function( event, ui ) {
+
+                    j$(esc('{!autocomplete_field}')).val( ui.item.Name );
+
+                    return false;
+
+                    },
+
+            select: function( event, ui ) {
+
+                        j$(esc('{!autocomplete_field}')).val( ui.item.Name );
+
+                        j$(esc('{!autocomplete_field}_lkid')).val( ui.item.Id );
+
+                        j$(esc('{!autocomplete_field}_lkold')).val( ui.item.Name );
+
+                        if (event.keyCode == 13) {
+
+                            event.preventDefault();
+
+                        }
+
+                        return false;
+
+                    },
+         })
+
+         .data( "autocomplete" )._renderItem = function( ul, item ) {
+
+            var entry = item.Name;
+
+            if("{!additionalfield}" !='')
+
+            {
+
+                j$.each("{!additionalfield}".split(",") , function(key, value) {
+
+                    entry = entry + " " + item[value];
+
+                });
+            }            
+
+            entry = entry.replace( new RegExp( "(" + queryTerm + ")" , "gi" ), "<strong>$1</strong>" );
+
+            return j$( "<li></li>" )
+
+                .data( "item.autocomplete", item )
+
+                .append( "<a>" + entry + "</a>")
+
+                .appendTo( ul );
+
+        };
+    });
+
+    //escape colons that are added to the compenent Id by Salesforce
+    function esc(myid)
+    {
+           return '#' + myid.replace(/(:|\.)/g,'\\\\$1');
+    }
+
+  </script>
+
+</apex:component>

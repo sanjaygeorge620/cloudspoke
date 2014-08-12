@@ -1,0 +1,11 @@
+<apex:page standardController="Employee_Change_Request__c">
+<!--
+ * Name: EmployeeChangeOverrideNewButton
+ *
+ * Description: to display the message when a standard New Employee button is clicked 
+ * Created By: Manoj Kolli
+ * Created Date: 4/17/2012
+ */-->
+  <h1>You do not have an access to create a New Employee Change Request from here. Please Create it from Contact Record</h1>
+  
+</apex:page>

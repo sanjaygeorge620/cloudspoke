@@ -1,0 +1,102 @@
+<apex:page standardController="Price_Book_Currency_Override__c" extensions="Ctrl_NewPBCurrencyandTierPricingOverride" tabStyle="Price_Book_Currency_Override__c">
+    
+    <style type="text/css">
+         table.exceptionText td {
+                 font-size:13px;
+                 font-weight:bold;
+                 text-align:center;
+                 color:red;}
+    </style>
+
+    <apex:form >
+        <apex:pageBlock title="New Price Book Currency Override" mode="edit">
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!addTierPricingExceptionValues}"/>
+                <apex:commandButton value="Cancel" action="{!returnToProd}"/>
+            </apex:pageBlockButtons>
+                        
+            <apex:messages layout="table" styleClass="exceptionText"/>
+            
+            <apex:pageBlockSection title="Information" collapsible="false" columns="1" >
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Currency Override Name" />
+                    <apex:panelGroup >
+                        <div class="requiredInput">
+                        <div class="requiredBlock"></div>
+                        <apex:inputField value="{!pbco.Name}"/>
+                        <apex:message style="color: #cc0000"></apex:message>
+                        </div>
+                    </apex:panelGroup>
+                </apex:pageBlockSectionItem>      
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Product" />
+                    <apex:panelGroup >
+                        <div class="requiredInput">
+                        <div class="requiredBlock"></div>
+                        <apex:inputField value="{!pbco.Product__c}"/>
+                        <apex:message style="color: #cc0000"></apex:message>
+                        </div>
+                    </apex:panelGroup>
+                </apex:pageBlockSectionItem>  
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Type" />
+                    <apex:panelGroup >
+                        <div class="requiredInput">
+                        <div class="requiredBlock"></div>
+                        <apex:inputField value="{!pbco.Type__c}"/>
+                        <apex:message style="color: #cc0000"></apex:message>
+                        </div>
+                    </apex:panelGroup>
+                </apex:pageBlockSectionItem>  
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Override Price" />
+                    <apex:panelGroup >
+                        <div class="requiredInput">
+                        <div class="requiredBlock"></div>
+                        <apex:inputField value="{!pbco.Override_Price__c}"/>
+                        <apex:message style="color: #cc0000"></apex:message>
+                        </div>
+                    </apex:panelGroup>
+                </apex:pageBlockSectionItem>  
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Currency" />
+                    <apex:inputField value="{!pbco.CurrencyIsoCode}"/>
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Tier Pricing" collapsible="false">
+                
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockTable value="{!ctpwList}" width="1250px" var="ctpw" id="tierInfoTable">
+                    
+                         <apex:column headerValue="Name" >
+                             <apex:outputlabel value="{!ctpw.tier.Name}" />
+                         </apex:column> 
+                         
+                         <apex:column headerValue="Tier Minimum" >
+                             <apex:outputlabel value="{!ctpw.tier.Tier_Minimum__c}" />
+                         </apex:column>
+                         
+                         <apex:column headerValue="List Price" >
+                             <apex:outputlabel value="{!ctpw.tier.Cost__c}" />
+                         </apex:column>
+                         
+                         <apex:column headerValue="Exception Value" >
+                             <apex:inputField value="{!ctpw.tpo.Exception_Value__c}"/>
+                         </apex:column> 
+                         
+                 </apex:pageBlockTable>
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+        
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

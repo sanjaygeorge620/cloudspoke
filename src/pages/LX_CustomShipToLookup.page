@@ -1,0 +1,443 @@
+<apex:page controller="LX_Shipto_Billto_Cntrl" sidebar="false" showHeader="false" showChat="false" action="{!onLoad}">
+        <style type="text/css">
+            .centerClass{
+            text-align: center;
+            vertical-align: middle;
+            }
+            .headerRow .headerStyle{
+            text-align: center;
+            vertical-align: middle;
+            }
+        </style>
+         <script>
+                function uncheckOthers(a){
+                        if(a.checked == true){
+                                if(a.id.indexOf("shipID") != -1){
+                                var elements = document.getElementsByTagName("input");
+                                        for(i=0;i<elements.length;i++)
+                                                {
+                                                    e = elements[i];
+                                                    if(e.id.indexOf("shipID") != -1){
+                                                                if(a.id != e.id){
+                                                                        e.checked = false;
+                                                                }
+                                                    }
+                                            }
+                                        }
+                                }else{
+                                                if(a.checked == true){
+                                                var elements = document.getElementsByTagName("input");
+                                                        for(i=0;i<elements.length;i++)
+                                                                {
+                                                                    e = elements[i];
+                                                                    if(e.id.indexOf("billID") != -1){
+                                                                                if(a.id != e.id){
+                                                                                        e.checked = false;
+                                                                                }
+                                                                    }
+                                                            }
+                                                        }
+                        
+                                                }
+                                       }
+                        
+                function CloseAndRefresh(){
+                    if('{!$CurrentPage.parameters.projID}' == ''){
+                        top.window.opener.location.href="/{!$CurrentPage.parameters.OppId}";
+                     }else{
+                        top.window.opener.location.href="/{!$CurrentPage.parameters.projID}";
+                     }
+                      window.top.close();                    
+                  }
+                  
+                function noenterBill(e){
+                                if(window.event){                    
+                                        key = window.event.keyCode;     //IE               
+                                } 
+                                else{                    
+                                        key = e.which;     //firefox               
+                                }               
+                                if(key == 13) {                    
+                                        var ele=document.getElementById('{!$Component.BillForm.billPageid.billSearchId}');                                                                                       
+                                        ele.click();                     
+                                        return false;               
+                                } else{                    
+                                        return true;               
+                                }          
+                        }     
+
+                function noenterShip(e){
+                                if(window.event){                    
+                                        key = window.event.keyCode;     //IE               
+                                } 
+                                else{                    
+                                        key = e.which;     //firefox               
+                                }               
+                                if(key == 13) {                    
+                                        var ele=document.getElementById('{!$Component.ShipForm.shipPageid.shipSearchId}');                                                                                       
+                                        ele.click();                     
+                                        return false;               
+                                } else{                    
+                                        return true;               
+                                }          
+                        }     
+
+                                          
+        </script>
+        <c:ActionStatusLoading />
+        <apex:sectionHeader title="{!$Label.LX_Opportunity}" subtitle="Select Opportunity Bill To / Ship To" />
+        <apex:outputPanel id="topid">
+ <apex:pageMessages rendered="{!isError}"/>
+        
+<apex:outputPanel rendered="true" >
+ <apex:tabPanel switchType="client" selectedTab="Bill" id="BillShipTab">
+ <apex:tab label="Bill To" name="Bill" id="tabBill">
+  <apex:form id="BillForm">
+  <apex:pageMessages rendered="{!isInitial}"/>  
+  <apex:pageMessages rendered="{!NOT(isInitial)}"/>
+     <apex:pageBlock id="billPageid">
+     <h5>{!$Label.LX_Search_Para}</h5><br/><br/>
+             <apex:outputpanel title="{!$Label.LX_Search_Para}">
+             <table>
+             <tr>
+             <td>
+                 <apex:outputText value="Bill to Name " id="search1"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input1}" onkeypress="return noenterBill(event)"/>
+             </td>
+             <td>    
+                 <apex:outputText value="Bill to Company" id="search2"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input2}" onkeypress="return noenterBill(event)"/>
+             </td>
+             <td>    
+                 <apex:outputText value="Bill to Address1" id="search3"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input3}" onkeypress="return noenterBill(event)"/>
+             </td> 
+             <td>                     
+                 <apex:outputText value="Bill to Address2" id="search4"/>                
+             </td>
+             <td>    
+                 <apex:inputText value="{!input4}" onkeypress="return noenterBill(event)"/><br/>
+            </td>  
+            <td>                 
+                 <apex:outputText value="Bill to City" id="search5"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input5}" onkeypress="return noenterBill(event)"/>
+             </td> 
+             </tr>
+             <tr>             
+             <td>
+                 <apex:outputText value="Bill to State" id="search6"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input6}" onkeypress="return noenterBill(event)"/>
+              </td> 
+              <td>  
+                 <apex:outputText value="Bill to Postal Code" id="search7"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input7}" onkeypress="return noenterBill(event)"/>
+              </td>
+              <td>   
+                 <apex:outputText value="Bill to Country" id="search8"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input8}" onkeypress="return noenterBill(event)"/><br/>
+               </td>
+               <td>  
+                 <apex:outputText value="Bill to ID" id="search9"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input9}" onkeypress="return noenterBill(event)"/><br/>
+               </td> 
+               <td>                 
+                 <apex:outputText value="Bill to Email ID" id="searchEmail"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input10}" onkeypress="return noenterBill(event)"/>
+             </td>
+              </tr>   
+              </table>  
+              <apex:commandbutton action="{!searchBill}" value="Go" reRender="BillForm" status="waitingStatusLoad" id="billSearchId"/>
+             </apex:outputpanel><br/><br/><br/>
+        <apex:outputPanel id="outPanelId1">
+        <apex:outputPanel rendered="{!NOT(isError)}">       
+        <apex:pageBlockSection title="Search Results" columns="1">
+           <apex:pageBlockTable value="{!billToWrapper}"  var="billto">
+                <apex:column headerValue="Select">
+                    <apex:inputCheckbox value="{!billto.selected}" onclick="uncheckOthers(this)" id="billID" styleClass="centerClass"/>
+               </apex:column>
+               <apex:column style="text-align:center;vertical-align:middle;">
+                        <apex:facet name="header">SMSA Renewal Bill To</apex:facet> 
+                         <apex:inputCheckbox value="{!billto.isDefault}" disabled="true" styleClass="centerClass"/>
+               </apex:column>
+                <apex:column value="{!billto.billShipName}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to Name{!IF(sortExpression=='billShipName',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort20" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="billShipName" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!billto.Company}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to Company{!IF(sortExpression=='Company',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort30" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="Company" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                 <apex:column value="{!billto.billEmail}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to Email ID{!IF(sortExpression=='billEmail',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort33" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="billEmail" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+               <apex:column value="{!billto.Address1}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to Address 1{!IF(sortExpression=='Address1',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort40" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="Address1" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!billto.Address2}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to Address 2{!IF(sortExpression=='Address2',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort50" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="IF({!billto.Address2} != NULL,'Address2','Address1')" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!billto.City}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to City{!IF(sortExpression=='City',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort60" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="City" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!billto.State}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to State{!IF(sortExpression=='State',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort70" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="State" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!billto.PostalCode}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to Postal Code{!IF(sortExpression=='PostalCode',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort80" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="PostalCode" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column> 
+                <apex:column value="{!billto.Country}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to Country{!IF(sortExpression=='Country',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort90" reRender="BillForm">
+                     <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="Country" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>              
+               <apex:column value="{!billto.BillShipID}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Bill to ID{!IF(sortExpression=='BillShipID',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort100"  reRender="BillForm">
+                   <apex:param value="TRUE" name="Bill" assignTo="{!filter}"/>
+                     <apex:param value="BillShipID" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+             </apex:pageBlockTable> 
+        </apex:pageBlockSection>  
+        </apex:outputPanel>  
+        </apex:outputPanel>
+        <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!updateBillTo}" value="Save" status="waitingStatusLoad" id="updateBillToID" rerender="BillForm">
+                <!--  <apex:param value="TRUE" name="Bill" assignTo="{!saveBill}"/>-->
+                </apex:commandButton>
+                <apex:commandButton action="{!Cancel}" value="Close" onclick="javascript:CloseAndRefresh()" oncomplete="javascript:CloseAndRefresh()" />
+               <apex:commandButton action="/500/e?{!$Label.LX_Case_Subject}=Bill To request for Opportunity [{!opp1.Name}]&retURL=%2F{!opp1.Id}&CF{!$Label.LX_Case_Internal_Account}={!opp1.Account.Name}&CF{!$Label.LX_Case_Internal_Account}_lkid={!opp1.Account.Id}&{!$Label.LX_Case_Contact_Name}={!$User.FirstName}%20{!$User.LastName}&{!$Label.LX_Case_Contact_Name}_lkid={!$User.ContactId}&RecordType={!$Label.LX_Case_Sold_To_RecordTypeId}&ent=Case&{!$Label.LX_Case_Request_Change}=<h3>Create Bill To:</h3><table width=600 border=1><tr><th width=200>Opportunity</th><td><a href=/{!opp1.Id} >{!opp1.Name}</a></td></tr>{!BillToShipToRequestURL}<tr><th>Sold To ID</th><td>{!opp1.LX_Sold_To_New__r.LX_Sold_To__r.LX_Sold_To_ID__c}</td></tr><tr><th>Sales Organization</th><td>{!opp1.Sales_Organization_value__c}</td></tr><tr><th>Name</th><td></td></tr><tr><th>Bill To Email Address</th><td></td></tr><tr><th>Address</th><td></td></tr><tr><th>Address 2</th><td></td></tr><tr><th>City</th><td></td></tr><tr><th>State</th><td></td></tr><tr><th>Postal</th><td></td></tr><tr><th>Country</th><td></td></tr><tr><th>Requestor</th><td><a href=/{!$User.Id} >{!$User.FirstName}%20{!$User.LastName}</a></td></tr><tr><th>Additional Comments</th><td></td></tr></table>" value="Request New Bill To"/>
+              
+                <apex:commandButton action="{!createShipBill}" value="Create new Ship To" rendered="{!sellButton}"/>
+        </apex:pageBlockButtons>     
+      </apex:pageBlock>
+     </apex:form>
+    </apex:tab>
+    
+    <apex:tab label="Ship To" name="Ship" id="tabShip">
+    <apex:form id="ShipForm">
+    <apex:pageMessages rendered="{!isInitial}"/>
+<apex:pageMessages rendered="{!NOT(isInitial)}"/>
+      <apex:pageBlock id="shipPageid">
+       <h5>{!$Label.LX_Search_Para}</h5><br/><br/>
+             <apex:outputpanel title="{!$Label.LX_Search_Para}">
+             <table>
+             <tr>
+             <td>
+                 <apex:outputText value="Ship to Name " id="search10"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input1}" onkeypress="return noenterShip(event)"/>
+             </td>
+             <td>    
+                 <apex:outputText value="Ship to Company" id="search11"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input2}" onkeypress="return noenterShip(event)"/>
+             </td>
+             <td>    
+                 <apex:outputText value="Ship to Address1" id="search12"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input3}" onkeypress="return noenterShip(event)"/>
+             </td>    
+             </tr>
+             <tr>
+             <td>                     
+                 <apex:outputText value="Ship to Address2" id="search13"/>                
+             </td>
+             <td>    
+                 <apex:inputText value="{!input4}" onkeypress="return noenterShip(event)"/><br/>
+            </td>
+            <td>                 
+                 <apex:outputText value="Ship to City" id="search14"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input5}" onkeypress="return noenterShip(event)"/>
+             </td>
+             <td>
+                 <apex:outputText value="Ship to State" id="search15"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input6}" onkeypress="return noenterShip(event)"/>
+              </td>
+              </tr>
+              <tr> 
+              <td>  
+                 <apex:outputText value="Ship to Postal Code" id="search16"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input7}" onkeypress="return noenterShip(event)"/>
+              </td>
+              <td>   
+                 <apex:outputText value="Ship to Country" id="search17"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input8}" onkeypress="return noenterShip(event)"/><br/>
+               </td>
+               <td>  
+                 <apex:outputText value="Ship to ID" id="search18"/>
+             </td>
+             <td>    
+                 <apex:inputText value="{!input9}" onkeypress="return noenterShip(event)"/><br/>
+               </td> 
+              </tr>   
+               </table>  
+               <apex:commandbutton action="{!searchShip}" value="Go" reRender="ShipForm" status="waitingStatusLoad" id="shipSearchId"/>
+             </apex:outputpanel><br/><br/><br/> 
+            <apex:outputPanel rendered="{!NOT(isError)}">
+            <apex:pageBlockSection title="Search Results" columns="1">
+             <apex:pageBlockTable value="{!shipToWrapper}"  var="shipto">
+                <apex:column headerValue="Select">
+                    <apex:inputCheckbox value="{!shipto.selected}" onclick="uncheckOthers(this)" id="shipID"/>
+                </apex:column>
+                <apex:column value="{!shipto.billShipName}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to Name{!IF(sortExpression=='billShipName',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort2" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="billShipName" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!shipto.Company}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to Company{!IF(sortExpression=='Company',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort3" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="Company" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+               <apex:column value="{!shipto.Address1}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to Address 1{!IF(sortExpression=='Address1',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort4" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="Address1" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!shipto.Address2}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to Address 2{!IF(sortExpression=='Address2',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort5" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="Address2" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!shipto.City}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to City{!IF(sortExpression=='City',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort6" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="City" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!shipto.State}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to State{!IF(sortExpression=='State',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort7" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="State" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                <apex:column value="{!shipto.PostalCode}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to Postal Code{!IF(sortExpression=='PostalCode',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort8" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="PostalCode" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column> 
+                <apex:column value="{!shipto.Country}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to Country{!IF(sortExpression=='Country',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort9" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="Country" name="column" assignTo="{!sortExpression}" ></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>           
+                <apex:column value="{!shipto.BillShipID}">
+                 <apex:facet name="header">   
+                   <apex:commandLink action="{!sortFilter}" value="Ship to ID{!IF(sortExpression=='BillShipID',IF(sortDirection='ASC','?','?'),'')}" id="cmdSort10" reRender="ShipForm">
+                     <apex:param value="FALSE" name="Ship" assignTo="{!filter}"/>
+                     <apex:param value="BillShipID" name="column" assignTo="{!sortExpression}"></apex:param>
+                   </apex:commandLink>
+                  </apex:facet>
+                </apex:column>
+                
+            </apex:pageBlockTable> 
+        </apex:pageBlockSection> 
+        </apex:outputPanel>
+         <apex:pageBlockButtons location="bottom">
+                    <apex:commandButton action="{!updateShipTo}" value="Save" reRender="ShipForm" status="waitingStatusLoad" id="updateShipToID">
+                    <!--  <apex:param value="TRUE" name="Ship" assignTo="{!saveShip}"/> -->
+                    </apex:commandButton>
+                <apex:commandButton action="{!Cancel}" value="Close" onclick="javascript:CloseAndRefresh()" oncomplete="javascript:CloseAndRefresh()" />
+                <apex:commandButton action="/500/e?{!$Label.LX_Case_Subject}=Ship To request for Opportunity [{!opp1.Name}]&retURL=%2F{!opp1.Id}&CF{!$Label.LX_Case_Internal_Account}={!opp1.Account.Name}&CF{!$Label.LX_Case_Internal_Account}_lkid={!opp1.Account.Id}&{!$Label.LX_Case_Contact_Name}={!$User.FirstName}%20{!$User.LastName}&{!$Label.LX_Case_Contact_Name}_lkid={!$User.ContactId}&RecordType={!$Label.LX_Case_Sold_To_RecordTypeId}&ent=Case&{!$Label.LX_Case_Request_Change}=<h3>Create Ship To:</h3><table width=600 border=1><tr><th width=200>Opportunity</th><td><a href=/{!opp1.Id} >{!opp1.Name}</a></td></tr><tr>{!BillToShipToRequestURL}<th>Sold To ID</th><td>{!opp1.LX_Sold_To_New__r.LX_Sold_To__r.LX_Sold_To_ID__c}</td></tr><tr><th>Sales Organization</th><td>{!opp1.Sales_Organization_value__c}</td></tr><tr><th>Name</th><td></td></tr><tr><th>Address</th><td></td></tr><tr><th>Address 2</th><td></td></tr><tr><th>City</th><td></td></tr><tr><th>State</th><td></td></tr><tr><th>Postal</th><td></td></tr><tr><th>Country</th><td></td></tr><tr><th>Requestor</th><td><a href=/{!$User.Id} >{!$User.FirstName}%20{!$User.LastName}</a></td></tr><tr><th>Additional Comments</th><td></td></tr></table>" value="Request New Ship To"/>
+        </apex:pageBlockButtons>     
+      </apex:pageBlock>
+     </apex:form>
+    </apex:tab>
+  </apex:tabPanel>
+  </apex:outputPanel>
+        </apex:outputPanel>
+</apex:page>

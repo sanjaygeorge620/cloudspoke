@@ -1,0 +1,100 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesGenericController"> 
+
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | Upgrade Center</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+       <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-upgradecenter').addClass('active');
+              jQuery("#accordion").accordion({ active: false, autoHeight: false, collapsible: true, icons: { 'header': 'ui-icon-plus', 'headerSelected': 'ui-icon-minus' } });
+              jQuery(".tabs").tabs({ fx:{opacity:'toggle'} });
+            });  
+        </script>
+        <script type="text/javascript">
+            Shadowbox.init({});
+            function openShadowbox(el,mov){ 
+                Shadowbox.open({
+                    content:    mov,
+                    player:     "qt",
+                    title:      el.title,
+                    height:     564,
+                    width:     900                
+                }); 
+            } 
+    </script>
+     </apex:define>
+    <apex:define name="body">  
+
+        <apex:stylesheet value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/smoothness/jquery-ui.css" />
+        <apex:stylesheet value="{!URLFOR($Resource.Perceptive_Sites, 'css/upgradecenter.css')}" />
+        <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">Home</a>
+                    <a class="current" href="#">Upgrade Center</a>
+              </nav>
+            </div>
+         </div>  
+         
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!SITE_TAB_UPGRADE}">
+            <p>{!$label.Insufficient_Privileges}</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!SITE_TAB_UPGRADE}">
+        <apex:pageMessages />
+        <div class="c16">
+         <h2 class="first-header">Upgrade Center</h2>
+          <p>Gain maximum value from your Perceptive Software products by keeping your system on the latest software release. Staying current keeps your Perceptive Software environment operating at peak performance and allows you to take full advantage of the newest features and technology available.</p>
+          <p>The Upgrade Center allows users access to upgrade related content for the Perceptive Software Product Suite.  The following material is organized by product family and applicable version.  This information along with helpful links to training options and recommended documentation within the customer portal should be used to prepare for your upgrade.</p>
+          <p>Select from the product options below to begin.</p>
+         </div> 
+         <hr class="row-break"/>    
+        <div class="grid upgrade">
+            <div class="c10">
+                <section class="divider grid">
+                    <section class="product-intro-block visible-grid-left c8">
+                        <h1 class="tight-margin has-icon links-list"><a href=""><span class="icon header-lead product-content">Product Category</span>Content</a></h1>
+                        <ul class="links-list links-pictogram">
+                            <li><a class="pictogram-next" href="/apex/UpgradeImageNow"> ImageNow</a></li>
+                            <li><a class="pictogram-next" href="/apex/UpgradeNolijWeb"> NolijWeb</a></li>
+                            <li><a class="pictogram-next" href="/apex/UpgradeDataTransfer"> DataTransfer</a></li>
+                            <li><a class="pictogram-next" href="/apex/UpgradeDocComp"> Document Composition</a></li>
+                            <li><a class="pictogram-next" href="/apex/UpgradeAcuo"> Acuo</a></li>
+                        </ul>
+                    </section>
+                    <section class="product-intro-block visible-grid-right c8">
+                        <h1 class="tight-margin has-icon links-list"><a href=""><span class="icon header-lead product-process">Product Category</span>Process</a></h1>
+                        <ul class="links-list links-pictogram">
+                            <li><a class="pictogram-next" href="/apex/UpgradeProcessSuite"> Process Suite</a></li>
+                            <li><a class="pictogram-next" href="/apex/UpgradeProcessMining"> Process Mining</a></li>
+                        </ul>
+                    </section>
+                </section>
+                <section class="grid" style="margin-bottom: 1em;">
+                    <section class="product-intro-block visible-grid-left c8">
+                        <h1 class="tight-margin has-icon links-list"><a href=""><span class="icon header-lead product-capture">Product Category</span>Capture</a></h1>
+                        <ul class="links-list links-pictogram">
+                            <li><a class="pictogram-next" href="/apex/UpgradeCapture"> Intelligent Capture</a></li>
+                        </ul>
+                    </section>
+                    <section class="product-intro-block visible-grid-right c8">
+                        <h1 class="tight-margin has-icon links-list"><a href=""><span class="icon header-lead product-search">Product Category</span>Search</a></h1>
+                            <ul class="links-list links-pictogram">
+                                <li><a class="pictogram-next" href="/apex/UpgradeEnterpriseSearch"> Enterprise Search</a></li>
+                                <li><a class="pictogram-next" href="/apex/UpgradeDocumentFilters"> Document Filters</a></li>
+                                <li><a class="pictogram-next" href="/apex/UpgradeWorkgroupSearch"> Workgroup Search</a></li>
+                                
+                            </ul>
+                    </section>
+                </section>
+                <div class="c6 m"></div>
+            </div>
+        </div>
+        <hr class="row-break"/>
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

@@ -1,0 +1,260 @@
+<apex:page standardController="Technical_Overview__kav" showHeader="false" sidebar="false" standardStylesheets="false" title="Knowledgebase | {!Technical_Overview__kav.Title}">
+    <style>
+        em { font-family: 'verdana';font-style: italic; }
+        .internalNotes{color:red;font-weight:bold;font-size: 14px;line-height: 1.5em;}   
+        .toc-section ul li {list-style:circle;}
+        .toc-section ul li,
+        .toc-section ul li a,
+        .toc-section ul li a:hover,
+        .toc-section ul li a:visited{color:#222;font:normal 14px verdana,geneva,sans-serif;}
+        .toc-section,
+        .kb-normalize span, 
+        .kb-normalize p{line-height: 1.41}
+        .kb-normalize table {word-wrap:break-word;table-layout: fixed;}
+        .kb-normalize td{margin:5px;padding:5px;vertical-align:text-top;}
+    </style>
+
+    <html>
+       <apex:variable var="ArticleURL" id="ArticleURL" value="/_ui/core/email/author/EmailAuthor?rtype=003&p6=Knowledgebase : {!JSENCODE(Technical_Overview__kav.title)}&p7=I found this article to assist you.     https://perceptivesoftware.secure.force.com/?Starturl=/articles/Technical_Overview/{!Technical_Overview__kav.UrlName}"/>
+        <apex:variable var="isVisible" id="isVisible" value="{!Ispickval($User.UserType,'Standard')}"/>
+
+        <head>
+            <title>Knowledgebase | {!Technical_Overview__kav.Title}</title>
+            <apex:include pageName="CustomerPortalAnalytics"/>
+            <apex:stylesheet id="kb_article" value="{!URLFOR($Resource.WebContent, 'css/knowledge.css')}"/>
+        </head>
+        
+        <body>
+            
+            <apex:pageblock >
+                
+                <div id="header">
+                    <div id="logo">
+                        <p id="logoimg" />
+                        <p id="loginnav">
+                            <apex:outputLink title="Print Screen" onclick="window.print()">Print</apex:outputLink>
+                            &nbsp;|&nbsp;
+                            <apex:outputPanel rendered="{!isVisible && Technical_Overview__kav.IsVisibleInCsp}" >
+                                <apex:outputLink title="Send Article Link" value="JavaScript:void(0);" onclick="window.open('{!ArticleURL}')">Send Link</apex:outputLink>
+                                &nbsp;|&nbsp;
+                            </apex:outputPanel>  
+                            <apex:outputLink title="Close Window" onclick="window.close();">Close</apex:outputLink>
+                        </p>
+                    </div>
+                </div>
+              
+                <div id="greenline" />
+                <div id="container">
+                        <div id="docdetails">
+                            <ul>
+                                <apex:outputPanel rendered="{!isVisible}" >
+                                    <li>
+                                        <apex:outputLabel styleClass="labelkey" value="Author: "/>
+                                        <apex:outputField styleClass="labelfield" value="{!Technical_Overview__kav.OwnerId}"/>
+                                    </li>
+                                    <li>
+                                         <apex:outputLabel styleClass="labelkey" value="Document ID: "/>
+                                         <apex:outputField styleClass="labelfield" value="{!Technical_Overview__kav.ArticleID__c}"/>
+                                    </li>
+                                    <li>    
+                                        <apex:outputLabel styleClass="labelkey" value="First Published: "/>
+                                        <apex:outputField styleClass="labelfield" value="{!Technical_Overview__kav.FirstPublishedDate}"/>
+                                    </li>
+                                    <li>                
+                                        <apex:outputLabel styleClass="labelkey" value="Last Modified: "/>
+                                        <apex:outputField styleClass="labelfield"  value="{!Technical_Overview__kav.LastModifiedDate}"/>
+                                    </li>
+                                    <li>
+                                        <apex:outputLabel styleClass="labelkey" value="Last Published: "/>
+                                        <apex:outputField styleClass="labelfield" value="{!Technical_Overview__kav.LastPublishedDate}"/>
+                                    </li>   
+                                    <li>   
+                                        <apex:outputLabel styleClass="labelkey" value="Channels: "/>
+                                        <apex:outputtext styleClass="labelfield" value="{!if(Technical_Overview__kav.IsVisibleInApp,'Internal; ','')+if(Technical_Overview__kav.IsVisibleInCsp,'Customer Portal; ','')+if(Technical_Overview__kav.IsVisibleInPrm,'Partner Portal; ','')+if(Technical_Overview__kav.IsVisibleInPkb,'Public KB; ','')}"/>
+                                    </li>       
+                                    <li class="warno">   
+                                        <apex:outputtext rendered="{!Technical_Overview__kav.IsVisibleInApp && !Technical_Overview__kav.IsVisibleInCsp && !Technical_Overview__kav.IsVisibleInPrm && !Technical_Overview__kav.IsVisibleInPkb}" value="Internal Only"/>
+                                    </li>  
+                                </apex:outputPanel>                   
+                              </ul>     
+                        </div>
+                    
+                        <div id="contenttitle">{!Technical_Overview__kav.Title}</div>                    
+                             <!--table of contents-->
+                             <apex:outputpanel id="container"  styleclass="toc-section" rendered="{!Technical_Overview__kav.Show_Table_of_Contents__c}">     
+                                   <span id="contentdetails"><h3 class="kbheader">Table of Contents</h3></span>
+                                    <ul>
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility1_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section1__c)}">
+                                             <li> 
+                                                 <a href="#Section_1">
+                                                     {!Technical_Overview__kav.Title1_Section__c} 
+                                                 </a>
+                                                 <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility1_Section__c=='Internal App'  &&  isVisible}"/>
+                                             </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility2_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section2__c)}">
+                                            <li> 
+                                                <a href="#Section_2">
+                                                    {!Technical_Overview__kav.Title2_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility2_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li>
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility3_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section3__c)}">
+                                            <li> 
+                                                <a href="#Section_3">
+                                                    {!Technical_Overview__kav.Title3_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility3_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility4_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section4__c)}">
+                                            <li> 
+                                                <a href="#Section_4">
+                                                    {!Technical_Overview__kav.Title4_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility4_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility5_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section5__c)}">
+                                            <li> 
+                                                <a href="#Section_5">
+                                                    {!Technical_Overview__kav.Title5_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility5_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility6_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section6__c)}">
+                                            <li> 
+                                                <a href="#Section_6">
+                                                    {!Technical_Overview__kav.Title6_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility6_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility7_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section7__c)}">
+                                            <li> 
+                                                <a href="#Section_7">
+                                                    {!Technical_Overview__kav.Title7_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility7_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility8_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section8__c)}">
+                                            <li> 
+                                                <a href="#Section_8">
+                                                    {!Technical_Overview__kav.Title8_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility8_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility9_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section9__c)}">
+                                            <li> 
+                                                <a href="#Section_9">
+                                                    {!Technical_Overview__kav.Title9_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility9_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel> 
+                                        <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility10_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section10__c)}">
+                                            <li> 
+                                                <a href="#Section_10">
+                                                    {!Technical_Overview__kav.Title10_Section__c} 
+                                                </a>
+                                                <apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility10_Section__c=='Internal App'  &&  isVisible}"/>
+                                            </li> 
+                                        </apex:outputPanel>  
+                                    </ul>
+                              </apex:outputpanel>   
+                          <!--/table of contents-->
+                      
+                        <div id="contentdetails">
+                                   
+                                 <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility1_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section1__c)}">
+                                       <a name="Section_1"></a>
+                                       <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title1_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility1_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                       <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section1__c}" /></div>                        
+                                       <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes1_Section__c}" /></div>
+                                 </apex:outputPanel> 
+                           
+                                 <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility2_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section2__c)}">
+                                        <a name="Section_2"></a>
+                                        <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title2_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility2_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                        <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section2__c}" /></div>            
+                                        <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes2_Section__c}" /></div>
+                                  </apex:outputPanel> 
+                            
+                                  <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility3_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section3__c)}">
+                                        <a name="Section_3"></a>
+                                        <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title3_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility3_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                        <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section3__c}" /></div>  
+                                        <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes3_Section__c}" /></div> 
+                                   </apex:outputPanel> 
+                           
+                                   <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility4_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section4__c)}">
+                                       <a name="Section_4"></a>
+                                       <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title4_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility4_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                       <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section4__c}" /></div>  
+                                       <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes4_Section__c}" /></div>
+                                   </apex:outputPanel>
+                            
+                                   <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility5_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section5__c)}">
+                                        <a name="Section_5"> </a>
+                                        <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title5_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility5_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                        <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section5__c}" /></div>  
+                                        <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes5_Section__c}" /></div>
+                                   </apex:outputPanel> 
+                            
+                                   <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility6_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section6__c)}">
+                                        <a name="Section_6"> </a>
+                                        <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title6_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility6_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                        <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section6__c}" /></div>    
+                                        <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes6_Section__c}" /></div>           
+                                   </apex:outputPanel>            
+
+                                   <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility7_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section7__c)}">
+                                       <a name="Section_7">  </a>
+                                       <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title7_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility7_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                       <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section7__c}" /></div>  
+                                       <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes7_Section__c}" /></div>
+                                   </apex:outputPanel>             
+                            
+                                    <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility8_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section8__c)}">
+                                        <a name="Section_8"> </a>
+                                        <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title8_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility8_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                        <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section8__c}" /></div>  
+                                        <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes8_Section__c}" /></div>
+                                    </apex:outputPanel>     
+     
+                            
+                                    <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility9_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section9__c)}">
+                                        <a name="Section_9"> </a>
+                                        <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title9_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility9_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                        <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section9__c}" /></div>  
+                                        <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes9_Section__c}" /></div>
+                                    </apex:outputPanel>             
+
+                            
+                                    <apex:outputPanel rendered="{!contains(Technical_Overview__kav.Visibility10_Section__c,'Internal App') && !isBlank(Technical_Overview__kav.Section10__c)}">
+                                        <a name="Section_10"> </a>
+                                        <h3 class="kbheader"><span><apex:outputtext value="{!Technical_Overview__kav.Title10_Section__c}" />&nbsp;<apex:outputText escape="false" styleClass="internalNotes"  value="(Internal Only)" rendered="{!Technical_Overview__kav.Visibility10_Section__c=='Internal App'  &&  isVisible}"/></span> </h3>
+                                        <div class="kbcontent"><apex:outputText styleClass="kb-normalize" escape="false"  value="{!Technical_Overview__kav.Section10__c}" /></div>  
+                                        <div class="kbcontent"><apex:outputText escape="false" styleClass="internalNotes"  value="{!Technical_Overview__kav.InternalNotes10_Section__c}" /></div>
+                                    </apex:outputPanel>        
+                        </div> <!--/contentdetails--->
+                    
+                        <hr />
+                                <c:PortalFeedback RefURL="/articles/Technical_Overview/{!Technical_Overview__kav.UrlName}" 
+                                    RefType="Knowledgebase" 
+                                    RefID="{!Technical_Overview__kav.ID}" 
+                                    RefTitle="{!Technical_Overview__kav.Title}" />        
+                </div>
+                
+                <div id="footer">
+                    <p> &#169;{!YEAR(Today())} Perceptive Software | <a href="http://www.perceptivesoftware.com/legal" rel="nofollow">Legal Terms and Privacy Policy</a></p>
+                </div>
+            </apex:pageblock>
+            
+        </body>
+    </html>
+</apex:page>

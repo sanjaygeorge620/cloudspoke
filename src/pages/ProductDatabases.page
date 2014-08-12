@@ -1,0 +1,56 @@
+<apex:page standardController="Product_Configuration__c" extensions="ControllerProductConfiguration" id="pc">
+<script language="javascript" >
+
+  
+  
+</script>
+    <apex:form id="frm" >
+        
+        <apex:pageBlock title="Databases" mode="edit" id="block">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!saveDatabase}" value="Save"/>
+                <apex:commandButton action="{!viewConfiguration}" value="Back"/>
+
+            </apex:pageBlockButtons>
+            <c:ProductConfigurationHeader type="Databases" 
+            	prodAction="{!prodAction}" prod="{!Product_Configuration__c}"/>
+            
+             
+               
+			<apex:dataTable value="{!allDatabases}" var="env" id="theTable"
+				styleClass="list" width="100%" >
+				<apex:column >
+					<apex:facet name="header"><input type="checkbox" id="selectAll" name="selectAll" onClick="checkAll(this)"/> Select</apex:facet>
+					<input id="CHBX{!env.id}" name="CHBX{!env.id}" type="checkbox">
+				</apex:column>
+				<apex:column >
+					<apex:facet name="header">Database</apex:facet>
+					<apex:outputField value="{!env.Database__c}" />
+				</apex:column>
+				<apex:column >
+					<apex:facet name="header">Database Version</apex:facet>
+					<apex:outputField value="{!env.Database_Version__c}" />
+				</apex:column>
+			</apex:dataTable>
+			
+		</apex:pageBlock>
+        
+        
+       
+    </apex:form>
+    <script>
+    	function checkAll(chkSelectAll){
+    		selectAll(chkSelectAll.checked);
+    	}
+    	function selectAll(flag){
+    		checkBoxes = document.getElementById("pc:frm:block:theTable").getElementsByTagName("input");
+    		for(var i = 0; i < checkBoxes.length; i++){
+    			if(checkBoxes[i].name.startsWith("CHBX")){
+    				checkBoxes[i].checked = flag;
+    			}
+    		}
+    	}
+    	String.prototype.startsWith = function(str)
+		{return (this.match("^"+str)==str)}
+    </script>
+    </apex:page>

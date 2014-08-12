@@ -1,0 +1,62 @@
+<apex:page standardController="LX_Evaluation_Product__c" extensions="LX_EvalProducts_Cntrl">
+
+ <apex:form >
+  <apex:messages />
+ <script>
+ function check( idval){
+  alert(idval);
+ var a= idval.lastIndexOf(':');
+ alert(a);
+ var idva = idval.substring(0,a);
+ alert(idva);
+ var ba = idva.lastIndexOf(':');
+ idval = idval.substring(a+1,ba);
+ alert(idval);
+ alert('Hi');
+ var Product=document.getElementById("j_id0:j_id2:j_id4:j_id6"+idval+"j_id8").value;
+ var quant=document.getElementById("j_id0:j_id2:j_id4:j_id6"+idval+"j_id11").value;
+ alert(Product);
+ if(Product==''||quant==''){
+ alert("issue!!!Type in your error!");
+ return false;
+ }
+ else{
+     return true;
+ }
+ }
+ </script>
+
+   <apex:pageBlock >
+     
+   <apex:outputPanel id="EvalTable">
+  
+  <apex:variable value="{!0}" var="index"/>
+    <apex:pageBlockTable value="{!evalProdList}" var="evProd">
+    
+      <apex:column headerValue="Product">
+       
+       <apex:inputField value="{!evProd.LX_Product__c}"/>
+       <apex:variable value="{!index+1}" var="index"/>
+      </apex:column>
+     <apex:column headerValue="Quantity">
+       <apex:inputField value="{!evProd.LX_Quantity__c}"/> 
+      </apex:column>
+      <apex:column headerValue="Evaluation Unit">
+       <apex:inputField value="{!evProd.LX_Seed_Order_Request__c}"/>
+      </apex:column>
+      <apex:column >
+       <apex:commandButton action="{!delEvalProd}" value="Delete" rendered="{!IF((evalProdList.size)>1,true,false)}" reRender="EvalTable" style="width:65px;color:red;font-weight:bold;" status="del">
+        <apex:param value="{!index}" assignTo="{!count}" name="counter"/>
+        <apex:actionStatus id="del" startText="Deleting"> Deleting</apex:actionStatus>
+       </apex:commandButton>
+       <apex:commandButton action="{!addMore}" value="Add More"  rendered="{!IF((evalProdList.size)==(index),true,false)}" reRender="EvalTable" style="color:green;" /><!--onclick="if(check(this.id)==false) return false;"  immediate="true"--> 
+      </apex:column>
+      
+    </apex:pageBlockTable>
+   </apex:outputPanel>
+    <apex:pageBlockButtons location="top">
+     <apex:commandButton action="{!saveEvalProd}" value="Save"  style="width:65px;"/>
+    </apex:pageBlockButtons>
+   </apex:pageBlock>
+ </apex:form>
+</apex:page>

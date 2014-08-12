@@ -1,0 +1,87 @@
+<apex:page standardController="Idea" extensions="IdeaPostController" showHeader="false" action="{!redirectIfNotLoggedIn}">
+
+    <apex:composition template="ideaLayoutWrapper">
+        <apex:define name="content">
+            <div class="callout ideas">
+                  <c:ideatabs Home_Tab="false" 
+                    ViewAll_Tab="false"
+                    Search_Tab="false"
+                    MyIdeas_Tab="false"
+                    Submit_Tab="true"
+                    />
+            
+            
+                    <div class="callout-content ideasearch">
+                            <apex:outputPanel layout="block" styleclass="ibtLargeContentInner" rendered="{!!$ObjectType.Idea.createable}">
+                                You do not have access to create an idea.
+                            </apex:outputPanel>
+                            <apex:form styleClass="ibtPostIdeaForm">
+                                    <!-- Idea Title -->
+                                    <apex:outputPanel styleClass="ibtFormRow">
+                                        <apex:outputPanel layout="block" styleClass="ibtTitleFieldContainer">
+                                            <apex:outputLabel rendered="true" for="ibtTitleField" value="Idea Title" styleClass="_ibtPseudoHidden" />
+                                            <apex:inputField styleClass="{!IF( OR(ISNULL(idea.Title), idea.Title == defaultTitle), 'ibtTitleFieldInitial','ibtTitleFieldFocus')}" value="{!idea.Title}" id="ibtTitleField" onfocus="focusTitle(this);" onblur="javascriptLoadSimilar()" />
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!ISNULL(idea.Title)}">
+                                            <script type="text/javascript">
+                                                $('{!$Component.ibtTitleField}').value = '{!defaultTitle}';
+                                          </script>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+            
+                                    <apex:actionFunction action="{!loadSimilar}" name="javascriptLoadSimilar" rerender="similarResults" status="spinner" />
+                                    <apex:actionStatus id="spinner" >
+                                        <apex:facet name="start">
+                                            <apex:image value="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}"/>
+                                        </apex:facet>
+                                    </apex:actionStatus>
+            
+                                    <apex:outputPanel layout="block" id="similarResults" styleClass="ibtSimilarResults">
+                                        <apex:outputPanel layout="none" rendered="{!hasSimilarIdeas}">
+                                        Possibly similar ideas:
+                                        <apex:dataList value="{!similarIdeas}" var="similarIdea">
+                                                <ideas:detailOutputLink page="{!ideaViewPage}" ideaId="{!similarIdea.id}">{!similarIdea.title}</ideas:detailOutputLink>
+                                            </apex:dataList>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+            
+                                    <!-- Idea Body -->
+                                    <apex:outputPanel styleClass="ibtFormRow">
+                                        <apex:outputLabel for="ibtBodyField" value="Describe your idea" />
+                                        <apex:outputPanel layout="block" styleClass="ibtBodyFieldContainer">
+                                            <apex:inputField id="ibtBodyField" value="{!idea.Body}" />
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+            
+                                    <!-- Categories -->
+                                    <apex:outputPanel styleClass="ibtFormRow ibtPostIdeaCategoryListContainer">
+                                        <apex:outputLabel styleClass="ibtPostIdeaCategoryLabel" for="ibtCategories" value="Select a category." />
+                                        <apex:outputPanel layout="block" style="margin-left:10px;" > 
+                                            <apex:repeat value="{!categoryOptions}" var="o">
+                                                <apex:variable value="{!o.value}" var="v"/>
+                                                <apex:outputPanel layout="block" rendered="{!CONTAINS(v,'--')}" styleClass="ibtFormRow">
+                                                    <apex:outputLabel value="{!SUBSTITUTE(v,'--','')}" />
+                                                </apex:outputPanel> 
+                                                <apex:outputPanel rendered="{!!CONTAINS(v,'--')}">
+                                                    <apex:selectCheckboxes rendered="true" id="ibtCategories" layout="lineDirection" value="{!categoriesForIdea}">
+                                                        <apex:selectOption itemValue="{!o.value}" itemLabel="{!o.label}" />
+                                                    </apex:selectCheckboxes>
+                                                </apex:outputPanel> 
+                                            </apex:repeat>                            
+                                        </apex:outputPanel>        
+                                    </apex:outputPanel>
+            
+                                    <!-- Submit Buttons -->
+                                    <apex:outputPanel layout="block" styleClass="ibtButtons">
+                                        <apex:commandButton action="{!save}" title="Post" styleclass="submitbutton"/>
+                                        <apex:commandLink action="{!cancel}" value="Cancel" />
+                                    </apex:outputPanel>
+                                </apex:form>    
+                    
+                    </div>    
+            </div>            
+            
+        </apex:define>
+    </apex:composition>
+
+</apex:page>

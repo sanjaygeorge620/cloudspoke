@@ -1,0 +1,3 @@
+<apex:page standardController="Contact" recordSetVar="contacts" sidebar="false">
+    <apex:iframe src="https://perceptive-salesconnect.couch-associates.com/recipients?type=contact&ids={!selected}" scrolling="true" id="contactsFrame"/>
+</apex:page>

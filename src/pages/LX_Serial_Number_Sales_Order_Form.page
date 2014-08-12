@@ -1,0 +1,132 @@
+<apex:page standardController="LX_Serial_Number_Sales_Order__c" extensions="LX_SerialNumberOrder">
+    <apex:sectionHeader title="{!$ObjectType.LX_Serial_Number_Sales_Order__c.label} Edit" subtitle="New {!$ObjectType.LX_Serial_Number_Sales_Order__c.label}" rendered="{!((OR(NOT(SalesOrder.LX_System_Locked__c),ProfileCheck)))}"/>
+     <apex:outputtext value="The record is submitted and do not have the approriate permission to edit the record." rendered="{!NOT(OR(NOT(SalesOrder.LX_System_Locked__c),ProfileCheck))}" />
+   <script type="text/javascript">
+      function setHidden(counter) {
+        var index = document.getElementById('theHiddenInput');
+        index.value = counter;
+      }
+</script>
+    <apex:form id="FormID" > 
+    <apex:pagemessages ></apex:pagemessages>
+    <c:ActionStatusLoading />
+    <apex:pageBlock title="{!$ObjectType.LX_Serial_Number_Sales_Order__c.label} Edit" rendered="{!((OR(NOT(SalesOrder.LX_System_Locked__c),ProfileCheck)))}"  mode="edit">
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton action="{!save_form}" value="Save"/>
+            <apex:commandButton action="{!cancel}" value="Cancel"/>
+             <apex:commandButton action="{!Delete}" value="Delete" rendered="{!ProfileCheck}"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection showHeader="true" title="Serial Number Sales Order Detail" columns="2">
+            <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+            <apex:inputField required="true" value="{!salesorder.LX_Partner_Account__c}"  >
+            <apex:actionsupport event="onchange" action="{!updateSNList}" rerender="FormID" immediate="false" status="waitingStatusLoad"/>
+            </apex:inputfield>
+            <apex:inputField value="{!salesorder.LX_Customer_Account__c}">
+            <apex:actionsupport event="onchange" action="{!UpdateAccName}"  rerender="AcctDetailSection,SalesOrderItem" status="waitingStatusLoad" />
+             </apex:inputField>
+            <apex:inputField value="{!salesorder.LX_Assigned_User__c}"/>
+              <apex:inputField value="{!salesorder.CurrencyIsoCode}"/>
+           
+            
+          
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection id="AcctDetailSection" showHeader="true" title="Account Details: Only if you could not find the specific account" columns="2">
+            <apex:inputField value="{!salesOrder.LX_Account_Name__c}">
+                
+            </apex:inputField>
+            <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+            <apex:inputField value="{!salesOrder.LX_First_Name__c}"/>
+            <apex:inputField value="{!salesorder.LX_Last_Name__c}"/>
+            <apex:inputField value="{!salesorder.LX_Phone_Number__c}"/>
+            <apex:inputField value="{!salesorder.LX_Email_Address__c}"/>
+            <apex:inputField value="{!salesorder.LX_Street_Address__c}"/>
+            <apex:inputField value="{!salesorder.LX_Street_Address_Line_2__c}"/>
+            <apex:inputField value="{!salesorder.LX_City__c}"/>
+            <apex:inputField value="{!salesorder.LX_State__c}"/>
+            <apex:inputField value="{!salesorder.LX_Province__c}"/>
+            <apex:inputField value="{!salesorder.LX_Zip_Postal_Code__c}"/>
+            <apex:inputField value="{!salesorder.LX_Country__c}"/>
+            <apex:inputfield value="{!salesorder.LX_Website__c}"/>
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="SMSA Renewal Information" columns="2">
+            <apex:inputField value="{!salesorder.LX_Bill_To_Name__c}"/>
+            <apex:inputField value="{!salesorder.LX_Ship_To_Name__c}"/>
+           
+            <apex:inputField value="{!salesorder.LX_Address_Same_as_Account_BillTo__c}"/>
+            <apex:inputField value="{!salesorder.LX_Address_Same_as_Account_ShipTo__c}"/>
+            <apex:inputField value="{!salesorder.LX_Bill_To_Title__c}"/>
+          <br/>
+            <apex:inputField value="{!salesorder.LX_Bill_To_Address__c}"/>
+            <apex:inputField value="{!salesorder.LX_Ship_To_Address__c}"/> 
+            <apex:inputField value="{!salesorder.LX_Bill_To_City__c}"/>
+            <apex:inputField value="{!salesorder.LX_Ship_To_City__c}"/>
+            <apex:inputField value="{!salesorder.LX_Bill_To_State_Province__c}"/>
+            <apex:inputField value="{!salesorder.LX_Ship_To_State_Province__c}"/>
+            <apex:inputField value="{!salesorder.LX_Bill_To_Postal_Code__c}"/>
+            <apex:inputField value="{!salesorder.LX_Ship_To_Postal_Code__c}"/>
+            <apex:inputField value="{!salesorder.LX_Bill_To_Country__c}"/>
+            <apex:inputField value="{!salesorder.LX_Ship_To_Country__c}"/>
+            <apex:inputField value="{!salesorder.LX_Bill_To_Email_Address__c}"/>
+           <br/>
+            <apex:inputField value="{!salesorder.LX_Bill_To_Phone__c}"/>
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" title="System Information" columns="2">
+            <apex:inputField value="{!salesorder.LX_Status__c}"/>
+            <apex:inputField value="{!salesorder.LX_Account_Requested__c}">
+            <apex:actionsupport event="onchange" action="{!ClearAccName}"  rerender="FormID" status="waitingStatusLoad" />
+            </apex:inputField>
+        </apex:pageBlockSection>
+        
+    </apex:pageBlock>
+          <apex:outputpanel id="SalesOrderItem">
+         <apex:pageBlock title="Sales Order Items" id="SalesOrderItemblock" rendered="{!AND((OR(NOT(SalesOrder.LX_System_Locked__c),ProfileCheck)),IsPartnerAccNOTempty )}">
+   <apex:actionRegion > <apex:pagemessages ></apex:pagemessages>
+             <apex:pageblockTable value="{!serialNumberList}" var="s">
+          
+            <apex:column width="30%"> 
+            <apex:facet name="header">Serial Number</apex:facet>
+               <apex:selectList size="1" style="width:40%;" value="{!s.serialnumberlineItem.Serial_Number__c}" multiselect="false" onchange="methodOneInJavascript({!s.counterWrap})">
+            <apex:selectOptions value="{!SNlist}"/>
+              
+            
+        </apex:selectList>
+        
+              </apex:column> 
+           
+            <apex:column width="30%"> 
+              <apex:facet name="header">Part Number</apex:facet>
+                <apex:outputfield value="{!s.serialnumberlineItem.Part_Number__c}"/> 
+            </apex:column>
+            
+            <apex:column width="30%"> 
+            <apex:facet name="header">Part Number</apex:facet>
+                <apex:outputfield value="{!s.serialnumberlineItem.Part_Name__c}"/> 
+            </apex:column>
+           
+           
+            <apex:column width="5%"> 
+                <apex:commandButton id="addAnother" title="Add Another" value="+" action="{!addSerialNumberOrder}"  rerender="SalesOrderItem" style="width:50;" />
+            </apex:column>
+            <apex:column width="5%"> 
+                <apex:commandButton id="remove" title="Remove" value="-" action="{!removeSerialNumberOrder}" onclick="methodTwoInJavascript('{!s.counterWrap}');" rerender="SalesOrderItem" > 
+              
+                </apex:commandButton>
+                
+            </apex:column>
+         </apex:pageblockTable>
+          <apex:actionFunction action="{!updateserialNumberList}" name="methodOneInJavascript" rerender="SalesOrderItem">
+        <apex:param name="firstParam" assignTo="{!index}" value="" />
+          </apex:actionFunction>
+           <apex:actionFunction action="{!removeSerialNumberOrder}" name="methodTwoInJavascript" rerender="SalesOrderItem">
+        <apex:param name="firstParam" assignTo="{!index}" value="" />
+          </apex:actionFunction>
+    </apex:actionRegion>
+     </apex:pageBlock>
+     </apex:outputpanel>
+     </apex:form>
+    
+    
+</apex:page>

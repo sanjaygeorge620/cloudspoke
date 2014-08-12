@@ -1,0 +1,19 @@
+<apex:page applyHtmlTag="false" showHeader="false" standardStylesheets="false" >
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width, user-scalable=no"></meta>
+            <script type="text/javascript" src="//api.twistage.com/api/script"></script>
+            <style>
+                .frame .video{margin:10px auto;width:600px;}
+            </style>
+        </head>
+        
+        <body>
+           <div class="frame">
+                <div class="video">
+                    <script type="text/javascript">viewNode("{!$CurrentPage.parameters.videoid}", {"server_detection": true, "width": 555, "height": 305});</script>
+                </div>  
+           </div> 
+        </body>
+    </html>
+</apex:page>

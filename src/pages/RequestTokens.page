@@ -1,0 +1,83 @@
+<apex:page standardcontroller="Training_Attendee__c" extensions="RequestTokens" id="pg">
+  <apex:includeScript value="{!URLFOR($Resource.Jquery)}"/>
+  <script>
+    function validateToken(){
+     if(document.getElementById('pg:frm:pb:pbs:pbsioppName:idoppName').value==''){
+       alert('Please enter the opportunity name to continue.');
+       return false;
+     }
+     if(document.getElementById('pg:frm:pb:pbs:pbsiconName:idConName').value==''){
+       alert('Please enter the contact name to continue.');
+       return false;
+     }
+     if(isNaN(parseInt(document.getElementById('pg:frm:pb:pbs:pbsireqTokens:idreqTokens').value)) || parseInt(document.getElementById('pg:frm:pb:pbs:pbsireqTokens:idreqTokens').value) == 0 ){
+        alert('Please enter the requested seats to continue.');
+        return false;
+      }
+      return true;
+    }
+    function showMessage(){     
+     alert('Seat request sent successfully...'); 
+    }
+    function setFocusOnLoad() {
+    }
+    
+  </script>
+    <apex:form id="frm">
+        <apex:pageBlock id="pb"> 
+            <apex:pageBlockButtons >
+             <apex:commandButton onclick="return validateToken();" action="{!requestTokens}" value="Submit" status="idStatus" />
+             <apex:commandButton action="{!cancel}" value="Cancel"/>
+             <apex:actionStatus startText="requesting..." id="idStatus" startStyle="color:red;padding:left:4px;">
+             </apex:actionStatus>
+            </apex:pageBlockButtons>
+            <apex:messages style="color:red;" />
+            <apex:pageBlockSection id="pbs">
+                <apex:pageBlockSectionItem id="pbsioppName">
+                  <apex:outputLabel value="Opportunity Name" for="idOppName"/>
+                  <apex:outputPanel >
+                    <div class="requiredInput"><div class="requiredBlock"></div><apex:inputText value="{!oppName}"  id="idoppName" /></div>
+                  </apex:outputPanel>
+                  
+              </apex:pageBlockSectionItem>
+        
+                <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Account Name" for="idAccName"/>
+                  <apex:outputText value="{!accName}" id="idAccName"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Parent Opportunity" for="opportunity"/>
+                    <apex:inputField value="{!opportunity.pse__Parent_Opportunity__c}" id="opportunity"/>
+                </apex:pageBlockSectionItem>
+                        
+                 <apex:pageBlockSectionItem id="pbsiconName" >
+                  <apex:outputLabel value="Contact Name" for="idConName"/>
+                  <apex:outputPanel >
+                       <div class="requiredInput"><div class="requiredBlock"></div><apex:inputText value="{!conName}"  id="idConName" /></div>
+                  </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                                
+                <apex:pageBlockSectionItem id="pbsireqTokens">
+                    <apex:outputLabel value="Requested Seats" for="idreqTokens"/>
+                    <apex:outputPanel >
+                            <div class="requiredInput"><div class="requiredBlock"></div><apex:inputText value="{!requstedTokens}" id="idreqTokens"/></div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                
+                 <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Special Notes" for="idSpecialNotes"/>
+                    <apex:inputText value="{!specialNotes}" id="idSpecialNotes"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Currency" for="idCurrency"/>
+                    <apex:inputField value="{!opportunity.CurrencyIsoCode}" />
+                </apex:pageBlockSectionItem>
+
+                
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,1 @@
+<apex:page action="{!updateField}" extensions="lastViewed_mss" showheader="false" sidebar="false" standardcontroller="Migration_Services_Server__c" />

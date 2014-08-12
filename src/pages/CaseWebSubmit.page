@@ -1,0 +1,365 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesCaseSubmitController"> 
+<style>
+select {height: 20px; margin-bottom: 3px; width: 250px;}
+input[type="text"], input[type="phone"], input[type="email"] {
+    float: left;
+    height: 17px;
+    margin: 3px 10px 10px 0;
+    padding: 2px 3px;
+    width: 204px;
+}
+  </style>
+      <head>
+        <apex:insert name="title" />
+        <meta content="{!SITE_META_DESCRIPTION}" name="description" />
+        <meta content="{!SITE_META_KEYWORD}" name="keywords" />
+        <script src="//az322532.vo.msecnd.net/script/modernizr.2.61.js" type="text/javascript">//empty</script>
+        <!--css-->
+        <apex:stylesheet id="sfdc_css" value="{!URLFOR($Resource.Perceptive_Sites_CSS, 'css/perceptive.css')}" />
+        <link href="//webenginedevstoragecdn.blob.core.windows.net/salesforce-css/customer-portal/jquery-ui-1.10.1.custom.css" rel="stylesheet"/>   
+        <link href="//www.perceptivesoftware.com/includes/css/ps3-salesforce.css" rel="stylesheet" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript">//empty</script>
+        <script src="/soap/ajax/27.0/connection.js" type="text/javascript">//empty</script>
+        <script src="//az322532.vo.msecnd.net/salesforce-scripts/jquery.locked_1_0_0.js" type="text/javascript">//empty</script>
+        <script>
+        if(!jQuery("html").hasClass("salesforce-sites")){
+               jQuery("html").addClass("salesforce-sites");
+           }
+        </script>
+    </head>
+  <apex:composition template="SitesTemplate" >
+   <apex:define name="title"> 
+        <title>{!SITE_NICKNAME} | {!$Label.Case_Submit}</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+     
+     
+     
+    <script type="text/javascript"> 
+                jQuery(document).ready(function() {
+                  jQuery(".toolbar-cases").addClass("active");
+                  jQuery(".accbody").hide();
+                  jQuery(".accbody.step1").slideToggle("slow");
+                  jQuery(".environment").focus();
+                  //disable enter
+                  jQuery("#landing").keyup(function(a) {
+                    if(a.keyCode == 13) {
+                      return!1
+                    }
+                  });
+                  //step 1
+                  jQuery(".case-subject-search").click(function() {
+                    jQuery(".new-case-subject").val() == "" || jQuery(".new-case-subject").val() == "{!$Label.CaseSubmitSubject}" ? jQuery(".new-case-subject").addClass("required-field") : (jQuery(".new-case-subject").removeClass("required-field"), jQuery(".accbody.step2").slideDown("slow"), jQuery(".accheader.step1").addClass("finished"), jQuery(".accheader.step2, .case-nav.recommended").addClass("active"), jQuery.scrollTo("#step2", 1E3), jQuery(".results-contents li:odd").addClass("odd"));
+                    return!1
+                  });
+                  //step 2
+                  jQuery("#comment-submit").click(function() {
+                    !jQuery("#fixed-yes").is(":checked") && !jQuery("#fixed-no").is(":checked") ? jQuery("#label-fixed-no,#label-fixed-yes").addClass("required-field") : jQuery("#fixed-yes").is(":checked") ? submitfeedback() : (jQuery("#label-fixed-no,#label-fixed-yes").removeClass("required-field"), jQuery(".accbody.step3").slideDown("slow"), jQuery(".accheader.step2").addClass("finished"), jQuery(".accheader.step3, .case-nav.case-details").addClass("active"), jQuery.scrollTo("#step3", 1E3));
+                    return!1
+                  });
+                  //step 3
+                  jQuery("#submit-casedetails").click(function() {
+                    jQuery(".case-details-textarea").val() == "" || jQuery(".case-details-textarea").val() == "{!$Label.CaseSubmitDescription}" ? jQuery(".case-details-textarea").addClass("required-field") : jQuery(".impact").val() == "" ? jQuery(".impact").addClass("required-field") : jQuery(".frequency").val() == "" ? jQuery(".frequency").addClass("required-field") : jQuery(".reason").val() == "" ? jQuery(".reason").addClass("required-field") : (jQuery(".case-details-textarea,.impact,.frequency,.reason").removeClass("required-field"), 
+                    jQuery(".accbody.step4").slideDown("slow"), jQuery(".accheader.step3").addClass("finished"), jQuery(".accheader.step4, .case-nav.verify").addClass("active"), jQuery.scrollTo("#step4", 1E3));
+                    return!1
+                  });
+                  //step 4
+                  jQuery(".finalstep").click(function() {
+                    return jQuery("#verified").is(":checked") ? (jQuery("#label-verified").removeClass("required-field"), !0) : (jQuery("#label-verified").addClass("required-field"), !1)
+                  })
+                });
+        </script> 
+     </apex:define>
+    <apex:define name="body">  
+       
+         <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.home}">{!$Label.Home}</a>
+                    <a href="{!$Page.Cases}">{!$Label.Cases}</a>
+                    <a class="current" href="#">{!$Label.New_Case}</a>
+            </nav>
+            </div>
+         </div>   
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.case.accessible}">
+            <p>{!$Label.Insufficient_Privileges}</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.case.accessible}">
+            <div class="column leftcol">
+                <c:Sites_Case_Widget />
+                <!--<c:Sites_Contact_Widget rendered="{!SITE_TAB_CONTACT}" />-->
+            </div> <!--/Left Col -->
+            
+            
+            <div class="column right-23 column-23">
+                <apex:pageMessages id="error" />
+               
+                <apex:outputPanel rendered="{!!$ObjectType.case.createable}">
+                    <p>{!$Label.Insufficient_Privileges}.</p>
+                </apex:outputPanel>
+                
+<!---Developer Network---->
+                <apex:outputPanel rendered="{!$ObjectType.case.createable && SITE_CASE_RECORDTYPE=='Developer Network'}">
+                   <div class="callout cases">
+                    <div class="title-bar">
+                        <span class="sprite_cpicons submit-case">&nbsp;</span>{!$Label.Submit_New_Case} 
+                    </div><!-- /Cases Title Bar -->
+                    <div class="callout-content cases-content">
+                       <apex:form >
+                        <div class="content-inner">
+                             {!$Label.Subject}:<br />
+                             <apex:inputfield styleclass="dev-case-details-subject" required="true" value="{!devCase.Subject}" />
+                             <div class="clear" />
+                             {!$Label.Description}:<br />
+                             <apex:inputfield styleclass="dev-case-details-textarea" required="true" value="{!devCase.Description}" /><br />
+                             <div class="clear" />
+                             <div class="inner-left-col">
+                                <p>
+                                    <label for="dev-frequency">{!$Label.Frequency}:</label>
+                                    <apex:inputField id="dev-frequency" required="true" value="{!DevCase.Frequency__c}"/>
+                                </p>
+                                <p>
+                                    <label for="dev-reason">{!$Label.Reason}:</label>
+                                    <apex:inputField id="dev-reason" required="true" value="{!DevCase.Reason}"/>
+                                </p>
+                              </div><!-- /Inner-Left-Col -->
+                              <div class="inner-right-col">
+                                <p><strong>{!$Label.Add_attachments}</strong><br /><span class="notes">{!$Label.Ex}</span></p>
+                                <p>
+                                  
+                                   <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="details-submit" styleclass="browse-button"/>
+                                </p>
+                            </div><!-- /Inner-Right-Col -->
+                         <div class="clear" />
+                         <apex:commandButton styleclass="submitbutton" action="{!SubmitDevCase}"/>
+                        </div>
+                       </apex:form> 
+                    </div>
+                  </div>      
+                </apex:outputPanel>
+                
+<!---Customer Portal---->
+                <apex:outputPanel rendered="{!$ObjectType.case.createable && SITE_CASE_RECORDTYPE=='Product Support'}">
+                <div class="callout cases">
+                    <div class="title-bar">
+                        <span class="sprite_cpicons submit-case">&nbsp;</span>{!$Label.Submit_New_Case}
+                    </div><!-- /Cases Title Bar -->
+                    <div class="case-progress">
+                        <ul class="sprite_case_progress">
+                            <li><a class="get-started active" href="#">{!$Label.Get_Started}</a></li>
+                            <li><a class="case-nav recommended inactive" href="#">{!$Label.Recommended_Articles}</a></li>
+                            <li><a class="case-nav case-details inactive" href="#">{!$Label.Case_Details}</a></li>
+                            <li><a class="case-nav verify inactive" href="#">{!$Label.Verify_Submit}</a></li>
+                        </ul>
+                    </div><!-- /Case Progress -->
+                <apex:form > 
+                    <apex:actionFunction immediate="true" name="submitfeedback" action="{!SubmitFeedback}"/>
+                       
+                    <div class="case-accordion">
+                        <div id="step1" class="title-bar active accheader step1"><span class="barNum">1.</span> {!$Label.Select_Environment}</div>
+                        <div class="content-inner accbody step1">
+                            <div class="inner-left-col-cws">
+                                <p>
+                                    <apex:actionRegion >
+                                        <label for="environment">{!$Label.Environment}:</label>
+                                        <apex:selectlist styleclass="input-select environment" required="false" size="1" id="environment" value="{!NewCase.Server__c}">
+                                         <apex:actionSupport rendered="true" event="onchange" rerender="ProductShow,UpdateServerMsg, error" status="serverstatus"/>
+                                         <apex:selectoptions value="{!Servers}"/> 
+                                             <apex:actionStatus id="serverstatus">
+                                                <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /> </apex:facet>
+                                             </apex:actionStatus> 
+                                        </apex:selectlist>
+                                     </apex:actionRegion>  
+                                     
+                                     <apex:outputPanel id="ProductShow">
+                                         <apex:outputPanel rendered="{!NewCase.Server__c!=null}">
+                                         
+                                         <!----------------------------------------------------------------------------------------------------------------------------------->
+                                        <apex:actionRegion >
+                                        <label for="product">{!$Label.Product}:</label>                                           
+                                             <apex:selectlist styleclass="input-select environment" required="False" size="1" id="product" value="{!SelectedProduct}"> 
+                                             <apex:actionSupport rendered="true" event="onchange" action="{!Getbrand}" rerender="" status="productstatus"/>
+                                                 <apex:selectoptions value="{!Products}"/> 
+                                                 <apex:actionStatus id="productstatus">
+                                                <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /> </apex:facet>
+                                             </apex:actionStatus> 
+                                             </apex:selectlist>     
+                                           </apex:actionRegion> 
+                                         <!----------------------------------------------------------------------------------------------------------------------------------------->
+                                         <!--    <label for="product">Product:</label>
+                                             <apex:selectlist styleclass="input-select product" required="false" size="1" id="product" value="{!SelectedProduct}"> 
+                                              <apex:selectoptions value="{!Products}"/> 
+                                             </apex:selectlist>  -->  
+                                             <apex:outputPanel rendered="{!Server.Release__r.name != null}">
+                                              <label for="release">{!$Label.Release}:</label>
+                                               <div class="outputfield cborelease"><apex:outputtext value="{!'' + Server.Release__r.name }" /></div>                                               
+                                               </apex:outputPanel>
+                                                <apex:outputPanel rendered="{!Server.Release__r.name == null}">
+                                              <label for="release">{!$Label.Release}:</label>
+                                               <div class="outputfield cborelease"><apex:outputtext value="N/A" /></div>                                               
+                                               </apex:outputPanel>
+                                              <label for="database">{!$Label.Database}:</label>
+                                              <div class="outputfield cbodatabase"><apex:outputText value="{!Server.Database__c +' '+Server.Database_Version__c}" /></div>
+                                              <label for="platform">{!$Label.Platform}:</label>
+                                              <div class="outputfield cboplatform"><apex:outputText value="{!Server.Platform__c +' '+Server.Platform_Version__c}" /></div>
+                                         </apex:outputPanel>        
+                                     </apex:outputPanel>
+                                     
+                                </p>
+                                
+                                
+
+                            </div><!-- /Inner-Left-Col -->
+                            <apex:outputPanel id="UpdateServerMsg" layout="block" styleClass="inner-left-col-cws" rendered="{!SITE_CONTACT.Contact_Role__c=='ImageNow Admin'}">
+                                <apex:outputPanel rendered="{!NewCase.Server__c!=null}">
+                                <p><label for="update">Need to update?</label> 
+                                        <apex:outputlink styleclass="gen-value" value="{!$Page.ServerDetails}">
+                                            Update your Environment
+                                            <apex:param name="id" value="{!NewCase.Server__c}"/>
+                                            <apex:param name="retURL" value="{!$CurrentPage.Name}"/>
+                                        </apex:outputlink>
+                                </p>
+                                </apex:outputPanel>
+                            </apex:outputPanel> <!-- /Inner-Right-Col -->
+                            <div class="clear"/>
+                            <apex:actionRegion >
+                                <div class="inner-left-col-cws case-search">
+                                   <p>
+                                        <apex:actionFunction name="refreshkb" reRender="articletable" status="kbstatus"/>
+                                        <label for="wizard-subject">{!$Label.Subject}:</label>
+                                        <apex:inputfield id="wizard-subject" required="true" styleclass="new-case-subject" value="{!NewCase.Subject}" onfocus="if (this.value == '{!$Label.CaseSubmitSubject}') { this.value=''; }" onblur="if (this.value == '') { this.value='{!$Label.CaseSubmitSubject}'; }" />
+                                        <!----<input id="case-subject-search" class="case-subject-search" value=" " onclick="refreshkb();" />--->
+                                        <apex:commandButton id="case-subject-search" styleclass="case-subject-search" rendered="false" reRender="kbarticles,resolutionfeedback, error" />
+                                        <input type="submit" class="case-subject-search nextbutton" value=" " onclick="refreshkb();" />
+                                   </p>     
+                                </div><!-- /Case Search Field -->
+                            </apex:actionRegion>
+                        </div><!-- /Content-Inner -->
+
+                         <div id="step2" class="title-bar accheader step2"><span class="barNum">2.</span> {!$Label.Recommended_Articles} <span class="returned-results">{!$Label.relevant_articles}</span></div>                        
+                                <div class="content-inner accbody step2"> 
+                                    <div class="callout-content results-content"> 
+                                        <div class="title-bar kbresults"> 
+                                            <span class="sprite_cpicons results">&nbsp;</span>{!$Label.Search_Results}
+                                            <span class="returned-results"></span> 
+                                        </div>
+                                        <apex:actionStatus id="kbstatus">
+                                            <apex:facet name="start">
+                                                <div class="kbstatus">
+                                                    <image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /> <span class="kbstatus-text">{!$Label.Searching}</span>
+                                                </div>    
+                                            </apex:facet>
+                                            
+                                        </apex:actionStatus> 
+                                        <apex:outputPanel layout="block" styleClass="callout-content results-content" id="articletable">
+                                            <apex:outputPanel layout="block" styleClass="search-results" rendered="{!NewCase.Subject!='{!$label.CaseSubmitSubject}' && NewCase.Subject!=''}">
+                                                             <div class="results-title-bar">
+                                                                <a class="results-doc-title" href="#" title="Title">{!$Label.Document_Title}</a>
+                                                                <a class="results-type" href="#" title="Article Type">{!$Label.Type}</a>
+                                                            </div>
+                                                            <div class="results-contents">
+                                                                 <apex:outputPanel id="kbarticles" >
+                                                                <apex:outputText rendered="false" value="{!if(Server.Release__r.name!='' && product.Brand__c != '',categoryID,null)}" /> 
+                                                                                                                         
+                                                                                <knowledge:articleList articleVar="article" rendered="true"
+                                                                                    language="{!SITE_LANGUAGE}"
+                                                                                    id="kb_list"
+                                                                                    sortBy="mostViewed"
+                                                                                    pageSize="10"
+                                                                                    pageNumber="1"
+                                                                                    keyword="{!NewCase.Subject}"                                                                                 
+                                                                                    categories="{!if(Server.Release__r.name!='' && NewCase.Server__c != null && SelectedProduct != null,categoryID2,IF(Server.Release__r.name !='' && NewCase.Server__c != null,'Release:IN'+categoryID,Null))}"                                                                                    
+                                                                                    articleTypes="ProductHelp__kav, Support_Articles__kav, Technical_Overview__kav"
+                                                                                    >
+                                                                                    <!-- && Brand != ''  -->
+                                                                                    <li>
+                                                                                       <div> 
+                                                                                        <apex:outputLink value="{!URLFOR($Action.KnowledgeArticle.View, article.id)}" styleClass="results-doc-title" target="_blank">{!article.title}</apex:outputLink>
+                                                                                        <apex:outputtext value="{!article.articleTypelabel}" styleclass="results-type" />
+                                                                                       </div> 
+                                                                                    </li>
+                                                                                </knowledge:articleList> 
+                                                                                
+                                                              </apex:outputPanel>
+                                                          </div>
+                                                </apex:outputPanel>     
+                                        </apex:outputPanel>
+                                         <div class="title-bar issue-solved"> 
+                                                <span class="sprite_cpicons doc-check">&nbsp;</span>{!$Label.Issue_Solved}
+                                                <span class="returned-results">{!$Label.Did_resolve}</span> 
+                                            </div> 
+                                            <div class="content-inner comments"> 
+                                                <div class="inner-left-col"> 
+                                                    <p><label for="solved">{!$Label.Did_resolve}</label></p> 
+                                                </div><!-- /Inner-Left-Col --> 
+                                                <div class="inner-right-col"> 
+                                                    <p> 
+                                                        <input name="resolution" type="radio" id="fixed-yes" class="radio-button" value="yes" /> 
+                                                        <label id="label-fixed-yes" for="fixed-yes">{!$Label.Yes_cancel}</label> 
+                                                    </p> 
+                                                    <p> 
+                                                        <input name="resolution" type="radio" id="fixed-no" class="radio-button" value="no" /> 
+                                                        <label id="label-fixed-no" for="fixed-no">{!$Label.No_submit}</label> 
+                                                    </p> 
+                                                </div><!-- /Inner-Right-Col --> 
+                                                <div class="solved-comments"> 
+                                                    <input type="submit" id="comment-submit" class="comment-submit nextbutton" value=" " />
+                                                </div> 
+                                            </div><!-- /Case Issue Solved -->
+                               </div>
+                         </div> 
+
+                        <div id="step3" class="title-bar accheader step3"><span class="barNum">3.</span> {!$Label.Case_Details} <span class="returned-results">{!$Label.additional_info}</span></div>
+                        <div class="content-inner accbody step3">
+                            <apex:inputfield id="case-details-text" styleclass="case-details-textarea" value="{!NewCase.Description}" onfocus="if (this.value == '{!$Label.CaseSubmitDescription}') { this.value=''; }" onblur="if (this.value == '') { this.value='Enter description.'; }" />
+                            <div class="inner-left-col">
+                                <p>
+                                    <label for="impact">{!$Label.Impact}:</label>
+                                    <apex:inputField required="true" styleClass="impact" id="impact" value="{!NewCase.Impact__c}"/>
+                                </p>
+                                <p>
+                                    <label for="frequency">{!$Label.Frequency}:</label>
+                                    <apex:inputField required="true" styleClass="frequency" id="frequency"  value="{!NewCase.Frequency__c}"/>
+                                </p>
+                                <p>
+                                    <label for="reason">{!$Label.Reason}:</label>
+                                    <apex:inputField required="true" styleClass="reason" id="reason"  value="{!NewCase.Reason}"/>
+                                </p>
+                            </div><!-- /Inner-Left-Col -->
+                            <div class="inner-right-col">
+                                <p><strong>{!$Label.Add_attachments}</strong><br /><span class="notes">{!$Label.Ex}</span></p>
+                                <p>
+                                  
+                                   <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="details-submit" styleclass="browse-button"/>
+                                    <!---<input type="text" id="attachments-field" />--->
+                                    <!---<input type="button" id="details-submit" class="browse-button" value=" " />--->
+                                </p>
+                            </div><!-- /Inner-Right-Col -->
+                             <!--- <input type="submit" id="details-submit" class="submitbutton" value=" " /> --->
+                        
+                         <div class="clear" />
+                         <input id="submit-casedetails" class="nextbutton submit-casedetails" type="button" value=" " />
+                        </div><!-- /Case Details -->
+                        
+                        <div id="step4" class="title-bar accheader step4"><span class="barNum">4.</span> {!$Label.Verify_Submit}</div>
+                        <div class="content-inner accbody step4">
+                            <p class="final"><input type="checkbox" id="verified" /><label id="label-verified" for="verified">{!$Label.I_verify}</label></p>
+                            <apex:commandButton id="verify-submit" styleclass="submitbutton finalstep"  value=" " action="{!SubmitCase}"  />
+
+                        </div><!-- /Verify & Submit -->
+                        
+                    </div><!-- /Case Accordion -->
+             </apex:form>       
+                </div><!-- /Cases -->
+                </apex:outputPanel>
+            </div><!-- /Right Two-Thirds -->
+            
+            
+            
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

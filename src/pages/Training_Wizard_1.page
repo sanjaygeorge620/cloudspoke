@@ -1,0 +1,155 @@
+<apex:page showHeader="true" StandardController="Class__c" extensions="TrainingWizardController" title="Training Enrollment Step 1" tabStyle="training__tab">
+<style>
+    input.buttons{font-size:12px;background:#6699CC;color:#FFFFFF;margin-left:6px;margin-right: 6px;height:30px;}
+</style> 
+  <apex:sectionHeader title="{!Class__c.Course__r.name}" subtitle="Class Enrollment Step 1 of 2"/>
+      <div style="margin:10px;">
+          <!---List to Return to Featured Courses--->
+           <a style="text-decoration:none;font-weight:bold;" href="{!$page.Training_Featured_Courses}">&#171; Return to Featured Courses</a> 
+      </div>
+      <apex:pageMessage rendered="{!RenderNoClassError}" title="No class had been selected for enrollment" severity="error" strength="3" >
+          Please return to the <a style="text-decoration:none;font-weight:bold;" href="{!$page.Training_Featured_Courses}">Featured Courses</a>.
+      </apex:pageMessage>
+
+
+<!--  <apex:messages styleClass="message errorM3" style="list-style:none;font-weight:bold;"  />--->
+  <apex:pageMessages />
+
+  <apex:form rendered="{!if(RenderNoClassError==true,false,true)}" >
+    <apex:pageBlock title="Registration">
+      <apex:pageBlockSection collapsible="false" title="Class Details">
+       <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Class Name" for="classnum"/>
+            <apex:outputField id="classnum" value="{!Class__c.Course__r.name}"/>
+       </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Class Number" for="classnum"/>
+            <apex:outputField id="classnum" value="{!Class__c.name}"/>
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+           <apex:outputLabel value="Class Date" for="accountSite"/>
+            <apex:outputField id="accountSite" value="{!Class__c.Class_Date__c}"/>
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+           <apex:outputLabel value="Class Type" for="classtype"/>
+            <apex:outputField id="classtype" value="{!Class__c.Class_Type__c}"/>
+       </apex:pageBlockSectionItem> 
+       <apex:pageBlockSectionItem >
+           <apex:outputLabel value="Class Hours" for="classhours"/>
+            <apex:outputField id="classhours" value="{!Class__c.Hours_Text__c}"/>
+       </apex:pageBlockSectionItem> 
+       <apex:pageBlockSectionItem >
+           <apex:outputLabel value="Training Location" for="Training_Location__c"/>
+            <apex:outputField id="Training_Location__c" value="{!Class__c.Training_Location__c}"/>
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+            &nbsp;
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+           <apex:outputLabel value="Trainer" for="Trainer__c"/>
+            <apex:outputField id="Trainer__c" value="{!Class__c.Trainer__c}"/>
+       </apex:pageBlockSectionItem>   
+      </apex:pageBlockSection>
+      
+      
+      <apex:pageBlockSection id="PmtBlock" title="Payment Information">
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Payment Method" for="Payment_Method__c"/>
+         <apex:inputField required="true" id="Payment_Method__c" value="{!RegistrationData.Payment_Method__c}" />
+       </apex:pageBlockSectionItem>
+      
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Address 1" for="Address_1__c"/>
+         <apex:inputField required="true" id="Address_1__c" value="{!RegistrationData.Address_1__c}"/>
+       </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Purchase Order Number" for="Purchase_Order_Number__c" >
+             <span id="Category_help" class="helpButtonOn" style="margin:2px;">
+             <img class="helpOrb" title="{!$ObjectType.ELearning_Registration__c.Fields.Purchase_Order_Number__c.inlineHelpText}" alt="" src="/s.gif"/></span>
+         </apex:outputLabel>
+         <apex:inputField required="true" id="Purchase_Order_Number__c" value="{!RegistrationData.Purchase_Order_Number__c}"/>
+       </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Address 2" for="Address_2__c"/>
+         <apex:inputField id="Address_2__c" value="{!RegistrationData.Address_2__c}"/>
+       </apex:pageBlockSectionItem>
+      
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Credit Card Type" for="Credit_Card_Type__c"/>
+         <apex:inputField id="Credit_Card_Type__c" value="{!RegistrationData.Credit_Card_Type__c}"/>
+       </apex:pageBlockSectionItem>
+
+      
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Billing City" for="Billing_City__c"/>
+         <apex:inputField required="true" id="Billing_City__c" value="{!RegistrationData.Billing_City__c}"/>
+       </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Name on Credit Card" for="Name_on_Credit_Card__c"/>
+         <apex:inputField id="Name_on_Credit_Card__c" value="{!RegistrationData.Name_on_Credit_Card__c}"/>
+       </apex:pageBlockSectionItem>
+      
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Billing State" for="Billing_State__c"/>
+         <apex:inputField required="true" id="Billing_State__c" value="{!RegistrationData.Billing_State__c}"/>
+       </apex:pageBlockSectionItem>
+                 
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Credit Card Number" for="Credit_Card_Number__c"/>
+         <apex:inputField id="Credit_Card_Number__c" value="{!RegistrationData.Credit_Card_Number__c}" />
+       </apex:pageBlockSectionItem>
+      
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Billing Zip" for="Billing_Zip__c"/>
+         <apex:inputField required="true" id="Billing_Zip__c" value="{!RegistrationData.Billing_Zip__c}"/>
+       </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Credit Card Expiration Date" for="Credit_Card_Expiration_Date__c"/>
+         <apex:inputField id="Credit_Card_Expiration_Date__c" value="{!RegistrationData.Credit_Card_Expiration_Date__c}"/>
+       </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+         <apex:outputLabel value="Country" for="Country__c"/>
+         <apex:inputField required="true" id="Country__c" value="{!RegistrationData.Country__c}"/>
+       </apex:pageBlockSectionItem>
+      
+      </apex:pageBlockSection>
+      <apex:pageBlocksection columns="1" title="Attendee(s)">
+                <apex:outputText >All Payment and Attendee fields required must be populated prior to adding additional attendees</apex:outputText>
+                <apex:pageBlockTable value="{!trainee}" var="a" id="trainee_table">
+                    <apex:facet name="footer">
+                        <apex:commandButton title="All Payment and Attendee fields required must be populated prior to adding additional attendees" value="Add Additional Attendee" action="{!addRow}" rerender="trainee_table,error"/>
+                    </apex:facet>
+                    <apex:column headerValue="Name">
+                        <apex:inputField required="true" value="{!a.Name}"/>
+                    </apex:column>
+                    <apex:column headerValue="Phone">
+                        <apex:inputField required="true" value="{!a.Contact_Phone__c}"/>
+                    </apex:column> 
+                    <apex:column headerValue="Email">
+                        <apex:inputField required="true" value="{!a.Attendee_Email__c}"/>
+                    </apex:column> 
+                    <apex:column >                  
+                            <apex:facet name="header">
+                                ImageNow Role
+                                <span id="Category_help" class="helpButtonOn" style="margin:2px;">
+             <img class="helpOrb" title="{!$ObjectType.Training_Attendee__c.Fields.Attendee_ImageNow_Role__c.inlineHelpText}" alt="" src="/s.gif"/></span>
+
+                        </apex:facet>  
+                        <apex:inputField required="true" value="{!a.Attendee_ImageNow_Role__c}" />
+                    </apex:column>                        
+                </apex:pageBlockTable>
+            </apex:pageBlocksection>  
+        
+      <apex:pageBlockButtons location="bottom">
+              <apex:commandButton styleClass="buttons" action="{!step2}" value="Next" />
+      </apex:pageBlockButtons>
+    </apex:pageBlock>
+  </apex:form>
+
+</apex:page>

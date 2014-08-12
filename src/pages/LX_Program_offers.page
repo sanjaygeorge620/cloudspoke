@@ -1,0 +1,214 @@
+<apex:page controller="LX_Program_offers_contr" > 
+    <apex:outputPanel id="msg">
+    <apex:pageMessages />
+    </apex:outputPanel>
+    <apex:sectionHeader title="Partner Program" subtitle="Offers"/>
+    <script type='text/javascript'>
+        //  Created for US3598
+        //This script assists the search bar functionality
+        // It will execute a search only after the user has stopped typing for more than 1 second
+               
+        var waitTime = 1;
+        var countDown = waitTime+1;
+        var started = false;
+        
+        function searchName()
+        {        
+        fetchResults();  
+        }
+        
+        function searchNumber()
+        {
+        fetchQuoteNumberResults();
+        }
+        
+        function resetTimer()
+        {
+            countDown=waitTime+1;
+            if(started==false)
+            {
+                started=true; 
+                runCountDown();
+                
+            }
+        }
+        
+        function runCountDown()
+        {
+            countDown--;
+             if(countDown<=0)
+             {
+                fetchResults();                
+                started=false;
+            }
+            else
+            {
+                window.setTimeout(runCountDown,100);
+            }
+        }
+        
+        function checkAll(cb,filter)
+        {
+            var inputElem = document.getElementsByTagName("input");          
+            for(var i=0; i<inputElem.length; i++)
+            {   
+                if(inputElem[i].id.indexOf(filter)!=-1)                         
+                inputElem[i].checked = cb.checked;
+            }
+        }
+    
+    </script>
+    <apex:form >
+        <apex:pageBlock >
+            
+            <!-- *****US3598****STARTS**** -->           
+
+                
+                <apex:pageBlockSection id="searchTableDetails" title="Search Offers" columns="4">
+                  
+                   
+                    <apex:outputText value="Search by Offer Name :"/>  
+               <apex:actionRegion renderRegionOnly="false" immediate="true">                  
+                    <apex:actionFunction name="fetchResults" action="{!updateOfferList3}" reRender="Table,sequenceNumber,sequenceVar,myButtons" status="spinner"/>
+                    <apex:inputText value="{!offerNameSearchString}"  onkeyup="searchName();" style="width:200px"/>
+                </apex:actionRegion>
+                    
+              <apex:outputText value="Search by Quote Number :"/>  
+               <apex:actionRegion renderRegionOnly="false" immediate="true">
+                    <apex:actionFunction name="fetchQuoteNumberResults" action="{!updateOfferList3}" reRender="Table,sequenceNumber,sequenceVar,myButtons" status="spinner"/>
+                    <apex:inputText value="{!quoteNumberSearchString}" onkeyup="searchNumber();" style="width:200px"/>
+                </apex:actionRegion>  
+                
+              <apex:outputText value="Search by Quote Category :"/> 
+              <apex:actionRegion renderRegionOnly="false" immediate="true">
+                    <apex:selectList value="{!selectedQuoteCategory}"  multiselect="false" size="1">
+                     <apex:actionSupport event="onchange" action="{!updateOfferList3}" reRender="Table,sequenceNumber,sequenceVar,myButtons" status="spinner"/>
+                      <apex:selectOptions value="{!quoteCategoryOptions}"></apex:selectOptions>                    
+                    </apex:selectList>
+                    </apex:actionRegion>  
+                    
+                   <apex:outputText value="Search by Offer Status :"/> 
+                   <apex:actionRegion renderRegionOnly="false" immediate="true">
+                    <apex:selectList value="{!selectedOfferStatus}"  multiselect="false" size="1">
+                    <apex:actionSupport event="onchange" action="{!updateOfferList3}" reRender="Table,sequenceNumber,sequenceVar,myButtons" status="spinner"/>
+                      <apex:selectOptions value="{!offerStatusOptions}"></apex:selectOptions>                      
+                    </apex:selectList>   
+                    </apex:actionRegion>  
+                   <!-- *****US3598****END**** --> 
+            <!--          
+                    <apex:outputText value=""/>
+              
+                    <apex:actionRegion >
+                        <apex:commandButton value="Search Offer" action="{!updateOfferList3}">
+                            <apex:actionSupport event="onchange" reRender="offerDataTable" >
+                            </apex:actionsupport>
+                        </apex:commandButton>
+                    </apex:actionRegion>  -->
+                </apex:pageBlockSection>
+ 
+
+            <!-- *****US3598****END**** -->
+            
+              <!-- *****US3598****STARTS**** -->
+            
+            <apex:outputPanel id="Table"  >
+            <apex:variable id="sequenceVar" var="rowIndex" value="{!1}"/>
+                <apex:pageBlockSection title="Choose the offers to be associated with Partner Program" columns="1">
+                
+                    <apex:pageblockTable var="Off" value="{!OfferWrapperList}"  columns="10" id="table" >
+                        <apex:column value="{!Off.rowCount}" headerValue="#"/>                        
+                   
+                   <apex:column headerValue="" headerClass="header1"> <!-- rendered="{!chkbx}" -->
+                        <apex:facet name="header">
+                            <input type="checkbox" onclick="checkAll(this,'checkedone')"  />                                  
+                        </apex:facet>
+                        <apex:inputCheckbox value="{!Off.chk}" id="checkedone">
+                        </apex:inputCheckbox>
+                </apex:column> 
+                     <!-- *****US3598****END**** -->
+                        <apex:column value="{!Off.Offer.Name}" title="Name" headerValue="Name"/>
+                        <apex:column value="{!Off.Offer.LX_Offer_ID__c}" headerValue="Offer ID"/>
+                        <apex:column value="{!Off.Offer.LX_Start_Date__c}" headerValue="Start Date"/>
+                        <apex:column value="{!Off.Offer.LX_End_Date__c}" headerValue="End Date"/>
+                        <apex:column value="{!Off.Offer.LX_Offer_Status__c}" headerValue="Status"/>
+                        <apex:column value="{!Off.Offer.LX_Quote_Category__c}" headerValue="Quote Category"/>
+                        <apex:column value="{!Off.Offer.LX_Quote_ID__c}" headerValue="Quote Number"/>
+                        <apex:column value="{!Off.Offer.Lx_Program__c}" headerValue="Program"/>
+                        <apex:facet name="footer">
+                            <apex:outputLabel rendered="{!OfferWrapperList != null &&  OfferWrapperList.size>0&&ActiveProgram==false}" value="Showing Page # {!pageNumber} of {!totalPages}" />
+                        </apex:facet>
+                    </apex:pageblockTable>
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            <div>
+                <apex:actionStatus id="counterStatus" style="align:center;" >
+                    <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />
+                    </apex:facet>
+                </apex:actionStatus>
+            </div>
+            <apex:outputPanel id="myButtons" rendered="{!OfferWrapperList != null && OfferWrapperList.size>0&&ActiveProgram==false}">
+                <div>
+                    <apex:commandButton value="First Page" rerender="table,myButtons" action="{!FirstPage}"  disabled="{!prev}" status="counterStatus">
+                        <!--             <apex:actionSupport event="onclick" 
+                                 status="counterStatus" 
+                                />-->
+                    </apex:commandButton>
+                    <apex:commandButton value="Previous" disabled="{!prev}" rerender="table,myButtons"
+                                action="{!previous}" status="counterStatus">
+                        <!--        <apex:actionSupport event="onclick"  status="counterStatus" 
+                                /> -->
+                    </apex:commandButton>
+                    <apex:commandButton value="Next" rerender="table,myButtons" action="{!next}" disabled="{!nxt}" status="counterStatus">
+                        <!--        <apex:actionSupport event="onclick"
+                                 status="counterStatus"   
+                                /> -->
+                    </apex:commandButton>
+                    <apex:commandButton value="Last Page" rerender="table,myButtons" action="{!LastPage}" disabled="{!nxt}" status="counterStatus">
+                        <!-- <apex:actionSupport event="onclick" 
+                                 status="counterStatus" 
+                                />-->
+                    </apex:commandButton>
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!noOfferRenderFlag}" >
+                <apex:OutputText > There are no offers which match the following criteria:</apex:OutputText>
+                <br/>
+                <br/>
+                <!--<apex:OutputText >Offer Record Type in: <b>Logistics Offer or Promotion Offer or Special Bid Channel Offer or Price Protection Offer or Non-Quote Offer or Pricelist Offer</b></apex:OutputText>-->
+                <br/>
+                (1) Fall between
+                
+                <b>
+                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                        <apex:param value="{!PartnerProgram[0].LX_Start_Date__c}" />
+                    </apex:OutputText>
+                </b> 
+                and  
+                <b>
+                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                        <apex:param value="{!PartnerProgram[0].Program_End_Date__c}" />
+                    </apex:OutputText>
+                </b>
+                <br/>
+                <apex:OutputText rendered="{!PartnerProgram[0].LX_Country__c !=null}" >(2) Sales Region selected on the offer = 
+                    <b>{!PartnerProgram[0].LX_Country__c }</b>
+                    <br/>
+                </apex:OutputText>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!ActiveProgram}" >
+                <apex:OutputText > Offers can't be added to Active Programs</apex:OutputText>
+            </apex:outputPanel>
+            <apex:pageBlockButtons style="align:center;"> 
+                <apex:commandButton value="Save" action="{!Save}" rendered="{!OfferWrapperList != null && ActiveProgram==false}" status="spinner"/>
+                <apex:commandButton value="Return" action="{!cancel}" rendered="{!noOfferRenderFlag||ActiveProgram}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" rendered="{!OfferWrapperList != null && ActiveProgram==false}"/>
+      <!--            <apex:commandButton value="Search" action="{!updateOfferList3}" rerender="Table,myButtons" status="spinner"/>
+         -->       <apex:actionStatus id="spinner" >
+                         <apex:facet name="start"><image alt="..." src="{!URLFOR($Resource.Perceptive_Sites, 'images/spinner.gif')}" /></apex:facet>
+                       </apex:actionStatus>
+            </apex:pageBlockButtons>
+        </apex:PageBlock>
+    </apex:form>
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

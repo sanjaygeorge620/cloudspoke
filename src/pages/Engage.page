@@ -1,0 +1,64 @@
+<apex:page standardStylesheets="false" showHeader="false" title="{!SITE_NICKNAME+' | Engage'}" controller="SitesGenericController">
+
+  <apex:composition template="{!SITE_TEMPLATE_SECONDARY}">
+          <apex:define name="title"> 
+  <title>{!SITE_NICKNAME+' | Engage'}</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+        <script type="text/javascript">
+                jQuery(document).ready(function() {
+                  jQuery('.toolbar-home').addClass('active');
+                });
+            </script>
+     </apex:define>
+         
+         <apex:define name="body">  
+           
+            
+            
+           <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Site.CurrentSiteURL}">Home</a>
+                    <a class="current" href="#">Engage</a>
+                 </nav>
+            </div>
+         </div>   
+            
+            <div class="cp_core">
+                <div class="column full-width">
+                    <div class="callout secondary">
+                        <a class="title-bar" href="#">
+                        <span class="sprite_cpicons secondary support">&nbsp;</span>Remote Desktop Support</a>
+                        <div class="callout-content">
+                            <div class="content-inner">
+                               <h4>Type in your provided code and click Continue to proceed.</h4>
+                                <meta name="robots" content="noindex,nofollow" /> 
+                                <script language="JavaScript"> <!--function setJS() {document.QuestionEntry.JavaScript.value = "true";}//--></script> 
+                                <form action="https://broker.gotoassist.com/h/perceptivesw" method="get" name="QuestionEntry">
+                                    <input type="hidden" name="Portal" value="perceptivesw" />
+                                    <input type="hidden" name="Target" value="ds/queryPost.flow" />
+                                    <input type="hidden" name="Template" value="ds/phoneModeRedemption.tmpl" />
+                                    <input type="hidden" name="JavaScript" value="false" />
+                                    <input type="hidden" name="Form" value="pbQuestionEntry" /> 
+                                    <table>
+                                        <tr> 
+                                            <td width="100%">
+                                                <font face="verdana,arial,helvetica" size="1">
+                                                    <input type="text" name="Question" size="35" style="font: normal 10 verdana,arial,helvetica;width:200;" />
+                                                    <input type="submit" class="submit-button" value=" " onClick="setJS()" />
+                                                </font>
+                                            </td> 
+                                        </tr>
+                                    </table> 
+                                </form> 
+                                <script language="JavaScript"><!--document.QuestionEntry.Question.focus()//--></script> 
+                          </div>     
+                        </div>
+                    </div><!-- /secondary template -->
+                </div>
+            </div>
+        </apex:define>    
+  </apex:composition>
+</apex:page>

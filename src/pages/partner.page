@@ -1,0 +1,210 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesAccountController"> 
+<title>{!SITE_NICKNAME} | Account</title>
+
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-accountpartner').addClass('active');
+                            
+              jQuery('.accounttable').dataTable( {aaSorting: [], "iCookieDuration": 60*60*24 /* 1 day */, "bLengthChange": false, "bStateSave": true, sDom: 'lfr<"dt_fixed_height"t>ip' });  
+              
+              //Tabs
+              var topTabs = jQuery('#tabs').tabs({ cookie: { expires: null} });
+              var subTabs = jQuery("#tabs-p, #tabs-c, #tabs-s").tabs({ cookie: { expires: null} });//contacts, Products and servers
+              
+              //open tab by url param
+              var openTab =  '{!$CurrentPage.parameters.tab}';
+                  if (openTab=='contacts'){
+                      topTabs.tabs('select', 0); // open contacts  
+                  }    
+                
+              jQuery('.tab-contacts-portal').click(); 
+            });
+        </script>
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Partner}">Home</a><span>&#187;</span></li>
+                <li><a class="current" href="#">Partner Profile</a></li>
+            </ul>
+        </div>  
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.account.accessible}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.account.accessible}">
+            <apex:pageMessages />
+            <div class="column leftcol">
+                <div class="callout ap">
+                    <span class="title-bar"><span class="sprite_cpicons ap">&nbsp;</span>Account Details</span>
+                    <div class="callout-content">
+                        <ul>
+                            <li>Name: {!SITE_ACCOUNT.Name}</li>
+                            <li>SMSA Status: {!SITE_ACCOUNT.SMA_Status__c}</li>
+                            <li>Relationship Manager: {!SITE_ACCOUNT.owner.name}</li>
+                            <li>ISR: {!SITE_ACCOUNT.ISR__r.name}</li>
+                            <li>CSA: {!SITE_ACCOUNT.CSA__c}</li>
+                            <li>Website: <a target="_blank" title="{!SITE_ACCOUNT.Website}" href="{!SITE_ACCOUNT.Website}">{!If(len(SITE_ACCOUNT.Website)>30,mid(SITE_ACCOUNT.Website,1,30)+'...',SITE_ACCOUNT.Website)}</a></li>
+                        </ul>
+                    </div>
+                </div><!-- /Account Details -->
+                
+                <apex:outputPanel styleClass="callout lc" rendered="{!$ObjectType.license_key__c.accessible}">
+                    <a class="title-bar lc" href="#"><span class="sprite_cpicons lc">&nbsp;</span>Licensing</a>
+                    <div class="callout-content">
+                        <ul>
+                            <li><apex:outputLink styleClass="license-view">View Licenses</apex:outputLink></li>
+                            <li><apex:outputLink styleClass="license-submit" rendered="{!$ObjectType.case.createable}">Submit License Request</apex:outputLink></li>
+                            <li><apex:outputLink styleClass="license-install" rendered="{!$ObjectType.knowledgearticleversion.accessible}" value="{!$site.prefix}/articles/Support_Articles/Article-00003858">How to install a License Key</apex:outputLink></li>
+                        </ul>
+                    </div>
+                </apex:outputPanel><!-- /Licensing -->
+                
+                     <apex:outputPanel layout="block" styleClass="callout Support" rendered="{!WidgetEventResources.size!=0}">
+                        <span class="title-bar" ><span class="sprite_cpicons fd">&nbsp;</span>Event Resources</span>
+                        <div class="callout-content">
+                            <apex:repeat value="{!WidgetEventResources}" var="w">
+                                <apex:outputText escape="false" value="{!w.Description_text__c}" />
+                            </apex:repeat>
+                        </div>
+                    </apex:outputPanel>
+                
+                
+            </div><!-- /Left Column -->
+            
+            <div class="column right-23">
+                <div class="callout accounts">
+                    <div id="tabs" class="tab-container">
+                        <ul class="ui-tabs-nav">
+                            <li><a href="#tabs-1" class="tab tab-contacts">Contacts</a></li>
+                        </ul><!-- /Account Profile Tabs -->
+                        <div id="tabs-1" Class="tab-content tab-content-1a" >
+                            <apex:outputText rendered="{!!$ObjectType.contact.accessible}"><p>Sorry, you do not have access to contacts.</p></apex:outputText>
+                            <apex:outputPanel rendered="{!$ObjectType.Contact.accessible}">
+                              <!---
+                                <div class="search-box">
+                                    <input type="text" class="contact-search" value="Search for a Contact" />
+                                    <input type="submit" class="contact-submit" value=" " />
+                                </div>
+                                --->
+                                <div id="tabs-c" class="tab-container">
+                                    <ul>
+                                    <li><a href="#tabs-4" class="tab tab-contacts-portal">Portal</a></li>
+                                        <li><a href="#tabs-5" class="tab tab-contacts-active">Active</a></li>                                        
+                                        <li><a href="#tabs-6" class="tab tab-contacts-inactive">Inactive</a></li>
+                                        <li><a href="#tabs-7" class="tab tab-contacts-add">Add Contact</a></li>
+                                    </ul>
+                                    
+                                    <div id="tabs-4" class="tab-content tab-content-2a">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Username</th>                                                        
+                                                        <th>Profile</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!PortalContacts}" var="c">
+                                                      <tr>  
+                                                            <td class="contact-name">
+                                                                <apex:outputLink value="{!$page.contactdetails_Channel}" rendered="{!$ObjectType.contact.updateable}">
+                                                                    {!c.Contact.lastname+', '+c.Contact.firstname}
+                                                                    <apex:param name="id" value="{!c.Contact.id}"/>
+                                                                </apex:outputLink>
+                                                                <apex:outputText rendered="{!!$ObjectType.contact.updateable}">{!c.Contact.lastname+', '+c.Contact.firstname}</apex:outputText>
+                                                            </td>
+                                                            <td class="contact-email">{!c.username}</td>
+                                                            
+                                                            <td class="contact-profile">{!if(CONTAINS(LOWER(c.Profile.Name),'admin'),'Admin','User')}</td>
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                    <div id="tabs-5" class="tab-content tab-content-1">
+                                         <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Phone</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!ActiveContacts}" var="c">
+                                                      <tr>  
+                                                            <td class="contact-name">
+                                                                <apex:outputLink value="{!$page.contactdetails_Channel}" rendered="{!$ObjectType.contact.updateable}">
+                                                                    {!c.lastname+', '+c.firstname}
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                                </apex:outputLink>
+                                                                <apex:outputText rendered="{!!$ObjectType.contact.updateable}">{!c.lastname+', '+c.firstname}</apex:outputText>
+                                                            </td>
+                                                            <td class="contact-email">{!c.email}</td>
+                                                            <td class="contact-phone">{!c.phone}</td>
+                                                            
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                    <div id="tabs-6"  class="tab-content tab-content-3b">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display accounttable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Phone</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     <apex:repeat value="{!InActiveContacts}" var="c">
+                                                      <tr>  
+                                                            <td class="contact-name">
+                                                                <apex:outputLink value="{!$page.contactdetails_Channel}" rendered="{!$ObjectType.contact.updateable}">
+                                                                     {!c.lastname+', '+c.firstname}
+                                                                    <apex:param name="id" value="{!c.id}"/>
+                                                                </apex:outputLink>
+                                                                <apex:outputText rendered="{!!$ObjectType.contact.updateable}">{!c.lastname+', '+c.firstname}}</apex:outputText>
+                                                            </td>
+                                                            <td class="contact-email">{!c.email}</td>
+                                                            <td class="contact-phone">{!c.phone}</td>
+                                                            
+                                                      </tr>
+                                                     </apex:repeat>
+                                                </tbody>
+                                          </table>
+                                    </div>
+                                    <div id="tabs-7"  class="tab-content tab-content-4b">
+                                        <apex:outputText rendered="{!!$ObjectType.contact.createable}"><p>Sorry, you do not have access to create contacts.</p></apex:outputText>
+                                        <apex:outputPanel rendered="{!$ObjectType.contact.createable}">
+                                           <apex:form id="form-contact">
+                                               <apex:pageMessages />
+                                               <div class="form-contact">
+                                                    <label>First Name</label><apex:inputField required="true" value="{!NewContact.FirstName}" />
+                                                    <label>Last Name</label><apex:inputField value="{!NewContact.LastName}" />
+                                                    <label>Email</label><apex:inputField required="true" value="{!NewContact.Email}" />
+                                                    <label>Phone</label><apex:inputField required="true" value="{!NewContact.Phone}" />
+                                                    <apex:commandButton value=" " reRender="form-contact" action="{!createContact}" styleClass="submitbutton"/>
+                                               </div> 
+                                            </apex:form>
+                                      </apex:outputPanel>
+                                    </div>
+                                </div><!-- /Inner Tabs for Contacts Sorting -->
+                            </apex:outputPanel>
+                        </div><!-- /Contacts Tab -->
+                        
+                       
+                        
+                    </div><!-- /Tabs -->
+                </div><!-- /Accounts -->
+            
+            </div><!-- /Right Two-Thirds -->
+            
+        </apex:outputPanel>
+        
+    </apex:define>
+  </apex:composition>
+</apex:page>

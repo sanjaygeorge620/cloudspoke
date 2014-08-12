@@ -1,0 +1,27 @@
+<apex:page title="{!$Organization.Name} | Internal Product Documentation" sidebar="false" tabStyle="ProductDocumentation__tab">
+<title>{!$Organization.Name} | Internal Product Documentation'}</title>
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" />
+
+    <script type='text/javascript'>
+            if(!jQuery){jQuery.noConflict();} //Is jQuery Loaded?
+            
+            jQuery(document).ready(function() {
+                //Fit iframe to browser height
+                fittowindow();
+            });
+            
+            function fittowindow() {
+              var wHeight =(document.documentElement.clientHeight-(300)); //window height
+              if ((wHeight)<800){wHeight = 800;} //minimum height
+                  jQuery('#itarget').css('height', wHeight);
+            }
+            
+            //Scale when window resizes
+            jQuery(window).resize(function() {
+                 fittowindow();
+            });
+    </script>
+    <div style="margin-top:10px;">
+        <apex:iframe height="800px" id="itarget" scrolling="true" src="https://docs.perceptivesoftware.com/robohelp/robo/Salesforce_Homepage/HTML/customer-documentation.htm"/>
+     </div>
+</apex:page>

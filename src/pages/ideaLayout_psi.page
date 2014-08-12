@@ -1,0 +1,63 @@
+<apex:page controller="IdeaLayoutController"  showHeader="false" standardStylesheets="false" cache="{!doCache}" expires="{!cacheMaxAge}">  
+  <apex:composition template="SitesTemplate" >
+   <apex:define name="javascriptcalls">          
+           <script type="text/javascript">
+            jQuery(document).ready(function() {
+              jQuery('.toolbar-ideas').addClass('active');
+            });  
+        </script>
+       </apex:define>
+    <apex:define name="body">
+    <apex:includeScript id="js1" value="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js" />
+       
+        
+        <!-- prototype.js/effects.js/vote.js/base.js        
+            <apex:includeScript id="sfdcideas_js" value="{!URLFOR($Resource.idea_js,'all_min.js')}" />
+        -->
+        
+         <script type="text/javascript" value="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js" />
+<!--
+        <script type="text/javascript" src="//az322532.vo.msecnd.net/salesforce-scripts/all_min.js" />
+          <script type="text/javascript" src="//az322532.vo.msecnd.net/salesforce-scripts/effects.js" />
+          <script type="text/javascript" src="//az322532.vo.msecnd.net/salesforce-scripts/vote.js" />
+          <script type="text/javascript" src="//az322532.vo.msecnd.net/salesforce-scripts/base.js" />
+        
+    -->
+        <apex:includeScript id="js2" value="{!URLFOR($Resource.idea_js,'effects.js')}" />
+        <apex:includeScript id="js3" value="{!URLFOR($Resource.idea_js,'vote.js')}" />
+        <apex:includeScript id="js4" value="{!URLFOR($Resource.idea_js,'base.js')}" />
+    
+        
+        <apex:stylesheet value="{!URLFOR($Resource.Perceptive_Sites,'ideas/idea.css')}" />
+        <apex:stylesheet value="{!customCssUrl}" />
+        
+            
+       <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                <a class="home" href="{!$Page.home}">Home</a>
+                <a class="current" href="{!$Page.Ideas}">Ideas</a>
+             </nav>
+            </div>
+         </div>   
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.idea.accessible}">
+            <p>{!$Label.Insufficient_Privileges}</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.idea.accessible}">
+            <body class="default">
+                <apex:outputPanel styleClass="" layout="block">
+                    <apex:outputPanel styleClass="column leftcol" layout="block">
+                        <c:ideaSecondary />
+                    </apex:outputPanel>
+            
+                    <apex:outputPanel styleClass="column right-23" layout="block">
+                        <apex:pageMessages id="error" />
+                        <apex:insert name="content" />
+                    </apex:outputPanel>
+                 </apex:outputPanel>
+                </body>
+        </apex:outputPanel>
+    </apex:define>
+    </apex:composition>
+</apex:page>

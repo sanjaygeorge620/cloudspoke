@@ -1,0 +1,105 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesController">
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="title"> 
+       <title>{!SITE_NICKNAME} | MEDITECH</title>
+    </apex:define>
+     <apex:define name="javascriptcalls">
+       <script type="text/javascript">
+        jQuery(document).ready(function() {
+          jQuery('.toolbar-documentation').addClass('active');
+          scaletowindow('#itarget',900,300);
+        });
+            
+        jQuery(window).resize(function() {
+          scaletowindow('#itarget',900,300);
+        });
+                
+        </script>
+     </apex:define>
+    <apex:define name="body">  
+       
+       
+       <div class="banner grid full-width breadcrumb">
+             <div class="c5 m"> </div>
+             <div class="c11">
+                <nav>
+                    <a class="home" href="{!$Page.Home}">Home</a>
+                    <a class="current" href="{!$page.MediTech}">MediTech</a>
+                 <a class="current" href="#">Training</a>
+                </nav>
+            </div>
+         </div>      
+        
+         <div class="cp_core">
+            <apex:pageMessages />
+                         <div class="column full-width" >
+                  <div class="callout spotlight">    
+                  <!-- a class="title-bar" href="#"><span class="sprite_cpicons cases-view">&nbsp;</span>Datatel</a -->  
+                    <div class="callout-content">
+                      <br/>
+                         <div><H1 align="center">LearnMode with MEDITECH</h1></div>
+                         <br />
+                         <hr />
+                         <br />
+                        
+        
+         <div class="callout-content">
+         <p>MEDITECH, an EMR (electronic medical records) healthcare system integrates with ImageNow in business processes such as Patient Access, Medical Records, and Back Office among others. </p>
+         <br />
+         <p>This page describes the different approaches to learning a MEDITECH screen. Once a screen is successfully learned, it can be used to drive searching within ImageNow using a <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015696?popup=true">view action filter</a>.  </p>
+         <br/>
+         <p><b>Note:</b> To learn a MEDITECH screen, you will need the global privilege to Manage Application Plans within ImageNow. </p>
+         <br/>
+         <br/>
+         <p><h2><font color= "FF9933">Various approaches to learning MEDITECH screens:</font></h2></p>
+         <br />
+         <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015760?popup=true"><h3>Learning MEDITECH Client/Server</h3></a>
+         <br />
+         <p>MEDITECH Client/Server screens can be learned using HyperLearn LearnMode method. Refer to <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015524?popup=true">HyperLearn Overview</a> in Knowledgebase for tips when using HyperLearn. </p>
+         <br/>
+         <a href="https://perceptivesoftware.secure.force.com/articles/Support_Troubleshooting/Article-000015632?popup=true"><h3>Learning MEDITECH Client/Server pre-5.x with “Large Size” font option</h3></a>
+         <br />
+         <p>A custom font template is required when learning MEDITECH Client/Server screens with large size font option. </p>
+         <br />
+          <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015563?popup=true"><h3>Learning MEDITECH MAGIC Workstation Client version 3.x and 4.x</h3></a>
+          <br />
+          <p>MEDITECH MAGIC Workstation Client screens can be learned using Terminal Capture LearnMode method.  </p>
+          <br />
+          <br />
+           <div class="column rightcolumn">  
+
+                <div class="callout fd">
+
+                    <a class="title-bar" href="#"><span class="sprite_cpicons fd">&nbsp;</span><font color= "FF9933">Related Topics</font></a>
+
+                    <div class="callout-content">
+                    <br />
+                    <a href="{!$page.LearnModeStrategies}"><h3>LearnMode Strategies</h3></a>
+                    <br/>
+                                   
+                    
+                    <a href="https://perceptivesoftware.secure.force.com/articles/Support_Troubleshooting/Article-000014969?popup=true"><h3>MEDITECH HyperLearn Fonts</H3></a>
+                    <br/>
+                    <a href="https://perceptivesoftware.secure.force.com/articles/Support_Articles/Article-000015558?popup=true"><h3>Using HyperLearn Debug</h3></a>
+                    
+
+                        </div>                        
+                        </div>                        
+                        </div>
+        
+         
+         
+         
+         
+         
+         </div>
+        
+         </div>
+                           </div>
+                         </div>
+                           </div>
+        
+        
+         </apex:define>
+  </apex:composition>
+</apex:page>

@@ -1,0 +1,161 @@
+<apex:page standardcontroller="pse__Proj__c" extensions="LX_CreateImplementationProject" > 
+    <apex:sectionheader title="{!$ObjectType.pse__Proj__c.label} Edit" subtitle="{!IF(ISNULL(pse__Proj__c.name), 'New Project',pse__Proj__c.name)}"/>
+    <apex:form >
+        <apex:pageblock mode="edit" title="{!$ObjectType.pse__Proj__c.label} Edit">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="Save" action="{!Save}"/>
+                <apex:commandbutton value="Cancel" action="{!Cancel}"/>
+            </apex:pageblockbuttons>
+
+            
+            <apex:outputpanel >
+                <apex:pageblocksection title="Implementation Project Detail" showheader="true" columns="2">
+                    <apex:outputfield value="{!pse__Proj__c.pse__Project_ID__c}" />
+                    <apex:outputfield value="{!pse__Proj__c.OwnerId}"/>
+                    <apex:inputfield value="{!pse__Proj__c.Name}" required="true"/>
+                    <apex:outputfield value="{!pse__Proj__c.Pre_Sales_Project_Name__c}" /> 
+                    <apex:inputfield value="{!pse__Proj__c.pse__Account__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Opportunity__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Manager__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Region__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Billing_Type__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Practice__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.Priority__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Group__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Start_Date__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                    <apex:inputfield value="{!pse__Proj__c.pse__End_Date__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                    <apex:inputfield value="{!pse__Proj__c.Description_Comments__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                    
+                </apex:pageblocksection>
+                <apex:pageblocksection title="Project Status" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Phase__c}" required="false"/>
+                    <apex:outputField value="{!pse__Proj__c.Project_Closed_Date__c}" />
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Status__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.Project_Inactive_Date__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Status_Notes__c}" required="false"/>
+                    <apex:inputCheckbox value="{!pse__Proj__c.pse__Closed_for_Time_Entry__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                    
+                    <apex:pageblocksectionitem />
+                </apex:pageblocksection>
+               <!-- 
+                <apex:pageblocksection title="Custom Links" showheader="true" columns="1">
+                         
+                    
+                </apex:pageblocksection>
+                -->
+                <apex:pageblocksection title="Project Attributes" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Is_Active__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Allow_Self_Staffing__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Is_Billable__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Daily_Timecard_Notes_Required__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Exclude_From_Billing__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.pse__Allow_Timecards_Without_Assignment__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Time_Credited__c}" required="false"/>
+                     <apex:pageblocksectionitem />
+                    <apex:inputfield value="{!pse__Proj__c.pse__Time_Excluded__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                    
+                    </apex:pageblocksection>
+             <!--       
+                <apex:pageblocksection title="Project Monitor" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Total_Assigned_Hours__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Total_Projected_Revenue_From_Assignments__c}" required="false"/>
+                </apex:pageblocksection>
+                
+                
+                <apex:pageblocksection title="Selected Time Period" showheader="true" columns="1">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Action_Update_Current_Time_Period__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Current_Time_Period__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Current_Time_Period_End_Date__c}" required="false"/>
+                </apex:pageblocksection>
+                    
+                    
+                
+                <apex:pageblocksection title="Actuals" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Bookings__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Internal_Costs__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Internal_Budget__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Other_Costs__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Billings__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.pse__Total_Costs__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.pse__Pre_Billed__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.pse__Margin__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.pse__Billed__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.pse__Pre_Bill_Type__c}" required="false"/>
+                    
+                </apex:pageblocksection>
+                
+                <apex:pageblocksection title="Time Actuals" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Billable_Internal_Hours__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Billable_External_Hours__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Non_Billable_Internal_Hours__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Non_Billable_External_Hours__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Credited_Non_Billable_Internal_Hours__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.pse__Excluded_Hours__c}" required="false"/>
+                     <apex:inputfield value="{!pse__Proj__c.Budgeted_Hours__c}" required="false"/>
+                 
+                    
+                </apex:pageblocksection>
+                
+                <apex:pageblocksection title="Backlog" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Unscheduled_Backlog__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Scheduled_Backlog_Calculated_Date__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Scheduled_Time__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Scheduled_Backlog_End_Date__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Scheduled_Milestone__c}" required="false"/>    
+                </apex:pageblocksection>
+                
+                 
+            </apex:outputpanel>
+ 
+         
+            <apex:outputpanel rendered="{!CASESAFEID(pse__Proj__c.RecordTypeId)='012e0000000CqO9'}">
+                <apex:pageblocksection title="Fields" showheader="false" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.Name}" required="true"/>
+                    <apex:outputfield value="{!pse__Proj__c.OwnerId}"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Account__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Opportunity__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Manager__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Region__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Billing_Type__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Practice__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.CurrencyIsoCode}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Group__c}" required="true"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Start_Date__c}" required="false"/>
+                    <apex:outputfield value="{!pse__Proj__c.RecordTypeId}"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__End_Date__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                </apex:pageblocksection>
+                <apex:pageblocksection title="Project Status" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Phase__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.Project_Closed_Date__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Status__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.Project_Inactive_Date__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Project_Status_Notes__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Closed_for_Time_Entry__c}" required="false"/>
+                </apex:pageblocksection>
+                <apex:pageblocksection title="Project Attributes" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Is_Active__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Allow_Self_Staffing__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Time_Credited__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Allow_Timecards_Without_Assignment__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Time_Excluded__c}" required="false"/>
+                    <apex:inputfield value="{!pse__Proj__c.pse__Daily_Timecard_Notes_Required__c}" required="false"/>
+                </apex:pageblocksection>
+                <apex:pageblocksection title="Actuals" showheader="true" columns="2">
+                    <apex:inputfield value="{!pse__Proj__c.pse__Internal_Costs__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                    <apex:inputfield value="{!pse__Proj__c.pse__Other_Costs__c}" required="false"/>
+                    <apex:pageblocksectionitem />
+                </apex:pageblocksection>
+                 -->
+            </apex:outputpanel>
+         
+        
+        </apex:pageblock>
+    </apex:form>
+    </apex:page>

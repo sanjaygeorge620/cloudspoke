@@ -1,0 +1,18 @@
+<apex:component controller="TrainingDisplayController">
+      <apex:attribute assignTo="{!ClassType}" name="coursetype" description="listofcourse" type="String" required="true"/>
+      <apex:pageBlock title="Featured {!ClassType} Courses">
+          <apex:pageBlockTable value="{!ClassroomInfo}" var="c">
+                <apex:column style="width:30%;" headerValue="Course Name">
+                            <apex:outputLink value="{!$Page.Training_Course_Description}">{!c.name}<apex:param name="id" value="{!c.ID}"/></apex:outputLink>
+                </apex:column>
+                <apex:column style="width:55%;" headerValue="Description" value="{!c.Short_Description__c}"/>
+                <apex:column style="width:15%;" value="{!c.Class_Duration__c}"/>
+                <apex:facet name="footer">
+                    <apex:outputLink style="text-decoration:underline;font-weight:bold;color:#FBAA19;" value="{!$Page.Training_Course_List}">
+                           <apex:param name="type" value="{!ClassType}"/>
+                           View All {!ClassType} Courses
+                   </apex:outputLink>
+              </apex:facet>
+          </apex:pageBlockTable>
+      </apex:pageBlock>    
+</apex:component>

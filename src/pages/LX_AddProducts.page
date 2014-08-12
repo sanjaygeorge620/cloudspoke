@@ -1,0 +1,273 @@
+<apex:page standardcontroller="Product2" extensions="LX_AddProductsExtension" sidebar="false" showHeader="false" id="mainPageId">
+<c:ActionStatusLoading />
+<apex:form id="mainForm">
+    <apex:pageblock >
+    <apex:pagemessages id="SavedProductErrorMsg" />
+    <apex:outputPanel id="filterFormOutputPanel" rendered="{!filterFormRender}">
+        <apex:pageBlock mode="edit" id="filterPageBlock" rendered="{!filterPageBlockRender}">
+            
+            <apex:pageBlockSection Title="Product Selections" id="FilterSection" columns="4">   
+                <apex:pageblockSectionItem >
+                    
+                    <apex:outputLabel style="font-weight:bold;text-align:right;color:#4a4a56;" value="Product Name" for="ProductName"/>
+                            <apex:InputText value="{!ProductNameFilter}" id="ProductNameInput"/>
+                </apex:pageblockSectionItem>
+                
+                <apex:pageblockSectionItem >
+                    <apex:outputLabel style="font-weight:bold;text-align:right;color:#4a4a56;" value="Part Number" for="PartNumber"/>
+                        <apex:InputText value="{!PartNumberFilter}" id="PartNumberInput"/>
+                </apex:pageblockSectionItem>
+                
+                <apex:pageblockSectionItem >
+                
+                    <apex:outputLabel style="font-weight:bold;text-align:right;color:#4a4a56;" value="Description" for="Description" />
+                        <apex:InputText value="{!DescriptionFilter}" id="DescriptionInput"/>         
+                </apex:pageblockSectionItem>
+                
+                <apex:pageblockSectionItem >
+                    <apex:outputLabel />
+                    <apex:inputHidden id="HiddenInput"/>
+                </apex:pageblockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel style="font-weight:bold;text-align:right;color:#4a4a56;" value="Line" for="Line"/> 
+                        <apex:selectList size="1" value="{!lineFilter}" id="lineFilterId">
+                            <apex:actionSupport immediate="false" event="onchange" action="{!lineChanged}" status="waitingStatusLoad" rerender="FilterSection"/>
+                            <apex:selectOptions value="{!LineListFilter}"/> 
+                        </apex:selectList>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem id="seriesListId" rendered="{!!(isSeriesNotToBeDisplayed)}">
+                    <apex:outputLabel style="font-weight:bold;text-align:right;color:#4a4a56;" value="Series" for="Series"/>
+                        <apex:selectList size="1" value="{!seriesFilter}" id="seriesFilterId" disabled="{!isSeriesNotToBeDisplayed}">
+                            <apex:actionSupport immediate="false" event="onchange" action="{!seriesChanged}" status="waitingStatusLoad" rerender="FilterSection"/>
+                            <apex:selectOptions value="{!SeriesListFilter}"/>
+                        </apex:selectList>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem id="familyListId" rendered="{!!(isFamilyNotToBeDisplayed)}">
+                    <apex:outputLabel style="font-weight:bold;text-align:right;color:#4a4a56;" value="Family" for="Family"/>
+                        <apex:selectList size="1" value="{!familyFilter}" id="familyFilterId" disabled="{!isFamilyNotToBeDisplayed}">
+                            <apex:actionSupport immediate="false" event="onchange" action="{!familyChanged}" status="waitingStatusLoad" reRender="FilterSection"/>
+                            <apex:selectOptions value="{!FamilyListFilter}"/>
+                        </apex:selectList>
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="modelListId" rendered="{!!(isModelNotToBeDisplayed)}">
+                    <apex:outputLabel style="font-weight:bold;text-align:right;color:#4a4a56;" value="Model" for="Model"/>
+                        <apex:selectList size="1" value="{!modelFilter}" id="modelFilterId" disabled="{!isModelNotToBeDisplayed}">
+                            <apex:selectOptions value="{!ModelListFilter}"/>
+                        </apex:selectList>
+                </apex:pageBlockSectionItem>
+                           
+            </apex:pageBlockSection>
+         <!--   <div align="center"> -->
+
+        <!--     </div> -->
+            <apex:pageblockButtons >
+                <apex:actionStatus id="counterStatus1" style="align:center;" >
+                        <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                    </apex:facet>
+                    </apex:actionStatus>
+                     <apex:commandButton action="{!getDynamicProductsFilter}" value="Search" id="searchButton" rerender="MainFormOutputPanel" status="counterStatus1" />
+                 
+                     <apex:commandButton action="{!cancelLogic}" value="Cancel" id="cancelButton" />            
+            </apex:pageblockButtons>
+        </apex:pageBlock>
+    </apex:outputPanel>
+
+    <!-- Added to show the save products when its submitted for Quick Bid Approval -->
+        <apex:outputPanel id="onSbmtApprSavedProductsOutputPanel"  >
+    <apex:pageBlock id="onSbmtApprPageBlockSavedProducts" title="Saved Products" rendered="{!onSbmtApprSavedProducts}">
+   <!-- <apex:pagemessages id="onSbmtApprSavedProductErrorMsg" /> --> 
+        <apex:outputPanel id="onSbmtApproutputPanelSavedProducts" >
+            <apex:pageblockTable columns="10" value="{!savedProductWrapperList}" title="Saved Products" id="savedProductsTable" var="savedProduct" columnsWidth="10%,*">
+                <apex:column value="{!savedProduct.ProductName}" headerValue="Product Name"/>  
+                <apex:column value="{!savedProduct.PartNumber}" headerValue="Part Number"/> 
+                <apex:column value="{!savedProduct.Description}" headerValue="Description"/> 
+                <apex:column value="{!savedProduct.oppPriceListProductInstance.LX_Quantity__c}" headerValue="Quantity"/>
+                
+                <!-- <apex:column headerValue="Currency">
+                    <apex:outputText value="{!oppCurrency}"></apex:outputText>
+                </apex:column> -->
+                <apex:column value="{!savedProduct.oppPriceListProductInstance.LX_Discount__c}" headerValue="Requested Discount (Per Unit)"/>
+                
+                <apex:column headerValue="Total Requested Discount">
+                    <apex:outputText value="{!savedProduct.oppPriceListProductInstance.LX_Discount__c * savedProduct.oppPriceListProductInstance.LX_Quantity__c}"></apex:outputText>
+                </apex:column>
+            </apex:pageblockTable>
+      </apex:outputPanel>      
+            <apex:pageBlockButtons > 
+
+             <apex:outputPanel id="myButtons1_SavedProducts" rendered="{!savedProductWrapperList!= null && savedProductWrapperList.size>0 && onSbmtApprSavedProducts}">
+                <apex:actionStatus id="counterStatus_SavedProducts" style="align:center;" >
+                        <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                    </apex:facet>
+                 </apex:actionStatus> 
+                                                
+                <apex:commandButton value="First Page" id="firstPage_SavedProducts" rerender="onSbmtApprSavedProductsOutputPanel" disabled="{!prev_SavedProducts}" action="{!FirstPage_SavedProducts}" status="waitingStatusLoad">
+      <!--               <apex:actionSupport event="onclick" rerender="onSbmtApproutputPanelSavedProducts,myButtons1_SavedProducts"
+                                action="{!FirstPage_SavedProducts}" status="waitingStatusLoad" />    -->
+                </apex:commandButton>               
+            
+            <apex:commandButton value="Previous Page" id="previousPage_SavedProducts" disabled="{!prev_SavedProducts}" rerender="onSbmtApprSavedProductsOutputPanel"  action="{!previous_SavedProducts}" status="waitingStatusLoad">
+             <!--        <apex:actionSupport event="onclick" rerender="onSbmtApprSavedProductsOutputPanel,myButtons1_SavedProducts"
+                                action="{!previous_SavedProducts}" status="waitingStatusLoad" />   --> 
+                </apex:commandButton>
+            
+            <apex:commandButton value="Next Page" id="nextPage_SavedProducts" rerender="onSbmtApprSavedProductsOutputPanel" disabled="{!nxt_SavedProducts}" action="{!next_SavedProducts}" status="waitingStatusLoad">
+         <!--            <apex:actionSupport event="onclick" rerender="onSbmtApprSavedProductsOutputPanel,myButtons1_SavedProducts"
+                                action="{!next_SavedProducts}" status="waitingStatusLoad" /> -->
+            </apex:commandButton>
+            
+            <apex:commandButton value="Last Page" id="lastPage_SavedProducts" rerender="onSbmtApprSavedProductsOutputPanel" disabled="{!nxt_SavedProducts}"  action="{!last_SavedProducts}" status="waitingStatusLoad" >
+         <!--             <apex:actionSupport event="onclick" rerender="onSbmtApprSavedProductsOutputPanel,myButtons1_SavedProducts"
+                                action="{!last_SavedProducts}" status="waitingStatusLoad" />  -->
+            </apex:commandButton>
+       </apex:outputPanel>
+            </apex:pageBlockButtons>
+          
+    </apex:pageBlock>
+    </apex:outputPanel>
+
+
+    <apex:outputPanel id="SavedProductsOutputPanel" rendered="{! IF(onSbmtApprSavedProducts == TRUE, FALSE ,TRUE) }" >
+    <apex:pageBlock id="PageBlockSavedProducts" title="Saved Products" rendered="{!IF(savedProductWrapperList.size>0,true,false)}">
+      <apex:pagemessages id="SavedProductErrorMsg" /> 
+        <apex:outputPanel id="outputPanelSavedProducts" >
+            <apex:pageblockTable columns="10" value="{!savedProductWrapperList}" title="Saved Products" id="savedProductsTable" var="savedProduct" columnsWidth="10%,*">
+                <apex:column value="{!savedProduct.ProductName}" headerValue="Product Name"/>  
+                <apex:column value="{!savedProduct.PartNumber}" headerValue="Part Number"/> 
+                <apex:column value="{!savedProduct.Description}" headerValue="Description"/> 
+                <apex:column headerValue="Quantity">
+                     <apex:inputText value="{!savedProduct.oppPriceListProductInstance.LX_Quantity__c}" required="false">
+                     <apex:actionSupport event="onchange" status="waitingStatusLoad" id="quantityChanged" action="{!isRecordChanged}" reRender="SavedProductsOutputPanel">
+                        <apex:param value="{!savedProduct.counter}" id="passCounterQuantity" assignTo="{!counterVal}" name="passCounterValQuantity"/>
+                    </apex:actionSupport>
+                    </apex:inputText>
+                </apex:column>
+                <apex:column headerValue="Currency">
+                    <apex:outputText value="{!oppCurrency}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Requested Discount (Per Unit)">
+                    <apex:inputText value="{!savedProduct.oppPriceListProductInstance.LX_Discount__c}" required="false">
+                    <apex:actionSupport event="onchange" id="discountChanged" status="waitingStatusLoad" action="{!isRecordChanged}" reRender="SavedProductsOutputPanel">
+                        <apex:param value="{!savedProduct.counter}" id="passCounterDiscount" assignTo="{!counterVal}" name="passCounterValDiscount"/>
+                    </apex:actionSupport>
+                    </apex:inputText>
+                </apex:column> 
+                <apex:column headerValue="Total Requested Discount">
+                    <apex:outputText value="{!savedProduct.oppPriceListProductInstance.LX_Discount__c * savedProduct.oppPriceListProductInstance.LX_Quantity__c}"></apex:outputText>
+                </apex:column>
+                <apex:column headerValue="Save">
+                    <apex:commandLink id="SaveLinkProduct" status="waitingStatusLoad" reRender="MainFormOutputPanel,SavedProductsOutputPanel" target="_self" title="Save" value="Save" action="{!inlineSaveLogic}">
+                            <apex:param id="CounterForSave" assignTo="{!counterToSave}" value="{!savedProduct.counter}" name="NameCounterToSave"/>
+                       <!--    <apex:param id="QuantityForSave" assignTo="{!quantityToSave}" name="test1" value="{!savedProduct.oppPriceListProductInstance.LX_Quantity__c}"/>
+                            <apex:param id="RequestedPriceForSave" assignTo="{!requestedPriceToSave}" name="test2" value="{!savedProduct.oppPriceListProductInstance.LX_Discount__c}"/> -->
+                     <!--  </apex:image> -->
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column headerValue="Delete">
+                   <apex:commandLink id="DeleteLinkProduct" action="{!inlineDeleteLogic}" status="waitingStatusLoad" reRender="MainFormOutputPanel,SavedProductsOutputPanel" immediate="false" value="Delete"  title="Delete">
+                    <!--    <apex:image ismap="true" url="{!$Resource.LX_Delete}"/> -->
+                    <apex:param id="CounterForDelete" assignTo="{!counterToDelete}" value="{!savedProduct.counter}" name="CounterToDeleteName"/>
+                    </apex:commandLink>
+                </apex:column>
+            </apex:pageblockTable>
+      </apex:outputPanel>      
+            <apex:pageBlockButtons > 
+
+             <apex:outputPanel id="myButtons_SavedProducts" rendered="{!savedProductWrapperList!= null && savedProductWrapperList.size>0}">
+                <apex:actionStatus id="counterStatus_SavedProducts" style="align:center;" >
+                        <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                    </apex:facet>
+                 </apex:actionStatus> 
+                                                
+                <apex:commandButton value="First Page" id="firstPage_SavedProducts" rerender="SavedProductsOutputPanel,MainFormOutputPanel" disabled="{!prev_SavedProducts}" action="{!FirstPage_SavedProducts}" status="waitingStatusLoad">
+      <!--               <apex:actionSupport event="onclick" rerender="SavedProductsOutputPanel,myButtons_SavedProducts"
+                                action="{!FirstPage_SavedProducts}" status="waitingStatusLoad" />    -->
+                </apex:commandButton>               
+            
+            <apex:commandButton value="Previous Page" id="previousPage_SavedProducts" disabled="{!prev_SavedProducts}" rerender="SavedProductsOutputPanel,MainFormOutputPanel"  action="{!previous_SavedProducts}" status="waitingStatusLoad">
+             <!--        <apex:actionSupport event="onclick" rerender="SavedProductsOutputPanel,myButtons_SavedProducts"
+                                action="{!previous_SavedProducts}" status="waitingStatusLoad" />   --> 
+                </apex:commandButton>
+            
+            <apex:commandButton value="Next Page" id="nextPage_SavedProducts" rerender="SavedProductsOutputPanel,MainFormOutputPanel" disabled="{!nxt_SavedProducts}" action="{!next_SavedProducts}" status="waitingStatusLoad">
+         <!--            <apex:actionSupport event="onclick" rerender="SavedProductsOutputPanel,myButtons_SavedProducts"
+                                action="{!next_SavedProducts}" status="waitingStatusLoad" /> -->
+            </apex:commandButton>
+            
+            <apex:commandButton value="Last Page" id="lastPage_SavedProducts" rerender="SavedProductsOutputPanel,MainFormOutputPanel" disabled="{!nxt_SavedProducts}"  action="{!last_SavedProducts}" status="waitingStatusLoad" >
+         <!--             <apex:actionSupport event="onclick" rerender="SavedProductsOutputPanel,myButtons_SavedProducts"
+                                action="{!last_SavedProducts}" status="waitingStatusLoad" />  -->
+            </apex:commandButton>
+        </apex:outputPanel>
+            </apex:pageBlockButtons>
+
+    </apex:pageBlock>
+    </apex:outputPanel>
+    
+<apex:outputPanel id="MainFormOutputPanel">
+            <apex:pageBlock id="pageBlockMain" rendered="{!mainPageBlockRender}" >
+                    <apex:pageMessages id="msg"/>
+                <apex:pageBlockSection Title="Products List" id="productsList" columns="1" > 
+                    <apex:pageBlockTable id="productsTable" var="product" value="{!productWrapperList}" columns="7"> 
+                        <apex:column headerValue="Checkbox">
+                            <apex:inputCheckbox value="{!product.selected}" id="checkedone" required="false">
+                            </apex:inputCheckbox>
+                        </apex:column>
+                        <apex:column value="{!product.ProductName}"  headerValue="Product Name"/>
+                        <apex:column value="{!product.PartNumber}"  headerValue="Part Number"/>
+                        <apex:column value="{!product.Description}"  headerValue="Description"/>
+                        <apex:column headerValue="Quantity">
+                             <apex:inputField value="{!product.oppPriceListProductInstance.LX_Quantity__c}" required="false"/>
+                        </apex:column>
+                        <apex:column headerValue="Currency">
+                            <apex:outputText value="{!oppCurrency}"></apex:outputText>
+                        </apex:column>
+                        <apex:column headerValue="Requested Discount (Per Unit)">
+                            <apex:inputField value="{!product.oppPriceListProductInstance.LX_Discount__c}" required="false"/>
+                        </apex:column>
+                    </apex:pageBlockTable>
+             </apex:pageBlockSection> 
+                <apex:pageBlockButtons > 
+                <apex:actionStatus id="counterStatus" style="align:center;" >
+                        <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Lx_Progress_Bar}" height="20" width="20" />                       
+                    </apex:facet>
+                    </apex:actionStatus>
+             <apex:outputPanel id="myButtons" rendered="{!productWrapperList!= null && productWrapperList.size>0}">
+                                
+                <apex:commandButton value="First Page" id="firstPage" rerender="MainFormOutputPanel,SavedProductsOutputPanel" action="{!FirstPage}"  disabled="{!prev}" status="counterStatus">
+                </apex:commandButton>               
+            <apex:commandButton value="Previous Page" id="previousPage" disabled="{!prev}" rerender="MainFormOutputPanel,SavedProductsOutputPanel"
+                                action="{!previous}" status="counterStatus">
+                </apex:commandButton>
+            
+            <apex:commandButton value="Save" id="savePage" action="{!saveLogic}" immediate="false" rerender="MainFormOutputPanel,SavedProductsOutputPanel" status="waitingStatusLoad" >
+                </apex:commandButton>
+            
+            <apex:commandButton value="Next Page" id="nextPage" rerender="MainFormOutputPanel,SavedProductsOutputPanel" action="{!next}" disabled="{!nxt}" status="counterStatus">
+            </apex:commandButton>
+                
+            </apex:outputPanel>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!errorPageBlock}" id="errorPageBlock">
+            <apex:actionFunction name="callProductDetailsNotEntered" action="{!ProductDetailsNotEntered}"  /> 
+                <apex:pageMessages id="msgError"></apex:pageMessages> 
+                 <div align="center">   
+                    <apex:commandButton action="{!cancelLogicVF}" value="Back" id="BackButton"/>   
+                 </div>
+     </apex:pageBlock> 
+</apex:outputPanel>
+    <apex:pageblockButtons >   
+        <apex:commandButton action="{!cancelLogic}"  value="Return To Opportunity" status="waitingStatusLoad"/>  
+    </apex:pageblockButtons>
+    </apex:pageblock>
+</apex:form>
+</apex:page>

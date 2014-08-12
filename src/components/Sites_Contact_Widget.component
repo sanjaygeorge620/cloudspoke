@@ -1,0 +1,78 @@
+<apex:component controller="SitesGenericController">
+<div class="callout contact-support">
+    <span class="title-bar" href="#"><span class="sprite_cpicons support">&nbsp;</span>Contact Us</span>
+    <div class="callout-content">
+        <ul>
+            <li><Strong><Font Color = "#00007A">For assistance with all Perceptive Software products, including those formerly known as Brainware, ISYS, Nolij, and Pallas Athena, please contact us using the below options.</font></Strong></li>
+            <li><h4>Phone</h4></li>
+         <!--   <li><h3><Font Color = "#00007A">Perceptive Software:</font></h3></li> -->
+            <li><strong>Worldwide:</strong></li>
+            <li><a class="vcard" href="tel:1 (800) 941-7460">&#43;1 (800) 941-7460</a> ext. 2</li>
+            <li><strong>United Kingdom (Local):</strong></li>
+            <li><a class="vcard" href="tel:44 (0) 800-141-2022">&#43;44 (0) 800-141-2022</a></li>
+            <li><strong>South Africa (Local):</strong></li>
+            <li><a class="vcard" href="tel:27 (0) 11-807-3025">&#43;27 (0) 11-807-3025</a></li><br/>
+            
+            <li><h4>Online Chat</h4></li>
+            <li><strong>Chat with Product Support</strong></li>
+            <li><a class="chat-now-btn" onClick="_alc.startChat(16438);" href="#">Chat Now</a></li>
+            <li><strong>Chat with Managed Services</strong><br /><span>(Remote Administration customers only)</span></li>
+            <li><a class="chat-now-btn" onClick="_alc.startChat(16435);" href="#">Chat Now</a></li>
+           
+            <li><h4>Email</h4></li>
+            <li><strong>Worldwide:</strong></li>
+            <li><a href="mailto:support@perceptivesoftware.com">support@perceptivesoftware.com</a></li>
+            <li><strong>South Africa:</strong></li>
+            <li><a href="mailto:africa.support@perceptivesoftware.com">africa.support@perceptivesoftware.com</a></li>
+           
+                        
+          <!--  <li><h3><Font Color = "#00007A">ISYS:</font></h3></li>
+            <li><strong>Americas:</strong></li>
+            <li><a class="vcard" href="tel:1 (800) 992-4797">&#43;1 (800) 992-4797 </a> Option 2</li>
+            <li><strong>APAC:</strong></li>
+            <li><a class="vcard" href="tel:61 2 80781100 ">&#43;61 2 8078 1100</a></li>
+            <li><strong>EMEA:</strong></li>
+            <li><a class="vcard" href="tel:44 1244 313 216 ">&#43;44 1244 313 216 </a> Option 2</li><br/>
+            
+            <li><h3><Font Color = "#00007A">Nolij:</font></h3></li>
+            <li><a class="vcard" href="tel:1 (888) 818-6654 ">&#43;1 (888) 818-6654</a> Option 2</li><br/>
+            
+            
+             <li><h3><Font Color = "#00007A">Brainware:</font></h3></li>
+              <li><strong>Americas:</strong></li>
+            <li><a class="vcard" href="tel:1 (888) 829-6441">&#43;1 (888) 829-6441</a></li>
+             <li><strong>European:</strong></li>
+            <li><a class="vcard" href="tel:44 (0) 7000 367 347">&#43;44 (0) 7000 367 347</a></li>  -->
+            
+            
+            
+        </ul>
+    </div>
+</div><!-- /Contact Us -->
+<!-- START Activa Live Chat Button/Link Code: Place this code into your HTML wherever you want this button/link to appear -->
+<script type="text/javascript">/*managed services*/
+    if ( typeof(__ALC_Badges) == 'undefined' ) { __ALC_Badges = new Array();}
+    __ALC_Badges.push({'id':'16435', 'available':'id_of_online_element', 'unavailable':'id_of_offline_element', 'department':'12182'});
+</script>
+<script type="text/javascript">/*product support*/
+    if ( typeof(__ALC_Badges) == 'undefined' ) { __ALC_Badges = new Array();}
+    __ALC_Badges.push({'id':'16438', 'available':'id_of_online_element', 'unavailable':'id_of_offline_element', 'department':'12186'});
+</script>
+<!-- END Activa Live Chat Button/Link Code -->
+
+
+<!-- Inserted the Deployment code Generated in Salesforce Live Agent Deployment Name Contact Support -->
+<!--------------------------------------------------------------->
+
+
+<!-- START Salesforce Live Agent Deployment Code: MUST BE PLACED DIRECTLY ABOVE THE CLOSING </BODY> TAG and AFTER/OUTSIDE ALL HTML -->
+
+<script type="text/javascript">
+var __ALC_Deployment = 10580;
+document.write(unescape("%3Cscript src='"+document.location.protocol+"//depot.liveagentforsalesforce.com/app/js/lt.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<!-- END Salesforce Live Agent Deployment Code -->
+<!--------------------------------------------------------------->
+
+</apex:component>

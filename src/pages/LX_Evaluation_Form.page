@@ -1,0 +1,33 @@
+<apex:page standardController="LX_Evaluation_Unit_Disposition_Forms__c" extensions="LX_Evaluation_Form">
+<apex:messages />
+
+<apex:form >
+ <apex:pageBlock title="Evaluation Unit Disposition Form">
+  <apex:pageblockSection collapsible="false">
+   <apex:outputField value="{!form.LX_Evaluation_Unit__c}"/>
+   <apex:outputField value="{!form.RecordTypeID}"/>
+
+  </apex:pageblockSection>
+  <apex:pageBlockSection title="Evaluation Unit Details" columns="1" collapsible="false">
+      <apex:pageBlockTable value="{!wrevalDetailList}" var="wrapper" id="pbt">
+        <apex:column headerValue="Select">
+          <apex:inputCheckbox value="{!wrapper.isSelected}"/>
+        </apex:column>
+        <apex:column value="{!wrapper.evalDetail.LX_Part_Number__c}"/>
+        <apex:column value="{!wrapper.evalDetail.Name}"/>
+        <apex:column headerValue="SalesPrice">
+
+          <apex:inputField value="{!wrapper.evalDetail.LX_Sales_Price__c}"  rendered="{!showField}"/>
+          <apex:outputField value="{!wrapper.evalDetail.LX_Sales_Price__c}" rendered="{!NOT(showField)}"/>
+        </apex:column>
+         <apex:column headerValue="Order #">
+          <apex:outputField value="{!wrapper.evalDetail.LX_Order_Number__c}"/>
+         </apex:column>
+      </apex:pageBlockTable>
+     </apex:pageBlockSection>
+      <apex:pageBlockButtons location="bottom">
+        <apex:commandButton action="{!saveForm}" value="Save Form"/>
+      </apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

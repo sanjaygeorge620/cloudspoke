@@ -1,0 +1,55 @@
+<apex:page standardController="SAP_Project_Request__c">
+    <script src="/soap/ajax/29.0/connection.js" type="text/javascript"></script> 
+    <script>
+    
+    sforce.connection.sessionId = '{!$Api.Session_ID}';
+    var existingParams = window.location.search.substr(1);
+    var url = '{!$Label.LX_SAPProjectRequest_Url}'+'&nooverride=1&';
+    
+    function getParam (sname)
+    {
+      var params = location.search.substr(location.search.indexOf("?")+1);
+      var sval = "";
+      params = params.split("&");
+        // split param and value into individual pieces
+        for (var i=0; i<params.length; i++)
+           {
+             temp = params[i].split("=");
+             if ( [temp[0]] == sname ) { sval = temp[1]; }
+           }
+      return sval;
+    }
+    
+      var oppID= getParam('{!$Label.LX_OpportunityID}');
+      if(oppID!='')
+      {
+      url = url +existingParams;
+      window.location.href = url;
+      }
+      else
+      {
+      window.location.href = url;
+      } 
+      
+    var opp = sforce.connection.query("SELECT id,Owner_Company_Code__c FROM opportunity where id ='"+oppID+"'");
+    var records = opp.getArray("records");
+    var company_code_value = records[0].Owner_Company_Code__c;
+    
+    var company_code = sforce.connection.query("SELECT id,name,Company_Code_Value__c FROM Company_Code__c where Company_Code_Value__c ='"+company_code_value+"'");
+    
+    if(company_code.size==0)
+    {
+    window.location.href = url;
+    }
+    else
+    {
+    var code = company_code.getArray("records")[0].Id;
+    var code_name = company_code.getArray("records")[0].Name;
+    url =url +'&{!$Label.LX_SAPProjectRequest_CompanycodeID}='+code+'&{!$Label.LX_SAPProjectRequest_Companycode}='+code_name;
+    window.location.href = url;
+    } 
+    
+    
+    </script>
+    
+    </apex:page>

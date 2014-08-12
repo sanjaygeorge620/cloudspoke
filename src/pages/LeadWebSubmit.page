@@ -1,0 +1,147 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesLeadSubmitController"> 
+<title>{!SITE_NICKNAME} | Lead Submit</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+        <script type="text/javascript"> 
+                jQuery(document).ready(function() {
+                  jQuery(".toolbar-leads").addClass("active");
+                  jQuery(".accbody").hide();
+                  jQuery(".accbody.step1").slideToggle("slow");
+                  jQuery(".lastname").focus();
+                  //disable enter
+                  jQuery("#landing").keyup(function(a) {
+                    if(a.keyCode == 13) {
+                      return!1
+                    }
+                  });
+                  
+                });
+        </script> 
+        <div class="breadcrumb">
+            <ul>
+                <li><a class="sprite_cpicons home" href="{!$Page.Home}">Home</a><span>&#187;</span></li>
+                <li><a href="{!$Page.Leads}">Leads</a><span>&#187;</span></li>
+                <li><a class="current" href="#">New Lead</a></li>
+            </ul>
+        </div>  
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!!$ObjectType.lead.accessible || !SITE_TAB_LEADS}">
+            <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+        </apex:outputPanel>
+        
+        <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.lead.accessible  && SITE_TAB_LEADS}">
+                     
+            
+            <div class="column full-width">
+                <apex:pageMessages id="error" />
+               
+                <apex:outputPanel rendered="{!!$ObjectType.lead.createable}">
+                    <p>Sorry, you do not have access to this content due to insufficient privileges.</p>
+                </apex:outputPanel>
+            </div>    
+<!---Leads---->
+                
+            <apex:outputPanel layout="block" styleClass="cp_core" rendered="{!$ObjectType.lead.accessible}">
+                <div class="column full-width"> <!----Full column-->
+                    <div class="callout profile">
+                        <a class="title-bar" href="#">
+                            <span class="sprite_cpicons profile">&nbsp;</span>
+                            Submit Lead
+                        </a>
+                        <div class="callout-content">
+                          
+
+                            <div class="inner-content">
+                                <apex:form >
+                                    <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Lead Information</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.lead.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">Company: <div><apex:inputField required="true" id="editCompany" value="{!newLead.Company}"/> </div></p>
+                                                    <p class="item user-info-title">First Name: <div><apex:inputField required="true" id="editfirstName" value="{!newLead.FirstName}"/> </div></p>
+                                                    <p class="item user-info-title">Last Name: <div><apex:inputField required="true" id="editlastName" value="{!newLead.LastName}"/> </div></p>
+                                                    <p class="item user-info-title">Title: <div><apex:inputField required="true" id="edittitle" value="{!newLead.Title}"/> </div></p>
+                                                    <p class="item user-info-title">Department: <div><apex:inputField styleClass="lead-select" required="true" id="editDepartment" value="{!newLead.Department__c}"/> </div></p>
+                                                    <p class="item user-info-title">Industry: <div><apex:inputField styleClass="lead-select" id="editIndustry" value="{!newLead.Industry}"/> </div></p>
+                                                    
+                                                </div>
+                                                <div class="right-inner-col">
+                                                    <p class="item user-info-title">Phone: <div><apex:inputField required="true" id="editphone" value="{!newLead.Phone}"/> </div></p>
+                                                    <p class="item user-info-title">Email: <div><apex:inputField required="true" id="editemail" value="{!newLead.Email}"/></div></p>
+                                                    <p class="item user-info-title">Website: <div><apex:inputField id="editwebsite" value="{!newLead.Website}"/></div></p>
+                                                    <p class="item user-info-title">Sector: <div><apex:inputField styleClass="lead-select" required="true" id="editsector" value="{!newLead.Sector__c}"/></div></p>
+                                                    <p class="item user-info-title">Lead Type: <div><apex:inputField styleClass="lead-select" required="true" id="editleadType" value="{!newLead.Lead_Type__c}"/></div></p>
+                                                </div>
+                                            </div>
+                                            <div class="clear"/>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Lead Detail</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.lead.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">Host Manufacturer: <div><apex:inputField styleClass="lead-select" required="true" id="editHostManufacturer" value="{!newLead.Manufacturer__c}"/> </div></p>
+                                                    <p class="item user-info-title">Competitor: <div><apex:inputField id="editCompetitor" value="{!newLead.Competitor_solution__c}"/> </div></p>
+                                                    <p class="item user-info-title">Budget: <div><apex:inputField required="true" id="editBudget" value="{!newLead.Budget__c}"/> </div></p>
+                                                    <p class="item user-info-title">Needs/Objectives: <div><apex:inputField required="true" id="editneed" value="{!newLead.Need_Objectives__c}"/> </div></p>
+                                                </div>
+                                                <div class="right-inner-col">
+                                                    <p class="item user-info-title">Host Application: <div><apex:inputField styleClass="lead-select" id="editHostApplication" value="{!newLead.Host_Application__c}"/> </div></p>
+                                                    <p class="item user-info-title">Current Solution: <div><apex:inputField styleClass="lead-select" id="editsolution" value="{!newLead.Current_Solution__c}"/></div></p>
+                                                    <p class="item user-info-title">    </p>
+                                                    <p class="item user-info-title">Timeline: <div><apex:inputField required="true" id="edittimeline" value="{!newLead.Timeline__c}"/></div></p>
+                                                </div>
+                                            </div>  <!---/CONTACT DETAILS--->
+                                            <div class="clear"/>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                     <apex:outputPanel >
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Additional Information</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.lead.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="item user-info-title">Preferred Language: <div><apex:inputField styleClass="lead-select" required="true" id="editLanguage" value="{!newLead.Preferred_Language__c}"/> </div></p>
+                                                    <p class="item user-info-title">Opportunity Lead Notes: <div><apex:inputField id="editNotes" value="{!newLead.Tradeshow_Notes__c}"/> </div></p>
+                                                </div>
+                                                
+                                            </div> 
+                                            <div class="clear"/>
+                                        </apex:outputPanel>
+                                        <div class="inner-content inner-content-title-bar">
+                                            <span>Address Information</span>
+                                        </div>
+                                        <apex:outputPanel rendered="{!$ObjectType.lead.createable}">
+                                            <div class="inner-content">
+                                                <div class="left-inner-col">
+                                                    <p class="label course-type">Region: <apex:inputField styleClass="lead-select" required="true" id="editRegion" value="{!newLead.Region__c}"/> </p>
+                                                    <p class="label course-type">Physical Country: <div><apex:inputField styleClass="lead-select" required="true" id="editCountry" value="{!newLead.physical_country__c}"/> </div></p>
+                                                    <p class="label course-type">Physical Street Address: <div><apex:inputField required="true" id="editAddress" value="{!newLead.physical_street_address__c}"/> </div></p>
+                                                    <p class="label course-type">Physical Street Address 2: <div><apex:inputField id="editAddress2" value="{!newLead.physical_street_address_2__c}"/> </div></p>
+                                                    <p class="item user-info-title">Physical City: <div><apex:inputField required="true" id="editCity" value="{!newLead.physical_city__c}"/> </div></p>
+                                                    <p class="item user-info-title">Physical State: <div><apex:inputField styleClass="lead-select" id="editState" value="{!newLead.physical_state__c}"/> </div></p>
+                                                    <p class="item user-info-title">Physical Postal Code: <div><apex:inputField id="editPostalCode" value="{!newLead.Physical_postal_code__c}"/> </div></p>
+                                                    <p class="item user-info-title">International State/Province: <div><apex:inputField id="editProvince" value="{!newLead.international_state_province__c}"/> </div></p>
+                                                </div>
+                                                
+                                            </div> 
+                                            <div class="clear"/>
+                                            <apex:commandButton styleclass="submitbutton" action="{!SubmitLead}"/>  
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </apex:form>               
+                            </div>
+                        </div> 
+                    </div>          
+                </div>     
+            </apex:outputPanel>     
+         </apex:outputPanel>
+    </apex:define>
+  </apex:composition>
+</apex:page>

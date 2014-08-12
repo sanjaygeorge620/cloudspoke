@@ -1,0 +1,106 @@
+<apex:page showHeader="true" standardStylesheets="true" controller="SitesControllerInternal">
+<title>Datatel</title>
+  <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" >
+    <apex:define name="body">  
+       <script type="text/javascript">
+       jQuery(document).ready(function() {
+       jQuery('.toolbar-documentation').addClass('active');
+       scaletowindow('#itarget',900,300);});
+       jQuery(window).resize(function() {
+       scaletowindow('#itarget',900,300);});
+       </script>
+       <div class="cp_core">
+       <apex:pageMessages />
+       <div class="column full-width" >
+       <div class="callout spotlight">    
+       <a class="title-bar" href="#"><span class="sprite_cpicons cases-view">&nbsp;</span>LearnMode Strategies</a>  
+       <div class="callout-content">
+       <br/>
+       <div><H1>LearnMode Strategies</h1></div><br /><hr /><br />
+                   <!--  LINKS  -->
+       <ul>
+       <a href="#sec0"><H3>Introduction</H3></a><br/>
+       <a href="#sec1"><H3>LearnMode Overview</H3></a><br/>
+       <a href="#sec2"><H3>Browser-delivered Applications</H3></a><br/>
+       <a href="#sec3"><H3>Java Applications</H3></a><br/>
+       <a href="#sec4"><H3>Terminal Emulator Applications</H3></a><br/>
+       <a href="#sec5"><H3>HyperLearn Tips</H3></a><br/>
+       <a href="#sec6"><H3>VBScript</H3></a><br/>
+       <a href="#sec7"><H3>Macros</H3></a><br/>
+       <a href="#sec8"><H3>Learning Business Applications</H3></a><br/><br/><br/>
+       </ul>
+                        <!--LINKS-->  
+       <h3 id="sec0">Introduction</h3><br />
+       There are several different LearnMode methods for capturing ImageNow linking values (document keys and custom properties) from a business application. The following articles provide an overview of the LearnMode methods and tips on using the different methods.<br /><br />
+       <h3 id="sec1">LearnMode Overview</h3><br/>
+       <ul>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SK5&popup=true">What is LearnMode</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SXP&popup=true">About the LearnMode type methods</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008Rpl&popup=true">Create a LearnMode application plan</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SCu&popup=true">About matching text in window titles</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SCx&popup=true">Use wildcards in application plan settings</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwr&popup=true">Searching using LearnMode</a></Li>
+       </ul><br />
+       <h3 id="sec2">Browser-delivered Applications</h3><br />
+       Browser-delivered applications can sometimes be learned using the <a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SJO&popup=true">Internet Explorer LearnMode method.</a><br /><br />
+       There are instances where IE LearnMode method will not work due to shifting of HTML tags at the application layer. In those situations, the following strategies are available, in order of effectiveness.<br /><br/>
+       <ul>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNq9&popup=true">Using hidden HTML tags to capture shifting values in LearnMode</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNZD&popup=true">Using IE LearnMode VBScript functions for capturing shifting values in a browser application</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwc&popup=true">Using AppGetData for linking with shifting values in a business application</a></Li><br/>
+       </ul><br />
+       The <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwI&popup=true">Viewpoint method</a> can be a fast way for learning a browser application, if the following conditions are true:<br /><br />
+       <ol>
+       <li>The Windows display settings are standardized, since Viewpoint performs xy coordinate mapping to find the data fields.</li><br />
+       <li>For browser applications, the locations of the toolbars are standardized.</li><br />
+       <li>The data is visible on the screen. </li><br />
+       </ol>
+       If none of the previous approaches work, then use  <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNoX&popup=true">HyperLearn</a>.<br /><br /><br />
+       <h3 id="sec3">Java Applications</h3><br /><br />
+       Java applications can typically be learned using the <a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SJ4&popup=true">Window Walker method</a>. However, there may be certain applications that require using the <a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNmq&popup=true">WinGetData function</a>.<br /><br />
+       <h3 id="sec4">Terminal Emulator Applications</h3><br />
+       <ul>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SJn&popup=true">Determine connect strings for a terminal emulation program</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNyY&popup=true">Terminal capture connect strings for common terminal emulators</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwh&popup=true">Using GetScreenText function to capture shifting values in a terminal emulator</a></Li><br/>
+       </ul>
+       <h3 id="sec5">HyperLearn Tips</h3><br/>
+       <ul>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNoX&popup=true">HyperLearn Overview</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNoh&popup=true">Common font types and sizes for learning business applications with HyperLearn</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Troubleshoot_Internal?id=kA170000000Gmhz&popup=true">Using HyperLearn offset to resolve "Couldn't recognize text" error on one computer</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwS&popup=true">Disabling font smoothing for HyperLearn</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SKb&popup=true">Imagenow.ini settings for HyperLearn</a></Li>
+       </ul><br />
+       <h3 id="sec6">VBScript</h3><br />
+       VBScript functions in ImageNow Client can be used to obtain and parse data used as linking values for document keys and custom properties. Below are articles that explain how to use VBScript functions with ImageNow LearnMode. <br /><br />
+       <ul>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNwm&popup=true">VBScript introduction</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SKk&popup=true">VBScript functions</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SKh&popup=true">VBScript variables</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNx6&popup=true">Conditional statements in VBScripts</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNxG&popup=true">Loops in VBScripts</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNk6&popup=true">Evaluating text with LearnMode VBScripts</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Articles_Internal?id=kA070000000TNk1&popup=true">Troubleshooting LearnMode VBScripts</a></Li>
+       </ul><br />
+       <h3 id="sec7">Macros</h3><br />
+       Macros simplify common data formatting tasks with LearnMode, such as date conversion, removing spaces, or removing certain types of characters. 
+       <ul><br />
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SHo&popup=true">Macro definitions</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/Knowledge_Support_Troubleshoot_Internal?id=kA170000000Gr8T&popup=true">Formatting a date in LearnMode using a macro</a></Li><br/>
+       <Li><a href="https://c.na5.visual.force.com/apex/KnowledgeProductHelp_Internal?id=kA3700000008SXU&popup=true">Patterns for formatting macros</a></Li>
+       </ul><br /><br />
+       <h3 id="sec8">Learning Business Applications</h3><br />
+       <ul><br />
+       <li><a href="{!$page.Datatel_Internal}"><h4>Ellucian – Datatel</h4> </a></li><br />
+       <li><a href="{!$page.Lawson_Internal}"> <h4>Lawson</h4></a></li><br />
+       <li><a href="{!$page.MEDITECH_Internal}"> <h4>MEDITECH</h4></a></li><br />
+       <li><a href="{!$page.PeopleSoft_Internal}"> <h4>PeopleSoft</h4></a></li>
+       </ul>
+       </div>
+       </div>
+       </div>
+       </div>
+     </apex:define>
+  </apex:composition>
+</apex:page>

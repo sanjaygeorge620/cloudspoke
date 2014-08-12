@@ -1,0 +1,50 @@
+<apex:component controller="IdeaController">
+            <apex:attribute name="Home_tab" default="false" required="true" type="boolean" description="Identify the active tab."/>
+            <apex:attribute name="ViewAll_Tab" default="false" required="true" type="boolean" description="Identify the active tab."/>
+            <apex:attribute name="Search_Tab" default="false" required="true" type="boolean" description="Identify the active tab."/>
+            <apex:attribute name="MyIdeas_Tab" default="false" required="true" type="boolean" description="Identify the active tab."/>
+            <apex:attribute name="Submit_Tab" default="false" required="true" type="boolean" description="Identify the active tab."/>
+            <apex:attribute name="ShowDetails" default="true" required="false" type="boolean" description="Hide all Details."/>
+
+          <div id="tabs" class="tab-container ui-tabs ui-widget ui-widget-content ui-corner-all">   
+            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                <li class="ui-state-default ui-corner-top {!if(Home_tab==true,' ui-tabs-selected ui-state-active ','')}"><a href="{!$page.Ideas}" class="tab tab-ideas">Ideas</a></li>
+                <li class="ui-state-default ui-corner-top {!if(ViewAll_Tab==true,' ui-tabs-selected ui-state-active ','')}"><ideas:listOutputLink styleClass="tab tab-ideas-view" communityId="{!communityId}" page="{!ideaListPage}" sort="popular">View All Ideas</ideas:listOutputLink></li>
+             <!---<li class="ui-state-default ui-corner-top {!if(Search_Tab==true,' ui-tabs-selected ui-state-active ','')}"><a href="{!searchResultsUrl}" class="tab tab-ideas-search">Search Ideas</a></li>--->
+             <!---<li class="ui-state-default ui-corner-top {!if(MyIdeas_Tab==true,' ui-tabs-selected ui-state-active ','')}"><a href="#tabs-4" class="tab tab-ideas-my">My Ideas</a></li>--->
+                <li class="ui-state-default ui-corner-top {!if(Submit_Tab==true,' ui-tabs-selected ui-state-active ','')}"><a href="{!ideaPostPage}" class="tab tab-ideas-submit">Submit Your Idea</a></li>
+            </ul>
+            <apex:outputPanel rendered="{!ShowDetails}">
+                <div id="tabs-1" class="tab-content tab-content-1 ui-tabs-panel ui-widget-content ui-corner-bottom {!if(Home_tab!=true,' ui-tabs-hide ','')}">
+                    <!--<p class="idea-excerpt"><apex:outputText escape="false" value="{!homeHeading1}"/></p>-->
+                    <p class="idea-summary">
+                         <apex:outputText escape="false" value="{!homeBody1}"/>
+                    </p>
+                </div>
+                <div id="tabs-2" class="tab-content tab-content-2 ui-tabs-panel ui-widget-content ui-corner-bottom {!if(ViewAll_Tab!=true,' ui-tabs-hide ','')}">
+                    <ul class="idea-nav view-ideas">
+                        <li><ideas:listOutputLink communityId="{!communityId}" page="{!ideaListPage}" sort="recent">Most Recent Ideas</ideas:listOutputLink></li>
+                        <li><ideas:listOutputLink communityId="{!communityId}" page="{!ideaListPage}" sort="popular">Most Popular Ideas</ideas:listOutputLink></li>
+                        <li><ideas:listOutputLink communityId="{!communityId}" page="{!ideaListPage}" sort="top">Top Ideas All-time</ideas:listOutputLink></li>
+                        <li><ideas:listOutputLink communityId="{!communityId}" page="{!ideaListPage}" sort="comments">Comments</ideas:listOutputLink></li>
+                    </ul>
+                </div>
+                <div id="tabs-3" class="tab-content tab-content-3 ui-tabs-panel ui-widget-content ui-corner-bottom {!if(Search_Tab!=true,' ui-tabs-hide ','')}">
+                    <span class="idea-nav search-ideas">Search all of the Ideas.</span>
+                    <div class="search-box">
+                        <form action="{!searchResultsUrl}">
+                            <input type="text" id="" class="idea-search" value="Start searching here." name="{!searchTermParamName}" title="Keyword Search"   onfocus="if (this.value == 'Start searching here.') { this.value=''; }" onblur="if (this.value == '') { this.value='Start searching here.'; }"/>
+                            <input type="submit" id="" class="idea-submit" value=" " />
+                        </form>
+                    </div>
+                </div>
+                <div id="tabs-4" class="tab-content tab-content-4 ui-tabs-panel ui-widget-content ui-corner-bottom {!if(MyIdeas_Tab!=true,' ui-tabs-hide ','')}">
+                    <ul class="idea-nav my-ideas">
+                        <li><a href="#">My Ideas</a></li>
+                        <li><a href="#">My Company's Ideas</a></li>
+                    </ul>
+                </div>
+                <div id="ui-tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom {!if(Submit_Tab!=true,' ui-tabs-hide ','')}"></div>
+             </apex:outputPanel>       
+          </div> 
+</apex:component>

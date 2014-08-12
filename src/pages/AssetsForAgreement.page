@@ -1,0 +1,20 @@
+<apex:page standardController="Agreement__c" extensions="AssetsForAgreementController">
+  <apex:pageBlock >
+      <apex:outputPanel rendered="{!if(assetItems.size > 0 , false, true)}">
+          No data to display.
+      </apex:outputPanel>
+      <apex:outputPanel rendered="{!if(assetItems.size > 0 , true , false)}">
+      <apex:pageBlockSection columns="1">
+          <apex:pageBlockTable value="{!assetItems}" var="assItem">
+              <apex:column headerValue="Asset Item Name"><a href="/{!assItem.id}" target="_top">{!assItem.Name}</a></apex:column>
+              <apex:column value="{!assItem.Environment__c}"/>
+              <apex:column value="{!assItem.Quantity__c}"/>
+              <apex:column value="{!assItem.Start_Date__c}"/>
+              <apex:column value="{!assItem.End_Date__c}"/>
+              <apex:column value="{!assItem.Status__c}"/>
+              <apex:column value="{!assItem.Exclude__c}"/>
+          </apex:pageBlockTable>
+      </apex:pageBlockSection>
+      </apex:outputPanel>
+  </apex:pageBlock>
+</apex:page>

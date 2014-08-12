@@ -1,0 +1,7 @@
+<apex:page standardController="account" tabStyle="Account" id="AccountHierarchy" readOnly="true" > 
+    <apex:sectionHeader title="Account Hierarchy" subtitle="{!Account.name}" printUrl="/apex/AccountHierarchyPage?id={!Account.id}&retURL=/{!Account.id}"/>
+    <apex:outputLink value="/{!Account.id}" >« Back to Account: {!Account.name}</apex:outputLink><br/><br/>
+    The hierarchy is created by associating accounts with parent accounts.<br/><br/>
+        <c:AccountHierarchyTree currentId="{!Account.id}" />
+  
+</apex:page>

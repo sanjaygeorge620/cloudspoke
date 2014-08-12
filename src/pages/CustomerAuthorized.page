@@ -1,0 +1,225 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="SitesHomeController"> 
+   <apex:composition template="{!SITE_TEMPLATE_PRIMARY}" > 
+       <apex:define name="title"> 
+           <title>{!SITE_TITLE}</title>
+        </apex:define>
+        <apex:define name="javascriptcalls">
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                  jQuery('.toolbar-home').addClass('active');
+                  jQuery('html').addClass("salesforce-sites"); 
+                  //CONDITION RIGHT HERE
+                 
+                    //if close button is clicked
+                     jQuery('.popup-window .close').click(function (e){
+                                         
+                        //Cancel the link behavior
+                        e.preventDefault();
+                    jQuery('.popupBackground').hide();
+                       jQuery('.popup-window').hide();
+                    });     
+                  
+                 
+                });  
+           </script>
+        </apex:define>  
+        
+        <apex:define name="body">  
+
+            <apex:outputPanel layout="block" styleClass="cp_core">
+                <apex:pageMessages />
+                <div class="two-thirds left-32">
+                    <div class="column-23">
+                      <apex:outputPanel layout="block" styleClass="callout kbsearch" rendered="{!$ObjectType.knowledgearticleversion.accessible}">
+                            <a class="title-bar" href="{!$page.knowledge}"><span class="sprite_cpicons knowledge">&nbsp;</span>{!$Label.Knowledgebase_Search}</a>
+                            <div class="callout-content kb-content">
+                                <apex:form >
+                                    <apex:inputText styleclass="kbsearch" value="{!SEARCH_TEXT}" onfocus="if (this.value == '{!$Label.KB_Default_Search_Text}') { this.value=''; }" onblur="if (this.value == '') { this.value='{!$Label.KB_Default_Search_Text}'; }"/>
+                                    <apex:commandButton styleclass="kbsubmit" action="{!doKBSearch}" />
+                                    
+                                </apex:form>    
+                            </div>
+                            <div class="callout-content">
+                                <dl class="left-third">
+                                    <apex:repeat value="{!WidgetKnowledgeSpotlight}" var="w">
+                                <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                            </apex:repeat>
+                                </dl>
+                               <dl class="right-twothirds"> 
+                                    <dt>{!$Label.Most_Recent}</dt> 
+                                    <knowledge:articleList articleVar="article"
+                                        categories="Product:All"
+                                        sortBy="lastUpdated"
+                                        pageSize="8">
+                                        <dd>
+                                            <a target="_blank" href="{!URLFOR($Action.KnowledgeArticle.View, article.id)}">{!If(len(article.title)>42,mid(article.title,1,42)+'...',article.title)}</a>
+                                            <apex:outputText styleClass="dates" value="{0,date,MM/dd/yyyy}">
+                                                <apex:param value="{!article.LastPublishedDate}" />
+                                            </apex:outputText>
+                                        </dd>
+                                    </knowledge:articleList>
+                                    
+                               </dl>
+                            </div>
+                      </apex:outputPanel><!-- /KB Search -->
+                    </div><!-- /Two-Thirds Column Left-32-->
+                    
+                    
+                    <div class="column leftcol">
+                       
+                    <apex:outputPanel styleclass="callout news" rendered="{!LOWER(SITE_LANGUAGE)!='de'}" >  
+                        <span class="title-bar" href="#"><span class="sprite_cpicons news">&nbsp;</span>{!$Label.News}</span>
+                        <div class="callout-content">
+                             <c:GetExternalPage pageurl="https://www.perceptivesoftware.com/customer-portal/content-index-news.html" /> 
+                        </div>
+                    </apex:outputPanel> 
+                    
+                    <apex:outputPanel rendered="{!WidgetCommunity.size>0}" styleclass="callout community">
+                        <span class="title-bar" href="#"><span class="sprite_cpicons community">&nbsp;</span>{!$Label.Community}</span>
+                        <div class="callout-content">
+                            <apex:repeat value="{!WidgetCommunity}" var="w">
+                                <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                            </apex:repeat>
+                        </div>
+                    </apex:outputPanel><!-- /Community -->
+                    
+                    </div><!-- /Left Column -->
+                    
+                    <div class="column middlecol">
+                        <apex:outputPanel layout="block" styleClass="callout licensekey" rendered="{!(RecentLicenses.size!=0 || OldServers.size!=0) && SITE_CONTACT.Contact_Role__c=='ImageNow Admin'}">
+                            <span class="title-bar"><span class="sprite_cpicons tasks">&nbsp;</span>{!$Label.Account_Notifications}</span>
+                            <div class="callout-content">
+                                <dl>
+                                        <apex:outputPanel rendered="{!OldServers.size!=0 && $ObjectType.Server__c.accessible}">
+                                            <dt>{!$Label.Servers_Verified}</dt>
+                                                <apex:repeat value="{!OldServers}" var="s">
+                                                    <dd>
+                                                        <apex:outputLink value="{!$Page.ServerDetails}">
+                                                            {!s.Server_Type__c+' '+s.Machine_Name__c} 
+                                                            <apex:param name="id" value="{!s.id}"/>
+                                                        </apex:outputLink>&nbsp;
+                                                        <apex:outputfield value="{!s.Date_Verified_by_Customer__c}" />
+                                                    </dd>
+                                                </apex:repeat>
+                                                <!--view all-->  
+                                                <br />     
+                                                <dd class="no-arrow">
+                                                    <apex:outputLink value="{!$Page.account}">
+                                                        {!$Label.View_All}                                    
+                                                        <apex:param name="tab" value="servers"/>
+                                                    </apex:outputLink>
+                                                </dd>
+                                        </apex:outputPanel>
+                                        <br />
+                                        
+                                        <apex:outputPanel rendered="{!RecentLicenses.size!=0 && $ObjectType.License_Key__c.accessible}">
+                                            <dt>{!$Label.New_License_30}</dt>
+                                                <apex:repeat value="{!RecentLicenses}" var="l">
+                                                    <dd>
+                                                        <apex:outputLink value="{!$Page.productdetails}">
+                                                            {!l.Asset__r.name}
+                                                            <apex:param name="id" value="{!l.Asset__r.id}"/>
+                                                        </apex:outputLink>
+                                                        &nbsp;<apex:outputfield value="{!l.CreatedDate}" />
+                                                    </dd>
+                                                </apex:repeat>
+                                            <!--view all--> 
+                                            <br />   
+                                            <dd class="no-arrow">
+                                                <apex:outputLink value="{!$Page.account}">
+                                                    {!$Label.View_All}                                    
+                                                    <apex:param name="tab" value="products"/>
+                                                </apex:outputLink>
+                                            </dd>
+                                        </apex:outputPanel>    
+                                </dl>
+                            </div>
+                        </apex:outputPanel><!-- /License Keys -->
+                        
+                        <!-- Perceptive Media Manager -->
+                        <apex:outputPanel layout="block" styleClass="callout Business-Applications" rendered="{!(WidgetMedia.size!=0 && SITE_ACCOUNT.Legacy_Company_Originator__c == 'Twistage')}">
+                           <a class="title-bar"><span class="sprite_cpicons live">&nbsp;</span>{!$Label.Perceptive_Media_Manager}</a>
+                            <div class="callout-content">
+                                <apex:repeat value="{!WidgetMedia}" var="w">
+                                    <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                                </apex:repeat>
+                            </div>
+                        </apex:outputPanel>
+                        <!-- Perceptive Media Manager  -->
+      
+                        <!-- Business Applications -->
+                        <apex:outputPanel layout="block" styleClass="callout Business-Applications" rendered="{!WidgetBusinessApplications.size!=0}">
+                           <a class="title-bar"><span class="sprite_cpicons fd">&nbsp;</span>{!$Label.Business_Applications}</a>
+                            <div class="callout-content">
+                                <apex:repeat value="{!WidgetBusinessApplications}" var="w">
+                                    <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                                </apex:repeat>
+                            </div>
+                        </apex:outputPanel>
+                        <!-- Business Applications  -->
+          
+                        
+                        <!-- Training -->
+                        <apex:outputPanel layout="block" styleClass="callout training" rendered="{!WidgetTraining.size!=0}">
+                            <a class="title-bar" href="{!$page.training}"><span class="sprite_cpicons training">&nbsp;</span>{!$Label.Training}</a>
+                            <div class="callout-content">
+                                <apex:repeat value="{!WidgetTraining}" var="w">
+                                    <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                                </apex:repeat>
+                            </div>
+                        </apex:outputPanel>
+                        <!-- /Training -->
+                        
+                        <!-- Support-->
+                        <apex:outputPanel layout="block" styleClass="callout Support" rendered="{!WidgetSupport.size!=0}">
+                            <span class="title-bar" ><span class="sprite_cpicons partner-show">&nbsp;</span>{!$Label.Global_Support_Services_Link}</span>
+                            <div class="callout-content">
+                                <apex:repeat value="{!WidgetSupport}" var="w">
+                                    <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                                </apex:repeat>
+                            </div>
+                        </apex:outputPanel>
+                        <!-- /Support-->
+                       <!---------------Event Resource---->
+                       
+                        <apex:outputPanel layout="block" styleClass="callout Support" rendered="{!WidgetSupport.size!=0}">
+                            <span class="title-bar" ><span class="sprite_cpicons fd">&nbsp;</span>{!$Label.Events}</span>
+                            <div class="callout-content">
+                                <apex:repeat value="{!WidgetEventResources}" var="w">
+                                    <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                                </apex:repeat>
+                            </div>
+                        </apex:outputPanel>
+                       
+                        
+                        
+                        
+                        
+                    </div><!-- /Middle Column -->
+                </div>
+                <div class="column rightcol">
+                    <apex:outputText escape="false" value="{!SITE_OUTAGE_HTML}" rendered="{!SITE_OUTAGE}" />
+                    <c:Sites_Case_Widget rendered="{!$ObjectType.case.accessible && SITE_TAB_CASES}" />
+                    <apex:outputPanel layout="block" styleClass="callout recentdownloads" rendered="false">
+                        <span class="title-bar" href="{!$page.Download}"><span class="sprite_cpicons downloads">&nbsp;</span>{!$Label.Recent_Downloads}</span>
+                        <div class="callout-content">
+                            <apex:repeat value="{!WidgetDownloads}" var="w">
+                                <apex:outputText escape="false" value="{!w.Description_Text__c}" />
+                            </apex:repeat>
+                        </div>
+                    </apex:outputPanel><!-- /Recent Downloads -->
+                    
+                </div><!-- /Right Column -->
+                <div style="font-size: 10px; color: rgb(204, 204, 204);"></div>
+    
+    
+    
+                <div class="popup-window">
+                  <apex:include pageName="popupwindow"/>
+                </div>
+            
+                
+            </apex:outputPanel>
+       </apex:define>
+  </apex:composition>
+</apex:page>

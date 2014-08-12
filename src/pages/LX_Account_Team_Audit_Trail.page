@@ -1,0 +1,84 @@
+<!-- 
+ * ©Lexmark Front Office 2013, all rights reserved
+ * 
+ * Created Date : 07/01/2013
+ *
+ * Author : Kapil Reddy Sama.
+ * 
+ * Description : Custom Account Team related list.
+ -->
+
+<apex:page standardController="Account" extensions="LX_Audit_Trail_Extension">  
+<script>
+function showDetail(recordId){
+    window.top.location.href='/apex/LX_AccountTeamEdit?teamMemberID='+recordId;    
+}
+</script>
+
+<!--<apex:sectionHeader title="Account Team"/>-->
+  <apex:form id="form">
+    <apex:actionFunction action="{!DeleteAccount}" name="DeleteAccount" reRender="form" onComplete="javascript:window.open('/'+'{!$CurrentPage.parameters.id}','_parent');  return false;">
+        <apex:param name="SelectedTeamMeberId" value="" assignTo="{!SelectedTeamMeberId}"/>
+    </apex:actionFunction> 
+    
+    <apex:outputPanel id="accTeam">    
+    <apex:pageBlock rendered="{!if(displayAccountTeam == true,true,false)}">    
+        <apex:pageBlockButtons location="Top">
+            <apex:commandButton action="{!addTeamMembers}" value="Add" reRender="accTeam" onclick="window.open('/apex/LX_AddTeamMembers?id='+'{!$CurrentPage.parameters.id}','_parent'); return false;"/>
+            <apex:commandButton action="{!addDefaultTeam}" value="Add Default Team" reRender="accTeam" onComplete="window.open('/'+'{!$CurrentPage.parameters.id}','_parent'); return false;"/>
+            <apex:commandButton action="{!displayAccess}" value="Display Access" reRender="dispalyAcces,displayAcctTeam,accTeam" rendered="{!if(accountTeamMembers != null && accountTeamMembers.size >0,true,false)}" disabled="{!if(displayAccessList != null && displayAccessList.size >0,true,false)}" />
+            <apex:commandButton action="{!deleteAll}" value="Delete All" onclick="javascript:if (window.confirm('Are you sure?')) return true;return false;" rendered="{!if(accountTeamMembers != null && accountTeamMembers.size >0,true,false)}"/>          
+        </apex:pageBlockButtons>  
+        
+        <apex:outputText rendered="{!if(accountTeamMembers != null && accountTeamMembers.size >0 ,false,true)}"> No Team Members
+        </apex:outputText>
+        <apex:outputPanel >
+            <apex:outputPanel rendered="{!if(displayAccessList != null && displayAccessList.size >0,true,false)}">
+            <div class="message infoM4" id="actualAccessMessage">
+            <table class="messageTable" border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+            <td><img src="/s.gif" alt="Information" class="msgIcon" title="Information"/></td>
+            <td class="messageCell"><div class="messageText"><h4></h4>Account team members may have greater access than defined by their account team membership. </div></td>
+            </tr>
+            </tbody>
+            </table>
+            </div>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <apex:outputPanel id="displayAcctTeam">
+            <apex:pageBlockTable value="{!accountTeamMembers }" var="a" rendered="{!if(accountTeamMembers != null && accountTeamMembers.size >0 && displayAccessList == null,true,false)}" columnsWidth="20px,150px,500px"  rows="{!noOfRows}">      
+                <apex:column headerValue="Action"  width="10%">                       
+                <apex:outputLink title="" value="/apex/LX_AccountTeamEdit?teamMemberID={!a.id}" style="font-weight:bold" target="_self" onclick="showDetail('{!a.id}')">Edit</apex:outputLink>&nbsp;|&nbsp;
+                <a href="javascript:if (window.confirm('Are you sure?')) DeleteAccount('{!a.Id}');" style="font-weight:bold">Del</a>
+                </apex:column>
+                <apex:column value="{!a.UserId}" headerValue="Team Member" onclick="window.open('/'+'{!a.UserId}','_parent'); return false;"/>
+                <apex:column value="{!a.TeamMemberRole}"/>        
+            </apex:pageBlockTable>
+            <apex:commandLink action="{!showMore}" rendered="{!if(accountTeamMembers != null && accountTeamMembers.size >3 && noOfRows != 1000 && displayAccessList == null,true,false )}" > Show More >>  </apex:commandLink>   
+        </apex:outputPanel>
+        
+        <apex:outPutPanel id="dispalyAcces" >
+            <apex:pageBlockTable var="a" value="{!displayAccessList}" rendered="{!if(displayAccessList != null && displayAccessList.size >0,true,false)}" columnsWidth="70px,150px,150px,150px,150px" rows="{!noOfRows}">
+                <apex:column headerValue="Action">                       
+                <apex:outputLink title="" value="/apex/LX_AccountTeamEdit?teamMemberID={!a.accounTeamMemberId}" style="font-weight:bold" target="_self" onclick="showDetail('{!a.accounTeamMemberId}')">Edit</apex:outputLink>&nbsp;|&nbsp;
+                <a href="javascript:if (window.confirm('Are you sure?')) DeleteAccount('{!a.accounTeamMemberId}');" style="font-weight:bold">Del</a>
+                </apex:column>
+                <apex:column headerValue="Team Member">
+                <apex:outputLink title="" value="/{!a.teamMemberId}" onclick="window.open('/'+'{!a.teamMemberId}','_parent');return false;">{!a.teamMemberName}</apex:outputLink>
+                </apex:column>
+                <apex:column value="{!a.accountAccessLevel}" headervalue="Account Access"/>
+         <!--   <apex:column value="{!a.contactAccessLevel}" headervalue="Contact Access"/>   -->
+                <apex:column value="{!a.OpportunityAccessLevel}" headervalue="Opportunity Access"/>
+                <apex:column value="{!a.CaseAccessLevel}" headervalue="Case Access"/>  
+                <apex:column value="{!a.teamMemberRole}" headervalue="Team Role"/>              
+            </apex:pageBlockTable>
+            <apex:commandLink action="{!showMore}" rendered="{!if(displayAccessList != null && displayAccessList.size >3 && noOfRows != 1000 ,true,false)}" > Show More >>  </apex:commandLink>       
+            
+        </apex:outPutPanel> 
+                
+    </apex:pageBlock>
+    </apex:outputPanel>     
+  </apex:form>  
+ 
+</apex:page>
