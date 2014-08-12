@@ -1,7 +1,7 @@
 @isTest(seeAllData=true)
 public class AAAA_Test {
     static Recordtype masterOfferRtId = [select id,developername from recordtype where sobjecttype = 'LX_Offer__c' and DeveloperName = 'Master']; 
-    static testMethod void myUnitTest() {
+    static testMethod void myUnitTest() { 
         //Global Program
         LX_Partner_Program__c globalPartnerProgram = new LX_Partner_Program__c();
         //globalPartnerProgram .RecordTypeId = Schema.SObjectType.LX_Partner_Program__c.getRecordTypeInfosByName().get('Global Program').getRecordTypeId();
