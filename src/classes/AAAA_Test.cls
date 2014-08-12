@@ -12,7 +12,7 @@ public class AAAA_Test {
         globalPartnerProgram.LX_Start_Date__c = system.today();
         globalPartnerProgram.Program_End_Date__c = system.today() +200;
         insert globalPartnerProgram ;
-        
+         
         //Global Program Category
         LX_Partner_Program__c globalPartnerProgramCategory = new LX_Partner_Program__c();
         //globalPartnerProgramCategory.RecordTypeId = Schema.SObjectType.LX_Partner_Program__c.getRecordTypeInfosByName().get('Global ISS Program Category').getRecordTypeId();
